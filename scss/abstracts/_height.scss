@@ -2,7 +2,11 @@
   $step: 10;
   $percent: 10%;
   .h-#{$h * $step} {
-    height: ($h * $percent);
+    @if ($h == 0) {
+      height: 0;
+    } @else {
+      height: ($h * $percent);
+    }
 
   }
 }
