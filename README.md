@@ -1,6 +1,6 @@
 # GTHub Website
 
-This repo pupose its to hoste the source code for the [GTHub](https://gthub.eu) website.
+This repo purpose its to hoste the source code for the [GTHub](https://gthub.eu) website.
 
 ## Requirements
 
