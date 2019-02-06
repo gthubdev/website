@@ -1,10 +1,11 @@
 const express = require('express');
-
 const server = express();
 
 server.set('view engine', 'ejs')
-server.use(express.static('views'));
-server.use(express.static('assets'));
+
+server.use('/assets', express.static('assets'));
+server.use('/js', express.static('js'));
+server.use('/css', express.static('css'));
 
 server.get('/', function (req, res) {
   res.render('landing.ejs');
