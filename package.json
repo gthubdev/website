@@ -1,0 +1,29 @@
+{
+  "name": "gthubweb",
+  "version": "0.1.0",
+  "description": "New GTHub's website design using Node.js and Express",
+  "main": "server.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gthubdev/website.git"
+  },
+  "keywords": [
+    "Javascript",
+    "Node.js"
+  ],
+  "author": "KazuoCode, Wl-Vlaeyen",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/gthubdev/website/issues"
+  },
+  "homepage": "https://github.com/gthubdev/website#readme"
+}
