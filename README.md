@@ -15,4 +15,8 @@ Install dependencies:
 `npm install`
 
 Run:
-`npm start`
+`npm start` 
+
+## Testing
+Run:
+`npm test`
