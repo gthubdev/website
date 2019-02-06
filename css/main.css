@@ -173,7 +173,7 @@ body {
 .center-v {
   display: flex;
   flex-flow: row wrap;
-  align-content: center;
+  align-items: center;
 }
 
 .main-bg {
