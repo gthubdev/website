@@ -1,0 +1,26 @@
+.side-menu {
+  position: absolute;
+  top: 0;
+  width: 20%;
+  height: 100%;
+  background-color: $primary-color;
+  box-shadow: 6px 6px 15px #00000030;
+  padding: 1%;
+  box-sizing: border-box;
+
+  transform: translateX(0);
+  will-change: transform;
+  transition: transform 300ms ease-in-out;
+  &--out {
+    transform: translateX(-100%);
+    will-change: transform;
+    transition: transform 300ms ease-in-out;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+  }
+}

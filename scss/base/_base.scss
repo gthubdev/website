@@ -1,0 +1,15 @@
+@for $i from 1 through 6 {
+  h#{$i} {
+    font-family: $header-font-family;
+    font-weight: $header-font-weight;
+    font-size: #{$header-font-size / $i};
+    line-height: $header-line-height;
+    margin: 0;
+  }
+}
+
+body {
+  font-family: $body-font-family;
+  font-size: $body-font-size;
+  font-weight: $body-font-weight;
+}
