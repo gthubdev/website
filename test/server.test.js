@@ -1,6 +1,6 @@
-var request = require('supertest');
-describe('loading express', function () {
-  var server;
+const request = require('supertest');
+describe('Starting server', () => {
+  let server;
   before(() => {
     server = require('../server');
   });
@@ -11,8 +11,8 @@ describe('loading express', function () {
     let routes200 = ['/', '/calendar', '/podcast', '/gallery', '/assets/test_file', '/js/test_file', '/css/test_file'];
 
     routes200.forEach(route => {
-      describe(route, function () {
-        it('Should return 200 on a GET request.', (done) => {
+      it('Should return 200 on a GET request.', (done) => {
+        describe(route, () => {
           request(server)
             .get(route)
             .expect(200, done);
@@ -31,6 +31,5 @@ describe('loading express', function () {
         });
       });
     });
-
   });
 });
