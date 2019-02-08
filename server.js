@@ -3,9 +3,8 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use('/assets', express.static('assets'));
-app.use('/js', express.static('js'));
-app.use('/css', express.static('css'));
+// set the static files location /public/img will be /img for users
+app.use(express.static(__dirname + '/public'));
 
 // routes
 const index = require('./routes/index');

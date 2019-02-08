@@ -9,11 +9,13 @@
     "supertest": "^3.4.2"
   },
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "sass": "^1.17.0"
   },
   "scripts": {
-    "test": "mocha -R spec test",
-    "start": "node server.js"
+    "start": "npm run sass && node server.js",
+    "sass": "sass views/scss/main.scss public/css/main.css",
+    "test": "mocha -R spec test"
   },
   "repository": {
     "type": "git",
