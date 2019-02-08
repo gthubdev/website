@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
 	res.render('landing.ejs');
 });
 
-router.get('/gallery', (req, res, next) => {
+router.get('/gallery', (req, res) => {
 	res.render('gallery.ejs');
 });
 
-router.get('/calendar', (req, res, next) => {
+router.get('/calendar', (req, res) => {
 	res.render('landing.ejs');
 });
 
-router.get('/podcast', (req, res, next) => {
+router.get('/podcast', (req, res) => {
 	res.render('podcast.ejs');
 });
 
