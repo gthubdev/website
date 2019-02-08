@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-	res.render('landing.ejs');
-});
+// controllers
+const StartpageCtrl = require('../controllers/startpage');
+const GalleryCtrl = require('../controllers/gallery');
+const CalendarCtrl = require('../controllers/calendar');
+const PodcastCtrl = require('../controllers/podcast');
 
-router.get('/gallery', (req, res) => {
-	res.render('gallery.ejs');
-});
 
-router.get('/calendar', (req, res) => {
-	res.render('landing.ejs');
-});
+// routes
+router.get('/', StartpageCtrl.getStartpage);
 
-router.get('/podcast', (req, res) => {
-	res.render('podcast.ejs');
-});
+router.get('/gallery', GalleryCtrl.getGallery);
+
+router.get('/calendar', CalendarCtrl.getCalendar);
+
+router.get('/podcast', PodcastCtrl.getPodcast);
+
 
 // route to handle all other requests
 router.get('*', function(req, res) {
