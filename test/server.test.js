@@ -8,7 +8,7 @@ describe('Starting server', () => {
     server.close();
   });
   describe('Routes', () => {
-    let routes200 = ['/', '/calendar', '/podcast', '/gallery', '/assets/test_file', '/js/test_file', '/css/test_file'];
+    let routes200 = ['/', '/calendar', '/podcast', '/gallery'];
 
     routes200.forEach(route => {
       it('Should return 200 on a GET request.', (done) => {
