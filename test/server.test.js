@@ -24,10 +24,10 @@ describe('Starting server', () => {
 
     routes404.forEach(route => {
       describe(route, () => {
-        it("Should return 404 on a GET request.", (done) => {
+        it("Should return 302 on a GET request.", (done) => {
           request(server)
             .get(route)
-            .expect(404, done);
+            .expect(302, done);
         });
       });
     });
