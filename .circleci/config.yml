@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: kazuocode/gthubweb
+      - image: kazuocode/gthubweb:first
       - image: postgres:10.1-alpine
         auth:
           username: kazuocode
