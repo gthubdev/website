@@ -7,10 +7,6 @@ services:
     ports:
       - "3000:3000"
       - "9229:9229"
-    env_file: .env
-    volumes:
-      - .:/home/gthubweb/
-      - /home/gthubweb/node_modules
   postgres:
     image: postgres:10.1-alpine
     environment:
