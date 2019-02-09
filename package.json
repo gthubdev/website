@@ -4,8 +4,11 @@
   "description": "New GTHub's website design using Node.js and Express",
   "main": "server.js",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "knex": "^0.16.3",
+    "pg": "^7.8.0",
     "supertest": "^3.4.2"
   },
   "devDependencies": {

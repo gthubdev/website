@@ -15,6 +15,12 @@ router.get('/gallery', GalleryCtrl.getGallery);
 
 router.get('/calendar', CalendarCtrl.getCalendar);
 
+router.get('/calendar/event', CalendarCtrl.getEvents);
+
+router.get('/calendar/series', CalendarCtrl.getSeries);
+
+router.get('/calendar/tracks', CalendarCtrl.getTracks);
+
 router.get('/podcast', PodcastCtrl.getPodcast);
 
 

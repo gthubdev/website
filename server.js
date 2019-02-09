@@ -1,8 +1,12 @@
+//loads the .env variables under process.env
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 
-// set the default port to 3000
+// set the default port and host
 const port = process.env.PORT || 3000;
+const host = process.env.HOST || 'localhost'
 
 app.set('view engine', 'ejs');
 
@@ -13,7 +17,7 @@ app.use(express.static(__dirname + '/public'));
 const index = require('./routes/index');
 app.use('/', index);
 
-const server = app.listen(3000, () => {
+const server = app.listen(port, host, () => {
   console.log('Server running on port ' + port);
 });
 
