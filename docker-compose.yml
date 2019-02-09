@@ -7,6 +7,7 @@ services:
     ports:
       - "3000:3000"
       - "9229:9229"
+    env_file: .env
   postgres:
     image: postgres:10.1-alpine
     environment:
