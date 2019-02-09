@@ -8,4 +8,4 @@ const options = {
 };
 
 
-exports.connect = () => { return knex(options) };
+exports.connect = () => { return knex(options); };

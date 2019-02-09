@@ -21,9 +21,9 @@ exports.get = (column, value) => {
         return GetAll();
     }
   } else {
-      return GetAll();
+    return GetAll();
   }
-}
+};
 
 // Gets events looking at the name column
 function GetByName(value) {
@@ -31,7 +31,7 @@ function GetByName(value) {
     let session = db.connect();
     session
       .select()
-      .where('name', value)
+      .where('name', value.replace(/-/g, ' '))
       .from('event')
       .then(events => RemoveInts(events).then(val => resolve(val)))
       .catch(e => reject(e))
@@ -43,14 +43,19 @@ function GetByName(value) {
 function GetByDate(value) {
   return new Promise((resolve, reject) => {
     let session = db.connect();
-    session
-      .select()
-      .where('date_start', new Date(value))
-      .orWhere('date_end', new Date(value))
-      .from('event')
-      .then(events => RemoveInts(events).then(val => resolve(val)))
-      .catch(e => reject(e))
-      .finally(() => session.destroy());
+    let date = new Date(value);
+    if (date.toString() !== 'Invalid Date') {
+      session
+        .select()
+        .where('date_start', date)
+        .orWhere('date_end', date)
+        .from('event')
+        .then(events => RemoveInts(events).then(val => resolve(val)))
+        .catch(e => reject(e))
+        .finally(() => session.destroy());
+    } else {
+      return [];
+    }
   });
 }
 
@@ -77,13 +82,15 @@ function GetThisMonth() {
 function GetBySerie(value) {
   return new Promise((resolve, reject) => {
     series.get().then(series => {
-      let serie = series.filter(x => x.id === value.serie)[0].name;
+      let serie = series.filter(x => x.name === value.replace(/-/g, ' '))[0].id;
       let session = db.connect();
       session
         .select()
         .from('event')
         .where('serie', serie)
-        .then(events => RemoveInts(events).then(events => resolve(events)));
+        .then(events => RemoveInts(events).then(events => resolve(events)))
+        .catch(e => reject(e))
+        .finally(() => session.destroy());
     });
   });
 }
@@ -92,13 +99,15 @@ function GetBySerie(value) {
 function GetByTrack(value) {
   return new Promise((resolve, reject) => {
     tracks.get().then(tracks => {
-      let track = tracks.filter(x => x.id === value.track)[0].name;
+      let track = tracks.filter(x => x.name === value.replace(/-/g, ' '))[0].id;
       let session = db.connect();
       session
         .select()
         .from('event')
         .where('track', track)
-        .then(events => RemoveInts(events).then(events => resolve(events)));
+        .then(events => RemoveInts(events).then(events => resolve(events)))
+        .catch(e => reject(e))
+        .finally(() => session.destroy());
     });
   });
 }

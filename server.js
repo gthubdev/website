@@ -6,7 +6,7 @@ const app = express();
 
 // set the default port and host
 const port = process.env.PORT || 3000;
-const host = process.env.HOST || 'localhost'
+const host = process.env.HOST || 'localhost';
 
 app.set('view engine', 'ejs');
 

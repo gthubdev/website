@@ -15,7 +15,7 @@ router.get('/gallery', GalleryCtrl.getGallery);
 
 router.get('/calendar', CalendarCtrl.getCalendar);
 
-router.get('/calendar/event', CalendarCtrl.getEvents);
+router.get('/calendar/events', CalendarCtrl.getEvents);
 
 router.get('/calendar/series', CalendarCtrl.getSeries);
 

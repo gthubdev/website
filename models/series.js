@@ -16,6 +16,7 @@ exports.get = (column, value) => {
       .from('serie')
       .where(builder => {
         if (column != undefined && value != undefined) {
+          value = value.replace(/-/g, ' ');
           builder.where(column, value);
         }
       })
