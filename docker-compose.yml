@@ -7,7 +7,7 @@ services:
     ports:
       - "3000:3000"
       - "9229:9229"
-    env_file: .env
+    env_file: .env.docker
   postgres:
     image: postgres:10.1-alpine
     environment:
