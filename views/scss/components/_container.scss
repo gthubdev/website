@@ -1,9 +1,14 @@
 .container {
   width: 70vw;
   margin: 0 auto;
+  box-sizing: border-box;
 
   &_pagefill {
     width: 100vw;
     height: 100vh;
+  }
+
+  &--fluid {
+    width: 100vw;
   }
 }

@@ -7,15 +7,19 @@ body, html {
 @import 'abstracts/fonts',
         'abstracts/variables',
         'abstracts/height',
-        'abstracts/color';
+        'abstracts/color',
+        'abstracts/text';
 // 3. Base
 @import 'base/base';
 // 4. Components
 @import 'components/container',
         'components/button',
         'components/nav',
+        'components/form',
         'components/side-menu';
 // 5. Layout
-@import 'layout/align';
+@import 'layout/align',
+        'layout/margin',
+        'layout/padding';
 // 6. Pages
 @import 'pages/home';

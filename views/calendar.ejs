@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Race Calendar | GTHub</title>
+  <%- include partials/styles.ejs %>
+</head>
+<body>
+  <nav class="navbar navbar--clear text--primary">
+    <button class='btn text--primary' id='menuOpen'><i data-feather='menu'></i></button>
+    <h3 class='text--upper'>race calendar</h3>
+  </nav>
+  <main class="container container--fluid">
+    <section class="gray p-v-5">
+      <main class="container">
+        <h3 class='text--light text--upper'><i data-feather="search"></i> Search</h3>
+        <form action="" class="form--inline">
+          <div class="form--field">
+            <label for="series_form">Series</label>
+            <input class='form--input' type="text" name="series" id="series_form">
+          </div>
+          <div class="form--field">
+            <label for="track_form">Track</label>
+            <input class='form--input' type="text" name="track" id="track_form">
+          </div>
+          <div class="form--field">
+            <label for="date_form">Date</label>
+            <input class='form--input' type="date" name="date" id="date_form">
+          </div>
+        </form>
+      </main>
+    </section>
+    <section class="container">
+      <p>Insert events here</p>
+    </section>
+  </main>
+  <%- include partials/menu.ejs %>
+  <%- include partials/scripts.ejs %>
+</body>
+</html>
