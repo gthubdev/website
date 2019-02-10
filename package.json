@@ -18,8 +18,7 @@
   "scripts": {
     "start": "npm run sass && node server.js",
     "sass": "sass views/scss/main.scss public/css/main.css",
-    "test": "mocha -R spec test",
-    "docker": "docker-compose -f docker-compose.yml build && docker-compose -f docker-compose.yml up"
+    "test": "mocha -R spec test"
   },
   "repository": {
     "type": "git",
