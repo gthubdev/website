@@ -12,9 +12,10 @@
   will-change: transform;
   transition: transform 300ms ease-in-out;
   &--out {
+    box-shadow: none;
     transform: translateX(-100%);
-    will-change: transform;
-    transition: transform 300ms ease-in-out;
+    will-change: transform, box-shadow;
+    transition: transform 300ms ease-in-out, box-shadow 300ms ease-in-out;
   }
 
   &__header {
@@ -23,4 +24,11 @@
     align-items: center;
     height: 40px;
   }
+}
+
+.menu--link {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  margin: 3% 0;
 }
