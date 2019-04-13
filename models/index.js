@@ -10,14 +10,7 @@ const path      = require('path');
 const Sequelize = require('sequelize');
 const basename  = path.basename(module.filename);
 const db        = {};
-const Op        = Sequelize.Op;
 const dbconfig 	= require('../database/config.js');
-
-
-// Define operator aliases here
-const operatorsAliases = {
-
-};
 
 // Define database-configuration
 const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.password, {
@@ -32,8 +25,7 @@ const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.p
 		min: 0,
 		idle: 10000
 	},
-	timezone: 'Europe/Amsterdam',
-	//operatorsAliases: operatorsAliases
+	timezone: 'Europe/Amsterdam'
 });
 
 //Load all the models

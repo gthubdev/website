@@ -12,6 +12,7 @@
     "supertest": "^3.4.2"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
     "mocha": "^5.2.0",
     "sass": "^1.17.0"
   },
@@ -19,7 +20,8 @@
     "start": "npm run sass && node server.js",
     "test_connection": "node ./database/test_connection.js",
     "sass": "sass views/scss/main.scss public/css/main.css",
-    "test": "mocha -R spec test"
+    "test": "npm run linting_test && mocha -R spec test",
+    "linting_test": "./node_modules/.bin/eslint controllers database models routes test"
   },
   "repository": {
     "type": "git",
@@ -29,7 +31,7 @@
     "Javascript",
     "Node.js"
   ],
-  "author": "KazuoCode, Wl-Vlaeyen",
+  "author": "KazuoCode, Wl-Vlaeyen, Delta-One",
   "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/gthubdev/website/issues"

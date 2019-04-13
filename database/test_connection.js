@@ -3,9 +3,9 @@ const dbconfig 	= require('../database/config.js');
 
 // Define database-configuration
 const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.password, {
-  host: dbconfig.host,
-  dialect: 'postgres',
-  logging: false
+	host: dbconfig.host,
+	dialect: 'postgres',
+	logging: false
 });
 
 // Test connection
