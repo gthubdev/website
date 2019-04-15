@@ -15,7 +15,7 @@ const dbconfig 	= require('../database/config.js');
 // Define database-configuration
 const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.password, {
 	host: dbconfig.host,
-	dialect: 'postgres',
+	dialect: 'mariadb',
 	logging: false,
 	dialectOptions: {
 		multipleStatements: true

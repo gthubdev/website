@@ -5,7 +5,7 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 ## Requirements
 
 * [Node.js](https://nodejs.org) - (Still need to test versions)
-* [PostgreSQL](https://www.postgresql.org/)
+* [MariaDB](https://mariadb.org/)
 
 ## Installation
 
