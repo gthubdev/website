@@ -1,5 +1,6 @@
-const express = require('express');
-const app = express();
+const express 	= require('express');
+const app 		= express();
+const db 		= require('./models/');
 
 // set the default port to 3000
 const port = process.env.PORT || 3000;

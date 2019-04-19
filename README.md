@@ -32,6 +32,12 @@ module.exports = db;
 * Test your database connection with:
 `npm run test_connection`
 
+* Create the tables with:
+`npm run create_tables`
+
+* Insert testdata with:
+`npm run insert_testdata`
+
 * Run:
 `npm start`
 

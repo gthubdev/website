@@ -10,7 +10,13 @@ const path      = require('path');
 const Sequelize = require('sequelize');
 const basename  = path.basename(module.filename);
 const db        = {};
-const dbconfig 	= require('../database/config.js');
+
+let dbconfig;
+if (fs.existsSync('./database/config.js')) {
+	dbconfig = require('../database/config.js');
+} else {
+	dbconfig = require('../database/circleci.js');
+}
 
 // Define database-configuration
 const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.password, {

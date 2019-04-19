@@ -34,6 +34,18 @@
     </section>
     <section class="container">
       <p>Insert events here</p>
+
+      <% events.forEach(event => { %>
+          <p>
+            <b><%= event.name %></b> (<%= event.Track.name %>) <%= event.startdate %> - <%= event.enddate %><br />
+            <% event.EventSessions.forEach(session => { %>
+                <p style="padding-left: 20px">
+                    <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= session.starttime %>
+                </p>
+            <% }); %>
+            <br />
+          </p>
+      <% }); %>
     </section>
   </main>
   <%- include partials/menu.ejs %>

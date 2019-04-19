@@ -15,10 +15,7 @@ module.exports = {
 		'ecmaVersion': 2018
 	},
 	'rules': {
-		'indent': [
-			'error',
-			'tab'
-		],
+		'indent': 'off',
 		'linebreak-style': [
 			'error',
 			'unix'
@@ -31,6 +28,7 @@ module.exports = {
 			'error',
 			'always'
 		],
-		"no-console": "off"
+		'no-console': 'off',
+		'no-undef': 'warn'
 	}
 };
