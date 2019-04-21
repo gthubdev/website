@@ -18,6 +18,7 @@ jobs:
             - MYSQL_DATABASE: gthub-testdb
             - MYSQL_USER: testuser
             - MYSQL_PASSWORD: testpwd
+            - MYSQL_HOST: 127.0.0.1
 
     working_directory: ~/repo
 

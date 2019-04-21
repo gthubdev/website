@@ -3,7 +3,7 @@
 
 // TODO: adjust
 const db = {
-	host: 'localhost',
+	host: '127.0.0.1',
 	databasename: 'gthub-testdb',
 	user: 'testuser',
 	password: 'testpwd'
