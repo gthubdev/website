@@ -7,6 +7,7 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mariadb": "^2.0.3",
+    "moment": "^2.24.0",
     "sequelize": "^5.3.1",
     "supertest": "^3.4.2"
   },
@@ -20,7 +21,9 @@
     "test_connection": "node ./database/test_connection.js",
     "sass": "sass views/scss/main.scss public/css/main.css",
     "test": "npm run linting_test && mocha -R spec test",
-    "linting_test": "./node_modules/.bin/eslint controllers database models routes test"
+    "linting_test": "./node_modules/.bin/eslint controllers database models routes test",
+    "create_tables": "node ./database/create_tables.js",
+    "insert_testdata": "node ./database/load_testdata.js"
   },
   "repository": {
     "type": "git",
