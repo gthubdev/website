@@ -23,7 +23,7 @@
     "test": "npm run linting_test && mocha -R spec test",
     "linting_test": "./node_modules/.bin/eslint controllers database models routes test",
     "create_tables": "node ./database/create_tables.js",
-    "insert_testdata": "node ./database/load_testdata.js"
+    "insert_testdata": "node ./database/insert_testdata.js"
   },
   "repository": {
     "type": "git",
