@@ -1,3 +1,8 @@
+INSERT INTO Usertype (id, name) VALUES (1, 'Admin');
+INSERT INTO Usertype (id, name) VALUES (2, 'TV Crew');
+
+INSERT INTO User (username, password, name, usertype) VALUES ('admin', '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.', 'Admin', 1);
+
 INSERT INTO Track (id, name, location, length, map) VALUES (1, "Nordschleife", "Nürburg", 20.832, "");
 INSERT INTO Track (id, name, location, length, map) VALUES (2, "Mount Panorama Circuit", "Bathurst", 6.213, "");
 INSERT INTO Track (id, name, location, length, map) VALUES (3, "Circuit de Spa-Francorchamps", "Spa-Francorchamps", 7.004, "");

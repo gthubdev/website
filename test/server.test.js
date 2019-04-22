@@ -1,4 +1,5 @@
 const request = require('supertest');
+
 describe('Starting server', () => {
 	let server;
 	before(() => {
