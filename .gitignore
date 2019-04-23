@@ -4,6 +4,9 @@ database/config.js
 # CSS-stuff
 public/css/main.css*
 
+### Session data
+sessions/*
+
 # Logs
 logs
 *.log

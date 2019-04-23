@@ -17,6 +17,23 @@
         <h1 class='title'>GTHub</h1>
         <p>The #1 Motorsports community!</p>
         <button class='btn btn--primary'>Join our Discord</button>
+        <br />
+        <br />
+        <%if (!loggedIn) { %>
+            <form action="/login" method="POST">
+                <label for="username">Username</label><br />
+                <input type="text" name="username" placeholder="Username">
+                <br />
+                <label for="password">Password</label><br />
+                <input type="password" name="password" placeholder="Password">
+                <br />
+                <button type="submit" class="btn btn--primary">LOGIN</button>
+            </form>
+        <% } else { %>
+            <form action="/logout" method="POST">
+                <button type="submit" class="btn btn--primary">LOGOUT</button>
+            </form>
+        <% } %>
       </div>
     </section>
   </main>

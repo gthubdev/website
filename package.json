@@ -4,14 +4,21 @@
   "description": "New GTHub's website design using Node.js and Express",
   "main": "server.js",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
+    "express-session": "^1.16.1",
     "mariadb": "^2.0.3",
+    "method-override": "^3.0.0",
     "moment": "^2.24.0",
     "sequelize": "^5.3.1",
+    "session-file-store": "^1.2.0",
     "supertest": "^3.4.2"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "mocha": "^5.2.0",
     "sass": "^1.17.0"
@@ -20,7 +27,7 @@
     "start": "npm run sass && node server.js",
     "test_connection": "node ./database/test_connection.js",
     "sass": "sass views/scss/main.scss public/css/main.css",
-    "test": "npm run linting_test && mocha -R spec test",
+    "test": "cross-env NODE_ENV=test mocha -R spec test --exit",
     "linting_test": "./node_modules/.bin/eslint controllers database models routes test",
     "create_tables": "node ./database/create_tables.js",
     "insert_testdata": "node ./database/insert_testdata.js"

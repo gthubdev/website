@@ -1,18 +1,14 @@
-const model = require('../models/');
+const db = require('../models/');
 
 module.exports.getCalendar = (req, res) => {
 
-	model.Event.findAll({
+	db.Event.findAll({
 		include: [
+			{ model: db.Track },
 			{
-				model: model.Track
-			},
-			{
-				model: model.EventSession,
+				model: db.EventSession,
 				include: [
-					{
-						model: model.Series
-					}
+					{ model: db.Series }
 				]
 			}
 		]
