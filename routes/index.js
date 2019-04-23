@@ -7,6 +7,7 @@ const StartpageCtrl = require('../controllers/startpage');
 const CalendarCtrl = require('../controllers/calendar');
 const AuthCtrl = require('../controllers/auth.js');
 const SeriesCtrl = require('../controllers/series.js');
+const TrackCtrl = require('../controllers/track');
 const GalleryCtrl = require('../controllers/gallery');
 const PodcastCtrl = require('../controllers/podcast');
 
@@ -25,6 +26,9 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 
 // Series
 router.post('/calendar/series/create', SeriesCtrl.createSeries);
+
+// Track
+router.post('/calendar/track/create', TrackCtrl.createTrack);
 
 // Gallery
 router.get('/gallery', GalleryCtrl.getGallery);
