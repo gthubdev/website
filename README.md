@@ -16,6 +16,18 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 `npm install`
 
 * Create the file `.env` and enter your configuration
+```
+# For the web server
+PORT=3000
+IP=localhost 
+
+# For MariaDB
+DBHost=DATABASE_HOST
+DBName=DATABASE_NAME
+DBUser=DATABASE_USER
+DBPass=DATABASE_PASSWRORD
+```
+You can use the supplied `.env.sample` as a base.
 
 * Test your database connection with:
 `npm run test_connection`
