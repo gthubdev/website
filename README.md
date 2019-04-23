@@ -15,7 +15,7 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 * Install dependencies:
 `npm install`
 
-* Create the file `.env` and enter your configuration
+* Create the file `.env` and enter your configuration:
 ```
 # For the web server
 PORT=3000
