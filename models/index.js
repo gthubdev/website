@@ -4,16 +4,24 @@
 
 /*jslint node: true */
 'use strict';
-
+const env 		= require('dotenv');
 const fs        = require('fs');
 const path      = require('path');
 const Sequelize = require('sequelize');
 const basename  = path.basename(module.filename);
 const db        = {};
 
+// loads .env variables
+env.config();
+
 let dbconfig;
-if (fs.existsSync('./database/config.js')) {
-	dbconfig = require('../database/config.js');
+if (process.env.DBHost) {
+	dbconfig = {
+		host: process.env.DBHost,
+		databasename: process.env.DBName,
+		user: process.env.DBUser,
+		password: process.env.DBPass
+	}
 } else {
 	dbconfig = require('../database/circleci.js');
 }

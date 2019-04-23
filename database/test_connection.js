@@ -1,9 +1,9 @@
+require('dotenv').config();
 const Sequelize = require('sequelize');
-const dbconfig 	= require('../database/config.js');
 
 // Define database-configuration
-const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.password, {
-	host: dbconfig.host,
+const sequelize = new Sequelize(process.env.DBName, process.env.DBUser, process.env.DBPass, {
+	host: process.env.DBHost,
 	dialect: 'mariadb',
 	logging: false
 });

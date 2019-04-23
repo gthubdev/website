@@ -1,3 +1,4 @@
+const env 				= require('dotenv');
 const express 	        = require('express');
 const app 		        = express();
 const bodyParser        = require('body-parser');
@@ -6,8 +7,12 @@ const session           = require('express-session');
 const SessionFileStore  = require('session-file-store')(session);
 const util 				= require('./util/util.js');
 
+// loads .env variables
+env.config();
+
 // set the default port to 3000
 const port = process.env.PORT || 3000;
+const ip = process.env.IP || '127.0.0.1';
 
 // set the template engine
 app.set('view engine', 'ejs');
@@ -45,8 +50,8 @@ app.use(express.static(__dirname + '/public'));
 const index = require('./routes/index');
 app.use('/', index);
 
-const server = app.listen(port, () => {
-	console.log('Server running on port ' + port);
+const server = app.listen(port, ip, () => {
+	console.log('Server running on ' + ip + ':' + port);
 });
 
 module.exports = server;
