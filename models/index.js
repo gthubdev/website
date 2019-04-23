@@ -12,8 +12,13 @@ const basename  = path.basename(module.filename);
 const db        = {};
 
 let dbconfig;
-if (fs.existsSync('./database/config.js')) {
-	dbconfig = require('../database/config.js');
+if (process.env.DBHost) {
+	dbconfig = {
+		host: process.env.DBHost,
+		databasename: process.env.DBName,
+		user: process.env.DBUser,
+		password: process.env.DBPass
+	}
 } else {
 	dbconfig = require('../database/circleci.js');
 }
