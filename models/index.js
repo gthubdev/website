@@ -4,12 +4,15 @@
 
 /*jslint node: true */
 'use strict';
-
+const env 		= require('dotenv');
 const fs        = require('fs');
 const path      = require('path');
 const Sequelize = require('sequelize');
 const basename  = path.basename(module.filename);
 const db        = {};
+
+// loads .env variables
+env.config();
 
 let dbconfig;
 if (process.env.DBHost) {
