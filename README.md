@@ -25,7 +25,7 @@ IP=localhost
 DBHost=DATABASE_HOST
 DBName=DATABASE_NAME
 DBUser=DATABASE_USER
-DBPass=DATABASE_PASSWRORD
+DBPass=DATABASE_PASSWORD
 ```
 You can use the supplied `.env.sample` as a base.
 
