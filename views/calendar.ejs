@@ -33,8 +33,7 @@
       </main>
     </section>
     <section class="container">
-      <p>Insert events here</p>
-
+      <h3>Events</h3>
       <% events.forEach(event => { %>
           <p>
             <b><%= event.name %></b> (<%= event.Track.name %>) <%= event.startdate %> - <%= event.enddate %><br />
@@ -46,6 +45,22 @@
             <br />
           </p>
       <% }); %>
+
+      <h3>Series</h3>
+      <% series.forEach(s => { %>
+          <p>
+              <b><%= s.name %></b> (<%= s.homepage %>)
+          </p>
+      <% }); %>
+      <form action="/calendar/series/create" method="POST">
+          <input aria-label="Name" type="text" name="name" placeholder="Name">
+          <br />
+          <input aria-label="Logo" type="text" name="logo" placeholder="Logo">
+          <br />
+          <input aria-label="Homepage" type="text" name="homepage" placeholder="Homepage">
+          <br />
+          <button type="submit" class="btn btn--primary">CREATE</button>
+      </form>
     </section>
   </main>
   <%- include partials/menu.ejs %>
