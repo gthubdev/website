@@ -4,7 +4,7 @@ const util = require('../util/util.js');
 module.exports.createSeries = (req, res) => {
 	db.Series.create(req.body)
 	.then(series => {
-		util.print('Series \'' + req.body.name + '\' created');
+		util.print('Series \'' + series.name + '\' created');
 		res.redirect('/calendar');
 	}, err => {
 		util.print('Ups. Something went wrong trying to create a series.');
