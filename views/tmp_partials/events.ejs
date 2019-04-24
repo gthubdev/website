@@ -20,7 +20,7 @@
     <br />
     <input aria-label="Enddate" type="date" name="enddate" placeholder="Enddate" required>
     <br />
-    <select class="form-control" id="track" name="track" required>
+    <select aria-label="Track" class="form-control" id="track" name="track" required>
         <option></option>
         <% tracks.forEach(track => { %>
         <option value="<%= track.id %>"> <%= track.name %>

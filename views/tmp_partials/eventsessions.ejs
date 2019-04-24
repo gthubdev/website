@@ -6,7 +6,7 @@
     <br />
     <input aria-label="Endtime" type="datetime-local" name="endtime" placeholder="Endtime" required>
     <br />
-    <select class="form-control" id="event" name="event" required>
+    <select aria-label="Event" class="form-control" id="event" name="event" required>
         <option></option>
         <% events.forEach(event => { %>
         <option value="<%= event.id %>"> <%= event.name %>
@@ -14,7 +14,7 @@
         </option>
     </select>
     <br />
-    <select class="form-control" id="series" name="series" required>
+    <select aria-label="Series" class="form-control" id="series" name="series" required>
         <option></option>
         <% series.forEach(s => { %>
         <option value="<%= s.id %>"> <%= s.name %>
