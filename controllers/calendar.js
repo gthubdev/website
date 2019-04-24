@@ -19,12 +19,18 @@ module.exports.getCalendar = (req, res) => {
 			order: [
 				['name', 'ASC']
 			]
+		}),
+		db.Track.findAll({
+			order: [
+				['name', 'ASC']
+			]
 		})
-	]).spread((events, series) => {
+	]).spread((events, series, tracks) => {
 		res.render('calendar.ejs',
 			{
 				events: events,
-				series: series
+				series: series,
+				tracks: tracks
 			});
 	}, err => {
 		console.error(err);

@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		name: DataTypes.STRING,
 		location: DataTypes.STRING,
-		length: DataTypes.DOUBLE,
+		length: {
+			type: DataTypes.DOUBLE,
+			allowNull: false,
+			defaultValue: '0'
+		},
 		map: DataTypes.STRING,
 		createdAt: {
 			type: DataTypes.DATE,
