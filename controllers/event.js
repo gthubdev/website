@@ -7,7 +7,7 @@ module.exports.createEvent = (req, res) => {
 		util.print('Event \'' + event.name + '\' created');
 		res.redirect('/calendar');
 	}, err => {
-		util.print('Ups. Something went wrong trying to create an even.');
+		util.print('Ups. Something went wrong trying to create an event.');
 		util.print(err);
 		res.redirect('/calendar');
 	});

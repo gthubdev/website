@@ -7,6 +7,7 @@ const StartpageCtrl = require('../controllers/startpage');
 const CalendarCtrl = require('../controllers/calendar');
 const AuthCtrl = require('../controllers/auth.js');
 const EventCtrl = require('../controllers/event.js');
+const EventSessionCtrl = require('../controllers/eventsession.js');
 const SeriesCtrl = require('../controllers/series.js');
 const TrackCtrl = require('../controllers/track');
 const GalleryCtrl = require('../controllers/gallery');
@@ -27,6 +28,9 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 
 // Event
 router.post('/calendar/event/create', EventCtrl.createEvent);
+
+// EventSession
+router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);
 
 // Series
 router.post('/calendar/series/create', SeriesCtrl.createSeries);
