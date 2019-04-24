@@ -33,58 +33,11 @@
       </main>
     </section>
     <section class="container">
-      <h3>Events</h3>
-      <% events.forEach(event => { %>
-          <p>
-            <b><%= event.name %></b> (<%= event.Track.name %>) <%= event.startdate %> - <%= event.enddate %><br />
-            <ul>
-                <% event.EventSessions.forEach(session => { %>
-                    <li>
-                        <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= session.starttime %>
-                    </li>
-                <% }); %>
-            </ul>
-          </p>
-      <% }); %>
 
-      <h3>Series</h3>
-      <ul>
-          <% series.forEach(s => { %>
-              <li>
-                  <b><%= s.name %></b> (<%= s.homepage %>)
-              </li>
-              <% }); %>
-      </ul>
-      <form action="/calendar/series/create" method="POST">
-          <input aria-label="Name" type="text" name="name" placeholder="Name" required>
-          <br />
-          <input aria-label="Logo" type="text" name="logo" placeholder="Logo">
-          <br />
-          <input aria-label="Homepage" type="text" name="homepage" placeholder="Homepage">
-          <br />
-          <button type="submit" class="btn btn--primary">CREATE</button>
-      </form>
-      <br />
+      <%- include tmp_partials/events.ejs %>
+      <%- include tmp_partials/series.ejs %>
+      <%- include tmp_partials/track.ejs %>
 
-      <h3>Tracks</h3>
-      <ul>
-          <% tracks.forEach(track => { %>
-              <li>
-                  <b><%= track.name %></b> (<%= track.location %>, <%= track.length %>km)
-              </li>
-          <% }); %>
-      </ul>
-      <form action="/calendar/track/create" method="POST">
-          <input aria-label="Name" type="text" name="name" placeholder="Name" required>
-          <br />
-          <input aria-label="Location" type="text" name="location" placeholder="Location" required>
-          <br />
-          <input aria-label="Length" type="number" name="length" placeholder="Length" step="0.001" required>
-          <br />
-          <input aria-label="Map" type="text" name="map" placeholder="Map">
-          <br />
-          <button type="submit" class="btn btn--primary">CREATE</button>
-      </form>
     </section>
   </main>
   <%- include partials/menu.ejs %>

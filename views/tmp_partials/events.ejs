@@ -1,0 +1,13 @@
+<h3>Events</h3>
+<% events.forEach(event => { %>
+    <p>
+      <b><%= event.name %></b> (<%= event.Track.name %>) <%= event.startdate %> - <%= event.enddate %><br />
+      <ul>
+          <% event.EventSessions.forEach(session => { %>
+          <li>
+              <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= session.starttime %>
+          </li>
+          <% }); %>
+      </ul>
+    </p>
+<% }); %>
