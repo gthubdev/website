@@ -1,0 +1,32 @@
+<h3>Events</h3>
+<% events.forEach(event => { %>
+    <p>
+      <b><%= event.name %></b> (<%= event.Track.name %>) <%= event.startdate %> - <%= event.enddate %><br />
+      <ul>
+          <% event.EventSessions.forEach(session => { %>
+          <li>
+              <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= session.starttime %>
+          </li>
+          <% }); %>
+      </ul>
+    </p>
+<% }); %>
+<form action="/calendar/event/create" method="POST">
+    <input aria-label="Name" type="text" name="name" placeholder="Name" required>
+    <br />
+    <input aria-label="Logo" type="text" name="logo" placeholder="Logo">
+    <br />
+    <input aria-label="Startdate" type="date" name="startdate" placeholder="Startdate" required>
+    <br />
+    <input aria-label="Enddate" type="date" name="enddate" placeholder="Enddate" required>
+    <br />
+    <select aria-label="Track" class="form-control" id="track" name="track" required>
+        <option></option>
+        <% tracks.forEach(track => { %>
+        <option value="<%= track.id %>"> <%= track.name %>
+        <% }) %>
+        </option>
+    </select>
+    <br />
+    <button type="submit" class="btn btn--primary">CREATE</button>
+</form>

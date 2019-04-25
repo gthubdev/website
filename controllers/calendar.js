@@ -13,6 +13,10 @@ module.exports.getCalendar = (req, res) => {
 						{ model: db.Series }
 					]
 				}
+			],
+			order: [
+				['startdate', 'ASC'],
+				[db.EventSession, 'starttime', 'ASC']
 			]
 		}),
 		db.Series.findAll({
