@@ -28,6 +28,15 @@
                 <button type="submit" class="btn btn--primary">LOGIN</button>
             </form>
         <% } else { %>
+            <form action="/changepassword" method="POST">
+                <input aria-label="Username" type="text" name="username" placeholder="Username">
+                <br />
+                <input aria-label="Old Password" type="password" name="oldpassword" placeholder="Old Password">
+                <br />
+                <input aria-label="New Password" type="password" name="newpassword" placeholder="New Password">
+                <br />
+                <button type="submit" class="btn btn--primary">UPDATE</button>
+            </form>
             <form action="/logout" method="POST">
                 <button type="submit" class="btn btn--primary">LOGOUT</button>
             </form>

@@ -22,6 +22,7 @@ router.get('/', StartpageCtrl.getStartpage);
 // Authentication
 router.post('/login', AuthCtrl.login);
 router.post('/logout', AuthCtrl.logout);
+router.post('/changepassword', AuthCtrl.changepassword);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
