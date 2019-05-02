@@ -7,8 +7,6 @@ module.exports.createEventSession = (req, res) => {
 		util.print('EventSession \'' + eventsession.name + '\' created');
 		res.redirect('/calendar');
 	}, err => {
-		util.print('Ups. Something went wrong trying to create an event session.');
-		util.print(err);
-		res.redirect('/calendar');
+		util.error(req, res, err);
 	});
 };

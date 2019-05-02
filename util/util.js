@@ -33,3 +33,11 @@ function isLoggedIn(req) {
 	return req.session.user ? true : false;
 }
 module.exports.isLoggedIn = isLoggedIn;
+
+// print error & redirect
+// TODO: decide what to do here
+function error(req, res, err) {
+	console.error(err);
+	res.redirect('/');
+}
+module.exports.error = error;

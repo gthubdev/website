@@ -37,7 +37,7 @@ module.exports.getCalendar = (req, res) => {
 				tracks: tracks
 			});
 	}, err => {
-		console.error(err);
+		util.error(req, res, err);
 	});
 
 };
