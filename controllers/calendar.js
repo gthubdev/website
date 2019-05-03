@@ -1,5 +1,6 @@
 const db = require('../models/');
 const Sequelize = require('sequelize');
+const dateutil = require('../util/dateutil.js');
 
 module.exports.getCalendar = (req, res) => {
 
@@ -34,7 +35,9 @@ module.exports.getCalendar = (req, res) => {
 			{
 				events: events,
 				series: series,
-				tracks: tracks
+				tracks: tracks,
+				tz_strings: dateutil.tz_strings,
+				tz_offsets: dateutil.tz_offsets
 			});
 	}, err => {
 		util.error(req, res, err);
