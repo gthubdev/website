@@ -12,9 +12,9 @@ INSERT INTO Series (id, name) VALUES (2, "Intercontinental GT Challenge");
 INSERT INTO Series (id, name) VALUES (3, "Blancpain Endurance Cup");
 INSERT INTO Series (id, name) VALUES (4, "GT2");
 
-INSERT INTO Event (id, name, startdate, enddate, track) VALUES (1, "Bathurst 12 Hour", "2019-02-03", "2019-02-03", 2);
-INSERT INTO Event (id, name, startdate, enddate, track) VALUES (2, "Nürburgring 24 Hours", "2019-06-20", "2019-06-23", 1);
-INSERT INTO Event (id, name, startdate, enddate, track) VALUES (3, "Spa 24 Hours", "2019-07-26", "2019-07-28", 3);
+INSERT INTO Event (id, name, startdate, enddate, timezone, track) VALUES (1, "Bathurst 12 Hour", "2019-02-03", "2019-02-03", 'Australia/Sydney',2);
+INSERT INTO Event (id, name, startdate, enddate, timezone, track) VALUES (2, "Nürburgring 24 Hours", "2019-06-20", "2019-06-23", 'Europe/Brussels', 1);
+INSERT INTO Event (id, name, startdate, enddate, timezone, track) VALUES (3, "Spa 24 Hours", "2019-07-26", "2019-07-28", 'Europe/Brussels',3);
 
 INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Top 10 Shootout", "2019-02-02 06:30", "2019-02-02 07:15", 1, 2);
 INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Race", "2019-02-02 19:45", "2019-02-03 07:45", 1, 2);
