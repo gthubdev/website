@@ -12,10 +12,7 @@ module.exports.login = (req, res) => {
 		if (user) {
 			bCrypt.compare(req.body.password, user.password, (err, matches) => {
 				if (err) {
-					util.print('Ups. Something went wrong comparing passwords.');
-					util.print(err);
-					// TODO
-					res.redirect('/', {loggedIn: false});
+					util.error(req, res, err);
 					return;
 				}
 				if (matches) {
@@ -35,10 +32,7 @@ module.exports.login = (req, res) => {
 			res.redirect('/error');
 		}
 	}, err => {
-		// TODO, print/redirect
-		util.print('Ups. Something went wrong logging in.');
-		util.print(err);
-		res.redirect('/');
+		util.error(req, res, err);
 	});
 
 };
@@ -56,10 +50,7 @@ module.exports.changepassword = (req, res) => {
 		if (user) {
 			bCrypt.compare(req.body.oldpassword, user.password, (err, matches) => {
 				if (err) {
-					util.print('Ups. Something went wrong comparing passwords.');
-					util.print(err);
-					// TODO
-					res.redirect('/');
+					util.error(req, res, err);
 					return;
 				}
 				if (matches) {
@@ -69,8 +60,7 @@ module.exports.changepassword = (req, res) => {
 						util.print('Password for user \'' + result.get('username') + '\' successfully changed.');
 						res.redirect('/');
 					}, err => {
-						util.print(err);
-						res.redirect('/error');
+						util.error(req, res, err);
 					});
 				} else {
 					// TODO, redirect & print error
@@ -86,8 +76,6 @@ module.exports.changepassword = (req, res) => {
 		}
 	}, err => {
 		// TODO, print/redirect
-		util.print('Ups. Something went wrong changing the password.');
-		util.print(err);
-		res.redirect('/');
+		util.error(req, res, err);
 	});
 };

@@ -7,8 +7,6 @@ module.exports.createTrack = (req, res) => {
 		util.print('Track \'' + track.name + '\' created');
 		res.redirect('/calendar');
 	}, err => {
-		util.print('Ups. Something went wrong trying to create a track.');
-		util.print(err);
-		res.redirect('/calendar');
+		util.error(req, res, err);
 	});
 };
