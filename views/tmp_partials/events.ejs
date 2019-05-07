@@ -5,7 +5,8 @@
       <ul>
           <% event.EventSessions.forEach(session => { %>
           <li>
-              <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= session.starttime %>
+              <% let start = moment(session.starttime).tz(timezone) %>
+              <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= start %>
           </li>
           <% }); %>
       </ul>
@@ -40,3 +41,4 @@
     <br />
     <button type="submit" class="btn btn--primary">CREATE</button>
 </form>
+<br />

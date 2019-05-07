@@ -26,6 +26,7 @@ router.post('/changepassword', AuthCtrl.changepassword);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
+router.post('/calendar/timezone', CalendarCtrl.getCalendarWithTimezone);
 
 // Event
 router.post('/calendar/event/create', EventCtrl.createEvent);
