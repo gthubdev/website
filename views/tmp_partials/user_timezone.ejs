@@ -1,0 +1,20 @@
+<h3>Local timezone</h3>
+<p>
+User set timezone:
+<% let tz = locals.timezone ? timezone : 'Europe/Brussels' %>
+<%= timezone %>
+</p>
+<form action="/calendar/timezone" method="POST">
+	<select aria-label="Timezone" class="form-control" id="timezone" name="timezone" required>
+        <option></option>
+        <% tz_offsets.forEach(tz => { %>
+        <% let offset = moment.tz(tz.name).format('Z'); %>
+        <% let name = tz_strings[tz.name] %>
+        <option value="<%= tz.name %>"> UTC<%= offset %> <%= name %>
+        <% }) %>
+        </option>
+    </select>
+    <br />
+    <button type="submit" class="btn btn--primary">CHANGE</button>
+</form>
+<br />
