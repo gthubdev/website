@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 		logo: DataTypes.STRING,
 		startdate: DataTypes.DATEONLY,
 		enddate: DataTypes.DATEONLY,
+		timezone: DataTypes.STRING,
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.fn('NOW')

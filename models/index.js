@@ -38,8 +38,7 @@ const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.p
 		max: 5,
 		min: 0,
 		idle: 10000
-	},
-	timezone: 'Europe/Amsterdam'
+	}
 });
 
 //Load all the models

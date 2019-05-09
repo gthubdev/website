@@ -5,6 +5,8 @@ const bodyParser        = require('body-parser');
 const methodOverride    = require('method-override');
 const session           = require('express-session');
 const SessionFileStore  = require('session-file-store')(session);
+const moment			= require('moment-timezone');
+const cookieParser 		= require('cookie-parser')
 const util 				= require('./util/util.js');
 
 // loads .env variables
@@ -46,9 +48,15 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + '/public'));
 
+// enable cookie-handling
+app.use(cookieParser());
+
 // routes
 const index = require('./routes/index');
 app.use('/', index);
+
+// allow Moment.js to be accessible from within EJS templates
+app.locals.moment = moment;
 
 const server = app.listen(port, ip, () => {
 	console.log('Server running on ' + ip + ':' + port);

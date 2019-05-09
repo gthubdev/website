@@ -1,11 +1,12 @@
 <h3>Events</h3>
 <% events.forEach(event => { %>
     <p>
-      <b><%= event.name %></b> (<%= event.Track.name %>) <%= event.startdate %> - <%= event.enddate %><br />
+      <b><%= event.name %></b> (<%= event.Track.name %>) <%= event.startdate %> - <%= event.enddate %> [Timezone: <%= event.timezone %>]<br />
       <ul>
           <% event.EventSessions.forEach(session => { %>
           <li>
-              <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= session.starttime %>
+              <% let start = moment(session.starttime).tz(timezone) %>
+              <%= session.name %> <i>(<%= session.Series.name %>)</i> <%= start %>
           </li>
           <% }); %>
       </ul>
@@ -20,6 +21,16 @@
     <br />
     <input aria-label="Enddate" type="date" name="enddate" placeholder="Enddate" required>
     <br />
+    <select aria-label="Timezone" class="form-control" id="timezone" name="timezone" required>
+        <option></option>
+        <% tz_offsets.forEach(tz => { %>
+        <% let offset = moment.tz(tz.name).format('Z'); %>
+        <% let name = tz_strings[tz.name] %>
+        <option value="<%= tz.name %>"> UTC<%= offset %> <%= name %>
+        <% }) %>
+        </option>
+    </select>
+    <br />
     <select aria-label="Track" class="form-control" id="track" name="track" required>
         <option></option>
         <% tracks.forEach(track => { %>
@@ -30,3 +41,4 @@
     <br />
     <button type="submit" class="btn btn--primary">CREATE</button>
 </form>
+<br />
