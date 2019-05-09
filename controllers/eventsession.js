@@ -12,11 +12,11 @@ module.exports.createEventSession = (req, res) => {
 		raw: true
 	})
 	.then(event => {
-		console.log('Timezone for event: ' + event.timezone);
+		//console.log('Timezone for event: ' + event.timezone);
 
 		let oldstart = moment.utc(req.body.starttime);
 		let oldend = moment.utc(req.body.endtime);
-		console.log('Local starttime: ' + oldstart.format());
+		//console.log('Local starttime: ' + oldstart.format());
 
 		let zone = moment.tz.zone(event.timezone);
 		let offset = zone.parse(Date.UTC(
@@ -25,11 +25,11 @@ module.exports.createEventSession = (req, res) => {
 			oldstart.get('date'),
 			oldstart.get('hour'),
 			oldstart.get('minute')));
-		console.log('Offset for timezone in relation to UTC: ' + offset + 'mins');
+		//console.log('Offset for timezone in relation to UTC: ' + offset + 'mins');
 
 		let newstart = moment(oldstart).add(offset, 'm');
 		let newend = moment(oldend).add(offset, 'm');
-		console.log('Starttime in UTC: ' + newstart.format());
+		//console.log('Starttime in UTC: ' + newstart.format());
 
 		req.body.starttime = newstart.format();
 		req.body.endtime = newend.format();

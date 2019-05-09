@@ -5,14 +5,12 @@ const dateutil = require('../util/dateutil.js');
 const DEFAULT_TIMEZONE = 'Europe/Brussels';
 
 module.exports.getCalendar = (req, res) => {
-	let timezone = req.cookies['timezone'] !== undefined ? req.cookies['timezone'] : DEFAULT_TIMEZONE;
+	let timezone = req.cookies.timezone !== undefined ? req.cookies.timezone : DEFAULT_TIMEZONE;
 	res.clearCookie('timezone', { httpOnly: true });
-	console.log(timezone);
 	buildCalendar(req, res, timezone);
 };
 
 module.exports.getCalendarWithTimezone = (req, res) => {
-	console.log(req.body);
 	res.cookie('timezone', req.body.timezone, { httpOnly: true });
 	res.redirect('/calendar');
 };
