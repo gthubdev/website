@@ -7,7 +7,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
-    "dotenv": "^7.0.0",
+    "dotenv": "^8.0.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
@@ -15,15 +15,15 @@
     "method-override": "^3.0.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.25",
-    "sequelize": "^5.3.1",
+    "sequelize": "~5.3.5",
     "session-file-store": "^1.2.0",
-    "supertest": "^3.4.2"
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.1.4",
     "sass": "^1.17.0"
   },
   "scripts": {
