@@ -4,9 +4,9 @@ const app 		        = express();
 const bodyParser        = require('body-parser');
 const methodOverride    = require('method-override');
 const session           = require('express-session');
-const SessionFileStore  = require('session-file-store')(session);
+const MemoryStore		= require('memorystore')(session);
 const moment			= require('moment-timezone');
-const cookieParser 		= require('cookie-parser')
+const cookieParser 		= require('cookie-parser');
 const util 				= require('./util/util.js');
 
 // loads .env variables
@@ -26,7 +26,9 @@ util.clearSessions();
 app.use(session({
 	secret: 'supersecretsecret',
 	name: 'gthubcookie',
-	store: new SessionFileStore({logFn: function(){}}),
+	store: new MemoryStore({
+		checkPeriod: 86400000
+	}),
 	//proxy: true,
 	resave: false,
 	saveUninitialized: false
