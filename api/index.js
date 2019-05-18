@@ -1,20 +1,19 @@
-const env 				= require('dotenv');
-const express 	        = require('express');
-const app 		        = express();
-const bodyParser        = require('body-parser');
-const methodOverride    = require('method-override');
-const session           = require('express-session');
-const MemoryStore		= require('memorystore')(session);
-const moment			= require('moment-timezone');
-const cookieParser 		= require('cookie-parser');
-const util 				= require('./util/util.js');
-
+const env = require('dotenv');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
+const moment = require('moment-timezone');
+const cookieParser = require('cookie-parser');
+const util = require('./util/util.js');
 // loads .env variables
 env.config();
 
 // set the default port to 3000
-const port = process.env.PORT || 3000;
-const ip = process.env.IP || '127.0.0.1';
+// const port = process.env.PORT || 3000;
+// const ip = process.env.IP || '127.0.0.1';
 
 // set the template engine
 app.set('view engine', 'ejs');
@@ -22,16 +21,18 @@ app.set('view engine', 'ejs');
 // clear old sessions
 util.clearSessions();
 
+// TODO: Make somehow conditional
+
 // handle authentication
 app.use(session({
-	secret: 'supersecretsecret',
-	name: 'gthubcookie',
-	store: new MemoryStore({
-		checkPeriod: 86400000
-	}),
-	//proxy: true,
-	resave: false,
-	saveUninitialized: false
+  secret: 'supersecretsecret',
+  name: 'gthubcookie',
+  store: new MemoryStore({
+    checkPeriod: 86400000
+  }),
+  //proxy: true,
+  resave: false,
+  saveUninitialized: false
 }));
 
 // get all data/stuff of the body (POST) parameters
@@ -60,8 +61,11 @@ app.use('/', index);
 // allow Moment.js to be accessible from within EJS templates
 app.locals.moment = moment;
 
-const server = app.listen(port, ip, () => {
-	console.log('Server running on ' + ip + ':' + port);
-});
+// const server = app.listen(port, ip, () => {
+//   console.log('Server running on ' + ip + ':' + port);
+// });
 
-module.exports = server;
+module.exports = {
+  path: '/api',
+  handler: app
+};

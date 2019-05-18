@@ -15,6 +15,7 @@ module.exports.getCalendarWithTimezone = (req, res) => {
 	res.redirect('/calendar');
 };
 
+
 function buildCalendar(req, res, timezone) {
 	Sequelize.Promise.all([
 		db.Event.findAll({
@@ -43,7 +44,7 @@ function buildCalendar(req, res, timezone) {
 			]
 		})
 	]).spread((events, series, tracks) => {
-		res.render('calendar.ejs',
+		res.json(
 			{
 				events: events,
 				series: series,

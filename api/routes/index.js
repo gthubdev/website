@@ -57,7 +57,7 @@ router.get('/error', (req, res) => {
 
 
 // route to handle all other requests
-router.get('*', function(req, res) {
+router.get('*', function (req, res) {
 	res.redirect('/');
 });
 
