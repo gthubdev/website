@@ -19,7 +19,7 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 ```
 # For the web server
 PORT=3000
-IP=localhost 
+IP=localhost
 
 # For MariaDB
 DBHost=DATABASE_HOST
@@ -38,8 +38,10 @@ You can use the supplied `.env.sample` as a base.
 * Insert testdata with:
 `npm run insert_testdata`
 
-* Run:
-`npm start`
+## Run
+* Run `npm run build` to generate all files, followed by `npm start` to start the server
+
+* Alternatively, run `npm run dev` to start the server in development mode
 
 ## Testing
 * Run:

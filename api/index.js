@@ -8,6 +8,7 @@ const MemoryStore = require('memorystore')(session);
 const moment = require('moment-timezone');
 const cookieParser = require('cookie-parser');
 const util = require('./util/util.js');
+
 // loads .env variables
 env.config();
 
@@ -25,14 +26,14 @@ util.clearSessions();
 
 // handle authentication
 app.use(session({
-  secret: 'supersecretsecret',
-  name: 'gthubcookie',
-  store: new MemoryStore({
-    checkPeriod: 86400000
-  }),
-  //proxy: true,
-  resave: false,
-  saveUninitialized: false
+	secret: 'supersecretsecret',
+	name: 'gthubcookie',
+	store: new MemoryStore({
+		checkPeriod: 86400000
+	}),
+	//proxy: true,
+	resave: false,
+	saveUninitialized: false
 }));
 
 // get all data/stuff of the body (POST) parameters
@@ -66,6 +67,6 @@ app.locals.moment = moment;
 // });
 
 module.exports = {
-  path: '/api',
-  handler: app
+	path: '/api',
+	handler: app
 };
