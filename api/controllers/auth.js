@@ -19,17 +19,20 @@ module.exports.login = (req, res) => {
 					// TODO, redirect to somewhere
 					util.print('User ' + req.body.username + ', password matched');
 					req.session.user = user;
-					res.redirect('/');
+					res.status(200).send();
+					// res.redirect('/');
 				} else {
 					// TODO, redirect & print error
 					util.print('User ' + req.body.username + ', password did not match');
-					res.redirect('/error');
+					// res.redirect('/api/error');
+					res.status(403).send();
 				}
 			});
 		} else {
 			// TODO, redirect & display error
 			util.print('User ' + req.body.username + ' does not exist');
-			res.redirect('/error');
+			// res.redirect('/api/error');
+			res.status(403).send();
 		}
 	}, err => {
 		util.error(req, res, err);
@@ -40,7 +43,8 @@ module.exports.login = (req, res) => {
 module.exports.logout = (req, res) => {
 	res.clearCookie('connect.sid');
 	req.session.destroy();
-	res.redirect('/');
+	res.status(200).send();
+	// res.redirect('/');
 };
 
 module.exports.changepassword = (req, res) => {

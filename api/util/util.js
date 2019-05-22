@@ -10,23 +10,23 @@ function print(s) {
 module.exports.print = print;
 
 // clear all session objects
-function clearSessions() {
-	const directory = 'sessions';
-
-	if (fs.existsSync(directory)) {
-		fs.readdir(directory, (err, files) => {
-			if (err) throw err;
-
-			for (const file of files) {
-				fs.unlink(path.join(directory, file), err => {
-					if (err) throw err;
-				});
-			}
-		});
-	}
-
-}
-module.exports.clearSessions = clearSessions;
+// function clearSessions() {
+// 	const directory = 'sessions';
+//
+// 	if (fs.existsSync(directory)) {
+// 		fs.readdir(directory, (err, files) => {
+// 			if (err) throw err;
+//
+// 			for (const file of files) {
+// 				fs.unlink(path.join(directory, file), err => {
+// 					if (err) throw err;
+// 				});
+// 			}
+// 		});
+// 	}
+//
+// }
+// module.exports.clearSessions = clearSessions;
 
 // check, if a visitor is logged in
 function isLoggedIn(req) {

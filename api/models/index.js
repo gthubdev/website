@@ -32,7 +32,8 @@ const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.p
 	dialect: 'mariadb',
 	logging: false,
 	dialectOptions: {
-		multipleStatements: true
+		multipleStatements: true,
+		timezone: 'local'
 	},
 	pool: {
 		max: 5,

@@ -20,8 +20,8 @@ const PodcastCtrl = require('../controllers/podcast');
 // router.get('/', StartpageCtrl.getStartpage);
 //
 // // Authentication
-// router.post('/login', AuthCtrl.login);
-// router.post('/logout', AuthCtrl.logout);
+router.post('/login', AuthCtrl.login);
+router.post('/logout', AuthCtrl.logout);
 // router.post('/changepassword', AuthCtrl.changepassword);
 //
 // // Calendar
@@ -49,11 +49,12 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 //
 // // Error-handling
 // // TODO
-// router.get('/error', (req, res) => {
-// 	res.render('landing.ejs', {
-// 		loggedIn: util.isLoggedIn(req)
-// 	});
-// });
+router.get('/error', (req, res) => {
+	// res.render('landing.ejs', {
+	// 	loggedIn: util.isLoggedIn(req)
+	// });
+	res.status(403).send();
+});
 //
 //
 // // route to handle all other requests
