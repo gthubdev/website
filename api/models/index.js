@@ -23,7 +23,7 @@ if (process.env.DBHost) {
 		password: process.env.DBPass
 	}
 } else {
-	dbconfig = require('../database/circleci.js');
+	dbconfig = require('../../database/circleci.js');
 }
 
 // Define database-configuration

@@ -1,4 +1,4 @@
-const db = require('../models/');
+const db = require('../api/models/');
 const fs = require('fs');
 
 // set the delay in milliseconds
