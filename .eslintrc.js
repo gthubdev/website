@@ -6,12 +6,17 @@ module.exports = {
 		'node': true,
 		'mocha': true
 	},
-	'extends': 'eslint:recommended',
+	'plugins': ['vue'],
+	'extends': [
+		'eslint:recommended',
+		'plugin:vue/recommended'
+	],
 	'globals': {
 		'Atomics': 'readonly',
 		'SharedArrayBuffer': 'readonly'
 	},
 	'parserOptions': {
+		'parser': 'babel-eslint',
 		'ecmaVersion': 2018,
 		'sourceType': 'module'
 	},
@@ -29,6 +34,13 @@ module.exports = {
 			'error',
 			'always'
 		],
+		'vue/html-indent': ["error", 'tab', {
+			"attribute": 1,
+			"baseIndent": 0,
+			"closeBracket": 0,
+			"alignAttributesVertically": true,
+			"ignores": []
+		}],
 		'no-console': 'off',
 		'no-undef': 'warn'
 	}
