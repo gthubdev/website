@@ -1,0 +1,70 @@
+<template>
+<div class="md-layout-item md-size-50">
+	<md-card>
+		<md-card-header>
+			<md-card-header-text>
+				<div class="md-title">{{ event.name }}</div>
+				<div class="md-subhead">{{ event.Track.name }}</div>
+				<div class="md-subhead">{{ startdate }} - {{ enddate }}<br />
+					({{ event.timezone }}, UTC{{ offset }})</div>
+			</md-card-header-text>
+
+			<md-card-media>
+				<img :src="event.logo" alt="Logo">
+			</md-card-media>
+		</md-card-header>
+		<!--<md-card-content>
+
+		</md-card-content>-->
+		<md-card-actions>
+			<md-button @click.native='showSessions()'>Show sessions</md-button>
+		</md-card-actions>
+	</md-card>
+</div>
+</template>
+
+<script>
+import moment from 'moment-timezone';
+
+export default {
+	props: {
+		event: {
+			type: Object,
+			default: null
+		},
+		tz: {
+			type: Object,
+			default: null
+		},
+		activeEvent: {
+			type: Object,
+			default: null
+		}
+	},
+	computed: {
+		startdate: function() {
+			return moment(this.event.startdate).format('ddd Do MMM YYYY');
+		},
+		enddate: function() {
+			return moment(this.event.enddate).format('ddd Do MMM YYYY');
+		},
+		offset: function() {
+			return moment.tz(this.event.timezone).format('Z');
+		}
+	},
+	methods: {
+		showSessions: function() {
+			this.$emit('showSessions', this.event);
+		}
+	}
+};
+</script>
+
+<style lang="scss" scoped>
+.md-card {
+	width: 95%;
+	margin: 16px;
+	display: inline-block;
+	vertical-align: top;
+}
+</style>
