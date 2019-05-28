@@ -44,13 +44,18 @@ function buildCalendar(req, res, timezone) {
 		})
 	]).spread((events, series, tracks) => {
 
+		// timezone-info
+		let tz = {
+			tz_strings: dateutil.tz_strings,
+			tz_offsets: dateutil.tz_offsets,
+			timezone: timezone // client-timezone
+		};
+
 		let data = {
 			events: events,
 			series: series,
 			tracks: tracks,
-			tz_strings: dateutil.tz_strings,
-			tz_offsets: dateutil.tz_offsets,
-			timezone: timezone
+			tz: tz
 		};
 
 		res.json(data);

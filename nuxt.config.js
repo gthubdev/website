@@ -25,6 +25,10 @@ module.exports = {
 			rel: 'icon',
 			type: 'image/x-icon',
 			href: '/favicon.ico'
+		}],
+		link: [{
+			rel: 'stylesheet',
+			href: '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
 		}]
 	},
 

@@ -12,9 +12,9 @@ INSERT INTO Series (id, name) VALUES (2, "Intercontinental GT Challenge");
 INSERT INTO Series (id, name) VALUES (3, "Blancpain Endurance Cup");
 INSERT INTO Series (id, name) VALUES (4, "GT2");
 
-INSERT INTO Event (id, name, startdate, enddate, timezone, track) VALUES (1, "Bathurst 12 Hour", "2019-02-03", "2019-02-03", 'Australia/Sydney',2);
-INSERT INTO Event (id, name, startdate, enddate, timezone, track) VALUES (2, "Nürburgring 24 Hours", "2019-06-20", "2019-06-23", 'Europe/Brussels', 1);
-INSERT INTO Event (id, name, startdate, enddate, timezone, track) VALUES (3, "Spa 24 Hours", "2019-07-26", "2019-07-28", 'Europe/Brussels',3);
+INSERT INTO Event (id, name, logo, startdate, enddate, timezone, track) VALUES (1, "Bathurst 12 Hour", "https://da2.rbmbtnx.net/v4/RBTV/pd/FO-1Y9A5DRAW5N11/im:i:q_70,f_png,e_trim/im:i:w_600,c_limit/a:s/st:iAJvI63Os4zYB9_BGlY7jW/bathurst12hour_titletreatment_squarelogo.svg", "2019-02-01", "2019-02-03", 'Australia/Sydney', 2);
+INSERT INTO Event (id, name, logo, startdate, enddate, timezone, track) VALUES (2, "Nürburgring 24 Hours", "https://reifenpresse.de/wp-content/uploads/2018/11/ADAC-neuer-24h-Titelsponsor.jpg", "2019-06-20", "2019-06-23", 'Europe/Brussels', 1);
+INSERT INTO Event (id, name, logo, startdate, enddate, timezone, track) VALUES (3, "Spa 24 Hours", "https://tickets-2-u.com/wp-content/uploads/2018/05/24Hours_Spa.png", "2019-07-26", "2019-07-28", 'Europe/Brussels', 3);
 
 INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Top 10 Shootout", "2019-02-02 06:30", "2019-02-02 07:15", 1, 2);
 INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Race", "2019-02-02 19:45", "2019-02-03 07:45", 1, 2);
