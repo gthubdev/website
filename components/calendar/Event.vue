@@ -7,17 +7,18 @@
 				<div class="md-subhead">{{ event.Track.name }}</div>
 				<div class="md-subhead">{{ startdate }} - {{ enddate }}<br />
 					({{ event.timezone }}, UTC{{ offset }})</div>
+				<div class="md-subhead">Priority: {{ event.priority }}</div>
 			</md-card-header-text>
 
 			<md-card-media>
-				<img :src="event.logo" alt="Logo">
+				<img :src="eventLogo" alt="Logo">
 			</md-card-media>
 		</md-card-header>
-		<!--<md-card-content>
+		<!-- <md-card-content>
 
-		</md-card-content>-->
+		</md-card-content> -->
 		<md-card-actions>
-			<md-button @click.native='showSessions()'>Show sessions</md-button>
+			<md-button @click.native='toggleSessions()'>Show sessions</md-button>
 		</md-card-actions>
 	</md-card>
 </div>
@@ -48,13 +49,16 @@ export default {
 		enddate: function() {
 			return moment(this.event.enddate).format('ddd Do MMM YYYY');
 		},
+		eventLogo: function() {
+			return this.event.logo.length > 1 ? this.event.logo : this.event.Series.logo;
+		},
 		offset: function() {
 			return moment.tz(this.event.timezone).format('Z');
 		}
 	},
 	methods: {
-		showSessions: function() {
-			this.$emit('showSessions', this.event);
+		toggleSessions: function() {
+			this.$emit('toggleSessions', this.event);
 		}
 	}
 };

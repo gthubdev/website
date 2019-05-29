@@ -6,7 +6,11 @@ module.exports = (sequelize, DataTypes) => {
 			primaryKey: true
 		},
 		name: DataTypes.STRING,
-		logo: DataTypes.STRING,
+		priority: DataTypes.INTEGER,
+		logo: {
+			type: DataTypes.STRING,
+			defaultValue: ''
+		},
 		startdate: DataTypes.DATEONLY,
 		enddate: DataTypes.DATEONLY,
 		timezone: DataTypes.STRING,
@@ -25,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	Event.associate = models => {
 		models.Event.belongsTo(models.Track, {foreignKey: 'track'});
+		models.Event.belongsTo(models.Series, {foreignKey: 'mainseries'});
 		models.Event.hasMany(models.EventSession, {foreignKey: 'event'});
 	};
 
