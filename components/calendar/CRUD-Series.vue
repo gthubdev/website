@@ -54,17 +54,6 @@ export default {
 			}
 		};
 	},
-	watch: {
-		showDialog: function(newValue) {
-			this.showSeriesDialog = newValue;
-		},
-		showSeriesDialog: function(newValue, oldValue) {
-			if (oldValue === true)
-				this.$root.$emit('toggleCrudSeries');
-			if (newValue === true)
-				Object.keys(this.series).forEach(key => (this.series[key] = ''));
-		}
-	},
 	methods: {
 		async sendRequest() {
 			const series = JSON.parse(JSON.stringify(this.series));
@@ -88,6 +77,17 @@ export default {
 			return {
 				'md-invalid': !(this.series.priority >= 1)
 			};
+		}
+	},
+	watch: {
+		showDialog: function(newValue) {
+			this.showSeriesDialog = newValue;
+		},
+		showSeriesDialog: function(newValue, oldValue) {
+			if (oldValue === true)
+				this.$root.$emit('toggleCrudSeries');
+			if (newValue === true)
+				Object.keys(this.series).forEach(key => (this.series[key] = ''));
 		}
 	}
 };

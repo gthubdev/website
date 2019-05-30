@@ -28,6 +28,9 @@
 	<CRUDSeries
 		:show-dialog="showSeriesDialog"
 	/>
+	<CRUDTrack
+		:show-dialog="showTrackDialog"
+	/>
 </div>
 </template>
 
@@ -36,15 +39,13 @@ import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import SidePanel from '~/components/calendar/SidePanel.vue';
 import CRUDSeries from '~/components/calendar/CRUD-Series.vue';
+import CRUDTrack from '~/components/calendar/CRUD-Track.vue';
 
 import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event,
-		FilterPanel,
-		SidePanel,
-		CRUDSeries
+		Event, FilterPanel,	SidePanel, CRUDSeries, CRUDTrack
 	},
 	data: function() {
 		return {
@@ -52,7 +53,8 @@ export default {
 			showCurrentEvents: true,
 			activeEvent: null,
 			showEvent: false,
-			showSeriesDialog: false
+			showSeriesDialog: false,
+			showTrackDialog: false
 		};
 	},
 	computed: {
@@ -80,6 +82,16 @@ export default {
 					return a.name.localeCompare(b.name);
 				else
 					return a.priority - b.priority;
+			});
+		});
+		// Track
+		this.$root.$on('toggleCrudTrack', () => {
+			this.showTrackDialog = !this.showTrackDialog;
+		});
+		this.$root.$on('trackCreated', obj => {
+			this.data.tracks.push(obj);
+			this.data.tracks.sort((a,b) => {
+				return a.name.localeCompare(b.name);
 			});
 		});
 

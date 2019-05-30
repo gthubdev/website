@@ -1,8 +1,9 @@
 <template>
 <div class="md-layout-item md-size-20 filter">
 	<div>FILTER-BOX</div>
-	<md-button class="md-raised md-primary" @click.native='toggleCurrentEvents()'>{{ showCurrentEventsLabel }}</md-button>
-	<md-button class="md-raised md-primary" @click.native='createSeries()'>Create Series</md-button>
+	<md-button class="md-raised md-primary" @click.native='toggleCurrentEvents()'>{{ showCurrentEventsLabel }}</md-button><br />
+	<md-button class="md-raised md-primary" @click.native='createSeries()'>Create Series</md-button><br />
+	<md-button class="md-raised md-primary" @click.native='createTrack()'>Create Track</md-button>
 </div>
 </template>
 
@@ -23,6 +24,9 @@ export default {
 	methods: {
 		createSeries: function() {
 			this.$root.$emit('toggleCrudSeries');
+		},
+		createTrack: function() {
+			this.$root.$emit('toggleCrudTrack');
 		},
 		toggleCurrentEvents: function() {
 			this.$root.$emit('toggleCurrentEvents');
