@@ -3,9 +3,10 @@
 	<md-dialog :md-active.sync="showSeriesDialog">
 		<md-dialog-title>Create a Series</md-dialog-title>
 
-		<md-field>
+		<md-field :class="requiredName">
 			<label>Name</label>
 			<md-input v-model="series.name" required></md-input>
+			<span class="md-error">Please enter a name</span>
 		</md-field>
 
 		<md-field>
@@ -18,16 +19,17 @@
 			<md-input v-model="series.homepage"></md-input>
 		</md-field>
 
-		<md-field>
+		<md-field :class="requiredPriority">
 			<label for="priority">Priority</label>
 			<md-select v-model="series.priority" name="priority" id="priority" placeholder="Priority" required>
-				<md-option v-for="i in 4" :key="i" :value="i">{{i}}</md-option>
+				<md-option v-for="i in 4" :key="i" :value="i">{{ i }}</md-option>
 			</md-select>
+			<span class="md-error">Please choose a priority</span>
 		</md-field>
 
 		<md-dialog-actions>
 			<md-button class="md-primary md-accent" @click="showSeriesDialog = false">Cancel</md-button>
-			<md-button class="md-primary" @click="sendRequest()">Create</md-button>
+			<md-button class="md-raised md-primary" @click="sendRequest()" :disabled="!validInput()">Create</md-button>
 		</md-dialog-actions>
 	</md-dialog>
 </div>
@@ -71,6 +73,21 @@ export default {
 				series
 			});
 			this.$root.$emit('seriesCreated', res);
+		},
+		validInput: function() {
+			return this.series.name.length > 0 && this.series.priority >= 1;
+		}
+	},
+	computed: {
+		requiredName() {
+			return {
+				'md-invalid': !(this.series.name.length > 0)
+			};
+		},
+		requiredPriority() {
+			return {
+				'md-invalid': !(this.series.priority >= 1)
+			};
 		}
 	}
 };
