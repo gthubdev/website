@@ -1,13 +1,29 @@
 <template>
 <div class="md-layout-item md-size-20 filter">
 	<div>FILTER-BOX</div>
+	<md-button class="md-raised md-primary" @click.native='toggleCurrentEvents()'>{{ showCurrentEventsLabel }}</md-button>
 </div>
 </template>
 
 <script>
 
 export default {
-
+	props: {
+		showCurrentEvents: {
+			type: Boolean,
+			default: true
+		}
+	},
+	computed: {
+		showCurrentEventsLabel: function() {
+			return this.showCurrentEvents ? 'Show all' : 'Show current';
+		}
+	},
+	methods: {
+		toggleCurrentEvents: function() {
+			this.$emit('toggleCurrentEvents');
+		}
+	}
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
 <div class="md-layout-item md-size-20 sidepanel">
 	<div v-if="showEvent" class="sessions">
-		<md-icon class="md-size-2x" @click.native='hideSessions()'>arrow_back</md-icon>
+		<md-icon class="md-size-2x" @click.native='toggleSessions()'>arrow_back</md-icon>
 		<br />
 		<br />
 		<EventSession
@@ -37,8 +37,8 @@ export default {
 		}
 	},
 	methods: {
-		hideSessions: function() {
-			this.$emit('hideSessions');
+		toggleSessions: function() {
+			this.$emit('toggleSessions', null);
 		}
 	}
 };

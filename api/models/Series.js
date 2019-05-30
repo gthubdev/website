@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 		name: DataTypes.STRING,
 		logo: DataTypes.STRING,
 		homepage: DataTypes.STRING,
+		priority: DataTypes.INTEGER,
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.fn('NOW')
@@ -23,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	Series.associate = models => {
 		models.Series.hasMany(models.EventSession, {foreignKey: 'series'});
+		models.Series.hasMany(models.Event, {foreignKey: 'mainseries'});
 	};
 
 	return Series;

@@ -20,6 +20,7 @@ function buildCalendar(req, res, timezone) {
 		db.Event.findAll({
 			include: [
 				{ model: db.Track },
+				{ model: db.Series},
 				{
 					model: db.EventSession,
 					include: [
@@ -28,6 +29,7 @@ function buildCalendar(req, res, timezone) {
 				}
 			],
 			order: [
+				['priority', 'ASC'],
 				['startdate', 'ASC'],
 				[db.EventSession, 'starttime', 'ASC']
 			]
