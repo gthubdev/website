@@ -58,7 +58,7 @@ export default {
 	},
 	methods: {
 		toggleSessions: function() {
-			this.$emit('toggleSessions', this.event);
+			this.$root.$emit('toggleSessions', this.event);
 		}
 	}
 };

@@ -35,7 +35,7 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 // router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);
 //
 // // Series
-// router.post('/calendar/series/create', SeriesCtrl.createSeries);
+router.post('/calendar/series/create', SeriesCtrl.createSeries);
 //
 // // Track
 // router.post('/calendar/track/create', TrackCtrl.createTrack);

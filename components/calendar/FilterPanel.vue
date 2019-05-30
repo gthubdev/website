@@ -2,6 +2,7 @@
 <div class="md-layout-item md-size-20 filter">
 	<div>FILTER-BOX</div>
 	<md-button class="md-raised md-primary" @click.native='toggleCurrentEvents()'>{{ showCurrentEventsLabel }}</md-button>
+	<md-button class="md-raised md-primary" @click.native='createSeries()'>Create Series</md-button>
 </div>
 </template>
 
@@ -20,8 +21,11 @@ export default {
 		}
 	},
 	methods: {
+		createSeries: function() {
+			this.$root.$emit('toggleCrudSeries');
+		},
 		toggleCurrentEvents: function() {
-			this.$emit('toggleCurrentEvents');
+			this.$root.$emit('toggleCurrentEvents');
 		}
 	}
 };

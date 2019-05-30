@@ -2,7 +2,6 @@
 <div class="md-layout">
 	<FilterPanel
 		:show-current-events="showCurrentEvents"
-		@toggleCurrentEvents="toggleCurrentEvents"
 	/>
 
 	<div class="md-layout-item flex-start">
@@ -16,7 +15,6 @@
 				:event="event"
 				:tz="data.tz"
 				:active-event="activeEvent"
-				@toggleSessions="toggleSessions"
 			/>
 		</div>
 	</div>
@@ -25,7 +23,10 @@
 		:event="activeEvent"
 		:show-event="showEvent"
 		:tz="data.tz"
-		@toggleSessions="toggleSessions"
+	/>
+
+	<CRUDSeries
+		:show-dialog="showSeriesDialog"
 	/>
 </div>
 </template>
@@ -34,6 +35,7 @@
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import SidePanel from '~/components/calendar/SidePanel.vue';
+import CRUDSeries from '~/components/calendar/CRUD-Series.vue';
 
 import moment from 'moment-timezone';
 
@@ -41,14 +43,16 @@ export default {
 	components: {
 		Event,
 		FilterPanel,
-		SidePanel
+		SidePanel,
+		CRUDSeries
 	},
 	data: function() {
 		return {
 			data: [],
 			showCurrentEvents: true,
 			activeEvent: null,
-			showEvent: false
+			showEvent: false,
+			showSeriesDialog: false
 		};
 	},
 	computed: {
@@ -64,8 +68,25 @@ export default {
 			data: resdata
 		};
 	},
-	methods: {
-		toggleSessions: function(event) {
+	mounted() {
+		// Series
+		this.$root.$on('toggleCrudSeries', () => {
+			this.showSeriesDialog = !this.showSeriesDialog;
+		});
+		this.$root.$on('seriesCreated', obj => {
+			this.data.series.push(obj);
+			this.data.series.sort((a,b) => {
+				if (a.priority === b.priority)
+					return a.name.localeCompare(b.name);
+				else
+					return a.priority - b.priority;
+			});
+		});
+
+		this.$root.$on('toggleCurrentEvents', () => {
+			this.showCurrentEvents = !this.showCurrentEvents;
+		});
+		this.$root.$on('toggleSessions', event => {
 			if (!this.showEvent) {
 				this.showEvent = true;
 				this.activeEvent = event;
@@ -73,10 +94,9 @@ export default {
 				this.showEvent = false;
 				this.activeEvent = null;
 			}
-		},
-		toggleCurrentEvents: function() {
-			this.showCurrentEvents = !this.showCurrentEvents;
-		},
+		});
+	},
+	methods: {
 		filterEvents: function() {
 			if (this.showCurrentEvents)
 				return this.data.events.filter(function(event) {

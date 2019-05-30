@@ -36,6 +36,7 @@ function buildCalendar(req, res, timezone) {
 		}),
 		db.Series.findAll({
 			order: [
+				['priority', 'ASC'],
 				['name', 'ASC']
 			]
 		}),
