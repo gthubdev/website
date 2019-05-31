@@ -30,12 +30,12 @@
 	/>
 	<CRUDTrack
 		:show-dialog="showTrackDialog"
+		:tz="data.tz"
 	/>
 	<CRUDEvent
 		:show-dialog="showEventDialog"
 		:series="data.series"
 		:tracks="data.tracks"
-		:tz="data.tz"
 	/>
 </div>
 </template>

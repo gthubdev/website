@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		name: DataTypes.STRING,
 		location: DataTypes.STRING,
+		timezone: DataTypes.STRING,
 		length: {
 			type: DataTypes.DOUBLE,
 			allowNull: false,

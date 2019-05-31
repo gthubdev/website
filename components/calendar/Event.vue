@@ -6,7 +6,7 @@
 				<div class="md-title">{{ event.name }}</div>
 				<div class="md-subhead">{{ event.Track.name }}</div>
 				<div class="md-subhead">{{ startdate }} - {{ enddate }}<br />
-					({{ event.timezone }}, UTC{{ offset }})</div>
+					({{ event.Track.timezone }}, UTC{{ offset }})</div>
 				<div class="md-subhead">Priority: {{ event.priority }}</div>
 				<div class="md-subhead" v-if="event.SupportSeries.length > 0">SupportSeries: <span v-for="ss in event.SupportSeries" :key="ss.id">{{ ss.Series.name }},</span></div>
 			</md-card-header-text>
@@ -59,7 +59,7 @@ export default {
 				return '';
 		},
 		offset: function() {
-			return moment.tz(this.event.timezone).format('Z');
+			return moment.tz(this.event.Track.timezone).format('Z');
 		}
 	},
 	methods: {

@@ -61,27 +61,6 @@
 			</md-datepicker>
 		</div>
 
-		<md-autocomplete v-model="event.timezone" md-dense :md-options="tz.tz_array.map(x=>({
-			'name':x.name,
-			'desc': x.desc,
-			'toLowerCase':()=>x.desc.toLowerCase(),
-			'toString':()=>x.desc
-		}))" :class="requiredTimezone">
-			<label>Timezone</label>
-
-			<template slot="md-autocomplete-item" slot-scope="{ item }">
-				<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
-				<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
-				{{ tzDisplay(item) }}
-			</template>
-
-			<template slot="md-autocomplete-empty" slot-scope="{ term }">
-				"{{ term }}" not found!
-			</template>
-
-			<span class="md-error">Please choose a timezone</span>
-		</md-autocomplete>
-
 		<md-field :class="requiredPriority">
 			<label for="priority">Priority</label>
 			<md-select v-model="event.priority" name="priority" id="priority" placeholder="Priority" required>
@@ -104,8 +83,6 @@
 </template>
 
 <script>
-import moment from 'moment-timezone';
-
 export default {
 	props: {
 		showDialog: {
@@ -123,10 +100,6 @@ export default {
 			default () {
 				return [];
 			}
-		},
-		tz: {
-			type: Object,
-			default: null
 		}
 	},
 	data: function() {
@@ -137,7 +110,6 @@ export default {
 				track: '',
 				startdate: '',
 				enddate: '',
-				timezone: '',
 				logo: ''
 			}
 		};
@@ -147,7 +119,6 @@ export default {
 			const event = JSON.parse(JSON.stringify(this.event));
 			event.track = event.track.id;
 			event.mainseries = event.series.id;
-			event.timezone = event.timezone.name;
 			this.showEventDialog = false;
 			const res = await this.$axios.$post('/api/calendar/event/create', {
 				event
@@ -160,11 +131,7 @@ export default {
 				this.event.series !== undefined && this.event.series !== '' &&
 				this.event.startdate !== null && this.event.startdate !== '' &&
 				this.event.enddate !== null && this.event.enddate !== '' &&
-				this.event.timezone.name !== undefined &&
 				this.event.priority >= 1;
-		},
-		tzDisplay: function(item) {
-			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
 		}
 	},
 	computed: {
@@ -198,11 +165,6 @@ export default {
 				'md-invalid': this.event.track === undefined || this.event.track === ''
 			};
 		},
-		requiredTimezone() {
-			return {
-				'md-invalid': this.event.timezone === undefined || this.event.timezone.length <= 0
-			};
-		}
 	},
 	watch: {
 		showDialog: function(newValue) {

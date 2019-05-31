@@ -12,6 +12,12 @@ module.exports.createEvent = (req, res) => {
 					{ model: db.Track },
 					{ model: db.Series},
 					{
+						model: db.SupportSeries,
+						include: [
+							{ model: db.Series }
+						]
+					},
+					{
 						model: db.EventSession,
 						include: [
 							{ model: db.Series }

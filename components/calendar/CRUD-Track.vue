@@ -14,6 +14,27 @@
 			<md-input v-model="track.location"></md-input>
 		</md-field>
 
+		<md-autocomplete v-model="track.timezone" md-dense :md-options="tz.tz_array.map(x=>({
+			'name':x.name,
+			'desc': x.desc,
+			'toLowerCase':()=>x.desc.toLowerCase(),
+			'toString':()=>x.desc
+		}))" :class="requiredTimezone">
+			<label>Timezone</label>
+
+			<template slot="md-autocomplete-item" slot-scope="{ item }">
+				<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
+				<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
+				{{ tzDisplay(item) }}
+			</template>
+
+			<template slot="md-autocomplete-empty" slot-scope="{ term }">
+				"{{ term }}" not found!
+			</template>
+
+			<span class="md-error">Please choose a timezone</span>
+		</md-autocomplete>
+
 		<md-field :class="requiredLength">
 			<label>Length</label>
 			<md-input v-model="track.length" required></md-input>
@@ -34,11 +55,17 @@
 </template>
 
 <script>
+import moment from 'moment-timezone';
+
 export default {
 	props: {
 		showDialog: {
 			type: Boolean,
 			default: false
+		},
+		tz: {
+			type: Object,
+			default: null
 		}
 	},
 	data: function() {
@@ -47,6 +74,7 @@ export default {
 			track: {
 				name: '',
 				location: '',
+				timezone: '',
 				length: '',
 				map: ''
 			}
@@ -55,6 +83,7 @@ export default {
 	methods: {
 		async sendRequest() {
 			const track = JSON.parse(JSON.stringify(this.track));
+			track.timezone = track.timezone.name;
 			this.showTrackDialog = false;
 			const res = await this.$axios.$post('/api/calendar/track/create', {
 				track
@@ -62,7 +91,13 @@ export default {
 			this.$root.$emit('trackCreated', res);
 		},
 		validInput: function() {
-			return this.track.name.length > 0 && !isNaN(Number(this.track.length)) && Number(this.track.length) > 0;
+			return this.track.name.length > 0 &&
+				this.track.timezone.name !== undefined &&
+				!isNaN(Number(this.track.length)) &&
+				Number(this.track.length) > 0;
+		},
+		tzDisplay: function(item) {
+			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
 		}
 	},
 	computed: {
@@ -74,6 +109,11 @@ export default {
 		requiredLength() {
 			return {
 				'md-invalid': isNaN(Number(this.track.length)) || Number(this.track.length) <= 0
+			};
+		},
+		requiredTimezone() {
+			return {
+				'md-invalid': this.track.timezone === undefined || this.track.timezone.length <= 0
 			};
 		}
 	},

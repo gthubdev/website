@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		startdate: DataTypes.DATEONLY,
 		enddate: DataTypes.DATEONLY,
-		timezone: DataTypes.STRING,
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.fn('NOW')
