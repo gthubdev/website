@@ -7,7 +7,6 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		name: DataTypes.STRING,
 		starttime: DataTypes.DATE,
-		endtime: DataTypes.DATE,
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.fn('NOW')

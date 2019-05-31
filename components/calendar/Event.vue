@@ -8,6 +8,7 @@
 				<div class="md-subhead">{{ startdate }} - {{ enddate }}<br />
 					({{ event.timezone }}, UTC{{ offset }})</div>
 				<div class="md-subhead">Priority: {{ event.priority }}</div>
+				<div class="md-subhead" v-if="event.SupportSeries.length > 0">SupportSeries: <span v-for="ss in event.SupportSeries" :key="ss.id">{{ ss.Series.name }},</span></div>
 			</md-card-header-text>
 
 			<md-card-media>

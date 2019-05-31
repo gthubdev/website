@@ -28,15 +28,19 @@ INSERT INTO Event (id, name, startdate, enddate, timezone, track, priority, main
 INSERT INTO Event (id, name, startdate, enddate, timezone, track, priority, mainseries) VALUES (8, "51. ADAC Barbarossapreis (VLN 8)", "2019-10-13", "2019-10-13", "Europe/Brussels", 1, 2, 1);
 
 # Bathurst 12 Hours
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Top 10 Shootout", "2019-02-02 06:30", "2019-02-02 07:15", 1, 2);
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Race", "2019-02-02 19:45", "2019-02-03 07:45", 1, 2);
+INSERT INTO SupportSeries (event, series) VALUES (1, 6);
+INSERT INTO SupportSeries (event, series) VALUES (1, 4);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("GT2 Race", "2019-02-02 02:00", 1, 4);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Top 10 Shootout", "2019-02-02 06:30", 1, 6);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Race", "2019-02-02 19:45", 1, 2);
 
 # N24
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Qualifying", "2019-06-21 14:00", "2019-06-21 16:00", 2, 1);
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Race", "2019-06-22 15:00", "2019-06-23 15:00", 2, 1);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Qualifying", "2019-06-21 14:00", 2, 1);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Race", "2019-06-22 15:00", 2, 1);
 
 # Spa 24
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Top 3 GT2 shootout", "2019-07-26 14:00", "2019-07-26 15:00", 3, 4);
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Inaugural GT2 race", "2019-07-26 18:00", "2019-07-26 19:00", 3, 4);
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Top 30 Qualifying", "2019-07-27 10:00", "2019-07-27 11:00", 3, 3);
-INSERT INTO EventSession (name, starttime, endtime, event, series) VALUES ("Race", "2019-07-27 16:00", "2019-07-28 16:00", 3, 3);
+INSERT INTO SupportSeries (event, series) VALUES (3, 4);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Top 3 GT2 shootout", "2019-07-26 14:00", 3, 4);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Inaugural GT2 race", "2019-07-26 18:00", 3, 4);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Top 30 Qualifying", "2019-07-27 10:00", 3, 3);
+INSERT INTO EventSession (name, starttime, event, series) VALUES ("Race", "2019-07-27 16:00", 3, 3);

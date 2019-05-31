@@ -22,6 +22,12 @@ function buildCalendar(req, res, timezone) {
 				{ model: db.Track },
 				{ model: db.Series},
 				{
+					model: db.SupportSeries,
+				 	include: [
+						{ model: db.Series }
+					]
+				},
+				{
 					model: db.EventSession,
 					include: [
 						{ model: db.Series }

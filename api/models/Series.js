@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
 	Series.associate = models => {
 		models.Series.hasMany(models.EventSession, {foreignKey: 'series'});
 		models.Series.hasMany(models.Event, {foreignKey: 'mainseries'});
+		models.Series.hasMany(models.SupportSeries, {foreignKey: 'series'});
 	};
 
 	return Series;
