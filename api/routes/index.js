@@ -29,7 +29,7 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 // router.post('/calendar/timezone', CalendarCtrl.getCalendarWithTimezone);
 //
 // // Event
-// router.post('/calendar/event/create', EventCtrl.createEvent);
+router.post('/calendar/event/create', EventCtrl.createEvent);
 //
 // // EventSession
 // router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);

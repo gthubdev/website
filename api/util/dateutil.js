@@ -81,6 +81,18 @@ const tz_strings = {
 };
 module.exports.tz_strings = tz_strings;
 
+tz_array = [];
+Object.entries(tz_strings).forEach(
+	([key, value]) => {
+		const tmp = {
+			name: key,
+			desc: value
+		};
+		tz_array.push(tmp);
+	}
+);
+module.exports.tz_array = tz_array;
+
 
 // filter the timezones we want
 const tmp_strings = moment.tz.names()

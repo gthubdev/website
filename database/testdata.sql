@@ -12,9 +12,9 @@ INSERT INTO Track (id, name, location, length, map) VALUES (5, "Road America", "
 INSERT INTO Track (id, name, location, length, map) VALUES (6, "Surfers Paradise Street Circuit", "Surfers Paradise", 2.98, "");
 
 INSERT INTO Series (id, name, priority, logo) VALUES (1, "VLN", 1, "https://kappelermotorsport.files.wordpress.com/2015/08/logovln.gif");
-INSERT INTO Series (id, name, priority) VALUES (2, "Intercontinental GT Challenge", 2);
-INSERT INTO Series (id, name, priority) VALUES (3, "Blancpain Endurance Cup", 2);
-INSERT INTO Series (id, name, priority) VALUES (4, "GT2", 2);
+INSERT INTO Series (id, name, priority, logo) VALUES (2, "Intercontinental GT Challenge", 2, "https://www.intercontinentalgtchallenge.com/images/logo-intercontinental-gt-challenge.png");
+INSERT INTO Series (id, name, priority, logo) VALUES (3, "Blancpain Endurance Cup", 2, "https://www.norbert-siedler.com/wp-content/uploads/2016/02/BlancpainGTSeriesLogo.jpg");
+INSERT INTO Series (id, name, priority, logo) VALUES (4, "GT2", 2, "https://upload.wikimedia.org/wikipedia/commons/c/cf/SROMotorsportsGroup_logo.png");
 INSERT INTO Series (id, name, priority, logo) VALUES (5, "IMSA WeatherTech SportsCar Championship", 1, "https://upload.wikimedia.org/wikipedia/en/thumb/2/28/WeatherTech_SportsCar_Championship_logo.png/300px-WeatherTech_SportsCar_Championship_logo.png");
 INSERT INTO Series (id, name, priority, logo) VALUES (6, "Virgin Australia Supercars Championship", 3, "https://upload.wikimedia.org/wikipedia/en/thumb/d/dd/Supercars_Championship_logo.svg/1200px-Supercars_Championship_logo.svg.png");
 

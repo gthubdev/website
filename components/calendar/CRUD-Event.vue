@@ -1,0 +1,239 @@
+<template>
+<div>
+	<md-dialog :md-active.sync="showEventDialog">
+		<md-dialog-title>Create an Event</md-dialog-title>
+
+		<md-field :class="requiredName">
+			<label>Name</label>
+			<md-input v-model="event.name" required></md-input>
+			<span class="md-error">Please enter a name</span>
+		</md-field>
+
+		<md-autocomplete v-model="event.track" :md-options="tracks.map(x=>({
+			'id':x.id,
+			'name':x.name,
+			'toLowerCase':()=>x.name.toLowerCase(),
+			'toString':()=>x.name
+		}))" :class="requiredTrack">
+			<label>Track</label>
+			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+				<span class="color" :style="`background-color: ${item.color}`"></span>
+				<md-highlight-text :md-term="term">{{ item.name }}</md-highlight-text>
+			</template>
+
+			<template slot="md-autocomplete-empty" slot-scope="{ term }">
+				"{{ term }}" not found!
+			</template>
+
+			<span class="md-error">Please choose a track</span>
+		</md-autocomplete>
+
+		<md-autocomplete v-model="event.series" :md-options="series.map(x=>({
+			'id':x.id,
+			'name':x.name,
+			'toLowerCase':()=>x.name.toLowerCase(),
+			'toString':()=>x.name
+		}))" :class="requiredSeries">
+			<label>Main Series</label>
+			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+				<span class="color" :style="`background-color: ${item.color}`"></span>
+				<md-highlight-text :md-term="term">{{ item.name }}</md-highlight-text>
+			</template>
+
+			<template slot="md-autocomplete-empty" slot-scope="{ term }">
+				"{{ term }}" not found!
+			</template>
+
+			<span class="md-error">Please choose a main series</span>
+		</md-autocomplete>
+
+		<div class="block">
+			<label>Startdate</label>
+			<md-datepicker v-model="event.startdate" md-immediately :class="requiredStartdate">
+				<span class="md-error">Please choose a startdate</span>
+			</md-datepicker>
+		</div>
+
+		<div class="block">
+			<label>Enddate</label>
+			<md-datepicker v-model="event.enddate" md-immediately :class="requiredEnddate">
+				<span class="md-error">Please choose an enddate</span>
+			</md-datepicker>
+		</div>
+
+		<md-autocomplete v-model="event.timezone" md-dense :md-options="tz.tz_array.map(x=>({
+			'name':x.name,
+			'desc': x.desc,
+			'toLowerCase':()=>x.desc.toLowerCase(),
+			'toString':()=>x.desc
+		}))" :class="requiredTimezone">
+			<label>Timezone</label>
+
+			<template slot="md-autocomplete-item" slot-scope="{ item }">
+				<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
+				<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
+				{{ tzDisplay(item) }}
+			</template>
+
+			<template slot="md-autocomplete-empty" slot-scope="{ term }">
+				"{{ term }}" not found!
+			</template>
+
+			<span class="md-error">Please choose a timezone</span>
+		</md-autocomplete>
+
+		<md-field :class="requiredPriority">
+			<label for="priority">Priority</label>
+			<md-select v-model="event.priority" name="priority" id="priority" placeholder="Priority" required>
+				<md-option v-for="i in 4" :key="i" :value="i">{{ i }}</md-option>
+			</md-select>
+			<span class="md-error">Please choose a priority</span>
+		</md-field>
+
+		<md-field>
+			<label>Logo</label>
+			<md-input v-model="event.logo"></md-input>
+		</md-field>
+
+		<md-dialog-actions>
+			<md-button class="md-primary md-accent" @click="showEventDialog = false">Cancel</md-button>
+			<md-button class="md-raised md-primary" @click="sendRequest()" :disabled="!validInput()">Create</md-button>
+		</md-dialog-actions>
+	</md-dialog>
+</div>
+</template>
+
+<script>
+import moment from 'moment-timezone';
+
+export default {
+	props: {
+		showDialog: {
+			type: Boolean,
+			default: false
+		},
+		series: {
+			type: Array,
+			default () {
+				return [];
+			}
+		},
+		tracks: {
+			type: Array,
+			default () {
+				return [];
+			}
+		},
+		tz: {
+			type: Object,
+			default: null
+		}
+	},
+	data: function() {
+		return {
+			showEventDialog: false,
+			event: {
+				name: '',
+				track: '',
+				startdate: '',
+				enddate: '',
+				timezone: '',
+				logo: ''
+			}
+		};
+	},
+	methods: {
+		async sendRequest() {
+			const event = JSON.parse(JSON.stringify(this.event));
+			event.track = event.track.id;
+			event.mainseries = event.series.id;
+			event.timezone = event.timezone.name;
+			this.showEventDialog = false;
+			const res = await this.$axios.$post('/api/calendar/event/create', {
+				event
+			});
+			this.$root.$emit('eventCreated', res);
+		},
+		validInput: function() {
+			return this.event.name.length > 0 && this.event.track !== '' &&
+				this.event.track !== undefined && this.event.track !== '' &&
+				this.event.series !== undefined && this.event.series !== '' &&
+				this.event.startdate !== null && this.event.startdate !== '' &&
+				this.event.enddate !== null && this.event.enddate !== '' &&
+				this.event.timezone.name !== undefined &&
+				this.event.priority >= 1;
+		},
+		tzDisplay: function(item) {
+			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
+		}
+	},
+	computed: {
+		requiredEnddate() {
+			return {
+				'md-invalid': this.event.enddate === null || this.event.enddate === ''
+			};
+		},
+		requiredName() {
+			return {
+				'md-invalid': !(this.event.name.length > 0)
+			};
+		},
+		requiredPriority() {
+			return {
+				'md-invalid': !(this.event.priority >= 1)
+			};
+		},
+		requiredSeries() {
+			return {
+				'md-invalid': this.event.series === undefined || this.event.series === ''
+			};
+		},
+		requiredStartdate() {
+			return {
+				'md-invalid': this.event.startdate === null || this.event.startdate === ''
+			};
+		},
+		requiredTrack() {
+			return {
+				'md-invalid': this.event.track === undefined || this.event.track === ''
+			};
+		},
+		requiredTimezone() {
+			return {
+				'md-invalid': this.event.timezone === undefined || this.event.timezone.length <= 0
+			};
+		}
+	},
+	watch: {
+		showDialog: function(newValue) {
+			this.showEventDialog = newValue;
+		},
+		showEventDialog: function(newValue, oldValue) {
+			if (oldValue === true)
+				this.$root.$emit('toggleCrudEvent');
+			if (newValue === true)
+				Object.keys(this.event).forEach(key => (this.event[key] = ''));
+		}
+	}
+};
+</script>
+
+<style lang="scss">
+.md-dialog {
+	min-width: 33%;
+}
+
+.md-field {
+	width: auto;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+.md-menu-content {
+	z-index: 100;
+}
+
+.block {
+	padding-left: 1em;
+}
+</style>

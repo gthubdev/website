@@ -9,9 +9,10 @@
 			<span class="md-error">Please enter a name</span>
 		</md-field>
 
-		<md-field>
+		<md-field :class="requiredLogo">
 			<label>Logo</label>
-			<md-input v-model="series.logo"></md-input>
+			<md-input v-model="series.logo" required></md-input>
+			<span class="md-error">Please enter a URL</span>
 		</md-field>
 
 		<md-field>
@@ -71,6 +72,11 @@ export default {
 		requiredName() {
 			return {
 				'md-invalid': !(this.series.name.length > 0)
+			};
+		},
+		requiredLogo() {
+			return {
+				'md-invalid': !(this.series.logo.length >= 1)
 			};
 		},
 		requiredPriority() {

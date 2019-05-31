@@ -50,6 +50,7 @@ function buildCalendar(req, res, timezone) {
 		// timezone-info
 		let tz = {
 			tz_strings: dateutil.tz_strings,
+			tz_array: dateutil.tz_array,
 			tz_offsets: dateutil.tz_offsets,
 			timezone: timezone // client-timezone
 		};

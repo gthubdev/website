@@ -50,7 +50,12 @@ export default {
 			return moment(this.event.enddate).format('ddd Do MMM YYYY');
 		},
 		eventLogo: function() {
-			return this.event.logo.length > 1 ? this.event.logo : this.event.Series.logo;
+			if (this.event.logo.length > 1)
+				return this.event.logo;
+			else if (this.event.Series.logo.length > 1)
+				return this.event.Series.logo;
+			else
+				return '';
 		},
 		offset: function() {
 			return moment.tz(this.event.timezone).format('Z');

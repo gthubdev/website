@@ -6,8 +6,14 @@ module.exports = (sequelize, DataTypes) => {
 			primaryKey: true
 		},
 		name: DataTypes.STRING,
-		logo: DataTypes.STRING,
-		homepage: DataTypes.STRING,
+		logo: {
+			type: DataTypes.STRING,
+			defaultValue: ''
+		},
+		homepage: {
+			type: DataTypes.STRING,
+			defaultValue: ''
+		},
 		priority: DataTypes.INTEGER,
 		createdAt: {
 			type: DataTypes.DATE,
