@@ -47,6 +47,13 @@
 			<span class="md-error">Please choose a main series</span>
 		</md-autocomplete>
 
+		<md-field v-if="this.event.series !== undefined && this.event.series !== ''">
+			<label for="supportseries">Support series</label>
+			<md-select v-model="supportseries" name="supportseries" id="supportseries" multiple>
+				<md-option v-for="s in filterSupportSeries()" :key="s.id" :value="s.id">{{ s.name }}</md-option>
+			</md-select>
+		</md-field>
+
 		<div class="block">
 			<label>Startdate</label>
 			<md-datepicker v-model="event.startdate" md-immediately :class="requiredStartdate">
@@ -108,10 +115,12 @@ export default {
 			event: {
 				name: '',
 				track: '',
+				series: '',
 				startdate: '',
 				enddate: '',
 				logo: ''
-			}
+			},
+			supportseries: []
 		};
 	},
 	methods: {
@@ -119,11 +128,20 @@ export default {
 			const event = JSON.parse(JSON.stringify(this.event));
 			event.track = event.track.id;
 			event.mainseries = event.series.id;
+			event.supportseries = this.supportseries;
 			this.showEventDialog = false;
 			const res = await this.$axios.$post('/api/calendar/event/create', {
 				event
 			});
 			this.$root.$emit('eventCreated', res);
+		},
+		filterSupportSeries: function() {
+			if (this.event.series === undefined || this.event.series === '')
+				return this.series;
+			else
+				return this.series.filter(series => {
+					return series.id !== this.event.series.id;
+				});
 		},
 		validInput: function() {
 			return this.event.name.length > 0 && this.event.track !== '' &&
@@ -173,8 +191,18 @@ export default {
 		showEventDialog: function(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudEvent');
-			if (newValue === true)
+			if (newValue === true) {
 				Object.keys(this.event).forEach(key => (this.event[key] = ''));
+				this.supportseries = [];
+			}
+		},
+		'event.series': function(newValue) {
+			// if a series was a support series and is now the main series, remove it as a support series
+			if (isNaN(newValue.id))
+				return;
+			let index = this.supportseries.indexOf(newValue.id);
+			if (index >= 0)
+				this.supportseries.splice(index, 1);
 		}
 	}
 };
