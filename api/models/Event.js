@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		startdate: DataTypes.DATEONLY,
 		enddate: DataTypes.DATEONLY,
-		timezone: DataTypes.STRING,
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.fn('NOW')
@@ -31,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
 		models.Event.belongsTo(models.Track, {foreignKey: 'track'});
 		models.Event.belongsTo(models.Series, {foreignKey: 'mainseries'});
 		models.Event.hasMany(models.EventSession, {foreignKey: 'event'});
+		models.Event.hasMany(models.SupportSeries, {foreignKey: 'event'});
 	};
 
 	return Event;

@@ -22,10 +22,11 @@ module.exports = {
 	},
 	'rules': {
 		'indent': 'off',
-		'linebreak-style': [
-			'error',
-			'unix'
-		],
+		// 'linebreak-style': [
+		// 	'error',
+		// 	'unix'
+		// ],
+		'linebreak-style': 'off',
 		'quotes': [
 			'error',
 			'single'
@@ -34,14 +35,24 @@ module.exports = {
 			'error',
 			'always'
 		],
-		'vue/html-indent': ["error", 'tab', {
-			"attribute": 1,
-			"baseIndent": 0,
-			"closeBracket": 0,
-			"alignAttributesVertically": true,
-			"ignores": []
+		'vue/html-indent': ['error', 'tab', {
+			'attribute': 1,
+			'baseIndent': 0,
+			'closeBracket': 0,
+			'alignAttributesVertically': true,
+			'ignores': []
 		}],
 		'no-console': 'off',
-		'no-undef': 'warn'
+		'no-undef': 'warn',
+		'vue/html-self-closing': ['error', {
+			'html': {
+				'void': 'always',
+				'normal': 'always',
+				'component': 'always'
+			},
+			'svg': 'always',
+			'math': 'always'
+		}],
+		'vue/max-attributes-per-line': 'off'
 	}
 };

@@ -1,11 +1,21 @@
 <template>
 <div>
 	<div>
-		<h3>Gthub</h3>
-		<md-button class="md-raised md-primary" href="/">Home</md-button>
-		<md-button class="md-raised md-primary" href="/testroute">Test route</md-button>
-		<md-button class="md-raised md-primary" href="/calendar">Calendar</md-button>
-		<md-button class="md-raised md-accent" @click.native='testClick()'>Click me</md-button>
+		<h3>
+			Gthub
+		</h3>
+		<md-button class="md-raised md-primary" href="/">
+			Home
+		</md-button>
+		<md-button class="md-raised md-primary" href="/testroute">
+			Test route
+		</md-button>
+		<md-button class="md-raised md-primary" href="/calendar">
+			Calendar
+		</md-button>
+		<md-button class="md-raised md-accent" @click.native="testClick()">
+			Click me
+		</md-button>
 	</div>
 	<nuxt />
 </div>

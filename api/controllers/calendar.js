@@ -22,6 +22,12 @@ function buildCalendar(req, res, timezone) {
 				{ model: db.Track },
 				{ model: db.Series},
 				{
+					model: db.SupportSeries,
+				 	include: [
+						{ model: db.Series }
+					]
+				},
+				{
 					model: db.EventSession,
 					include: [
 						{ model: db.Series }
@@ -36,6 +42,7 @@ function buildCalendar(req, res, timezone) {
 		}),
 		db.Series.findAll({
 			order: [
+				['priority', 'ASC'],
 				['name', 'ASC']
 			]
 		}),
@@ -49,6 +56,7 @@ function buildCalendar(req, res, timezone) {
 		// timezone-info
 		let tz = {
 			tz_strings: dateutil.tz_strings,
+			tz_array: dateutil.tz_array,
 			tz_offsets: dateutil.tz_offsets,
 			timezone: timezone // client-timezone
 		};

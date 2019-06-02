@@ -2,7 +2,6 @@
 <div class="md-layout">
 	<FilterPanel
 		:show-current-events="showCurrentEvents"
-		@toggleCurrentEvents="toggleCurrentEvents"
 	/>
 
 	<div class="md-layout-item flex-start">
@@ -16,7 +15,6 @@
 				:event="event"
 				:tz="data.tz"
 				:active-event="activeEvent"
-				@toggleSessions="toggleSessions"
 			/>
 		</div>
 	</div>
@@ -25,7 +23,23 @@
 		:event="activeEvent"
 		:show-event="showEvent"
 		:tz="data.tz"
-		@toggleSessions="toggleSessions"
+	/>
+
+	<CRUDSeries
+		:show-dialog="showSeriesDialog"
+	/>
+	<CRUDTrack
+		:show-dialog="showTrackDialog"
+		:tz="data.tz"
+	/>
+	<CRUDEvent
+		:show-dialog="showEventDialog"
+		:series="data.series"
+		:tracks="data.tracks"
+	/>
+	<CRUDEventSession
+		:show-dialog="showEventSessionDialog"
+		:event="createdEvent"
 	/>
 </div>
 </template>
@@ -34,21 +48,28 @@
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import SidePanel from '~/components/calendar/SidePanel.vue';
+import CRUDSeries from '~/components/calendar/CRUD-Series.vue';
+import CRUDTrack from '~/components/calendar/CRUD-Track.vue';
+import CRUDEvent from '~/components/calendar/CRUD-Event.vue';
+import CRUDEventSession from '~/components/calendar/CRUD-EventSession.vue';
 
 import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event,
-		FilterPanel,
-		SidePanel
+		Event, FilterPanel,	SidePanel, CRUDSeries, CRUDTrack, CRUDEvent, CRUDEventSession
 	},
 	data: function() {
 		return {
 			data: [],
 			showCurrentEvents: true,
 			activeEvent: null,
-			showEvent: false
+			showEvent: false,
+			showSeriesDialog: false,
+			showTrackDialog: false,
+			showEventDialog: false,
+			showEventSessionDialog: false,
+			createdEvent: null
 		};
 	},
 	computed: {
@@ -64,8 +85,65 @@ export default {
 			data: resdata
 		};
 	},
-	methods: {
-		toggleSessions: function(event) {
+	mounted() {
+		// Event
+		this.$root.$on('toggleCrudEvent', () => {
+			this.showEventDialog = !this.showEventDialog;
+		});
+		this.$root.$on('eventCreated', obj => {
+			this.data.events.push(obj);
+			this.data.events.sort((a,b) => {
+				if (a.priority === b.priority)
+					return a.startdate.localeCompare(b.startdate);
+				else
+					return a.priority - b.priority;
+			});
+			this.createdEvent = obj;
+			this.showEventSessionDialog = !this.showEventSessionDialog;
+		});
+		// EventSession
+		this.$root.$on('toggleCrudEventSession', () => {
+			this.showEventSessionDialog = !this.showEventSessionDialog;
+		});
+		this.$root.$on('eventSessionCreated', session => {
+			let event = this.data.events.find(e => e.id == session.event);
+			event.EventSessions.push(session);
+			event.EventSessions.sort((a,b) => {
+				return a.starttime.localeCompare(b.starttime);
+			});
+		});
+		this.$root.$on('addEventSession', event => {
+			this.showEventSessionDialog = !this.showEventSessionDialog;
+			this.createdEvent = event;
+		});
+		// Series
+		this.$root.$on('toggleCrudSeries', () => {
+			this.showSeriesDialog = !this.showSeriesDialog;
+		});
+		this.$root.$on('seriesCreated', obj => {
+			this.data.series.push(obj);
+			this.data.series.sort((a,b) => {
+				if (a.priority === b.priority)
+					return a.name.localeCompare(b.name);
+				else
+					return a.priority - b.priority;
+			});
+		});
+		// Track
+		this.$root.$on('toggleCrudTrack', () => {
+			this.showTrackDialog = !this.showTrackDialog;
+		});
+		this.$root.$on('trackCreated', obj => {
+			this.data.tracks.push(obj);
+			this.data.tracks.sort((a,b) => {
+				return a.name.localeCompare(b.name);
+			});
+		});
+
+		this.$root.$on('toggleCurrentEvents', () => {
+			this.showCurrentEvents = !this.showCurrentEvents;
+		});
+		this.$root.$on('toggleSessions', event => {
 			if (!this.showEvent) {
 				this.showEvent = true;
 				this.activeEvent = event;
@@ -73,10 +151,9 @@ export default {
 				this.showEvent = false;
 				this.activeEvent = null;
 			}
-		},
-		toggleCurrentEvents: function() {
-			this.showCurrentEvents = !this.showCurrentEvents;
-		},
+		});
+	},
+	methods: {
 		filterEvents: function() {
 			if (this.showCurrentEvents)
 				return this.data.events.filter(function(event) {
