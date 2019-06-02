@@ -3,23 +3,38 @@
 	<md-card>
 		<md-card-header>
 			<md-card-header-text>
-				<div class="md-title">{{ event.name }}</div>
-				<div class="md-subhead">{{ event.Track.name }}</div>
-				<div class="md-subhead">{{ startdate }} - {{ enddate }}<br />
-					({{ event.Track.timezone }}, UTC{{ offset }})</div>
-				<div class="md-subhead">Priority: {{ event.priority }}</div>
-				<div class="md-subhead" v-if="event.SupportSeries.length > 0">SupportSeries: <span v-for="ss in event.SupportSeries" :key="ss.id">{{ ss.Series.name }},</span></div>
+				<div class="md-title">
+					{{ event.name }}
+				</div>
+				<div class="md-subhead">
+					{{ event.Track.name }}
+				</div>
+				<div class="md-subhead">
+					{{ startdate }} - {{ enddate }}<br />
+					({{ event.Track.timezone }}, UTC{{ offset }})
+				</div>
+				<div class="md-subhead">
+					Priority: {{ event.priority }}
+				</div>
+				<div v-if="event.SupportSeries.length > 0" class="md-subhead">
+					SupportSeries: <span v-for="ss in event.SupportSeries" :key="ss.id">{{ ss.Series.name }},</span>
+				</div>
 			</md-card-header-text>
 
 			<md-card-media>
-				<img :src="eventLogo" alt="Logo">
+				<img :src="eventLogo" alt="Logo" />
 			</md-card-media>
 		</md-card-header>
 		<!-- <md-card-content>
 
 		</md-card-content> -->
 		<md-card-actions>
-			<md-button @click.native='toggleSessions()'>Show sessions</md-button>
+			<md-button @click.native="addEventSession()">
+				Create Session
+			</md-button>
+			<md-button @click.native="toggleSessions()">
+				Show sessions
+			</md-button>
 		</md-card-actions>
 	</md-card>
 </div>
@@ -63,6 +78,9 @@ export default {
 		}
 	},
 	methods: {
+		addEventSession: function() {
+			this.$root.$emit('addEventSession', this.event);
+		},
 		toggleSessions: function() {
 			this.$root.$emit('toggleSessions', this.event);
 		}

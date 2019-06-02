@@ -5,7 +5,7 @@
 
 		<md-field :class="requiredName">
 			<label>Name</label>
-			<md-input v-model="event.name" required></md-input>
+			<md-input v-model="event.name" required />
 			<span class="md-error">Please enter a name</span>
 		</md-field>
 
@@ -14,11 +14,14 @@
 			'name':x.name,
 			'toLowerCase':()=>x.name.toLowerCase(),
 			'toString':()=>x.name
-		}))" :class="requiredTrack">
+		}))" :class="requiredTrack"
+		>
 			<label>Track</label>
 			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-				<span class="color" :style="`background-color: ${item.color}`"></span>
-				<md-highlight-text :md-term="term">{{ item.name }}</md-highlight-text>
+				<span class="color" :style="`background-color: ${item.color}`" />
+				<md-highlight-text :md-term="term">
+					{{ item.name }}
+				</md-highlight-text>
 			</template>
 
 			<template slot="md-autocomplete-empty" slot-scope="{ term }">
@@ -33,11 +36,14 @@
 			'name':x.name,
 			'toLowerCase':()=>x.name.toLowerCase(),
 			'toString':()=>x.name
-		}))" :class="requiredSeries">
+		}))" :class="requiredSeries"
+		>
 			<label>Main Series</label>
 			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-				<span class="color" :style="`background-color: ${item.color}`"></span>
-				<md-highlight-text :md-term="term">{{ item.name }}</md-highlight-text>
+				<span class="color" :style="`background-color: ${item.color}`" />
+				<md-highlight-text :md-term="term">
+					{{ item.name }}
+				</md-highlight-text>
 			</template>
 
 			<template slot="md-autocomplete-empty" slot-scope="{ term }">
@@ -47,43 +53,53 @@
 			<span class="md-error">Please choose a main series</span>
 		</md-autocomplete>
 
-		<md-field v-if="this.event.series !== undefined && this.event.series !== ''">
+		<md-field v-if="event.series !== undefined && event.series !== ''">
 			<label for="supportseries">Support series</label>
-			<md-select v-model="supportseries" name="supportseries" id="supportseries" multiple>
-				<md-option v-for="s in filterSupportSeries()" :key="s.id" :value="s.id">{{ s.name }}</md-option>
+			<md-select id="supportseries" v-model="supportseries" name="supportseries" multiple>
+				<md-option v-for="s in filterSupportSeries()" :key="s.id" :value="s.id">
+					{{ s.name }}
+				</md-option>
 			</md-select>
 		</md-field>
 
-		<div class="block">
-			<label>Startdate</label>
-			<md-datepicker v-model="event.startdate" md-immediately :class="requiredStartdate">
-				<span class="md-error">Please choose a startdate</span>
-			</md-datepicker>
-		</div>
+		<div class="md-layout">
+			<div class="block md-layout-item">
+				<label>Startdate</label>
+				<md-datepicker v-model="event.startdate" md-immediately :class="requiredStartdate">
+					<span class="md-error">Please choose a startdate</span>
+				</md-datepicker>
+			</div>
 
-		<div class="block">
-			<label>Enddate</label>
-			<md-datepicker v-model="event.enddate" md-immediately :class="requiredEnddate">
-				<span class="md-error">Please choose an enddate</span>
-			</md-datepicker>
+			<div class="block md-layout-item">
+				<label>Enddate</label>
+				<md-datepicker v-model="event.enddate" md-immediately :class="requiredEnddate">
+					<span class="md-error">Please choose an enddate</span>
+				</md-datepicker>
+			</div>
 		</div>
 
 		<md-field :class="requiredPriority">
-			<label for="priority">Priority</label>
-			<md-select v-model="event.priority" name="priority" id="priority" placeholder="Priority" required>
-				<md-option v-for="i in 4" :key="i" :value="i">{{ i }}</md-option>
+			<label for="priority">Priority (will be pre-filled from Series-priority in future)</label>
+			<md-select id="priority" v-model="event.priority" name="priority" placeholder="Priority" required>
+				<md-option v-for="i in 4" :key="i" :value="i">
+					{{ i }}
+				</md-option>
 			</md-select>
 			<span class="md-error">Please choose a priority</span>
 		</md-field>
 
 		<md-field>
 			<label>Logo</label>
-			<md-input v-model="event.logo"></md-input>
+			<md-input v-model="event.logo" />
 		</md-field>
 
 		<md-dialog-actions>
-			<md-button class="md-primary md-accent" @click="showEventDialog = false">Cancel</md-button>
-			<md-button class="md-raised md-primary" @click="sendRequest()" :disabled="!validInput()">Create</md-button>
+			<md-button class="md-primary md-accent" @click="showEventDialog = false">
+				Cancel
+			</md-button>
+			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+				Create
+			</md-button>
 		</md-dialog-actions>
 	</md-dialog>
 </div>
@@ -98,13 +114,13 @@ export default {
 		},
 		series: {
 			type: Array,
-			default () {
+			default() {
 				return [];
 			}
 		},
 		tracks: {
 			type: Array,
-			default () {
+			default() {
 				return [];
 			}
 		}
@@ -122,35 +138,6 @@ export default {
 			},
 			supportseries: []
 		};
-	},
-	methods: {
-		async sendRequest() {
-			const event = JSON.parse(JSON.stringify(this.event));
-			event.track = event.track.id;
-			event.mainseries = event.series.id;
-			event.supportseries = this.supportseries;
-			this.showEventDialog = false;
-			const res = await this.$axios.$post('/api/calendar/event/create', {
-				event
-			});
-			this.$root.$emit('eventCreated', res);
-		},
-		filterSupportSeries: function() {
-			if (this.event.series === undefined || this.event.series === '')
-				return this.series;
-			else
-				return this.series.filter(series => {
-					return series.id !== this.event.series.id;
-				});
-		},
-		validInput: function() {
-			return this.event.name.length > 0 && this.event.track !== '' &&
-				this.event.track !== undefined && this.event.track !== '' &&
-				this.event.series !== undefined && this.event.series !== '' &&
-				this.event.startdate !== null && this.event.startdate !== '' &&
-				this.event.enddate !== null && this.event.enddate !== '' &&
-				this.event.priority >= 1;
-		}
 	},
 	computed: {
 		requiredEnddate() {
@@ -203,6 +190,35 @@ export default {
 			let index = this.supportseries.indexOf(newValue.id);
 			if (index >= 0)
 				this.supportseries.splice(index, 1);
+		}
+	},
+	methods: {
+		async sendRequest() {
+			const event = JSON.parse(JSON.stringify(this.event));
+			event.track = event.track.id;
+			event.mainseries = event.series.id;
+			event.supportseries = this.supportseries;
+			this.showEventDialog = false;
+			const res = await this.$axios.$post('/api/calendar/event/create', {
+				event
+			});
+			this.$root.$emit('eventCreated', res);
+		},
+		filterSupportSeries: function() {
+			if (this.event.series === undefined || this.event.series === '')
+			return this.series;
+			else
+			return this.series.filter(series => {
+				return series.id !== this.event.series.id;
+			});
+		},
+		validInput: function() {
+			return this.event.name.length > 0 && this.event.track !== '' &&
+			this.event.track !== undefined && this.event.track !== '' &&
+			this.event.series !== undefined && this.event.series !== '' &&
+			this.event.startdate !== null && this.event.startdate !== '' &&
+			this.event.enddate !== null && this.event.enddate !== '' &&
+			this.event.priority >= 1;
 		}
 	}
 };

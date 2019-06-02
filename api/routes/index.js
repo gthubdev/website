@@ -16,28 +16,28 @@ const PodcastCtrl = require('../controllers/podcast');
 
 // routes ==================================================
 
-// // Startpage
+// Startpage
 // router.get('/', StartpageCtrl.getStartpage);
-//
-// // Authentication
+
+// Authentication
 router.post('/login', AuthCtrl.login);
 router.post('/logout', AuthCtrl.logout);
 // router.post('/changepassword', AuthCtrl.changepassword);
-//
-// // Calendar
+
+// Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
 // router.post('/calendar/timezone', CalendarCtrl.getCalendarWithTimezone);
-//
-// // Event
+
+// Event
 router.post('/calendar/event/create', EventCtrl.createEvent);
-//
-// // EventSession
-// router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);
-//
-// // Series
+
+// EventSession
+router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);
+
+// Series
 router.post('/calendar/series/create', SeriesCtrl.createSeries);
-//
-// // Track
+
+// Track
 router.post('/calendar/track/create', TrackCtrl.createTrack);
 //
 // // Gallery

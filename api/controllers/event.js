@@ -14,7 +14,7 @@ module.exports.createEvent = (req, res) => {
 		});
 		db.SupportSeries.bulkCreate(supportarray)
 		.then(() => {
-			return 	db.Event.findOne({
+			return  db.Event.findOne({
 						where: {id: newevent.id},
 						include: [
 							{ model: db.Track },
