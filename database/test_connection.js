@@ -5,7 +5,11 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DBName, process.env.DBUser, process.env.DBPass, {
 	host: process.env.DBHost,
 	dialect: 'mariadb',
-	logging: false
+	logging: false,
+		dialectOptions: {
+		multipleStatements: true,
+		timezone: 'local'
+	}
 });
 
 // Test connection
