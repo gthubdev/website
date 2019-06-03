@@ -47,3 +47,15 @@ module.exports.createEvent = (req, res) => {
 		util.error(req, res, err);
 	});
 };
+
+module.exports.deleteEvent = (req, res) => {
+	db.Event.destroy({
+		where: { id: req.params.id }
+	}).then(response => {
+		if (response === 1)
+			util.print('Deleted Event with id ' + req.params.id);
+		res.json({ deleted: response });
+	}, err => {
+		util.error(req, res, err);
+	});
+};
