@@ -30,6 +30,7 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 
 // Event
 router.post('/calendar/event/create', EventCtrl.createEvent);
+router.post('/calendar/event/delete/:id', EventCtrl.deleteEvent);
 
 // EventSession
 router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);
