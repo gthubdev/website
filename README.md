@@ -39,9 +39,8 @@ You can use the supplied `.env.sample` as a base.
 `npm run insert_testdata`
 
 ## Run
-* Run `npm run build` to generate all files, followed by `npm start` to start the server
-
-* Alternatively, run `npm run dev` to start the server in development mode
+* To run in development mode: `npm run dev`
+* To run in production mode: `npm run build` to generate all files followed by `npm start` to start the server
 
 ## Testing
 * Run:
