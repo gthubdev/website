@@ -33,6 +33,7 @@ router.post('/calendar/event/create', EventCtrl.createEvent);
 
 // EventSession
 router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);
+router.post('/calendar/eventsession/delete/:id', EventSessionCtrl.deleteEventSession);
 
 // Series
 router.post('/calendar/series/create', SeriesCtrl.createSeries);
