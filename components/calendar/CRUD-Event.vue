@@ -97,7 +97,7 @@
 			<md-button class="md-primary md-accent" @click="showEventDialog = false">
 				Cancel
 			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="createEvent()">
 				Create
 			</md-button>
 		</md-dialog-actions>
@@ -193,7 +193,7 @@ export default {
 		}
 	},
 	methods: {
-		async sendRequest() {
+		async createEvent() {
 			const event = JSON.parse(JSON.stringify(this.event));
 			event.track = event.track.id;
 			event.mainseries = event.series.id;
