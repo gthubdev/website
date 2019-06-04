@@ -9,7 +9,16 @@
 					<img :src="es.Series.logo" alt="Logo" />
 				</md-avatar>
 				<div class="md-list-item-text">
-					<strong>{{ es.name }}</strong> {{ es.starttime }}
+					<div class="md-layout">
+						<div class="md-layout-item">
+							<strong>{{ es.name }}</strong> {{ es.starttime }}
+						</div>
+						<div class="md-layout-item">
+							<md-icon class="" @click.native="deleteSession(es.id)">
+								delete
+							</md-icon>
+						</div>
+					</div>
 				</div>
 			</md-list-item>
 		</md-list>
@@ -73,7 +82,7 @@
 			<md-button class="md-primary md-accent" @click="showEventSessionDialog = false">
 				Cancel
 			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="createSession()">
 				Create
 			</md-button>
 		</md-dialog-actions>
@@ -155,7 +164,7 @@ export default {
 		},
 	},
 	methods: {
-		async sendRequest() {
+		async createSession() {
 			const session = JSON.parse(JSON.stringify(this.eventsession));
 			session.event = this.event.id;
 			session.series = session.series.id;
@@ -174,6 +183,11 @@ export default {
 			Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
 			if (event !== null)
 				this.eventname = this.event.name;
+		},
+		async deleteSession(sessionid) {
+			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
+			if (res.deleted === 1)
+				this.$root.$emit('eventSessionDeleted', this.event.id, sessionid);
 		},
 		getAllSeries: function() {
 			let arr = [];

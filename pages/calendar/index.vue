@@ -116,6 +116,11 @@ export default {
 			this.showEventSessionDialog = !this.showEventSessionDialog;
 			this.createdEvent = event;
 		});
+		this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
+			let event = this.data.events.find(e => e.id == eventid);
+			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
+			event.EventSessions.splice(sessionindex, 1);
+		});
 		// Series
 		this.$root.$on('toggleCrudSeries', () => {
 			this.showSeriesDialog = !this.showSeriesDialog;
