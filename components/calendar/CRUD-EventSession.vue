@@ -186,7 +186,7 @@ export default {
 		},
 		async deleteSession(sessionid) {
 			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
-			if (res.deleted === 1)
+			if (res.deleted >= 1)
 				this.$root.$emit('eventSessionDeleted', this.event.id, sessionid);
 		},
 		getAllSeries: function() {

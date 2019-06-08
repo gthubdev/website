@@ -49,8 +49,8 @@ module.exports.deleteEventSession = (req, res) => {
 	db.EventSession.destroy({
 		where: { id: req.params.id }
 	}).then(response => {
-		if (response === 1)
-			util.print('Deleted EventSession with id ' + req.params.id);
+		if (response >= 1)
+			util.print('EventSessions deleted: ' + response);
 		res.json({ deleted: response });
 	}, err => {
 		util.error(req, res, err);
