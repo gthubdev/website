@@ -4,6 +4,7 @@ const Sequelize = require('sequelize');
 // Define database-configuration
 const sequelize = new Sequelize(process.env.DBName, process.env.DBUser, process.env.DBPass, {
 	host: process.env.DBHost,
+	port: process.env.DBPort || 3306,
 	dialect: 'mariadb',
 	logging: false,
 		dialectOptions: {

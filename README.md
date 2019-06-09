@@ -26,6 +26,8 @@ DBHost=DATABASE_HOST
 DBName=DATABASE_NAME
 DBUser=DATABASE_USER
 DBPass=DATABASE_PASSWORD
+# Defaults to 3306 (MariaDB default)
+DBPort=DATABASE_PORT
 ```
 You can use the supplied `.env.sample` as a base.
 
