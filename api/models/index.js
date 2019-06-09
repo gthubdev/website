@@ -20,7 +20,8 @@ if (process.env.DBHost) {
 		host: process.env.DBHost,
 		databasename: process.env.DBName,
 		user: process.env.DBUser,
-		password: process.env.DBPass
+		password: process.env.DBPass,
+		port: process.env.DBPort
 	}
 } else {
 	dbconfig = require('../../database/circleci.js');
@@ -29,6 +30,7 @@ if (process.env.DBHost) {
 // Define database-configuration
 const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.password, {
 	host: dbconfig.host,
+	port: dbconfig.port,
 	dialect: 'mariadb',
 	logging: false,
 	dialectOptions: {
