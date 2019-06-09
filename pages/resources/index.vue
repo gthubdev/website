@@ -1,5 +1,5 @@
 <template>
 <div>
-	this is testroute
+	this is the resource page
 </div>
 </template>

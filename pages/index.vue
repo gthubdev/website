@@ -1,20 +1,21 @@
 <template>
 <section class="container">
 	<div>
-		<logo />
+		<img src="~assets/website.jpg" />
+		<!-- <logo />
 		<h2 class="subtitle">
 			My best Nuxt.js project
-		</h2>
+		</h2> -->
 	</div>
 </section>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue';
+// import Logo from '~/components/Logo.vue';
 
 export default {
 	components: {
-		Logo
+		// Logo
 	}
 };
 </script>
