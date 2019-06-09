@@ -25,7 +25,7 @@
 		:tz="data.tz"
 	/>
 
-	<CRUDSeries
+	<!-- <CRUDSeries
 		:show-dialog="showSeriesDialog"
 	/>
 	<CRUDTrack
@@ -40,7 +40,7 @@
 	<CRUDEventSession
 		:show-dialog="showEventSessionDialog"
 		:event="createdEvent"
-	/>
+	/> -->
 </div>
 </template>
 
@@ -48,16 +48,16 @@
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import SidePanel from '~/components/calendar/SidePanel.vue';
-import CRUDSeries from '~/components/calendar/CRUD-Series.vue';
-import CRUDTrack from '~/components/calendar/CRUD-Track.vue';
-import CRUDEvent from '~/components/calendar/CRUD-Event.vue';
-import CRUDEventSession from '~/components/calendar/CRUD-EventSession.vue';
+// import CRUDSeries from '~/components/calendar/CRUD-Series.vue';
+// import CRUDTrack from '~/components/calendar/CRUD-Track.vue';
+// import CRUDEvent from '~/components/calendar/CRUD-Event.vue';
+// import CRUDEventSession from '~/components/calendar/CRUD-EventSession.vue';
 
 import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event, FilterPanel,	SidePanel, CRUDSeries, CRUDTrack, CRUDEvent, CRUDEventSession
+		Event, FilterPanel,	SidePanel//, CRUDSeries, CRUDTrack, CRUDEvent, CRUDEventSession
 	},
 	data: function() {
 		return {
@@ -87,67 +87,67 @@ export default {
 	},
 	mounted() {
 		// Event
-		this.$root.$on('toggleCrudEvent', () => {
-			this.showEventDialog = !this.showEventDialog;
-		});
-		this.$root.$on('eventCreated', obj => {
-			this.data.events.push(obj);
-			this.data.events.sort((a,b) => {
-				if (a.priority === b.priority)
-					return a.startdate.localeCompare(b.startdate);
-				else
-					return a.priority - b.priority;
-			});
-			this.createdEvent = obj;
-			this.showEventSessionDialog = !this.showEventSessionDialog;
-		});
-		this.$root.$on('eventDeleted', eventid => {
-			let index = this.data.events.findIndex(e => e.id == eventid);
-			this.data.events.splice(index, 1);
-		});
+		// this.$root.$on('toggleCrudEvent', () => {
+		// 	this.showEventDialog = !this.showEventDialog;
+		// });
+		// this.$root.$on('eventCreated', obj => {
+		// 	this.data.events.push(obj);
+		// 	this.data.events.sort((a,b) => {
+		// 		if (a.priority === b.priority)
+		// 			return a.startdate.localeCompare(b.startdate);
+		// 		else
+		// 			return a.priority - b.priority;
+		// 	});
+		// 	this.createdEvent = obj;
+		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
+		// });
+		// this.$root.$on('eventDeleted', eventid => {
+		// 	let index = this.data.events.findIndex(e => e.id == eventid);
+		// 	this.data.events.splice(index, 1);
+		// });
 		// EventSession
-		this.$root.$on('toggleCrudEventSession', () => {
-			this.showEventSessionDialog = !this.showEventSessionDialog;
-		});
-		this.$root.$on('eventSessionCreated', session => {
-			let event = this.data.events.find(e => e.id == session.event);
-			event.EventSessions.push(session);
-			event.EventSessions.sort((a,b) => {
-				return a.starttime.localeCompare(b.starttime);
-			});
-		});
-		this.$root.$on('addEventSession', event => {
-			this.showEventSessionDialog = !this.showEventSessionDialog;
-			this.createdEvent = event;
-		});
-		this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
-			let event = this.data.events.find(e => e.id == eventid);
-			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
-			event.EventSessions.splice(sessionindex, 1);
-		});
+		// this.$root.$on('toggleCrudEventSession', () => {
+		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
+		// });
+		// this.$root.$on('eventSessionCreated', session => {
+		// 	let event = this.data.events.find(e => e.id == session.event);
+		// 	event.EventSessions.push(session);
+		// 	event.EventSessions.sort((a,b) => {
+		// 		return a.starttime.localeCompare(b.starttime);
+		// 	});
+		// });
+		// this.$root.$on('addEventSession', event => {
+		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
+		// 	this.createdEvent = event;
+		// });
+		// this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
+		// 	let event = this.data.events.find(e => e.id == eventid);
+		// 	let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
+		// 	event.EventSessions.splice(sessionindex, 1);
+		// });
 		// Series
-		this.$root.$on('toggleCrudSeries', () => {
-			this.showSeriesDialog = !this.showSeriesDialog;
-		});
-		this.$root.$on('seriesCreated', obj => {
-			this.data.series.push(obj);
-			this.data.series.sort((a,b) => {
-				if (a.priority === b.priority)
-					return a.name.localeCompare(b.name);
-				else
-					return a.priority - b.priority;
-			});
-		});
+		// this.$root.$on('toggleCrudSeries', () => {
+		// 	this.showSeriesDialog = !this.showSeriesDialog;
+		// });
+		// this.$root.$on('seriesCreated', obj => {
+		// 	this.data.series.push(obj);
+		// 	this.data.series.sort((a,b) => {
+		// 		if (a.priority === b.priority)
+		// 			return a.name.localeCompare(b.name);
+		// 		else
+		// 			return a.priority - b.priority;
+		// 	});
+		// });
 		// Track
-		this.$root.$on('toggleCrudTrack', () => {
-			this.showTrackDialog = !this.showTrackDialog;
-		});
-		this.$root.$on('trackCreated', obj => {
-			this.data.tracks.push(obj);
-			this.data.tracks.sort((a,b) => {
-				return a.name.localeCompare(b.name);
-			});
-		});
+		// this.$root.$on('toggleCrudTrack', () => {
+		// 	this.showTrackDialog = !this.showTrackDialog;
+		// });
+		// this.$root.$on('trackCreated', obj => {
+		// 	this.data.tracks.push(obj);
+		// 	this.data.tracks.sort((a,b) => {
+		// 		return a.name.localeCompare(b.name);
+		// 	});
+		// });
 
 		this.$root.$on('toggleCurrentEvents', () => {
 			this.showCurrentEvents = !this.showCurrentEvents;
