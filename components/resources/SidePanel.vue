@@ -5,6 +5,10 @@
 	<md-button class="md-raised md-primary" @click.native="showSeries()">
 		Show Series
 	</md-button>
+	<br />
+	<md-button class="md-raised md-primary" @click.native="showTracks()">
+		Show Tracks
+	</md-button>
 </div>
 </template>
 
@@ -14,6 +18,9 @@ export default {
 	methods: {
 		showSeries: function() {
 			this.$root.$emit('showResourcesSeries');
+		},
+		showTracks: function() {
+			this.$root.$emit('showResourcesTracks');
 		}
 	}
 };
