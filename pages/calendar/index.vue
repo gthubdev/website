@@ -101,10 +101,6 @@ export default {
 		// 	this.createdEvent = obj;
 		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
 		// });
-		// this.$root.$on('eventDeleted', eventid => {
-		// 	let index = this.data.events.findIndex(e => e.id == eventid);
-		// 	this.data.events.splice(index, 1);
-		// });
 		// EventSession
 		// this.$root.$on('toggleCrudEventSession', () => {
 		// 	this.showEventSessionDialog = !this.showEventSessionDialog;

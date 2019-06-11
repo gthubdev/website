@@ -81,11 +81,6 @@ export default {
 		}
 	},
 	methods: {
-		// async deleteEvent() {
-		// 	const res = await this.$axios.$post('/api/calendar/event/delete/' + this.event.id);
-		// 	if (res.deleted === 1)
-		// 		this.$root.$emit('eventDeleted', this.event.id);
-		// },
 		// addEventSession: function() {
 		// 	this.$root.$emit('addEventSession', this.event);
 		// },

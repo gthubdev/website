@@ -40,12 +40,19 @@ export default {
 		};
 	},
 	mounted() {
+		// Events
 		this.$root.$on('showResourcesEvents', () => {
 			this.activeModel = 'events';
 		});
+		this.$root.$on('eventDeleted', eventid => {
+			let index = this.data.events.findIndex(e => e.id == eventid);
+			this.data.events.splice(index, 1);
+		});
+		// Series
 		this.$root.$on('showResourcesSeries', () => {
 			this.activeModel = 'series';
 		});
+		// Tracks
 		this.$root.$on('showResourcesTracks', () => {
 			this.activeModel = 'tracks';
 		});
