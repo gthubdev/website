@@ -1,5 +1,8 @@
 <template>
-<div class="md-layout">
+<div>
+	<div class="headline">
+		<span class="md-display-1">Tracks</span>
+	</div>
 	<md-list>
 		<md-list-item v-for="t in tracks" :key="t.id">
 			<span class="md-list-item-text">{{ t.name }}</span>
@@ -26,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.md-list-item-text {
-	margin-right: 2em !important;
+.headline {
+	margin-bottom: 1em;
 }
 </style>

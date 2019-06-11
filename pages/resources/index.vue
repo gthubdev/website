@@ -1,10 +1,10 @@
 <template>
 <div class="md-layout">
 	<SidePanel />
-	<div class="md-layout-item flex-start">
-		<div class="headline">
-			<span class="md-display-1">{{ headline }}</span>
-		</div>
+	<div class="md-layout-item flex-start main-panel">
+		<EventsContainer v-if="activeModel === 'events'"
+			:events="data.events"
+		/>
 		<SeriesContainer v-if="activeModel === 'series'"
 			:series="data.series"
 		/>
@@ -17,30 +17,19 @@
 
 <script>
 import SidePanel from '~/components/resources/SidePanel.vue';
+import EventsContainer from '~/components/resources/EventsContainer.vue';
 import SeriesContainer from '~/components/resources/SeriesContainer.vue';
 import TracksContainer from '~/components/resources/TracksContainer.vue';
 
 export default {
 	components: {
-		SidePanel, SeriesContainer, TracksContainer
+		SidePanel, EventsContainer, SeriesContainer, TracksContainer
 	},
 	data: function() {
 		return {
 			data: [],
 			activeModel: ''
 		};
-	},
-	computed: {
-		headline: function() {
-			switch(this.activeModel) {
-				case 'series':
-					return 'Series';
-				case 'tracks':
-					return 'Tracks';
-				default:
-					return ' ';
-			}
-		}
 	},
 	async asyncData({
 		$axios
@@ -51,6 +40,9 @@ export default {
 		};
 	},
 	mounted() {
+		this.$root.$on('showResourcesEvents', () => {
+			this.activeModel = 'events';
+		});
 		this.$root.$on('showResourcesSeries', () => {
 			this.activeModel = 'series';
 		});
@@ -60,3 +52,9 @@ export default {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+.main-panel {
+	margin-right: 1em !important;
+}
+</style>

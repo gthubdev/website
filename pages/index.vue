@@ -1,7 +1,7 @@
 <template>
 <section class="container">
 	<div>
-		<img src="~assets/website.jpg" />
+		<img src="~assets/website.jpg" alt="background" />
 		<!-- <logo />
 		<h2 class="subtitle">
 			My best Nuxt.js project

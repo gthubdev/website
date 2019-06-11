@@ -2,6 +2,10 @@
 <div class="md-layout-item md-size-20 filter">
 	<div>CONTROL-BOX</div>
 	<br />
+	<md-button class="md-raised md-primary" @click.native="showEvents()">
+		Show Events
+	</md-button>
+	<br />
 	<md-button class="md-raised md-primary" @click.native="showSeries()">
 		Show Series
 	</md-button>
@@ -16,6 +20,9 @@
 
 export default {
 	methods: {
+		showEvents: function() {
+			this.$root.$emit('showResourcesEvents');
+		},
 		showSeries: function() {
 			this.$root.$emit('showResourcesSeries');
 		},
