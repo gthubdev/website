@@ -1,17 +1,17 @@
 <template>
 <div class="md-layout">
 	<SidePanel />
-	<div class="md-layout-item flex-start main-panel">
-		<EventsContainer v-if="activeModel === 'events'"
-			:events="data.events"
-		/>
-		<SeriesContainer v-if="activeModel === 'series'"
-			:series="data.series"
-		/>
-		<TracksContainer v-else-if="activeModel === 'tracks'"
-			:tracks="data.tracks"
-		/>
-	</div>
+	<!-- <div class="md-layout-item flex-start main-panel"> -->
+	<EventsContainer v-if="activeModel === 'events'"
+		:events="data.events"
+	/>
+	<SeriesContainer v-else-if="activeModel === 'series'"
+		:series="data.series"
+	/>
+	<TracksContainer v-else-if="activeModel === 'tracks'"
+		:tracks="data.tracks"
+	/>
+	<!-- </div> -->
 </div>
 </template>
 
@@ -51,6 +51,15 @@ export default {
 		// Series
 		this.$root.$on('showResourcesSeries', () => {
 			this.activeModel = 'series';
+		});
+		this.$root.$on('seriesCreated', obj => {
+			this.data.series.push(obj);
+			this.data.series.sort((a,b) => {
+				if (a.priority === b.priority)
+					return a.name.localeCompare(b.name);
+				else
+					return a.priority - b.priority;
+			});
 		});
 		// Tracks
 		this.$root.$on('showResourcesTracks', () => {
