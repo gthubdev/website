@@ -1,7 +1,6 @@
 <template>
 <div class="md-layout">
 	<SidePanel />
-	<!-- <div class="md-layout-item flex-start main-panel"> -->
 	<EventsContainer v-if="activeModel === 'events'"
 		:events="data.events"
 	/>
@@ -10,8 +9,8 @@
 	/>
 	<TracksContainer v-else-if="activeModel === 'tracks'"
 		:tracks="data.tracks"
+		:tz="data.tz"
 	/>
-	<!-- </div> -->
 </div>
 </template>
 
@@ -64,6 +63,12 @@ export default {
 		// Tracks
 		this.$root.$on('showResourcesTracks', () => {
 			this.activeModel = 'tracks';
+		});
+		this.$root.$on('trackCreated', obj => {
+			this.data.tracks.push(obj);
+			this.data.tracks.sort((a,b) => {
+				return a.name.localeCompare(b.name);
+			});
 		});
 	}
 };

@@ -25,14 +25,7 @@
 		:tz="data.tz"
 	/>
 
-	<!-- <CRUDSeries
-		:show-dialog="showSeriesDialog"
-	/>
-	<CRUDTrack
-		:show-dialog="showTrackDialog"
-		:tz="data.tz"
-	/>
-	<CRUDEvent
+	<!-- <CRUDEvent
 		:show-dialog="showEventDialog"
 		:series="data.series"
 		:tracks="data.tracks"
@@ -48,8 +41,6 @@
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import SidePanel from '~/components/calendar/SidePanel.vue';
-// import CRUDSeries from '~/components/calendar/CRUD-Series.vue';
-// import CRUDTrack from '~/components/calendar/CRUD-Track.vue';
 // import CRUDEvent from '~/components/calendar/CRUD-Event.vue';
 // import CRUDEventSession from '~/components/calendar/CRUD-EventSession.vue';
 
@@ -57,7 +48,7 @@ import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event, FilterPanel,	SidePanel//, CRUDSeries, CRUDTrack, CRUDEvent, CRUDEventSession
+		Event, FilterPanel,	SidePanel//, CRUDEvent, CRUDEventSession
 	},
 	data: function() {
 		return {
@@ -120,29 +111,6 @@ export default {
 		// 	let event = this.data.events.find(e => e.id == eventid);
 		// 	let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
 		// 	event.EventSessions.splice(sessionindex, 1);
-		// });
-		// Series
-		// this.$root.$on('toggleCrudSeries', () => {
-		// 	this.showSeriesDialog = !this.showSeriesDialog;
-		// });
-		// this.$root.$on('seriesCreated', obj => {
-		// 	this.data.series.push(obj);
-		// 	this.data.series.sort((a,b) => {
-		// 		if (a.priority === b.priority)
-		// 			return a.name.localeCompare(b.name);
-		// 		else
-		// 			return a.priority - b.priority;
-		// 	});
-		// });
-		// Track
-		// this.$root.$on('toggleCrudTrack', () => {
-		// 	this.showTrackDialog = !this.showTrackDialog;
-		// });
-		// this.$root.$on('trackCreated', obj => {
-		// 	this.data.tracks.push(obj);
-		// 	this.data.tracks.sort((a,b) => {
-		// 		return a.name.localeCompare(b.name);
-		// 	});
 		// });
 
 		this.$root.$on('toggleCurrentEvents', () => {

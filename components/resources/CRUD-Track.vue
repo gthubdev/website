@@ -108,9 +108,9 @@ export default {
 		},
 		showTrackDialog: function(newValue, oldValue) {
 			if (oldValue === true)
-			this.$root.$emit('toggleCrudTrack');
+				this.$root.$emit('toggleCrudTrack');
 			if (newValue === true)
-			Object.keys(this.track).forEach(key => (this.track[key] = ''));
+				Object.keys(this.track).forEach(key => (this.track[key] = ''));
 		}
 	},
 	methods: {
@@ -145,5 +145,9 @@ export default {
 	width: auto;
 	margin-left: 1em;
 	margin-right: 1em;
+}
+
+.md-menu-content {
+	z-index: 100;
 }
 </style>
