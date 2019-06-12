@@ -29,12 +29,6 @@
 
 		</md-card-content> -->
 		<md-card-actions>
-			<!-- <md-icon class="" @click.native="deleteEvent()">
-				delete
-			</md-icon>
-			<md-button @click.native="addEventSession()">
-				Create Session
-			</md-button> -->
 			<md-button @click.native="toggleSessions()">
 				Show sessions
 			</md-button>

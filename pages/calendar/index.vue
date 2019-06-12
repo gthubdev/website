@@ -24,16 +24,6 @@
 		:show-event="showEvent"
 		:tz="data.tz"
 	/>
-
-	<!-- <CRUDEvent
-		:show-dialog="showEventDialog"
-		:series="data.series"
-		:tracks="data.tracks"
-	/>
-	<CRUDEventSession
-		:show-dialog="showEventSessionDialog"
-		:event="createdEvent"
-	/> -->
 </div>
 </template>
 
@@ -41,14 +31,12 @@
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import SidePanel from '~/components/calendar/SidePanel.vue';
-// import CRUDEvent from '~/components/calendar/CRUD-Event.vue';
-// import CRUDEventSession from '~/components/calendar/CRUD-EventSession.vue';
 
 import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event, FilterPanel,	SidePanel//, CRUDEvent, CRUDEventSession
+		Event, FilterPanel,	SidePanel
 	},
 	data: function() {
 		return {
@@ -81,36 +69,13 @@ export default {
 		// this.$root.$on('toggleCrudEvent', () => {
 		// 	this.showEventDialog = !this.showEventDialog;
 		// });
-		// this.$root.$on('eventCreated', obj => {
-		// 	this.data.events.push(obj);
-		// 	this.data.events.sort((a,b) => {
-		// 		if (a.priority === b.priority)
-		// 			return a.startdate.localeCompare(b.startdate);
-		// 		else
-		// 			return a.priority - b.priority;
-		// 	});
-		// 	this.createdEvent = obj;
-		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
-		// });
 		// EventSession
 		// this.$root.$on('toggleCrudEventSession', () => {
 		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
 		// });
-		// this.$root.$on('eventSessionCreated', session => {
-		// 	let event = this.data.events.find(e => e.id == session.event);
-		// 	event.EventSessions.push(session);
-		// 	event.EventSessions.sort((a,b) => {
-		// 		return a.starttime.localeCompare(b.starttime);
-		// 	});
-		// });
 		// this.$root.$on('addEventSession', event => {
 		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
 		// 	this.createdEvent = event;
-		// });
-		// this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
-		// 	let event = this.data.events.find(e => e.id == eventid);
-		// 	let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
-		// 	event.EventSessions.splice(sessionindex, 1);
 		// });
 
 		this.$root.$on('toggleCurrentEvents', () => {

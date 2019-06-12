@@ -3,6 +3,8 @@
 	<SidePanel />
 	<EventsContainer v-if="activeModel === 'events'"
 		:events="data.events"
+		:series="data.series"
+		:tracks="data.tracks"
 	/>
 	<SeriesContainer v-else-if="activeModel === 'series'"
 		:series="data.series"
@@ -43,9 +45,31 @@ export default {
 		this.$root.$on('showResourcesEvents', () => {
 			this.activeModel = 'events';
 		});
+		this.$root.$on('eventCreated', obj => {
+			this.data.events.push(obj);
+			this.data.events.sort((a,b) => {
+				if (a.priority === b.priority)
+					return a.startdate.localeCompare(b.startdate);
+				else
+					return a.priority - b.priority;
+			});
+		});
 		this.$root.$on('eventDeleted', eventid => {
 			let index = this.data.events.findIndex(e => e.id == eventid);
 			this.data.events.splice(index, 1);
+		});
+		// EventSessions
+		this.$root.$on('eventSessionCreated', session => {
+			let event = this.data.events.find(e => e.id == session.event);
+			event.EventSessions.push(session);
+			event.EventSessions.sort((a,b) => {
+				return a.starttime.localeCompare(b.starttime);
+			});
+		});
+		this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
+			let event = this.data.events.find(e => e.id == eventid);
+			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
+			event.EventSessions.splice(sessionindex, 1);
 		});
 		// Series
 		this.$root.$on('showResourcesSeries', () => {
