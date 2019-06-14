@@ -1,21 +1,35 @@
 const https = require('https');
 
+let data = '';
+
 module.exports.getWecData = (req, res) => {
+	// console.log('RECEIVED REQUEST AT ' + new Date());
+	res.json({
+		data: data
+	});
+};
+
+setInterval(() => {
+	fetchData()
+}, 30 * 1000);
+
+fetchData = function() {
 	https.get('https://storage.googleapis.com/fiawec-prod/assets/live/WEC/__data.json', response => {
-		let data = '';
+		let tmp = '';
 
 		// A chunk of data has been recieved
 		response.on('data', chunk => {
-			data += chunk;
+			tmp += chunk;
 		});
 
 		// The whole response has been received
 		response.on('end', () => {
-			res.json({
-				data: JSON.parse(data)
-			});
+			data = JSON.parse(tmp);
+			// console.log('UPDATE FROM SOURCE AT ' + new Date());
 		});
 	}, err => {
 		console.log(err);
 	});
 };
+
+fetchData();

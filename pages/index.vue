@@ -113,7 +113,7 @@ export default {
 		fetchData: function() {
 			setInterval(() => {
 				this.sendRequest();
-			}, 60 * 1000);
+			}, 30 * 1000);
 		},
 		racestateBg: function() {
 			if (this.data.params === undefined)
