@@ -12,12 +12,14 @@ const SeriesCtrl = require('../controllers/series.js');
 const TrackCtrl = require('../controllers/track');
 const GalleryCtrl = require('../controllers/gallery');
 const PodcastCtrl = require('../controllers/podcast');
+const WecCtrl = require('../controllers/wec.js');
 
 
 // routes ==================================================
 
 // Startpage
 // router.get('/', StartpageCtrl.getStartpage);
+router.get('/wecdata', WecCtrl.getWecData);
 
 // Authentication
 router.post('/login', AuthCtrl.login);

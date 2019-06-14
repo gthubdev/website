@@ -1,6 +1,6 @@
 <template>
 <div>
-	<div>
+	<!-- <div>
 		<h3>
 			Gthub
 		</h3>
@@ -16,7 +16,7 @@
 		<md-button class="md-raised md-accent" @click.native="testClick()">
 			Click me
 		</md-button>
-	</div>
+	</div> -->
 	<nuxt />
 </div>
 </template>
