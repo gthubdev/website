@@ -94,6 +94,10 @@ export default {
 				return a.name.localeCompare(b.name);
 			});
 		});
+		this.$root.$on('trackDeleted', trackid => {
+			let index = this.data.tracks.findIndex(t => t.id == trackid);
+			this.data.tracks.splice(index, 1);
+		});
 	}
 };
 </script>
