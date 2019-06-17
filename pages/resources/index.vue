@@ -84,6 +84,10 @@ export default {
 					return a.priority - b.priority;
 			});
 		});
+		this.$root.$on('seriesDeleted', seriesid => {
+			let index = this.data.series.findIndex(s => s.id == seriesid);
+			this.data.series.splice(index, 1);
+		});
 		// Tracks
 		this.$root.$on('showResourcesTracks', () => {
 			this.activeModel = 'tracks';
