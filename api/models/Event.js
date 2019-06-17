@@ -31,7 +31,10 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'track',
 			onDelete: 'RESTRICT'
 		});
-		models.Event.belongsTo(models.Series, {foreignKey: 'mainseries'});
+		models.Event.belongsTo(models.Series, {
+			foreignKey: 'mainseries',
+			onDelete: 'RESTRICT'
+		});
 		models.Event.hasMany(models.EventSession, {
 			foreignKey: 'event',
 			onDelete: 'CASCADE'

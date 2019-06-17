@@ -18,6 +18,7 @@ INSERT INTO Series (id, name, priority, logo) VALUES (3, "Blancpain Endurance Cu
 INSERT INTO Series (id, name, priority, logo) VALUES (4, "GT2", 2, "https://upload.wikimedia.org/wikipedia/commons/c/cf/SROMotorsportsGroup_logo.png");
 INSERT INTO Series (id, name, priority, logo) VALUES (5, "IMSA WeatherTech SportsCar Championship", 1, "https://upload.wikimedia.org/wikipedia/en/thumb/2/28/WeatherTech_SportsCar_Championship_logo.png/300px-WeatherTech_SportsCar_Championship_logo.png");
 INSERT INTO Series (id, name, priority, logo) VALUES (6, "Virgin Australia Supercars Championship", 3, "https://upload.wikimedia.org/wikipedia/en/thumb/d/dd/Supercars_Championship_logo.svg/1200px-Supercars_Championship_logo.svg.png");
+INSERT INTO Series (id, name, priority, logo) VALUES (7, "SUPER GT", 1, "https://en.wikipedia.org/wiki/Super_GT#/media/File:SUPER_GT_logo.svg");
 
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, "Bathurst 12 Hour", "https://da2.rbmbtnx.net/v4/RBTV/pd/FO-1Y9A5DRAW5N11/im:i:q_70,f_png,e_trim/im:i:w_600,c_limit/a:s/st:iAJvI63Os4zYB9_BGlY7jW/bathurst12hour_titletreatment_squarelogo.svg", "2019-02-01", "2019-02-03", 2, 2, 2);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, "Nürburgring 24 Hours", "https://reifenpresse.de/wp-content/uploads/2018/11/ADAC-neuer-24h-Titelsponsor.jpg","2019-06-20", "2019-06-23", 1, 1, 1);

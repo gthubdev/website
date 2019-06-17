@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'event',
 			onDelete: 'CASCADE'
 		});
-		models.EventSession.belongsTo(models.Series, {foreignKey: 'series'});
+		models.EventSession.belongsTo(models.Series, {
+			foreignKey: 'series',
+			onDelete: 'RESTRICT'
+		});
 	};
 
 	return EventSession;
