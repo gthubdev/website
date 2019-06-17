@@ -11,6 +11,18 @@ module.exports.createSeries = (req, res) => {
 	});
 };
 
+module.exports.updateSeries = (req, res) => {
+	db.Series.update(req.body.series,
+		{where: { id: req.params.id }
+	}).then(response => {
+		if (response[0] >= 1)
+			util.print(response[0] + ' Series updated');
+		res.json({ updated: response[0] });
+	}, err => {
+		util.error(req, res, err);
+	});
+};
+
 module.exports.deleteSeries = (req, res) => {
 	// A series cannot be deleted, if it is the main series of an event,
 	// used as a support series in an event or used in an event session

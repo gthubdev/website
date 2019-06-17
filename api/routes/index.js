@@ -40,6 +40,7 @@ router.post('/calendar/eventsession/delete/:id', EventSessionCtrl.deleteEventSes
 
 // Series
 router.post('/calendar/series/create', SeriesCtrl.createSeries);
+router.post('/calendar/series/update/:id', SeriesCtrl.updateSeries);
 router.post('/calendar/series/delete/:id', SeriesCtrl.deleteSeries);
 
 // Track
