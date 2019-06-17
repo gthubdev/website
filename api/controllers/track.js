@@ -11,6 +11,18 @@ module.exports.createTrack = (req, res) => {
 	});
 };
 
+module.exports.updateTrack = (req, res) => {
+	db.Track.update(req.body.track,
+		{ where: { id: req.params.id }
+	}).then(response => {
+		if (response[0] >= 1)
+			util.print(response[0] + ' Tracks updated');
+		res.json({ updated: response[0] });
+	}, err => {
+		util.error(req, res, err);
+	});
+};
+
 module.exports.deleteTrack = (req, res) => {
 	// A track cannot be deleted, if it is used in an event
 	db.Track.destroy({

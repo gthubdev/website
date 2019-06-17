@@ -44,6 +44,7 @@ router.post('/calendar/series/delete/:id', SeriesCtrl.deleteSeries);
 
 // Track
 router.post('/calendar/track/create', TrackCtrl.createTrack);
+router.post('/calendar/track/update/:id', TrackCtrl.updateTrack);
 router.post('/calendar/track/delete/:id', TrackCtrl.deleteTrack);
 
 // // Gallery
