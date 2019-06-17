@@ -10,3 +10,20 @@ module.exports.createTrack = (req, res) => {
 		util.error(req, res, err);
 	});
 };
+
+module.exports.deleteTrack = (req, res) => {
+	db.Track.destroy({
+		where: { id: req.params.id }
+	}).then(response => {
+		if (response >= 1)
+			util.print('Tracks deleted: ' + response);
+		res.json({ deleted: response });
+	}, err => {
+		// Errno 1451 is when trying to delete a row which is referenced
+		// from another entity and 'On Delete' is set to 'RESTRICT'
+		if (err.parent && err.parent.errno && err.parent.errno === 1451)
+			res.status(409).send('The track is used by events.');
+		else
+			util.error(req, res, err);
+	});
+};

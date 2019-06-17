@@ -10,6 +10,7 @@ INSERT INTO Track (id, name, location, length, map, timezone) VALUES (3, "Circui
 INSERT INTO Track (id, name, location, length, map, timezone) VALUES (4, "Daytona International Speedway", "Daytona", 5.73, "", "America/New_York");
 INSERT INTO Track (id, name, location, length, map, timezone) VALUES (5, "Road America", "Elkhart Lake", 6.515, "", "America/Chicago");
 INSERT INTO Track (id, name, location, length, map, timezone) VALUES (6, "Surfers Paradise Street Circuit", "Surfers Paradise", 2.98, "", "Australia/Brisbane");
+INSERT INTO Track (id, name, location, length, map, timezone) VALUES (7, "Phillip Island Grand Prix Circuit", "Phillip Island", 4.445, "", "Australia/Sydney");
 
 INSERT INTO Series (id, name, priority, logo) VALUES (1, "VLN", 1, "https://kappelermotorsport.files.wordpress.com/2015/08/logovln.gif");
 INSERT INTO Series (id, name, priority, logo) VALUES (2, "Intercontinental GT Challenge", 2, "https://www.intercontinentalgtchallenge.com/images/logo-intercontinental-gt-challenge.png");

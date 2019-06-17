@@ -28,7 +28,10 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	Track.associate = models => {
-		models.Track.hasMany(models.Event, {foreignKey: 'track'});
+		models.Track.hasMany(models.Event, {
+			foreignKey: 'track',
+			onDelete: 'RESTRICT'
+		});
 	};
 
 	return Track;
