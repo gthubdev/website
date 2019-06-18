@@ -1,7 +1,7 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showTrackDialog">
-		<md-dialog-title>Create a Track</md-dialog-title>
+		<md-dialog-title>{{ headline }}</md-dialog-title>
 
 		<md-field :class="requiredName">
 			<label>Name</label>
@@ -52,7 +52,7 @@
 				Cancel
 			</md-button>
 			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-				Create
+				{{ action }}
 			</md-button>
 		</md-dialog-actions>
 	</md-dialog>
@@ -67,6 +67,14 @@ export default {
 		showDialog: {
 			type: Boolean,
 			default: false
+		},
+		activeTrack: {
+			type: Object,
+			default: null
+		},
+		mode: {
+			type: String,
+			default: ''
 		},
 		tz: {
 			type: Object,
@@ -86,6 +94,26 @@ export default {
 		};
 	},
 	computed: {
+		headline() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create a track';
+				case 'update':
+					return 'Update a track';
+				default:
+					return '';
+			}
+		},
+		action() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create';
+				case 'update':
+					return 'Update';
+				default:
+					return '';
+			}
+		},
 		requiredName() {
 			return {
 				'md-invalid': !(this.track.name.length > 0)
@@ -109,25 +137,55 @@ export default {
 		showTrackDialog: function(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudTrack');
-			if (newValue === true)
+			if (newValue === true && this.mode === 'create')
+				// Reset all values
 				Object.keys(this.track).forEach(key => (this.track[key] = ''));
+			if (newValue === true && this.activeTrack !== undefined)
+				// Might need to reset the object
+				this.track = JSON.parse(JSON.stringify(this.activeTrack));
+		},
+		activeTrack: function(newValue) {
+			if (this.mode === 'update' && newValue !== undefined)
+				// Need to copy the object in order to not change it when cancelling
+				this.track = JSON.parse(JSON.stringify(this.activeTrack));
 		}
 	},
 	methods: {
 		async sendRequest() {
 			const track = JSON.parse(JSON.stringify(this.track));
-			track.timezone = track.timezone.name;
+			if (this.mode === 'create') {
+				track.timezone = track.timezone.name;
+				const res = await this.$axios.$post('/api/calendar/track/create', {
+					track
+				});
+				this.$root.$emit('trackCreated', res);
+			} else if (this.mode === 'update') {
+				// if timezone was changed, need to update it
+				if (track.timezone.name !== undefined)
+					track.timezone = track.timezone.name;
+				// no need to update that
+				delete track.createdAt;
+				const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
+					track
+				});
+				if (res.updated >= 1)
+					this.$root.$emit('trackUpdated', track);
+			}
 			this.showTrackDialog = false;
-			const res = await this.$axios.$post('/api/calendar/track/create', {
-				track
-			});
-			this.$root.$emit('trackCreated', res);
 		},
 		validInput: function() {
 			return this.track.name.length > 0 &&
-				this.track.timezone.name !== undefined &&
+				this.validTimezone() &&
 				!isNaN(Number(this.track.length)) &&
 				Number(this.track.length) > 0;
+		},
+		validTimezone: function() {
+			if (this.mode === 'create')
+				return this.track.timezone.name !== undefined;
+			else if (this.mode === 'update')
+				return this.track.timezone !== '';
+			else
+				return false;
 		},
 		tzDisplay: function(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;

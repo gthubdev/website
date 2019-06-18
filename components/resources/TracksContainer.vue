@@ -6,10 +6,11 @@
 	<md-button class="md-raised md-primary" @click.native="createTrack()">
 		Create Track
 	</md-button>
+
 	<md-list>
 		<md-list-item v-for="t in tracks" :key="t.id">
 			<span class="md-list-item-text">{{ t.name }}</span>
-			<md-icon>
+			<md-icon @click.native="updateTrack(t)">
 				edit
 			</md-icon>
 			<md-icon @click.native="deleteTrack(t.id)">
@@ -20,6 +21,8 @@
 
 	<CRUDTrack
 		:show-dialog="showDialog"
+		:active-track="activeTrack"
+		:mode="mode"
 		:tz="tz"
 	/>
 </div>
@@ -44,7 +47,9 @@ export default {
 	},
 	data: function() {
 		return {
-			showDialog: false
+			showDialog: false,
+			activeTrack: null,
+			mode: ''
 		};
 	},
 	mounted() {
@@ -64,6 +69,12 @@ export default {
 			}
 		},
 		createTrack() {
+			this.mode = 'create';
+			this.showDialog = !this.showDialog;
+		},
+		updateTrack(track) {
+			this.activeTrack = track;
+			this.mode = 'update';
 			this.showDialog = !this.showDialog;
 		}
 	}
