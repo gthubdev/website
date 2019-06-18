@@ -116,7 +116,7 @@ export default {
 		},
 		requiredName() {
 			return {
-				'md-invalid': !(this.track.name.length > 0)
+				'md-invalid': !(this.track !== undefined && this.track.name.length > 0)
 			};
 		},
 		requiredLength() {
@@ -140,7 +140,7 @@ export default {
 			if (newValue === true && this.mode === 'create')
 				// Reset all values
 				Object.keys(this.track).forEach(key => (this.track[key] = ''));
-			if (newValue === true && this.activeTrack !== undefined)
+			if (newValue === true && this.mode === 'update' && this.activeTrack !== undefined)
 				// Might need to reset the object
 				this.track = JSON.parse(JSON.stringify(this.activeTrack));
 		},
