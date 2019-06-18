@@ -84,6 +84,16 @@ export default {
 					return a.priority - b.priority;
 			});
 		});
+		this.$root.$on('seriesUpdated', updatedSeries => {
+			let index = this.data.series.findIndex(s => s.id == updatedSeries.id);
+			this.data.series.splice(index, 1, updatedSeries);
+			this.data.series.sort((a,b) => {
+				if (a.priority === b.priority)
+					return a.name.localeCompare(b.name);
+				else
+					return a.priority - b.priority;
+			});
+		});
 		this.$root.$on('seriesDeleted', seriesid => {
 			let index = this.data.series.findIndex(s => s.id == seriesid);
 			this.data.series.splice(index, 1);

@@ -97,9 +97,9 @@ export default {
 		headline() {
 			switch(this.mode) {
 				case 'create':
-					return 'Create a track';
+					return 'Create a Track';
 				case 'update':
-					return 'Update a track';
+					return 'Update ' + this.track.name;
 				default:
 					return '';
 			}

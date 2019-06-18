@@ -1,7 +1,7 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showSeriesDialog">
-		<md-dialog-title>Create a Series</md-dialog-title>
+		<md-dialog-title>{{ headline }}</md-dialog-title>
 
 		<md-field :class="requiredName">
 			<label>Name</label>
@@ -35,7 +35,7 @@
 				Cancel
 			</md-button>
 			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-				Create
+				{{ action }}
 			</md-button>
 		</md-dialog-actions>
 	</md-dialog>
@@ -48,6 +48,14 @@ export default {
 		showDialog: {
 			type: Boolean,
 			default: false
+		},
+		activeSeries: {
+			type: Object,
+			default: null
+		},
+		mode: {
+			type: String,
+			default: ''
 		}
 	},
 	data: function() {
@@ -62,6 +70,26 @@ export default {
 		};
 	},
 	computed: {
+		headline() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create a Series';
+				case 'update':
+					return 'Update ' + this.series.name;
+				default:
+					return '';
+			}
+		},
+		action() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create';
+				case 'update':
+					return 'Update';
+				default:
+					return '';
+			}
+		},
 		requiredName() {
 			return {
 				'md-invalid': !(this.series.name.length > 0)
@@ -85,18 +113,37 @@ export default {
 		showSeriesDialog: function(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudSeries');
-			if (newValue === true)
+			if (newValue === true && this.mode === 'create')
+				// Reset all values
 				Object.keys(this.series).forEach(key => (this.series[key] = ''));
+			if (newValue === true && this.mode === 'update' && this.activeSeries !== undefined)
+				// Might need to reset the object
+				this.series = JSON.parse(JSON.stringify(this.activeSeries));
+		},
+		activeSeries: function(newValue) {
+			if (this.mode === 'update' && newValue !== undefined)
+				// Need to copy the object in order to not change it when cancelling
+				this.series = JSON.parse(JSON.stringify(this.activeSeries));
 		}
 	},
 	methods: {
 		async sendRequest() {
 			const series = JSON.parse(JSON.stringify(this.series));
+			if (this.mode === 'create') {
+				const res = await this.$axios.$post('/api/calendar/series/create', {
+					series
+				});
+				this.$root.$emit('seriesCreated', res);
+			} else if (this.mode === 'update') {
+				// no need to update that
+				delete series.createdAt;
+				const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
+					series
+				});
+				if (res.updated >= 1)
+					this.$root.$emit('seriesUpdated', series);
+			}
 			this.showSeriesDialog = false;
-			const res = await this.$axios.$post('/api/calendar/series/create', {
-				series
-			});
-			this.$root.$emit('seriesCreated', res);
 		},
 		validInput: function() {
 			return this.series.name.length > 0 && this.series.priority >= 1;

@@ -9,7 +9,7 @@
 	<md-list>
 		<md-list-item v-for="s in series" :key="s.id">
 			<span class="md-list-item-text">{{ s.name }}</span>
-			<md-icon>
+			<md-icon @click.native="updateSeries(s)">
 				edit
 			</md-icon>
 			<md-icon @click.native="deleteSeries(s.id)">
@@ -20,6 +20,8 @@
 
 	<CRUDSeries
 		:show-dialog="showDialog"
+		:active-series="activeSeries"
+		:mode="mode"
 	/>
 </div>
 </template>
@@ -39,7 +41,9 @@ export default {
 	},
 	data: function() {
 		return {
-			showDialog: false
+			showDialog: false,
+			activeSeries: null,
+			mode: ''
 		};
 	},
 	mounted() {
@@ -59,6 +63,12 @@ export default {
 			}
 		},
 		createSeries() {
+			this.mode = 'create';
+			this.showDialog = !this.showDialog;
+		},
+		updateSeries(series) {
+			this.activeSeries = series;
+			this.mode = 'update';
 			this.showDialog = !this.showDialog;
 		}
 	}
