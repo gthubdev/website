@@ -27,6 +27,9 @@
 					</md-list>
 				</span>
 			</span>
+			<md-icon @click.native="createEventSession(e)">
+				add_circle
+			</md-icon>
 			<md-icon>
 				edit
 			</md-icon>
@@ -43,7 +46,7 @@
 	/>
 	<CRUDEventSession
 		:show-dialog="showSessionDialog"
-		:event="createdEvent"
+		:event="activeEvent"
 	/>
 </div>
 </template>
@@ -76,12 +79,18 @@ export default {
 			createdEvent: null,
 			showEventDialog: false,
 			showSessionDialog: false,
-			shownSessions: []
+			shownSessions: [],
+			activeEvent: null,
+			activeEventSession: null,
+			mode: ''
 		};
 	},
 	mounted() {
 		this.$root.$on('toggleCrudEvent', () => {
 			this.showEventDialog = !this.showEventDialog;
+		});
+		this.$root.$on('toggleCrudEventSession', () => {
+			this.showSessionDialog = !this.showSessionDialog;
 		});
 		this.$root.$on('eventCreated', event => {
 			this.createdEvent = event;
@@ -100,12 +109,17 @@ export default {
 				this.$root.$emit('eventSessionDeleted', eventid, sessionid);
 		},
 		createEvent() {
+			this.mode = 'create';
 			this.showEventDialog = !this.showEventDialog;
+		},
+		createEventSession(event) {
+			this.activeEvent = event;
+			this.mode = 'create';
+			this.showSessionDialog = !this.showSessionDialog;
 		},
 		toggleSessions(id) {
 			if (this.shownSessions.includes(id)) {
 				let index = this.shownSessions.findIndex(e => e == id);
-				console.log(index);
 				this.shownSessions.splice(index, 1);
 			} else {
 				this.shownSessions.push(id);

@@ -5,9 +5,9 @@
 
 		<md-list v-if="event !== null" class="md-dense">
 			<md-list-item v-for="es in event.EventSessions" :key="es.id">
-				<md-avatar>
+				<!-- <md-avatar>
 					<img :src="es.Series.logo" alt="Logo" />
-				</md-avatar>
+				</md-avatar> -->
 				<div class="md-list-item-text">
 					<div class="md-layout">
 						<div class="md-layout-item">
