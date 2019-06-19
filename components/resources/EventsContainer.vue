@@ -9,8 +9,23 @@
 	<md-list v-if="events.length > 0">
 		<md-list-item v-for="e in events" :key="e.id">
 			<span class="md-list-item-text">
-				<strong>{{ e.startdate }} - {{ e.enddate }}</strong>
-				{{ e.name }}
+				<span @click="toggleSessions(e.id)">
+					<strong>{{ e.startdate }} - {{ e.enddate }}</strong><br />
+					{{ e.name }}
+				</span>
+				<span v-if="shownSessions.includes(e.id) && e.EventSessions.length" class="sessions">
+					<md-list>
+						<md-list-item v-for="s in e.EventSessions" :key="s.id">
+							<strong>{{ sessionStart(s.starttime) }} {{ s.name }} ({{ s.Series.name }})</strong>
+							<md-icon>
+								edit
+							</md-icon>
+							<md-icon @click.native="deleteSession(e.id, s.id)">
+								delete
+							</md-icon>
+						</md-list-item>
+					</md-list>
+				</span>
 			</span>
 			<md-icon>
 				edit
@@ -36,6 +51,7 @@
 <script>
 import CRUDEvent from '~/components/resources/CRUD-Event.vue';
 import CRUDEventSession from '~/components/resources/CRUD-EventSession.vue';
+import moment from 'moment';
 
 export default {
 	components: {
@@ -59,7 +75,8 @@ export default {
 		return {
 			createdEvent: null,
 			showEventDialog: false,
-			showSessionDialog: false
+			showSessionDialog: false,
+			shownSessions: []
 		};
 	},
 	mounted() {
@@ -77,8 +94,25 @@ export default {
 			if (res.deleted >= 1)
 				this.$root.$emit('eventDeleted', id);
 		},
+		async deleteSession(eventid, sessionid) {
+			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
+			if (res.deleted >= 1)
+				this.$root.$emit('eventSessionDeleted', eventid, sessionid);
+		},
 		createEvent() {
 			this.showEventDialog = !this.showEventDialog;
+		},
+		toggleSessions(id) {
+			if (this.shownSessions.includes(id)) {
+				let index = this.shownSessions.findIndex(e => e == id);
+				console.log(index);
+				this.shownSessions.splice(index, 1);
+			} else {
+				this.shownSessions.push(id);
+			}
+		},
+		sessionStart(starttime) {
+			return moment(starttime).format('ddd Do HH:mm')+'h';
 		}
 	}
 };
@@ -87,5 +121,8 @@ export default {
 <style lang="scss" scoped>
 .headline {
 	margin-bottom: 1em;
+}
+.sessions {
+	padding-left: 2em
 }
 </style>
