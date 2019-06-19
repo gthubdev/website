@@ -1,7 +1,8 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showEventSessionDialog">
-		<md-dialog-title>Create an EventSession for {{ eventname }}</md-dialog-title>
+		<!-- <md-dialog-title>Create an EventSession for {{ eventname }}</md-dialog-title> -->
+		<md-dialog-title>{{ headline }}</md-dialog-title>
 
 		<md-list v-if="event !== null" class="md-dense">
 			<md-list-item v-for="es in event.EventSessions" :key="es.id">
@@ -11,7 +12,7 @@
 				<div class="md-list-item-text">
 					<div class="md-layout">
 						<div class="md-layout-item">
-							<strong>{{ es.name }}</strong> {{ es.starttime }}
+							<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ es.starttime }}
 						</div>
 						<div class="md-layout-item">
 							<md-icon class="" @click.native="deleteSession(es.id)">
@@ -82,8 +83,8 @@
 			<md-button class="md-primary md-accent" @click="showEventSessionDialog = false">
 				Cancel
 			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="createSession()">
-				Create
+			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+				{{ action }}
 			</md-button>
 		</md-dialog-actions>
 	</md-dialog>
@@ -104,6 +105,16 @@ export default {
 			default() {
 				return '';
 			}
+		},
+		activeSession: {
+			type: Object,
+			default() {
+				return '';
+			}
+		},
+		mode: {
+			type: String,
+			default: ''
 		}
 	},
 	data: function() {
@@ -122,6 +133,26 @@ export default {
 		};
 	},
 	computed: {
+		headline() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create an EventSession for ' + this.eventname;
+				case 'update':
+					return 'Update Session ' + this.eventsession.name + ' for ' + this.eventname;
+				default:
+					return '';
+			}
+		},
+		action() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create';
+				case 'update':
+					return 'Update';
+				default:
+					return '';
+			}
+		},
 		requiredDate() {
 			return {
 				'md-invalid': this.eventtime.date === null || this.eventtime.date === ''
@@ -155,16 +186,37 @@ export default {
 		showEventSessionDialog: function(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudEventSession');
-			if (newValue === true) {
+			if (newValue === true && this.mode === 'create') {
+				// Reset all values
 				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
 				Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
 				if (event !== null)
 					this.eventname = this.event.name;
 			}
+			if (newValue === true && this.mode === 'update' && this.activeSession !== undefined) {
+				this.eventsession = JSON.parse(JSON.stringify(this.activeSession));
+				this.eventsession.series = this.eventsession.Series.name;
+				// Convert into local time
+				let start = moment(this.eventsession.starttime).tz(this.event.Track.timezone);
+				this.eventtime.date = start.format('YYYY-MM-DD');
+				this.eventtime.hour = start.hour();
+				this.eventtime.minute = start.minute();
+			}
 		},
+		activeSession: function(newValue) {
+			if (this.mode === 'update' && newValue !== undefined) {
+				this.eventsession = JSON.parse(JSON.stringify(this.activeSession));
+				this.eventsession.series = this.eventsession.Series.name;
+				// Convert into local time
+				let start = moment(this.eventsession.starttime).tz(this.event.Track.timezone);
+				this.eventtime.date = start.format('YYYY-MM-DD');
+				this.eventtime.hour = start.hour();
+				this.eventtime.minute = start.minute();
+			}
+		}
 	},
 	methods: {
-		async createSession() {
+		async sendRequest() {
 			const session = JSON.parse(JSON.stringify(this.eventsession));
 			session.event = this.event.id;
 			session.series = session.series.id;
@@ -175,14 +227,24 @@ export default {
 			session.starttime = date + ' ' + hour + ':' + minute;
 			session.timezone = this.event.Track.timezone;
 
-			const res = await this.$axios.$post('/api/calendar/eventsession/create', {
-				session
-			});
-			this.$root.$emit('eventSessionCreated', res);
-			Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
-			Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
-			if (event !== null)
+			if (this.mode === 'create') {
+				const res = await this.$axios.$post('/api/calendar/eventsession/create', {
+					session
+				});
+				this.$root.$emit('eventSessionCreated', res);
+				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
+				Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
+				if (event !== null)
 				this.eventname = this.event.name;
+			} else if (this.mode === 'update') {
+				const res = await this.$axios.$post('/api/calendar/eventsession/update/' + session.id, {
+					session
+				});
+				session.starttime = moment(session.starttime).utc().format();
+				if (res.updated >= 1)
+					this.$root.$emit('eventSessionUpdated', session);
+				this.showEventSessionDialog = false;
+			}
 		},
 		async deleteSession(sessionid) {
 			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);

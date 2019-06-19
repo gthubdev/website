@@ -17,7 +17,7 @@
 					<md-list>
 						<md-list-item v-for="s in e.EventSessions" :key="s.id">
 							<strong>{{ sessionStart(s.starttime) }} {{ s.name }} ({{ s.Series.name }})</strong>
-							<md-icon>
+							<md-icon @click.native="updateEventSession(e, s)">
 								edit
 							</md-icon>
 							<md-icon @click.native="deleteSession(e.id, s.id)">
@@ -47,6 +47,8 @@
 	<CRUDEventSession
 		:show-dialog="showSessionDialog"
 		:event="activeEvent"
+		:active-session="activeEventSession"
+		:mode="mode"
 	/>
 </div>
 </template>
@@ -76,7 +78,6 @@ export default {
 	},
 	data: function() {
 		return {
-			createdEvent: null,
 			showEventDialog: false,
 			showSessionDialog: false,
 			shownSessions: [],
@@ -93,7 +94,7 @@ export default {
 			this.showSessionDialog = !this.showSessionDialog;
 		});
 		this.$root.$on('eventCreated', event => {
-			this.createdEvent = event;
+			this.activeEvent = event;
 			this.showSessionDialog = !this.showSessionDialog;
 		});
 	},
@@ -115,6 +116,12 @@ export default {
 		createEventSession(event) {
 			this.activeEvent = event;
 			this.mode = 'create';
+			this.showSessionDialog = !this.showSessionDialog;
+		},
+		updateEventSession(event, session) {
+			this.activeEvent = event;
+			this.activeEventSession = session;
+			this.mode = 'update';
 			this.showSessionDialog = !this.showSessionDialog;
 		},
 		toggleSessions(id) {

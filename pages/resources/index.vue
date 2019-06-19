@@ -66,6 +66,14 @@ export default {
 				return a.starttime.localeCompare(b.starttime);
 			});
 		});
+		this.$root.$on('eventSessionUpdated', session => {
+			let event = this.data.events.find(e => e.id == session.event);
+			let sessionindex = event.EventSessions.findIndex(s => s.id == session.id);
+			event.EventSessions.splice(sessionindex, 1, session);
+			event.EventSessions.sort((a,b) => {
+				return a.starttime.localeCompare(b.starttime);
+			});
+		});
 		this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
 			let event = this.data.events.find(e => e.id == eventid);
 			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
