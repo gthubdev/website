@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
 
 	SupportSeries.associate = models => {
 		models.SupportSeries.belongsTo(models.Event, {foreignKey: 'event'});
-		models.SupportSeries.belongsTo(models.Series, {foreignKey: 'series'});
+		models.SupportSeries.belongsTo(models.Series, {
+			foreignKey: 'series',
+			onDelete: 'RESTRICT'
+		});
 	};
 
 	return SupportSeries;

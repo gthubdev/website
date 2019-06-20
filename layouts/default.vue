@@ -1,20 +1,14 @@
 <template>
 <div>
 	<div>
-		<h3>
-			Gthub
-		</h3>
 		<md-button class="md-raised md-primary" href="/">
 			Home
-		</md-button>
-		<md-button class="md-raised md-primary" href="/testroute">
-			Test route
 		</md-button>
 		<md-button class="md-raised md-primary" href="/calendar">
 			Calendar
 		</md-button>
-		<md-button class="md-raised md-accent" @click.native="testClick()">
-			Click me
+		<md-button class="md-raised md-primary" href="/resources">
+			Resources
 		</md-button>
 	</div>
 	<nuxt />
@@ -30,11 +24,7 @@ import 'vue-material/dist/theme/default-dark.css';
 Vue.use(VueMaterial);
 
 export default {
-	methods: {
-		testClick: function() {
-			alert('Don\'t click that button, idiot!');
-		}
-	}
+
 };
 </script>
 

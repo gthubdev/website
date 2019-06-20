@@ -40,10 +40,14 @@ router.post('/calendar/eventsession/delete/:id', EventSessionCtrl.deleteEventSes
 
 // Series
 router.post('/calendar/series/create', SeriesCtrl.createSeries);
+router.post('/calendar/series/update/:id', SeriesCtrl.updateSeries);
+router.post('/calendar/series/delete/:id', SeriesCtrl.deleteSeries);
 
 // Track
 router.post('/calendar/track/create', TrackCtrl.createTrack);
-//
+router.post('/calendar/track/update/:id', TrackCtrl.updateTrack);
+router.post('/calendar/track/delete/:id', TrackCtrl.deleteTrack);
+
 // // Gallery
 // router.get('/gallery', GalleryCtrl.getGallery);
 //
