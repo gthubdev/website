@@ -54,6 +54,16 @@ export default {
 					return a.priority - b.priority;
 			});
 		});
+		this.$root.$on('eventUpdated', event => {
+			let index = this.data.events.findIndex(e => e.id == event.id);
+			this.data.events.splice(index, 1, event);
+			this.data.events.sort((a,b) => {
+				if (a.priority === b.priority)
+					return a.startdate.localeCompare(b.startdate);
+				else
+					return a.priority - b.priority;
+			});
+		});
 		this.$root.$on('eventDeleted', eventid => {
 			let index = this.data.events.findIndex(e => e.id == eventid);
 			this.data.events.splice(index, 1);

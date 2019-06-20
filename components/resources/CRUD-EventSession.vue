@@ -76,7 +76,7 @@
 		</div>
 
 		<p style="padding-left: 1em">
-			<strong>Info:</strong> When creating the 2nd session etc., you need to clear the date first. Will be fixed later.
+			<strong>Info:</strong> When creating the 2nd session etc., you need to set the date again. Will be fixed later.
 		</p>
 
 		<md-dialog-actions>
@@ -237,6 +237,7 @@ export default {
 				if (event !== null)
 				this.eventname = this.event.name;
 			} else if (this.mode === 'update') {
+				delete session.createdAt;
 				const res = await this.$axios.$post('/api/calendar/eventsession/update/' + session.id, {
 					session
 				});

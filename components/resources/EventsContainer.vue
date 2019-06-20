@@ -30,7 +30,7 @@
 			<md-icon @click.native="createEventSession(e)">
 				add_circle
 			</md-icon>
-			<md-icon>
+			<md-icon @click.native="updateEvent(e)">
 				edit
 			</md-icon>
 			<md-icon @click.native="deleteEvent(e.id)">
@@ -41,8 +41,10 @@
 
 	<CRUDEvent
 		:show-dialog="showEventDialog"
+		:active-event="activeEvent"
 		:series="series"
 		:tracks="tracks"
+		:mode="mode"
 	/>
 	<CRUDEventSession
 		:show-dialog="showSessionDialog"
@@ -117,6 +119,11 @@ export default {
 			this.activeEvent = event;
 			this.mode = 'create';
 			this.showSessionDialog = !this.showSessionDialog;
+		},
+		updateEvent(event) {
+			this.activeEvent = event;
+			this.mode = 'update';
+			this.showEventDialog = !this.showEventDialog;
 		},
 		updateEventSession(event, session) {
 			this.activeEvent = event;

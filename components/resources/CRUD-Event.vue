@@ -1,7 +1,7 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showEventDialog">
-		<md-dialog-title>Create an Event</md-dialog-title>
+		<md-dialog-title>{{ headline }}</md-dialog-title>
 
 		<md-field :class="requiredName">
 			<label>Name</label>
@@ -31,7 +31,7 @@
 			<span class="md-error">Please choose a track</span>
 		</md-autocomplete>
 
-		<md-autocomplete v-model="event.series" :md-options="series.map(x=>({
+		<md-autocomplete v-model="event.mainseries" :md-options="series.map(x=>({
 			'id':x.id,
 			'name':x.name,
 			'toLowerCase':()=>x.name.toLowerCase(),
@@ -53,7 +53,7 @@
 			<span class="md-error">Please choose a main series</span>
 		</md-autocomplete>
 
-		<md-field v-if="event.series !== undefined && event.series !== ''">
+		<md-field v-if="event.mainseries !== undefined && event.mainseries !== ''">
 			<label for="supportseries">Support series</label>
 			<md-select id="supportseries" v-model="supportseries" name="supportseries" multiple>
 				<md-option v-for="s in filterSupportSeries()" :key="s.id" :value="s.id">
@@ -97,8 +97,8 @@
 			<md-button class="md-primary md-accent" @click="showEventDialog = false">
 				Cancel
 			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="createEvent()">
-				Create
+			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+				{{ action }}
 			</md-button>
 		</md-dialog-actions>
 	</md-dialog>
@@ -112,6 +112,10 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		activeEvent: {
+			type: Object,
+			default: null
+		},
 		series: {
 			type: Array,
 			default() {
@@ -123,6 +127,10 @@ export default {
 			default() {
 				return [];
 			}
+		},
+		mode: {
+			type: String,
+			default: ''
 		}
 	},
 	data: function() {
@@ -131,7 +139,7 @@ export default {
 			event: {
 				name: '',
 				track: '',
-				series: '',
+				mainseries: '',
 				startdate: '',
 				enddate: '',
 				logo: ''
@@ -140,6 +148,26 @@ export default {
 		};
 	},
 	computed: {
+		headline() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create an Event';
+				case 'update':
+					return 'Update ' + this.event.name;
+				default:
+					return '';
+			}
+		},
+		action() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create';
+				case 'update':
+					return 'Update';
+				default:
+					return '';
+			}
+		},
 		requiredEnddate() {
 			return {
 				'md-invalid': this.event.enddate === null || this.event.enddate === ''
@@ -157,7 +185,7 @@ export default {
 		},
 		requiredSeries() {
 			return {
-				'md-invalid': this.event.series === undefined || this.event.series === ''
+				'md-invalid': this.event.mainseries === undefined || this.event.mainseries === ''
 			};
 		},
 		requiredStartdate() {
@@ -178,14 +206,33 @@ export default {
 		showEventDialog: function(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudEvent');
-			if (newValue === true) {
+			if (newValue === true && this.mode === 'create') {
 				Object.keys(this.event).forEach(key => (this.event[key] = ''));
-				this.supportseries = [];
+				this.supportseries.splice(0);
+			}
+			if (newValue === true && this.mode === 'update' && this.activeEvent !== undefined) {
+				this.event = JSON.parse(JSON.stringify(this.activeEvent));
+				let track = this.tracks.find(t => t.id == this.event.track);
+				this.event.track = {
+					'id': track.id,
+					'name': track.name,
+					'toLowerCase':()=>track.name.toLowerCase(),
+					'toString':()=>track.name
+				};
+				let mainseries = this.series.find(s => s.id == this.event.mainseries);
+				this.event.mainseries = {
+					'id': mainseries.id,
+					'name': mainseries.name,
+					'toLowerCase':()=>mainseries.name.toLowerCase(),
+					'toString':()=>mainseries.name
+				};
+				this.supportseries.splice(0);
+				this.activeEvent.SupportSeries.forEach(s => this.supportseries.push(s.series));
 			}
 		},
-		'event.series': function(newValue) {
+		'event.mainseries': function(newValue) {
 			// if a series was a support series and is now the main series, remove it as a support series
-			if (isNaN(newValue.id))
+			if (newValue === undefined || isNaN(newValue.id))
 				return;
 			let index = this.supportseries.indexOf(newValue.id);
 			if (index >= 0)
@@ -193,29 +240,39 @@ export default {
 		}
 	},
 	methods: {
-		async createEvent() {
+		async sendRequest() {
 			const event = JSON.parse(JSON.stringify(this.event));
 			event.track = event.track.id;
-			event.mainseries = event.series.id;
+			event.mainseries = event.mainseries.id;
 			event.supportseries = this.supportseries;
+
+			if (this.mode === 'create') {
+				const res = await this.$axios.$post('/api/calendar/event/create', {
+					event
+				});
+				this.$root.$emit('eventCreated', res);
+			} else if (this.mode === 'update') {
+				delete event.createdAt;
+				const res = await this.$axios.$post('/api/calendar/event/update/' + event.id, {
+					event
+				});
+				if (res.id && res.id >= 1)
+					this.$root.$emit('eventUpdated', res);
+			}
 			this.showEventDialog = false;
-			const res = await this.$axios.$post('/api/calendar/event/create', {
-				event
-			});
-			this.$root.$emit('eventCreated', res);
 		},
 		filterSupportSeries: function() {
-			if (this.event.series === undefined || this.event.series === '')
-			return this.series;
+			if (this.event.mainseries === undefined || this.event.mainseries === '')
+				return this.series;
 			else
-			return this.series.filter(series => {
-				return series.id !== this.event.series.id;
-			});
+				return this.series.filter(series => {
+					return series.id !== this.event.mainseries.id;
+				});
 		},
 		validInput: function() {
 			return this.event.name.length > 0 && this.event.track !== '' &&
 			this.event.track !== undefined && this.event.track !== '' &&
-			this.event.series !== undefined && this.event.series !== '' &&
+			this.event.mainseries !== undefined && this.event.mainseries !== '' &&
 			this.event.startdate !== null && this.event.startdate !== '' &&
 			this.event.enddate !== null && this.event.enddate !== '' &&
 			this.event.priority >= 1;
