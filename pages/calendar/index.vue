@@ -73,6 +73,15 @@ export default {
 			return this.showCurrentEvents ? 'This week\'s events' : 'All events';
 		}
 	},
+	watch: {
+		userTimezone: function(newValue) {
+			// save new local timezone in cookie
+			if (moment.tz.zone(newValue.name) !== null) {
+				let cookieDate = new Date(moment().add(12, 'months').toDate());
+				document.cookie = 'localtz=' + newValue.name + '; expires ' + cookieDate;
+			}
+		}
+	},
 	async asyncData({
 		$axios
 	}) {
@@ -94,18 +103,19 @@ export default {
 				this.activeEvent = null;
 			}
 		});
-		// Set the initial timezone
+		// Set the initial timezone, load from cookie if possible
 		let tz_name = 'Europe/Brussels';
+		if (document.cookie.split(';').filter((item) => item.trim().startsWith('localtz=')).length) {
+			tz_name = document.cookie.replace(/(?:(?:^|.*;\s*)localtz\s*=\s*([^;]*).*$)|^.*$/, '$1');
+		}
 		let tz_desc = this.data.tz.tz_strings[tz_name];
 		this.userTimezone = {
 			'name':tz_name,
-			'desc': tz_desc,
+			'desc':tz_desc,
 			'toLowerCase':()=>tz_desc.toLowerCase(),
 			// 'toString':()=>'(UTC' + moment.tz(tz_name).format('Z') + ') ' + tz_desc
 			'toString':()=>tz_desc
-
 		};
-
 	},
 	methods: {
 		filterEvents: function() {
