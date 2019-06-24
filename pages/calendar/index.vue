@@ -8,6 +8,27 @@
 		<div class="headline">
 			<span class="md-display-1">{{ headline }}</span><br />
 		</div>
+		<md-autocomplete v-model="userTimezone" md-dense :md-options="data.tz.tz_array.map(x=>({
+			'name':x.name,
+			'desc': x.desc,
+			'toLowerCase':()=>x.desc.toLowerCase(),
+			'toString':()=>x.desc
+		}))"
+		>
+			<label>Local Timezone</label>
+
+			<template slot="md-autocomplete-item" slot-scope="{ item }">
+				<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
+				<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
+				{{ tzDisplay(item) }}
+			</template>
+
+			<template slot="md-autocomplete-empty" slot-scope="{ term }">
+				"{{ term }}" not found!
+			</template>
+
+			<span class="md-error">Please choose a timezone</span>
+		</md-autocomplete>
 		<div class="md-layout">
 			<Event
 				v-for="event in filterEvents()"
@@ -22,7 +43,7 @@
 	<SidePanel
 		:event="activeEvent"
 		:show-event="showEvent"
-		:tz="data.tz"
+		:user-timezone="userTimezone"
 	/>
 </div>
 </template>
@@ -44,11 +65,7 @@ export default {
 			showCurrentEvents: true,
 			activeEvent: null,
 			showEvent: false,
-			showSeriesDialog: false,
-			showTrackDialog: false,
-			showEventDialog: false,
-			showEventSessionDialog: false,
-			createdEvent: null
+			userTimezone: ''
 		};
 	},
 	computed: {
@@ -65,19 +82,6 @@ export default {
 		};
 	},
 	mounted() {
-		// Event
-		// this.$root.$on('toggleCrudEvent', () => {
-		// 	this.showEventDialog = !this.showEventDialog;
-		// });
-		// EventSession
-		// this.$root.$on('toggleCrudEventSession', () => {
-		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
-		// });
-		// this.$root.$on('addEventSession', event => {
-		// 	this.showEventSessionDialog = !this.showEventSessionDialog;
-		// 	this.createdEvent = event;
-		// });
-
 		this.$root.$on('toggleCurrentEvents', () => {
 			this.showCurrentEvents = !this.showCurrentEvents;
 		});
@@ -90,6 +94,18 @@ export default {
 				this.activeEvent = null;
 			}
 		});
+		// Set the initial timezone
+		let tz_name = 'Europe/Brussels';
+		let tz_desc = this.data.tz.tz_strings[tz_name];
+		this.userTimezone = {
+			'name':tz_name,
+			'desc': tz_desc,
+			'toLowerCase':()=>tz_desc.toLowerCase(),
+			// 'toString':()=>'(UTC' + moment.tz(tz_name).format('Z') + ') ' + tz_desc
+			'toString':()=>tz_desc
+
+		};
+
 	},
 	methods: {
 		filterEvents: function() {
@@ -99,7 +115,10 @@ export default {
 				});
 			else
 				return this.data.events;
-		}
+		},
+		tzDisplay: function(item) {
+			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
+		},
 	}
 };
 </script>
