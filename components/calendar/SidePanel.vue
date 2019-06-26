@@ -10,7 +10,8 @@
 			v-for="session in event.EventSessions"
 			:key="session.id"
 			:session="session"
-			:tz="tz"
+			:local-timezone="event.Track.timezone"
+			:user-timezone="userTimezone"
 		/>
 	</div>
 </div>
@@ -32,9 +33,9 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		tz: {
-			type: Object,
-			default: null
+		userTimezone: {
+			type: String,
+			default: ''
 		}
 	},
 	methods: {

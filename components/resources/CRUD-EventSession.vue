@@ -12,7 +12,7 @@
 				<div class="md-list-item-text">
 					<div class="md-layout">
 						<div class="md-layout-item">
-							<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ es.starttime }}
+							<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ getLocalTime(es) }}
 						</div>
 						<div class="md-layout-item">
 							<md-icon class="" @click.native="deleteSession(es.id)">
@@ -262,6 +262,10 @@ export default {
 				arr.push(series.Series);
 			});
 			return arr;
+		},
+		getLocalTime: function(session) {
+			let local_tz = this.event.Track.timezone;
+			return moment(session.starttime).tz(local_tz).format();
 		},
 		validInput: function() {
 			return this.eventsession.name.length > 0 &&
