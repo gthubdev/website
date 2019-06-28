@@ -6,38 +6,76 @@
 	<md-button class="md-raised md-primary" @click.native="createEvent()">
 		Create Event
 	</md-button>
-	<md-list v-if="events.length > 0">
-		<md-list-item v-for="e in events" :key="e.id">
-			<span class="md-list-item-text">
-				<span @click="toggleSessions(e.id)">
-					<strong>{{ e.startdate }} - {{ e.enddate }}</strong><br />
-					{{ e.name }}
-				</span>
-				<span v-if="shownSessions.includes(e.id) && e.EventSessions.length" class="sessions">
-					<md-list>
-						<md-list-item v-for="s in e.EventSessions" :key="s.id">
-							<strong>{{ sessionStart(s.starttime) }} {{ s.name }} ({{ s.Series.name }})</strong>
-							<md-icon @click.native="updateEventSession(e, s)">
-								edit
-							</md-icon>
-							<md-icon @click.native="deleteSession(e.id, s.id)">
-								delete
-							</md-icon>
-						</md-list-item>
-					</md-list>
-				</span>
-			</span>
-			<md-icon @click.native="createEventSession(e)">
-				add_circle
-			</md-icon>
-			<md-icon @click.native="updateEvent(e)">
-				edit
-			</md-icon>
-			<md-icon @click.native="deleteEvent(e.id)">
-				delete
-			</md-icon>
-		</md-list-item>
-	</md-list>
+	<md-tabs>
+		<md-tab id="current" md-label="Current Events">
+			<md-list v-if="events.length > 0">
+				<md-list-item v-for="e in currentEvents" :key="e.id">
+					<span class="md-list-item-text">
+						<span @click="toggleSessions(e.id)">
+							<strong>{{ e.startdate }} - {{ e.enddate }}</strong><br />
+							{{ e.name }}
+						</span>
+						<span v-if="shownSessions.includes(e.id) && e.EventSessions.length" class="sessions">
+							<md-list>
+								<md-list-item v-for="s in e.EventSessions" :key="s.id">
+									<strong>{{ sessionStart(s.starttime) }} {{ s.name }} ({{ s.Series.name }})</strong>
+									<md-icon @click.native="updateEventSession(e, s)">
+										edit
+									</md-icon>
+									<md-icon @click.native="deleteSession(e.id, s.id)">
+										delete
+									</md-icon>
+								</md-list-item>
+							</md-list>
+						</span>
+					</span>
+					<md-icon @click.native="createEventSession(e)">
+						add_circle
+					</md-icon>
+					<md-icon @click.native="updateEvent(e)">
+						edit
+					</md-icon>
+					<md-icon @click.native="deleteEvent(e.id)">
+						delete
+					</md-icon>
+				</md-list-item>
+			</md-list>
+		</md-tab>
+		<md-tab id="past" md-label="Past Events">
+			<md-list v-if="events.length > 0">
+				<md-list-item v-for="e in pastEvents" :key="e.id">
+					<span class="md-list-item-text">
+						<span @click="toggleSessions(e.id)">
+							<strong>{{ e.startdate }} - {{ e.enddate }}</strong><br />
+							{{ e.name }}
+						</span>
+						<span v-if="shownSessions.includes(e.id) && e.EventSessions.length" class="sessions">
+							<md-list>
+								<md-list-item v-for="s in e.EventSessions" :key="s.id">
+									<strong>{{ sessionStart(s.starttime) }} {{ s.name }} ({{ s.Series.name }})</strong>
+									<md-icon @click.native="updateEventSession(e, s)">
+										edit
+									</md-icon>
+									<md-icon @click.native="deleteSession(e.id, s.id)">
+										delete
+									</md-icon>
+								</md-list-item>
+							</md-list>
+						</span>
+					</span>
+					<md-icon @click.native="createEventSession(e)">
+						add_circle
+					</md-icon>
+					<md-icon @click.native="updateEvent(e)">
+						edit
+					</md-icon>
+					<md-icon @click.native="deleteEvent(e.id)">
+						delete
+					</md-icon>
+				</md-list-item>
+			</md-list>
+		</md-tab>
+	</md-tabs>
 
 	<CRUDEvent
 		:show-dialog="showEventDialog"
@@ -87,6 +125,18 @@ export default {
 			activeEventSession: null,
 			mode: ''
 		};
+	},
+	computed: {
+		currentEvents() {
+			return this.events.filter(event => {
+				return moment(event.enddate).isSameOrAfter(moment());
+			});
+		},
+		pastEvents() {
+			return this.events.filter(event => {
+				return moment(event.enddate).isBefore(moment());
+			});
+		}
 	},
 	mounted() {
 		this.$root.$on('toggleCrudEvent', () => {
