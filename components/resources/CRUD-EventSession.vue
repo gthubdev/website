@@ -175,7 +175,7 @@ export default {
 		},
 		requiredSeries() {
 			return {
-				'md-invalid': this.eventsession.series === undefined || this.eventsession.series === ''
+				'md-invalid': this.eventsession.series === undefined || !this.eventsession.series.id
 			};
 		}
 	},
@@ -269,7 +269,7 @@ export default {
 		},
 		validInput: function() {
 			return this.eventsession.name.length > 0 &&
-			this.eventsession.series !== undefined && this.eventsession.series !== '' &&
+			this.eventsession.series !== undefined && this.eventsession.series.id &&
 			this.eventtime.date !== null && this.eventtime.date !== '' &&
 			this.eventtime.hour !== '' && Number.isInteger(Number(this.eventtime.hour)) && Number(this.eventtime.hour) >= 0 && Number(this.eventtime.hour) <= 23 &&
 			this.eventtime.minute !== '' && Number.isInteger(Number(this.eventtime.minute)) && Number(this.eventtime.minute) >= 0 && Number(this.eventtime.minute) <= 59;

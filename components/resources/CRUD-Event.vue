@@ -216,7 +216,7 @@ export default {
 		},
 		requiredSeries() {
 			return {
-				'md-invalid': this.event.mainseries === undefined || this.event.mainseries === ''
+				'md-invalid': this.event.mainseries === undefined || !this.event.mainseries.id
 			};
 		},
 		requiredStartdate() {
@@ -226,7 +226,7 @@ export default {
 		},
 		requiredTrack() {
 			return {
-				'md-invalid': this.event.track === undefined || this.event.track === ''
+				'md-invalid': this.event.track === undefined || !this.event.track.id
 			};
 		},
 	},
@@ -343,9 +343,9 @@ export default {
 			this.tmpSupportSeries.push(series);
 		},
 		validInput: function() {
-			return this.event.name.length > 0 && this.event.track !== '' &&
-			this.event.track !== undefined && this.event.track !== '' &&
-			this.event.mainseries !== undefined && this.event.mainseries !== '' &&
+			return this.event.name.length > 0 &&
+			this.event.track !== undefined && this.event.track.id &&
+			this.event.mainseries !== undefined && this.event.mainseries.id &&
 			this.event.startdate !== null && this.event.startdate !== '' &&
 			this.event.enddate !== null && this.event.enddate !== '' &&
 			this.event.priority >= 1;

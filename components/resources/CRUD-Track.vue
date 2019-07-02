@@ -126,7 +126,7 @@ export default {
 		},
 		requiredTimezone() {
 			return {
-				'md-invalid': this.track.timezone === undefined || this.track.timezone.length <= 0
+				'md-invalid': this.track.timezone === undefined || !this.track.timezone.desc
 			};
 		}
 	},
@@ -140,29 +140,41 @@ export default {
 			if (newValue === true && this.mode === 'create')
 				// Reset all values
 				Object.keys(this.track).forEach(key => (this.track[key] = ''));
-			if (newValue === true && this.mode === 'update' && this.activeTrack !== undefined)
+			if (newValue === true && this.mode === 'update' && this.activeTrack !== undefined) {
 				// Might need to reset the object
 				this.track = JSON.parse(JSON.stringify(this.activeTrack));
+				let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
+				this.track.timezone = {
+					'name':tz.name,
+					'desc':tz.desc,
+					'toLowerCase':()=>tz.desc.toLowerCase(),
+					'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
+				};
+			}
 		},
 		activeTrack: function(newValue) {
 			if (this.mode === 'update' && newValue !== undefined)
 				// Need to copy the object in order to not change it when cancelling
 				this.track = JSON.parse(JSON.stringify(this.activeTrack));
+				let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
+				this.track.timezone = {
+					'name':tz.name,
+					'desc':tz.desc,
+					'toLowerCase':()=>tz.desc.toLowerCase(),
+					'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
+				};
 		}
 	},
 	methods: {
 		async sendRequest() {
-			const track = JSON.parse(JSON.stringify(this.track));
+			let track = JSON.parse(JSON.stringify(this.track));
+			track.timezone = track.timezone.name;
 			if (this.mode === 'create') {
-				track.timezone = track.timezone.name;
 				const res = await this.$axios.$post('/api/calendar/track/create', {
 					track
 				});
 				this.$root.$emit('trackCreated', res);
 			} else if (this.mode === 'update') {
-				// if timezone was changed, need to update it
-				if (track.timezone.name !== undefined)
-					track.timezone = track.timezone.name;
 				// no need to update that
 				delete track.createdAt;
 				const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
@@ -180,12 +192,7 @@ export default {
 				Number(this.track.length) > 0;
 		},
 		validTimezone: function() {
-			if (this.mode === 'create')
-				return this.track.timezone.name !== undefined;
-			else if (this.mode === 'update')
-				return this.track.timezone !== '';
-			else
-				return false;
+			return this.track.timezone.desc;
 		},
 		tzDisplay: function(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
