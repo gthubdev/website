@@ -10,7 +10,7 @@ module.exports.createEvent = (req, res) => {
 		req.body.event.supportseries.forEach(s => {
 			supportarray.push({
 				event: newevent.id,
-				series: s
+				series: s.id
 			});
 		});
 		db.SupportSeries.bulkCreate(supportarray)
@@ -64,7 +64,7 @@ module.exports.updateEvent = (req, res) => {
 		req.body.event.supportseries.forEach(s => {
 			supportarray.push({
 				event: req.params.id,
-				series: s
+				series: s.id
 			});
 		});
 		db.SupportSeries.bulkCreate(supportarray)
