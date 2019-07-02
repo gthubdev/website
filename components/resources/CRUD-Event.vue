@@ -291,7 +291,7 @@ export default {
 			}
 		},
 		chosenSupportSeries: function(newValue) {
-			if (newValue !== undefined && newValue.name.length) {
+			if (newValue !== undefined && newValue.name && newValue.name.length) {
 				this.series.forEach(s => {
 					if (s.name === newValue.name) {
 						this.supportseries.push(newValue);
