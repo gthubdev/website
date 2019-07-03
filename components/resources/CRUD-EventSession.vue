@@ -52,6 +52,9 @@
 			<span class="md-error">Please choose a series</span>
 		</md-autocomplete>
 
+		<div class="md-subheading">
+			Date
+		</div>
 		<div class="md-layout">
 			<div class="block md-layout-item md-size-33">
 				<label>Date</label>
@@ -59,18 +62,38 @@
 					<span class="md-error">Please choose a date</span>
 				</md-datepicker>
 			</div>
-			<div class="block md-layout-item md-size-15">
+			<div class="block md-layout-item md-size-25">
 				<md-field :class="requiredHour">
 					<label>Hour</label>
 					<md-input v-model="eventtime.hour" required />
 					<span class="md-error">Please enter an hour</span>
 				</md-field>
 			</div>
-			<div class="block md-layout-item md-size-15">
+			<div class="block md-layout-item md-size-25">
 				<md-field :class="requiredMinute">
 					<label>Minute</label>
 					<md-input v-model="eventtime.minute" required />
 					<span class="md-error">Please enter a minute</span>
+				</md-field>
+			</div>
+		</div>
+
+		<div class="md-subheading">
+			Duration
+		</div>
+		<div class="md-layout">
+			<div class="block md-layout-item md-size-25">
+				<md-field :class="requiredDurationHours">
+					<label>Hours</label>
+					<md-input v-model="eventtime.duration_hours" required />
+					<span class="md-error">Please enter hours</span>
+				</md-field>
+			</div>
+			<div class="block md-layout-item md-size-25">
+				<md-field :class="requiredDurationMinutes">
+					<label>Minutes</label>
+					<md-input v-model="eventtime.duration_minutes" required />
+					<span class="md-error">Please enter minutes</span>
 				</md-field>
 			</div>
 		</div>
@@ -127,7 +150,9 @@ export default {
 			eventtime: {
 				date: '',
 				hour: '',
-				minute: ''
+				minute: '',
+				duration_hours: '',
+				duration_minutes: ''
 			},
 			eventname: ''
 		};
@@ -168,6 +193,16 @@ export default {
 				'md-invalid': this.eventtime.minute === '' || !Number.isInteger(Number(this.eventtime.minute)) || Number(this.eventtime.minute) < 0 || Number(this.eventtime.minute) > 59
 			};
 		},
+		requiredDurationHours() {
+			return {
+				'md-invalid': this.eventtime.duration_hours === '' || !Number.isInteger(Number(this.eventtime.duration_hours)) || Number(this.eventtime.duration_hours) < 0 || Number(this.eventtime.duration_hours) > 96
+			};
+		},
+		requiredDurationMinutes() {
+			return {
+				'md-invalid': this.eventtime.duration_minutes === '' || !Number.isInteger(Number(this.eventtime.duration_minutes)) || Number(this.eventtime.duration_minutes) < 0 || Number(this.eventtime.duration_minutes) > 60
+			};
+		},
 		requiredName() {
 			return {
 				'md-invalid': !(this.eventsession.name.length > 0)
@@ -206,12 +241,21 @@ export default {
 		activeSession: function(newValue) {
 			if (this.mode === 'update' && newValue !== undefined) {
 				this.eventsession = JSON.parse(JSON.stringify(this.activeSession));
-				this.eventsession.series = this.eventsession.Series.name;
+				let s = this.eventsession.Series;
+				this.eventsession.series = {
+					'id':s.id,
+					'name':s.name,
+					'toLowerCase':()=>s.name.toLowerCase(),
+					'toString':()=>s.name
+				};
 				// Convert into local time
 				let start = moment(this.eventsession.starttime).tz(this.event.Track.timezone);
 				this.eventtime.date = start.format('YYYY-MM-DD');
 				this.eventtime.hour = start.hour();
 				this.eventtime.minute = start.minute();
+				// Parse the duration
+				this.eventtime.duration_hours = Math.floor(parseInt(this.eventsession.duration)/60);
+				this.eventtime.duration_minutes = parseInt(this.eventsession.duration) % 60;
 			}
 		}
 	},
@@ -225,6 +269,7 @@ export default {
 			let minute = parseInt(this.eventtime.minute, 10);
 			minute = (minute < 10 ? '0' : '') + minute;
 			session.starttime = date + ' ' + hour + ':' + minute;
+			session.duration = parseInt(this.eventtime.duration_hours) * 60 + parseInt(this.eventtime.duration_minutes);
 			session.timezone = this.event.Track.timezone;
 
 			if (this.mode === 'create') {
@@ -235,15 +280,14 @@ export default {
 				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
 				Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
 				if (event !== null)
-				this.eventname = this.event.name;
+					this.eventname = this.event.name;
 			} else if (this.mode === 'update') {
 				delete session.createdAt;
 				const res = await this.$axios.$post('/api/calendar/eventsession/update/' + session.id, {
 					session
 				});
-				session.starttime = moment(session.starttime).utc().format();
-				if (res.updated >= 1)
-					this.$root.$emit('eventSessionUpdated', session);
+				if (res.id)
+					this.$root.$emit('eventSessionUpdated', res);
 				this.showEventSessionDialog = false;
 			}
 		},
@@ -272,7 +316,9 @@ export default {
 			this.eventsession.series !== undefined && this.eventsession.series.id &&
 			this.eventtime.date !== null && this.eventtime.date !== '' &&
 			this.eventtime.hour !== '' && Number.isInteger(Number(this.eventtime.hour)) && Number(this.eventtime.hour) >= 0 && Number(this.eventtime.hour) <= 23 &&
-			this.eventtime.minute !== '' && Number.isInteger(Number(this.eventtime.minute)) && Number(this.eventtime.minute) >= 0 && Number(this.eventtime.minute) <= 59;
+			this.eventtime.minute !== '' && Number.isInteger(Number(this.eventtime.minute)) && Number(this.eventtime.minute) >= 0 && Number(this.eventtime.minute) <= 59 &&
+			this.eventtime.duration_hours !== '' && Number.isInteger(Number(this.eventtime.duration_hours)) && Number(this.eventtime.duration_hours) >= 0 && Number(this.eventtime.duration_hours) <= 96 &&
+			this.eventtime.duration_minutes !== '' && Number.isInteger(Number(this.eventtime.duration_minutes)) && Number(this.eventtime.duration_minutes) >= 0 && Number(this.eventtime.duration_minutes) <= 60;
 		}
 	}
 };
@@ -291,5 +337,8 @@ export default {
 
 .md-menu-content {
 	z-index: 100;
+}
+.md-subheading {
+	margin-left: 1em;
 }
 </style>

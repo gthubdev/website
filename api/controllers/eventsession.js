@@ -37,9 +37,20 @@ module.exports.updateEventSession = (req, res) => {
 	db.EventSession.update(req.body.session,
 		{ where: { id: req.params.id } }
 	).then(response => {
-		if (response[0] >= 1)
-			util.print(response[0] + ' EventSessions updated');
-		res.json({ updated: response[0] });
+		if (response[0] == 0)
+			return;
+
+		util.print(response[0] + ' EventSession updated');
+		db.EventSession.findOne({
+			where: { id: req.params.id },
+			include: [
+				{ model: db.Series }
+			]
+		}).then(session => {
+			res.json(session.get({plain:true}));
+		}, err => {
+			util.error(req, res, err);
+		});
 	}, err => {
 		util.error(req, res, err);
 	});
