@@ -15,7 +15,7 @@
 			</md-button>
 		</div>
 		<div class="second">
-			<img src="img/01.png" />
+			<img src="img/01.png" alt="Picture of a Lamborghini race car" />
 		</div>
 	</div>
 </section>
