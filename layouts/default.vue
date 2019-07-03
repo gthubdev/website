@@ -25,4 +25,11 @@ export default {
 
 <style>
 
+body {
+	overflow-y: hidden;
+	background:linear-gradient(rgba(28, 36, 43, 0.92),rgba(28, 36, 43, 0.92)),
+		url('/img/WVL2689.jpg');
+	background-size: cover;
+	background-position: center;
+}
 </style>

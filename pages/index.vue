@@ -1,54 +1,134 @@
 <template>
-<section class="container">
-	<div>
-		<img src="~assets/website.jpg" alt="background" />
-		<!-- <logo />
-		<h2 class="subtitle">
-			My best Nuxt.js project
-		</h2> -->
+<section>
+	<div class="container">
+		<div class="first">
+			<div class="line" />
+			<h1 class="title">
+				GTHub
+			</h1>
+			<div class="line mobile" />
+			<p class="subtitle">
+				The motorsports Discord you need.<br /> Join <span class="bold">more than 1000</span> car and motorsports enthusiasts <br /> with the click of a button!
+			</p>
+			<md-button id="join" class="md-raised md-primary login" href="http://discord.gg/jeHEW8X">
+				JOIN US
+			</md-button>
+		</div>
+		<div class="second">
+			<img src="img/01.png" />
+		</div>
 	</div>
 </section>
 </template>
 
 <script>
-// import Logo from '~/components/Logo.vue';
 
 export default {
-	components: {
-		// Logo
-	}
+	components: {}
 };
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap');
+
 .container {
-	margin: 0 auto;
-	min-height: 100vh;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 0;
+	grid-auto-rows: minmax(100px, auto);
+	margin: -1em 10em;
+	height: 91.4vh;
+}
+
+.first, .second {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
-	align-items: center;
-	text-align: center;
+}
+
+.line {
+	height: 5px;
+	width: 18vw;
+	background: linear-gradient(to right, #ed6400 0%, #df1652 100%);
+}
+
+.title, .subtitle {
+	font-family: 'Lato', sans-serif;
 }
 
 .title {
-	font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
-		"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-	display: block;
-	font-weight: 300;
-	font-size: 100px;
-	color: #35495e;
-	letter-spacing: 1px;
+	font-weight: 900;
+	font-style: italic;
+	font-size: 7vw;
+	margin: 0.8em -0.1em;
+}
+
+.line.mobile {
+	display: none;
 }
 
 .subtitle {
-	font-weight: 300;
-	font-size: 42px;
-	color: #526488;
-	word-spacing: 5px;
-	padding-bottom: 15px;
+	font-weight: 400;
+	font-size: 1vw;
+	color:white;
+	line-height: 2;
+	margin: 0 0 3em;
+} 
+
+.bold {
+	color: #df1652;
+	font-weight: 800;
 }
 
-.links {
-	padding-top: 15px;
+.container .md-button {
+	width: 10em;
+	height: 3em;
+	border-radius: 10px;
+	background-image: linear-gradient(to right, #ed6400 0%, #df1652 100%);
+	margin: 0;
+}
+
+.second img {
+	width: 100%;
+	min-width: 50vw;
+}
+
+@media screen and (max-width: 888px){
+	.container {
+		display: flex;
+		flex-direction: column;
+		margin: -1em 5em 0;
+	}
+
+	.first {
+		width: 100%;
+		height: 91.4vh;
+		align-items: center;
+	}
+
+	.second {
+		display: none;
+	}
+
+	.line {
+		display: none;
+	}
+
+	.line.mobile {
+		display: block;
+		margin-bottom: 4em;
+		width: 45vw;
+	}
+
+	.title {
+		font-size: 20vw;
+		margin: 0 0 0.6em;
+	}
+
+	.subtitle {
+		text-align: center;
+		font-size: 4vw;
+	}
+	
 }
 </style>
