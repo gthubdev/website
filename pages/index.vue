@@ -93,7 +93,7 @@ export default {
 	min-width: 50vw;
 }
 
-@media screen and (max-width: 888px){
+@media screen and (max-width: 1100px){
 	.container {
 		display: flex;
 		flex-direction: column;

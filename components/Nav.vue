@@ -118,7 +118,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 888px) {
+@media screen and (max-width: 1100px) {
   .topnav.responsive {
     flex-direction: column;
     padding-right: 0;
@@ -162,7 +162,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 888px) {
+@media screen and (max-width: 1100px) {
   .topnav {
     margin-right: 5em;
     margin-left: 5em;
