@@ -28,7 +28,7 @@ export default {
 body {
 	overflow-y: hidden;
 	background:linear-gradient(rgba(28, 36, 43, 0.92),rgba(28, 36, 43, 0.92)),
-		url('/img/WVL2689.jpg');
+		url('~assets/img/SiteBackground.jpg');
 	background-size: cover;
 	background-position: center;
 }

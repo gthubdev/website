@@ -3,9 +3,12 @@
 <div>
 	<nav class="topnav">
 		<a href="/" class="logoref">
-			<img class="logo" src="\img\GTHubNoBackground.svg" alt="GTHub's logo" />
+			<img class="logo" src="~/assets/img/GTHubNoBackground.svg" alt="GTHub's logo" />
 		</a>
 		<div class="buttonContainer">
+			<md-button class="md-primary" href="/">
+				Home
+			</md-button>
 			<md-button class="md-primary" href="/calendar">
 				Calendar
 			</md-button>
