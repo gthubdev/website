@@ -53,14 +53,42 @@
 			<span class="md-error">Please choose a main series</span>
 		</md-autocomplete>
 
-		<md-field v-if="event.mainseries !== undefined && event.mainseries !== ''">
+		<div v-if="event.mainseries !== undefined && event.mainseries !== ''" class="chips">
+			<md-chip v-for="(ss, index) in supportseries" :key="ss.id" class="md-primary" md-deletable @md-delete="removeSupportSeries(ss, index)">
+				{{ ss.name }}
+			</md-chip>
+		</div>
+
+		<md-autocomplete v-if="event.mainseries !== undefined && event.mainseries !== ''" v-model="chosenSupportSeries" :md-options="tmpSupportSeries.map(x=>({
+			'id':x.id,
+			'name':x.name,
+			'toLowerCase':()=>x.name.toLowerCase(),
+			'toString':()=>x.name
+		}))" :class="requiredSeries"
+		>
+			<label>Support Series</label>
+			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+				<span class="color" :style="`background-color: ${item.color}`" />
+				<md-highlight-text :md-term="term">
+					{{ item.name }}
+				</md-highlight-text>
+			</template>
+
+			<template slot="md-autocomplete-empty" slot-scope="{ term }">
+				"{{ term }}" not found!
+			</template>
+
+			<span class="md-error">Please choose a main series</span>
+		</md-autocomplete>
+
+		<!-- <md-field v-if="event.mainseries !== undefined && event.mainseries !== ''">
 			<label for="supportseries">Support series</label>
 			<md-select id="supportseries" v-model="supportseries" name="supportseries" multiple>
 				<md-option v-for="s in filterSupportSeries()" :key="s.id" :value="s.id">
 					{{ s.name }}
 				</md-option>
 			</md-select>
-		</md-field>
+		</md-field> -->
 
 		<div class="md-layout">
 			<div class="block md-layout-item">
@@ -144,7 +172,10 @@ export default {
 				enddate: '',
 				logo: ''
 			},
-			supportseries: []
+			chosenSupportSeries: '',
+			supportseries: [],
+			tmpSupportSeries: [],
+			validss: false
 		};
 	},
 	computed: {
@@ -185,7 +216,7 @@ export default {
 		},
 		requiredSeries() {
 			return {
-				'md-invalid': this.event.mainseries === undefined || this.event.mainseries === ''
+				'md-invalid': this.event.mainseries === undefined || !this.event.mainseries.id
 			};
 		},
 		requiredStartdate() {
@@ -195,7 +226,7 @@ export default {
 		},
 		requiredTrack() {
 			return {
-				'md-invalid': this.event.track === undefined || this.event.track === ''
+				'md-invalid': this.event.track === undefined || !this.event.track.id
 			};
 		},
 	},
@@ -208,7 +239,10 @@ export default {
 				this.$root.$emit('toggleCrudEvent');
 			if (newValue === true && this.mode === 'create') {
 				Object.keys(this.event).forEach(key => (this.event[key] = ''));
+				// Rset arrays
 				this.supportseries.splice(0);
+				this.tmpSupportSeries.splice(0);
+				this.tmpSupportSeries = Array.from(this.series);
 			}
 			if (newValue === true && this.mode === 'update' && this.activeEvent !== undefined) {
 				this.event = JSON.parse(JSON.stringify(this.activeEvent));
@@ -226,17 +260,52 @@ export default {
 					'toLowerCase':()=>mainseries.name.toLowerCase(),
 					'toString':()=>mainseries.name
 				};
+				// Reset arrays
 				this.supportseries.splice(0);
-				this.activeEvent.SupportSeries.forEach(s => this.supportseries.push(s.series));
+				this.tmpSupportSeries.splice(0);
+				this.tmpSupportSeries = Array.from(this.series);
+				// Move all support series to corresponding array
+				this.activeEvent.SupportSeries.forEach(s => {
+					let index = this.tmpSupportSeries.findIndex(ss => ss.id == s.series);
+					this.supportseries.push(this.tmpSupportSeries[index]);
+					this.tmpSupportSeries.splice(index, 1);
+				});
 			}
 		},
-		'event.mainseries': function(newValue) {
-			// if a series was a support series and is now the main series, remove it as a support series
-			if (newValue === undefined || isNaN(newValue.id))
+		'event.mainseries': function(newValue, oldValue) {
+			// if a main series is removed as main series, add it to the list of possible support series
+			if (newValue === '') {
+				if (oldValue.id && this.tmpSupportSeries.findIndex(ss => ss.id == oldValue.id) < 0)
+					this.tmpSupportSeries.push(oldValue);
 				return;
-			let index = this.supportseries.indexOf(newValue.id);
-			if (index >= 0)
+			}
+			// if a series is now the main series, remove it as an option for a support series
+			let index = this.tmpSupportSeries.findIndex(ss => ss.id == newValue.id);
+			if (index >= 0) {
+				this.tmpSupportSeries.splice(index, 1);
+			}
+			// if a series is now the main series, remove it as support series if it had been one
+			index = this.supportseries.findIndex(ss => ss.id == newValue.id);
+			if (index >= 0) {
 				this.supportseries.splice(index, 1);
+			}
+		},
+		chosenSupportSeries: function(newValue) {
+			if (newValue !== undefined && newValue.name && newValue.name.length) {
+				this.series.forEach(s => {
+					if (s.name === newValue.name) {
+						this.supportseries.push(newValue);
+						let index = this.tmpSupportSeries.findIndex(ss => ss.id == newValue.id);
+						this.tmpSupportSeries.splice(index, 1);
+						this.chosenSupportSeries = {
+							'id':'',
+							'name': '',
+							'toLowerCase':()=>'',
+							'toString':()=>''
+						};
+					}
+				});
+			}
 		}
 	},
 	methods: {
@@ -269,10 +338,14 @@ export default {
 					return series.id !== this.event.mainseries.id;
 				});
 		},
+		removeSupportSeries: function(series, index) {
+			this.supportseries.splice(index, 1);
+			this.tmpSupportSeries.push(series);
+		},
 		validInput: function() {
-			return this.event.name.length > 0 && this.event.track !== '' &&
-			this.event.track !== undefined && this.event.track !== '' &&
-			this.event.mainseries !== undefined && this.event.mainseries !== '' &&
+			return this.event.name.length > 0 &&
+			this.event.track !== undefined && this.event.track.id &&
+			this.event.mainseries !== undefined && this.event.mainseries.id &&
 			this.event.startdate !== null && this.event.startdate !== '' &&
 			this.event.enddate !== null && this.event.enddate !== '' &&
 			this.event.priority >= 1;
@@ -298,5 +371,8 @@ export default {
 
 .block {
 	padding-left: 1em;
+}
+.chips {
+	padding: 1em 1em 0 1em;
 }
 </style>
