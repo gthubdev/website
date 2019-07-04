@@ -81,15 +81,6 @@
 			<span class="md-error">Please choose a main series</span>
 		</md-autocomplete>
 
-		<!-- <md-field v-if="event.mainseries !== undefined && event.mainseries !== ''">
-			<label for="supportseries">Support series</label>
-			<md-select id="supportseries" v-model="supportseries" name="supportseries" multiple>
-				<md-option v-for="s in filterSupportSeries()" :key="s.id" :value="s.id">
-					{{ s.name }}
-				</md-option>
-			</md-select>
-		</md-field> -->
-
 		<div class="md-layout">
 			<div class="block md-layout-item">
 				<label>Startdate</label>
@@ -239,7 +230,7 @@ export default {
 				this.$root.$emit('toggleCrudEvent');
 			if (newValue === true && this.mode === 'create') {
 				Object.keys(this.event).forEach(key => (this.event[key] = ''));
-				// Rset arrays
+				// Reset arrays
 				this.supportseries.splice(0);
 				this.tmpSupportSeries.splice(0);
 				this.tmpSupportSeries = Array.from(this.series);
@@ -329,14 +320,6 @@ export default {
 					this.$root.$emit('eventUpdated', res);
 			}
 			this.showEventDialog = false;
-		},
-		filterSupportSeries: function() {
-			if (this.event.mainseries === undefined || this.event.mainseries === '')
-				return this.series;
-			else
-				return this.series.filter(series => {
-					return series.id !== this.event.mainseries.id;
-				});
 		},
 		removeSupportSeries: function(series, index) {
 			this.supportseries.splice(index, 1);
