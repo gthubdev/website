@@ -53,6 +53,7 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Event ' + obj.name + ' created');
 		});
 		this.$root.$on('eventUpdated', event => {
 			let index = this.data.events.findIndex(e => e.id == event.id);
@@ -63,10 +64,13 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Event ' + event.name + ' updated');
 		});
 		this.$root.$on('eventDeleted', eventid => {
 			let index = this.data.events.findIndex(e => e.id == eventid);
+			let event = this.data.events.find(e => e.id == eventid);
 			this.data.events.splice(index, 1);
+			this.$root.$emit('showToast', 'Event ' + event.name + ' deleted');
 		});
 		// EventSessions
 		this.$root.$on('eventSessionCreated', session => {
