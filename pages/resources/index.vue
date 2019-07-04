@@ -109,6 +109,7 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Series ' + obj.name + ' created');
 		});
 		this.$root.$on('seriesUpdated', updatedSeries => {
 			let index = this.data.series.findIndex(s => s.id == updatedSeries.id);
@@ -119,10 +120,13 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Series ' + updatedSeries.name + ' updated');
 		});
 		this.$root.$on('seriesDeleted', seriesid => {
 			let index = this.data.series.findIndex(s => s.id == seriesid);
+			let series = this.data.series.find(s => s.id == seriesid);
 			this.data.series.splice(index, 1);
+			this.$root.$emit('showToast', 'Series ' + series.name + ' deleted');
 		});
 		// Tracks
 		this.$root.$on('showResourcesTracks', () => {
