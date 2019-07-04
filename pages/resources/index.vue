@@ -137,14 +137,18 @@ export default {
 			this.data.tracks.sort((a,b) => {
 				return a.name.localeCompare(b.name);
 			});
+			this.$root.$emit('showToast', 'Track ' + obj.name + ' created');
 		});
 		this.$root.$on('trackUpdated', updatedTrack => {
 			let index = this.data.tracks.findIndex(t => t.id == updatedTrack.id);
 			this.data.tracks.splice(index, 1, updatedTrack);
+			this.$root.$emit('showToast', 'Track ' + updatedTrack.name + ' updated');
 		});
 		this.$root.$on('trackDeleted', trackid => {
 			let index = this.data.tracks.findIndex(t => t.id == trackid);
+			let track = this.data.tracks.find(t => t.id == trackid);
 			this.data.tracks.splice(index, 1);
+			this.$root.$emit('showToast', 'Track ' + track.name + ' deleted');
 		});
 	}
 };
