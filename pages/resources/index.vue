@@ -53,6 +53,7 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Event ' + obj.name + ' created');
 		});
 		this.$root.$on('eventUpdated', event => {
 			let index = this.data.events.findIndex(e => e.id == event.id);
@@ -63,10 +64,13 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Event ' + event.name + ' updated');
 		});
 		this.$root.$on('eventDeleted', eventid => {
 			let index = this.data.events.findIndex(e => e.id == eventid);
+			let event = this.data.events.find(e => e.id == eventid);
 			this.data.events.splice(index, 1);
+			this.$root.$emit('showToast', 'Event ' + event.name + ' deleted');
 		});
 		// EventSessions
 		this.$root.$on('eventSessionCreated', session => {
@@ -75,6 +79,7 @@ export default {
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
+			this.$root.$emit('showToast', 'Session ' + session.name + ' created');
 		});
 		this.$root.$on('eventSessionUpdated', session => {
 			let event = this.data.events.find(e => e.id == session.event);
@@ -83,11 +88,14 @@ export default {
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
+			this.$root.$emit('showToast', 'Session ' + session.name + ' updated');
 		});
 		this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
 			let event = this.data.events.find(e => e.id == eventid);
 			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
+			let session = event.EventSessions.find(s => s.id == sessionid);
 			event.EventSessions.splice(sessionindex, 1);
+			this.$root.$emit('showToast', 'Session ' + session.name + ' deleted');
 		});
 		// Series
 		this.$root.$on('showResourcesSeries', () => {
@@ -101,6 +109,7 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Series ' + obj.name + ' created');
 		});
 		this.$root.$on('seriesUpdated', updatedSeries => {
 			let index = this.data.series.findIndex(s => s.id == updatedSeries.id);
@@ -111,10 +120,13 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
+			this.$root.$emit('showToast', 'Series ' + updatedSeries.name + ' updated');
 		});
 		this.$root.$on('seriesDeleted', seriesid => {
 			let index = this.data.series.findIndex(s => s.id == seriesid);
+			let series = this.data.series.find(s => s.id == seriesid);
 			this.data.series.splice(index, 1);
+			this.$root.$emit('showToast', 'Series ' + series.name + ' deleted');
 		});
 		// Tracks
 		this.$root.$on('showResourcesTracks', () => {
@@ -125,14 +137,18 @@ export default {
 			this.data.tracks.sort((a,b) => {
 				return a.name.localeCompare(b.name);
 			});
+			this.$root.$emit('showToast', 'Track ' + obj.name + ' created');
 		});
 		this.$root.$on('trackUpdated', updatedTrack => {
 			let index = this.data.tracks.findIndex(t => t.id == updatedTrack.id);
 			this.data.tracks.splice(index, 1, updatedTrack);
+			this.$root.$emit('showToast', 'Track ' + updatedTrack.name + ' updated');
 		});
 		this.$root.$on('trackDeleted', trackid => {
 			let index = this.data.tracks.findIndex(t => t.id == trackid);
+			let track = this.data.tracks.find(t => t.id == trackid);
 			this.data.tracks.splice(index, 1);
+			this.$root.$emit('showToast', 'Track ' + track.name + ' deleted');
 		});
 	}
 };

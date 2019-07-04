@@ -121,7 +121,7 @@ export default {
 	props: {
 		showDialog: {
 			type: Boolean,
-			defaukt: false
+			default: false
 		},
 		event: {
 			type: Object,
