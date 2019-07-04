@@ -79,6 +79,7 @@ export default {
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
+			this.$root.$emit('showToast', 'Session ' + session.name + ' created');
 		});
 		this.$root.$on('eventSessionUpdated', session => {
 			let event = this.data.events.find(e => e.id == session.event);
@@ -87,11 +88,14 @@ export default {
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
+			this.$root.$emit('showToast', 'Session ' + session.name + ' updated');
 		});
 		this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
 			let event = this.data.events.find(e => e.id == eventid);
 			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
+			let session = event.EventSessions.find(s => s.id == sessionid);
 			event.EventSessions.splice(sessionindex, 1);
+			this.$root.$emit('showToast', 'Session ' + session.name + ' deleted');
 		});
 		// Series
 		this.$root.$on('showResourcesSeries', () => {
