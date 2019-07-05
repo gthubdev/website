@@ -21,7 +21,7 @@
 			<md-button class="md-primary" href="/resources">
 				Resources
 			</md-button>
-			<md-button class="md-raised md-primary login" @click="testClick()">
+			<md-button class="md-raised md-primary btn-primary" @click="testClick()">
 				Log In
 			</md-button>
 			<md-button class="icon md-primary" @click="responsive()">
@@ -88,11 +88,6 @@ export default {
 
 .topnav .md-button-content {
   color: white;
-}
-
-.topnav .login {
-  background-image: linear-gradient(to right, #ed6400 0%, #df1652 100%);
-  border-radius: 10px;
 }
 
 .topnav .icon {

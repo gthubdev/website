@@ -1,25 +1,15 @@
-// 1. Reset
-body, html {
-  margin: 0;
-  padding: 0;
-}
-// 2. Abstracts
-@import 'abstracts/fonts',
-        'abstracts/variables',
-        'abstracts/height',
-        'abstracts/color',
-        'abstracts/text';
-// 3. Base
-@import 'base/base';
-// 4. Components
-@import 'components/container',
-        'components/button',
-        'components/nav',
-        'components/form',
-        'components/side-menu';
-// 5. Layout
-@import 'layout/align',
-        'layout/margin',
-        'layout/padding';
-// 6. Pages
-@import 'pages/home';
+// Define primary colours here
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
+@include md-register-theme("default", (
+	primary: #ed6400, // The primary color of your application
+	accent: md-get-palette-color(red, A200), // The accent or secondary color
+	theme: dark // This can be dark or light
+));
+@import "~vue-material/dist/theme/all"; // Apply the theme
+
+
+// Layout
+@import 'layout/align';
+
+// Components
+@import 'components/button';

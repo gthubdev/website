@@ -1,11 +1,15 @@
 <template>
 <div class="md-layout-item flex-start main-panel">
-	<div class="headline">
-		<span class="md-display-1">Series</span>
+	<div class="md-layout headline">
+		<div class="md-layout-item md-display-1">
+			Series
+		</div>
+		<div class="md-layout-item align-right">
+			<md-button class="md-raised md-primary btn-primary" @click.native="createSeries()">
+				Create Series
+			</md-button>
+		</div>
 	</div>
-	<md-button class="md-raised md-primary" @click.native="createSeries()">
-		Create Series
-	</md-button>
 	<md-list>
 		<md-list-item v-for="s in series" :key="s.id">
 			<span class="md-list-item-text">{{ s.name }}</span>

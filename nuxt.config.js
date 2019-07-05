@@ -42,7 +42,9 @@ module.exports = {
 	/*
 	 ** Global CSS
 	 */
-	css: [],
+	css: [
+		'@/assets/scss/main.scss'
+	],
 
 	/*
 	 ** Plugins to load before mounting the App
@@ -54,8 +56,15 @@ module.exports = {
 	 */
 	modules: [
 		// Doc: https://axios.nuxtjs.org/usage
-		'@nuxtjs/axios'
+		'@nuxtjs/axios',
+		'nuxt-vue-material'
 	],
+	/*
+	 ** Vue Material config
+	*/
+	vueMaterial: {
+		theme: 'default-dark'
+	}, 
 	/*
 	 ** Axios module configuration
 	 */

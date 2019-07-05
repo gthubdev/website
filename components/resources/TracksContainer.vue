@@ -1,11 +1,15 @@
 <template>
 <div class="md-layout-item flex-start main-panel">
-	<div class="headline">
-		<span class="md-display-1">Tracks</span>
+	<div class="md-layout headline">
+		<div class="md-layout-item md-display-1">
+			Tracks
+		</div>
+		<div class="md-layout-item align-right">
+			<md-button class="md-raised md-primary btn-primary" @click.native="createTrack()">
+				Create Track
+			</md-button>
+		</div>
 	</div>
-	<md-button class="md-raised md-primary" @click.native="createTrack()">
-		Create Track
-	</md-button>
 
 	<md-list>
 		<md-list-item v-for="t in tracks" :key="t.id">

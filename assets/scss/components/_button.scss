@@ -1,14 +1,10 @@
-.btn {
-  border: none;
-  background: none;
-  padding: 15px;
-  font-family: $body-font-family;
-  font-size: $body-font-size;
-  text-transform: uppercase;
-  cursor: pointer;
+.btn-primary {
+	background-image: linear-gradient(to right, #ed6400 0%, #df1652 100%);
+	border-radius: 10px;
+}
 
-  &--primary {
-    background-color: $primary-color;
-    color: #fff;
-  }
+.btn-secondary {
+	background-color: white !important;
+	color: black !important;
+	border-radius: 10px;
 }

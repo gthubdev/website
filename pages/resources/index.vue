@@ -1,35 +1,40 @@
 <template>
 <div class="md-layout">
-	<SidePanel />
-	<EventsContainer v-if="activeModel === 'events'"
-		:events="data.events"
-		:series="data.series"
-		:tracks="data.tracks"
-	/>
-	<SeriesContainer v-else-if="activeModel === 'series'"
-		:series="data.series"
-	/>
-	<TracksContainer v-else-if="activeModel === 'tracks'"
-		:tracks="data.tracks"
-		:tz="data.tz"
-	/>
+	<md-tabs md-alignment="fixed" :md-dynamic-height="true">
+		<md-tab id="tab-events" md-label="Events">
+			<EventsContainer
+				:events="data.events"
+				:series="data.series"
+				:tracks="data.tracks"
+			/>
+		</md-tab>
+		<md-tab id="tab-tracks" md-label="Tracks">
+			<TracksContainer
+				:tracks="data.tracks"
+				:tz="data.tz"
+			/>
+		</md-tab>
+		<md-tab id="tab-series" md-label="Series">
+			<SeriesContainer
+				:series="data.series"
+			/>
+		</md-tab>
+	</md-tabs>
 </div>
 </template>
 
 <script>
-import SidePanel from '~/components/resources/SidePanel.vue';
 import EventsContainer from '~/components/resources/EventsContainer.vue';
 import SeriesContainer from '~/components/resources/SeriesContainer.vue';
 import TracksContainer from '~/components/resources/TracksContainer.vue';
 
 export default {
 	components: {
-		SidePanel, EventsContainer, SeriesContainer, TracksContainer
+		EventsContainer, SeriesContainer, TracksContainer
 	},
 	data: function() {
 		return {
-			data: [],
-			activeModel: ''
+			data: []
 		};
 	},
 	async asyncData({
@@ -41,10 +46,6 @@ export default {
 		};
 	},
 	mounted() {
-		// Events
-		this.$root.$on('showResourcesEvents', () => {
-			this.activeModel = 'events';
-		});
 		this.$root.$on('eventCreated', obj => {
 			this.data.events.push(obj);
 			this.data.events.sort((a,b) => {
@@ -97,10 +98,6 @@ export default {
 			event.EventSessions.splice(sessionindex, 1);
 			this.$root.$emit('showToast', 'Session ' + session.name + ' deleted');
 		});
-		// Series
-		this.$root.$on('showResourcesSeries', () => {
-			this.activeModel = 'series';
-		});
 		this.$root.$on('seriesCreated', obj => {
 			this.data.series.push(obj);
 			this.data.series.sort((a,b) => {
@@ -128,10 +125,6 @@ export default {
 			this.data.series.splice(index, 1);
 			this.$root.$emit('showToast', 'Series ' + series.name + ' deleted');
 		});
-		// Tracks
-		this.$root.$on('showResourcesTracks', () => {
-			this.activeModel = 'tracks';
-		});
 		this.$root.$on('trackCreated', obj => {
 			this.data.tracks.push(obj);
 			this.data.tracks.sort((a,b) => {
@@ -156,6 +149,16 @@ export default {
 
 <style lang="scss" scoped>
 .main-panel {
-	margin-right: 1em !important;
+	// margin-right: 1em !important;
+	padding-top: 2em;
+}
+.md-layout {
+	margin: 2em 10em 2em 10em !important;
+}
+.md-tabs {
+	margin: 0 0 0 0 !important;
+}
+.md-tabs {
+	width: 100%;
 }
 </style>
