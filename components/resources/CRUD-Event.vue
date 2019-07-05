@@ -19,7 +19,7 @@
 			<label>Track</label>
 			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
 				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="term">
+				<md-highlight-text :md-term="term.name ? term.name : term">
 					{{ item.name }}
 				</md-highlight-text>
 			</template>
@@ -41,7 +41,7 @@
 			<label>Main Series</label>
 			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
 				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="term">
+				<md-highlight-text :md-term="term.name ? term.name : term">
 					{{ item.name }}
 				</md-highlight-text>
 			</template>
@@ -53,23 +53,23 @@
 			<span class="md-error">Please choose a main series</span>
 		</md-autocomplete>
 
-		<div v-if="event.mainseries !== undefined && event.mainseries !== ''" class="chips">
+		<div v-if="event.mainseries !== undefined && event.mainseries.id" class="chips">
 			<md-chip v-for="(ss, index) in supportseries" :key="ss.id" class="md-primary" md-deletable @md-delete="removeSupportSeries(ss, index)">
 				{{ ss.name }}
 			</md-chip>
 		</div>
 
-		<md-autocomplete v-if="event.mainseries !== undefined && event.mainseries !== ''" v-model="chosenSupportSeries" :md-options="tmpSupportSeries.map(x=>({
+		<md-autocomplete v-if="event.mainseries !== undefined && event.mainseries.id" v-model="chosenSupportSeries" :md-options="tmpSupportSeries.map(x=>({
 			'id':x.id,
 			'name':x.name,
 			'toLowerCase':()=>x.name.toLowerCase(),
 			'toString':()=>x.name
-		}))" :class="requiredSeries"
+		}))" :class="requiredSeries" :md-fuzzy-search="false"
 		>
 			<label>Support Series</label>
 			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
 				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="term">
+				<md-highlight-text :md-term="typeof term === 'object' && term.name ? term.name : ''">
 					{{ item.name }}
 				</md-highlight-text>
 			</template>
@@ -234,6 +234,12 @@ export default {
 				this.supportseries.splice(0);
 				this.tmpSupportSeries.splice(0);
 				this.tmpSupportSeries = Array.from(this.series);
+				this.chosenSupportSeries = {
+					'id':'',
+					'name': '',
+					'toLowerCase':()=>'',
+					'toString':()=>''
+				};
 			}
 			if (newValue === true && this.mode === 'update' && this.activeEvent !== undefined) {
 				this.event = JSON.parse(JSON.stringify(this.activeEvent));

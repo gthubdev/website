@@ -40,7 +40,7 @@
 			<label>Series</label>
 			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
 				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="term">
+				<md-highlight-text :md-term="term.name ? term.name : term">
 					{{ item.name }}
 				</md-highlight-text>
 			</template>

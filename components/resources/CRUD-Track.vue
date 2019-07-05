@@ -19,7 +19,7 @@
 			'desc': x.desc,
 			'toLowerCase':()=>x.desc.toLowerCase(),
 			'toString':()=>x.desc
-		}))" :class="requiredTimezone"
+		}))" :class="requiredTimezone" :md-fuzzy-search="false"
 		>
 			<label>Timezone</label>
 
