@@ -1,25 +1,2 @@
-// 1. Reset
-body, html {
-  margin: 0;
-  padding: 0;
-}
-// 2. Abstracts
-@import 'abstracts/fonts',
-        'abstracts/variables',
-        'abstracts/height',
-        'abstracts/color',
-        'abstracts/text';
-// 3. Base
-@import 'base/base';
-// 4. Components
-@import 'components/container',
-        'components/button',
-        'components/nav',
-        'components/form',
-        'components/side-menu';
-// 5. Layout
-@import 'layout/align',
-        'layout/margin',
-        'layout/padding';
-// 6. Pages
-@import 'pages/home';
+// Components
+@import 'components/button';

@@ -157,5 +157,6 @@ export default {
 <style lang="scss" scoped>
 .main-panel {
 	margin-right: 1em !important;
+	padding-top: 2em;
 }
 </style>

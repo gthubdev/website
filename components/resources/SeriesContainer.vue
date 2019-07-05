@@ -3,7 +3,7 @@
 	<div class="headline">
 		<span class="md-display-1">Series</span>
 	</div>
-	<md-button class="md-raised md-primary" @click.native="createSeries()">
+	<md-button class="md-raised md-primary btn-primary" @click.native="createSeries()">
 		Create Series
 	</md-button>
 	<md-list>

@@ -3,7 +3,7 @@
 	<div class="headline">
 		<span class="md-display-1">Events</span>
 	</div>
-	<md-button class="md-raised md-primary" @click.native="createEvent()">
+	<md-button class="md-raised md-primary btn-primary" @click.native="createEvent()">
 		Create Event
 	</md-button>
 	<md-tabs>

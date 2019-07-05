@@ -3,7 +3,7 @@
 	<div class="headline">
 		<span class="md-display-1">Tracks</span>
 	</div>
-	<md-button class="md-raised md-primary" @click.native="createTrack()">
+	<md-button class="md-raised md-primary btn-primary" @click.native="createTrack()">
 		Create Track
 	</md-button>
 
