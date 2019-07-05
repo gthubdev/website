@@ -34,8 +34,13 @@ export default {
 			default: false
 		},
 		userTimezone: {
-			type: String,
-			default: ''
+			type: Object,
+			default: function() {
+				return	{
+							'name':'',
+							'desc':'',
+						};
+			}
 		}
 	},
 	methods: {

@@ -8,12 +8,12 @@
 		<div class="headline">
 			<span class="md-display-1">{{ headline }}</span><br />
 		</div>
-		<md-autocomplete v-model="userTimezone" md-dense :md-options="data.tz.tz_array.map(x=>({
+		<md-autocomplete v-model="selectedTimezone" md-dense :md-options="data.tz.tz_array.map(x=>({
 			'name':x.name,
 			'desc': x.desc,
 			'toLowerCase':()=>x.desc.toLowerCase(),
-			'toString':()=>x.desc
-		}))"
+			'toString':()=>tzDisplay(x)
+		}))" :md-fuzzy-search="false"
 		>
 			<label>Local Timezone</label>
 
@@ -65,7 +65,11 @@ export default {
 			showCurrentEvents: true,
 			activeEvent: null,
 			showEvent: false,
-			userTimezone: ''
+			userTimezone: {
+				'name': '',
+				'desc': ''
+			},
+			selectedTimezone: ''
 		};
 	},
 	computed: {
@@ -74,11 +78,18 @@ export default {
 		}
 	},
 	watch: {
-		userTimezone: function(newValue) {
-			// save new local timezone in cookie
-			if (moment.tz.zone(newValue.name) !== null) {
-				let cookieDate = new Date(moment().add(12, 'months').toDate());
-				document.cookie = 'localtz=' + newValue.name + '; expires ' + cookieDate;
+		selectedTimezone: function(newValue) {
+			if (newValue.name) {
+				// save new local timezone in cookie
+				if (moment.tz.zone(newValue.name) !== null) {
+					let cookieDate = new Date(moment().add(12, 'months').toDate());
+					document.cookie = 'localtz=' + newValue.name + '; expires ' + cookieDate;
+				}
+				// set userTimezone
+				this.userTimezone = {
+					'name': newValue.name,
+					'desc': newValue.desc
+				};
 			}
 		}
 	},
@@ -109,12 +120,11 @@ export default {
 			tz_name = document.cookie.replace(/(?:(?:^|.*;\s*)localtz\s*=\s*([^;]*).*$)|^.*$/, '$1');
 		}
 		let tz_desc = this.data.tz.tz_strings[tz_name];
-		this.userTimezone = {
+		this.selectedTimezone = {
 			'name':tz_name,
 			'desc':tz_desc,
 			'toLowerCase':()=>tz_desc.toLowerCase(),
-			// 'toString':()=>'(UTC' + moment.tz(tz_name).format('Z') + ') ' + tz_desc
-			'toString':()=>tz_desc
+			'toString':()=>'(UTC' + moment.tz(tz_name).format('Z') + ') ' + tz_desc
 		};
 	},
 	methods: {
@@ -128,7 +138,7 @@ export default {
 		},
 		tzDisplay: function(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
-		},
+		}
 	}
 };
 </script>
