@@ -89,4 +89,8 @@ export default {
 .headline {
 	margin-bottom: 1em;
 }
+.md-list {
+	background-color: rgba(0, 0, 0, 0.3);
+	margin-top: 0.5em;
+}
 </style>

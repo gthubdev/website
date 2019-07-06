@@ -177,4 +177,8 @@ export default {
 .sessions {
 	padding-left: 2em
 }
+.md-list {
+	background-color: rgba(0, 0, 0, 0.3);
+	margin-top: 0.5em;
+}
 </style>

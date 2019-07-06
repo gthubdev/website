@@ -1,6 +1,6 @@
 <template>
 <div class="md-layout">
-	<md-tabs md-alignment="fixed" :md-dynamic-height="true">
+	<md-tabs md-alignment="fixed" :md-dynamic-height="true" class="md-transparent">
 		<md-tab id="tab-events" md-label="Events">
 			<EventsContainer
 				:events="data.events"
