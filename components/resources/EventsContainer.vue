@@ -104,11 +104,11 @@ export default {
 		filterEvents() {
 			if (this.showCurrentEvents === true)
 				return this.events.filter(event => {
-					return moment(event.enddate).isSameOrAfter(moment());
+					return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
 				});
 			else
 				return this.events.filter(event => {
-					return moment(event.enddate).isBefore(moment());
+					return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD'));
 				});
 		}
 	},

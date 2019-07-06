@@ -259,8 +259,15 @@ export default {
 		},
 		headline() {
 			switch(this.mode) {
-				case 'create':
-					return 'Create an EventSession for ' + this.event.name;
+				case 'create': {
+					let name;
+					if (this.event !== null)
+						name = this.event.name;
+					else
+						name = '';
+					// let name = this.event !== undefined ? this.event.name : '';
+					return 'Create an EventSession for ' + name;
+				}
 				case 'update':
 					return 'Update Session ' + this.eventsession.name + ' for ' + this.event.name;
 				default:
