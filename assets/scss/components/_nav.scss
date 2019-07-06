@@ -1,19 +1,4 @@
 .topnav {
-    border-bottom: 4px solid;
-    border-image: $default-gradient;
-    border-image-slice: 1;
-    border-left: 0;
-    border-right: 0;
-    border-top: 0;
-    display: flex;
-    height: 5em;
-    margin-left: 10em;
-    margin-right: 10em;
-    padding-bottom: 5px;
-    padding-left: 2.5em;
-    padding-right: 2.5em;
-    padding-top: 5px;
-
     .logoref {
         height: inherit;
     }
@@ -25,6 +10,23 @@
         padding-top: 5px;
         width: auto;
     }
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-image: $default-gradient;
+    border-image-slice: 1;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 4px solid;
+    margin-right: 10em;
+    margin-left: 10em;
+    padding-right: 2.5em;
+    padding-left: 2.5em;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    height: 5em;
 
     .md-button-content {
         color: white;
@@ -86,7 +88,7 @@
         .buttonContainer {
             background-color: #262d34;
             border-bottom: 4px solid;
-            border-image: $site-gradient;
+            border-image: $default-gradient;
             border-image-slice: 1;
             border-left: 0;
             border-right: 0;
