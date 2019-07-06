@@ -54,7 +54,7 @@
 				<span class="md-error">Please choose a main series</span>
 			</md-autocomplete>
 
-			<div v-if="event.mainseries !== undefined && event.mainseries.id" class="chips">
+			<div v-if="event.mainseries !== undefined && event.mainseries.id && supportseries.length">
 				<md-chip v-for="(ss, index) in supportseries" :key="ss.id" class="md-primary" md-deletable @md-delete="removeSupportSeries(ss, index)">
 					{{ ss.name }}
 				</md-chip>
@@ -83,7 +83,7 @@
 			</md-autocomplete>
 
 			<div class="md-layout">
-				<div class="block md-layout-item">
+				<div class="md-layout-item">
 					<label>Startdate</label>
 					<VueCtkDateTimePicker
 						v-model="event.startdate"
@@ -97,7 +97,7 @@
 					/>
 				</div>
 
-				<div class="block md-layout-item">
+				<div class="md-layout-item">
 					<label>Enddate</label>
 					<VueCtkDateTimePicker
 						v-model="event.enddate"
@@ -113,7 +113,7 @@
 			</div>
 
 			<md-field :class="requiredPriority">
-				<label for="priority">Priority (will be pre-filled from Series-priority in future)</label>
+				<label for="priority">Priority</label>
 				<md-select id="priority" v-model="event.priority" name="priority" placeholder="Priority" required>
 					<md-option v-for="i in 4" :key="i" :value="i">
 						{{ i }}
@@ -177,12 +177,14 @@ export default {
 				mainseries: '',
 				startdate: '',
 				enddate: '',
-				logo: ''
+				logo: '',
+				priority: ''
 			},
 			chosenSupportSeries: '',
 			supportseries: [],
 			tmpSupportSeries: [],
-			validss: false
+			validss: false,
+			initMainSet: false
 		};
 	},
 	computed: {
@@ -208,7 +210,7 @@ export default {
 		},
 		requiredPriority() {
 			return {
-				'md-invalid': !(this.event.priority >= 1)
+				'md-invalid': this.event.priority === undefined || this.event.priority === ''
 			};
 		},
 		requiredSeries() {
@@ -236,6 +238,7 @@ export default {
 				this.$root.$emit('toggleCrudEvent');
 			if (newValue === true && this.mode === 'create') {
 				Object.keys(this.event).forEach(key => (this.event[key] = ''));
+				this.initMainSet = true;
 				// Reset arrays
 				this.supportseries.splice(0);
 				this.tmpSupportSeries.splice(0);
@@ -248,6 +251,7 @@ export default {
 				};
 			}
 			if (newValue === true && this.mode === 'update' && this.activeEvent !== undefined) {
+				this.initMainSet = false;
 				this.event = JSON.parse(JSON.stringify(this.activeEvent));
 				let track = this.tracks.find(t => t.id == this.event.track);
 				this.event.track = {
@@ -277,9 +281,10 @@ export default {
 		},
 		'event.mainseries': function(newValue, oldValue) {
 			// if a main series is removed as main series, add it to the list of possible support series
-			if (newValue === '') {
+			if (typeof newValue !== 'object') {
 				if (oldValue.id && this.tmpSupportSeries.findIndex(ss => ss.id == oldValue.id) < 0)
 					this.tmpSupportSeries.push(oldValue);
+				this.event.priority = '';
 				return;
 			}
 			// if a series is now the main series, remove it as an option for a support series
@@ -291,6 +296,16 @@ export default {
 			index = this.supportseries.findIndex(ss => ss.id == newValue.id);
 			if (index >= 0) {
 				this.supportseries.splice(index, 1);
+			}
+			// set priority for event
+			// somewhat dirty hack, because this function will override the initial value set when editing an event
+			// cannot guarantee the order since this is a watch-function
+			// must therefore use an indicator to not override the value
+			if (this.initMainSet == true) {
+				let series = this.series.find(s => s.id == newValue.id);
+				this.event.priority = series.priority;
+			} else {
+				this.initMainSet = true;
 			}
 		},
 		chosenSupportSeries: function(newValue) {
@@ -365,12 +380,5 @@ export default {
 }
 .md-menu-content {
 	z-index: 100;
-}
-
-.block {
-	padding-left: 1em;
-}
-.chips {
-	padding: 1em 1em 0 1em;
 }
 </style>
