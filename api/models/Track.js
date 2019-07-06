@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 			primaryKey: true
 		},
 		name: DataTypes.STRING,
-		location: DataTypes.STRING,
+		country: DataTypes.STRING,
 		timezone: DataTypes.STRING,
 		length: {
 			type: DataTypes.DOUBLE,

@@ -1,115 +1,103 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showEventSessionDialog">
-		<!-- <md-dialog-title>Create an EventSession for {{ eventname }}</md-dialog-title> -->
-		<md-dialog-title>{{ headline }}</md-dialog-title>
+		<md-dialog-content>
+			<md-dialog-title>{{ headline() }}</md-dialog-title>
 
-		<md-list v-if="event !== null" class="md-dense">
-			<md-list-item v-for="es in event.EventSessions" :key="es.id">
-				<!-- <md-avatar>
-					<img :src="es.Series.logo" alt="Logo" />
-				</md-avatar> -->
-				<div class="md-list-item-text">
-					<div class="md-layout">
-						<div class="md-layout-item">
-							<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ getLocalTime(es) }}
-						</div>
-						<div class="md-layout-item">
-							<md-icon class="" @click.native="deleteSession(es.id)">
-								delete
-							</md-icon>
+			<md-list v-if="event !== null" class="md-dense">
+				<md-list-item v-for="es in event.EventSessions" :key="es.id">
+					<!-- <md-avatar>
+						<img :src="es.Series.logo" alt="Logo" />
+					</md-avatar> -->
+					<div class="md-list-item-text">
+						<div class="md-layout">
+							<div class="md-layout-item">
+								<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ getLocalTime(es) }}
+							</div>
+							<div class="md-layout-item">
+								<md-icon class="" @click.native="deleteSession(es.id)">
+									delete
+								</md-icon>
+							</div>
 						</div>
 					</div>
+				</md-list-item>
+			</md-list>
+
+			<md-field :class="requiredName">
+				<label>Name</label>
+				<md-input v-model="eventsession.name" required />
+				<span class="md-error">Please enter a name</span>
+			</md-field>
+
+			<md-autocomplete v-model="eventsession.series" :md-options="getAllSeries().map(x=>({
+				'id':x.id,
+				'name':x.name,
+				'toLowerCase':()=>x.name.toLowerCase(),
+				'toString':()=>x.name
+			}))" :class="requiredSeries"
+			>
+				<label>Series</label>
+				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+					<span class="color" :style="`background-color: ${item.color}`" />
+					<md-highlight-text :md-term="term.name ? term.name : term">
+						{{ item.name }}
+					</md-highlight-text>
+				</template>
+
+				<template slot="md-autocomplete-empty" slot-scope="{ term }">
+					"{{ term }}" not found!
+				</template>
+
+				<span class="md-error">Please choose a series</span>
+			</md-autocomplete>
+
+			<div class="md-subheading">
+				Date
+			</div>
+			<VueCtkDateTimePicker
+				v-model="eventtime.date"
+				format="YYYY-MM-DD HH:mm"
+				formatted="ddd, Do MMMM YYYY, HH:mm"
+				minute-interval="15"
+				locale="en"
+				:first-day-of-week="1"
+				:dark="true"
+			/>
+
+			<div class="md-subheading">
+				Duration
+			</div>
+			<div class="md-layout">
+				<div class="block md-layout-item md-size-25">
+					<md-field :class="requiredDurationHours">
+						<label>Hours</label>
+						<md-input v-model="eventtime.duration_hours" required />
+						<span class="md-error">Please enter hours</span>
+					</md-field>
 				</div>
-			</md-list-item>
-		</md-list>
-
-		<md-field :class="requiredName">
-			<label>Name</label>
-			<md-input v-model="eventsession.name" required />
-			<span class="md-error">Please enter a name</span>
-		</md-field>
-
-		<md-autocomplete v-model="eventsession.series" :md-options="getAllSeries().map(x=>({
-			'id':x.id,
-			'name':x.name,
-			'toLowerCase':()=>x.name.toLowerCase(),
-			'toString':()=>x.name
-		}))" :class="requiredSeries"
-		>
-			<label>Series</label>
-			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="term.name ? term.name : term">
-					{{ item.name }}
-				</md-highlight-text>
-			</template>
-
-			<template slot="md-autocomplete-empty" slot-scope="{ term }">
-				"{{ term }}" not found!
-			</template>
-
-			<span class="md-error">Please choose a series</span>
-		</md-autocomplete>
-
-		<div class="md-subheading">
-			Date
-		</div>
-		<div class="md-layout">
-			<div class="block md-layout-item md-size-33">
-				<label>Date</label>
-				<md-datepicker v-model="eventtime.date" md-immediately :class="requiredDate">
-					<span class="md-error">Please choose a date</span>
-				</md-datepicker>
+				<div class="block md-layout-item md-size-25">
+					<md-field :class="requiredDurationMinutes">
+						<label>Minutes</label>
+						<md-input v-model="eventtime.duration_minutes" required />
+						<span class="md-error">Please enter minutes</span>
+					</md-field>
+				</div>
 			</div>
-			<div class="block md-layout-item md-size-25">
-				<md-field :class="requiredHour">
-					<label>Hour</label>
-					<md-input v-model="eventtime.hour" required />
-					<span class="md-error">Please enter an hour</span>
-				</md-field>
-			</div>
-			<div class="block md-layout-item md-size-25">
-				<md-field :class="requiredMinute">
-					<label>Minute</label>
-					<md-input v-model="eventtime.minute" required />
-					<span class="md-error">Please enter a minute</span>
-				</md-field>
-			</div>
-		</div>
 
-		<div class="md-subheading">
-			Duration
-		</div>
-		<div class="md-layout">
-			<div class="block md-layout-item md-size-25">
-				<md-field :class="requiredDurationHours">
-					<label>Hours</label>
-					<md-input v-model="eventtime.duration_hours" required />
-					<span class="md-error">Please enter hours</span>
-				</md-field>
-			</div>
-			<div class="block md-layout-item md-size-25">
-				<md-field :class="requiredDurationMinutes">
-					<label>Minutes</label>
-					<md-input v-model="eventtime.duration_minutes" required />
-					<span class="md-error">Please enter minutes</span>
-				</md-field>
-			</div>
-		</div>
+			<p style="padding-left: 1em">
+				<strong>Info:</strong> When creating the 2nd session etc., you need to set the date again. Will be fixed later.
+			</p>
 
-		<p style="padding-left: 1em">
-			<strong>Info:</strong> When creating the 2nd session etc., you need to set the date again. Will be fixed later.
-		</p>
-
-		<md-dialog-actions>
-			<md-button class="md-primary md-accent" @click="showEventSessionDialog = false">
-				Cancel
-			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-				{{ action }}
-			</md-button>
-		</md-dialog-actions>
+			<md-dialog-actions>
+				<md-button class="md-primary md-accent" @click="showEventSessionDialog = false">
+					Cancel
+				</md-button>
+				<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+					{{ action }}
+				</md-button>
+			</md-dialog-actions>
+		</md-dialog-content>
 	</md-dialog>
 </div>
 </template>
@@ -149,25 +137,12 @@ export default {
 			},
 			eventtime: {
 				date: '',
-				hour: '',
-				minute: '',
 				duration_hours: '',
 				duration_minutes: ''
-			},
-			eventname: ''
+			}
 		};
 	},
 	computed: {
-		headline() {
-			switch(this.mode) {
-				case 'create':
-					return 'Create an EventSession for ' + this.eventname;
-				case 'update':
-					return 'Update Session ' + this.eventsession.name + ' for ' + this.eventname;
-				default:
-					return '';
-			}
-		},
 		action() {
 			switch(this.mode) {
 				case 'create':
@@ -181,16 +156,6 @@ export default {
 		requiredDate() {
 			return {
 				'md-invalid': this.eventtime.date === null || this.eventtime.date === ''
-			};
-		},
-		requiredHour() {
-			return {
-				'md-invalid': this.eventtime.hour === '' || !Number.isInteger(Number(this.eventtime.hour)) || Number(this.eventtime.hour) < 0 || Number(this.eventtime.hour) > 23
-			};
-		},
-		requiredMinute() {
-			return {
-				'md-invalid': this.eventtime.minute === '' || !Number.isInteger(Number(this.eventtime.minute)) || Number(this.eventtime.minute) < 0 || Number(this.eventtime.minute) > 59
 			};
 		},
 		requiredDurationHours() {
@@ -225,17 +190,19 @@ export default {
 				// Reset all values
 				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
 				Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
-				if (event !== null)
-					this.eventname = this.event.name;
 			}
 			if (newValue === true && this.mode === 'update' && this.activeSession !== undefined) {
 				this.eventsession = JSON.parse(JSON.stringify(this.activeSession));
-				this.eventsession.series = this.eventsession.Series.name;
+				let s = this.eventsession.Series;
+				this.eventsession.series = {
+					'id':s.id,
+					'name':s.name,
+					'toLowerCase':()=>s.name.toLowerCase(),
+					'toString':()=>s.name
+				};
 				// Convert into local time
 				let start = moment(this.eventsession.starttime).tz(this.event.Track.timezone);
-				this.eventtime.date = start.format('YYYY-MM-DD');
-				this.eventtime.hour = start.hour();
-				this.eventtime.minute = start.minute();
+				this.eventtime.date = start.format('YYYY-MM-DD HH:mm');
 			}
 		},
 		activeSession: function(newValue) {
@@ -250,9 +217,7 @@ export default {
 				};
 				// Convert into local time
 				let start = moment(this.eventsession.starttime).tz(this.event.Track.timezone);
-				this.eventtime.date = start.format('YYYY-MM-DD');
-				this.eventtime.hour = start.hour();
-				this.eventtime.minute = start.minute();
+				this.eventtime.date = start.format('YYYY-MM-DD HH:mm');
 				// Parse the duration
 				this.eventtime.duration_hours = Math.floor(parseInt(this.eventsession.duration)/60);
 				this.eventtime.duration_minutes = parseInt(this.eventsession.duration) % 60;
@@ -264,11 +229,7 @@ export default {
 			const session = JSON.parse(JSON.stringify(this.eventsession));
 			session.event = this.event.id;
 			session.series = session.series.id;
-			let date = moment(this.eventtime.date).format('YYYY-MM-DD');
-			let hour = (Number(this.eventtime.hour) < 10 ? '0' : '') + parseInt(this.eventtime.hour, 10);
-			let minute = parseInt(this.eventtime.minute, 10);
-			minute = (minute < 10 ? '0' : '') + minute;
-			session.starttime = date + ' ' + hour + ':' + minute;
+			session.starttime = this.eventtime.date;
 			session.duration = parseInt(this.eventtime.duration_hours) * 60 + parseInt(this.eventtime.duration_minutes);
 			session.timezone = this.event.Track.timezone;
 
@@ -296,6 +257,23 @@ export default {
 			if (res.deleted >= 1)
 				this.$root.$emit('eventSessionDeleted', this.event.id, sessionid);
 		},
+		headline() {
+			switch(this.mode) {
+				case 'create': {
+					let name;
+					if (this.event !== null)
+						name = this.event.name;
+					else
+						name = '';
+					// let name = this.event !== undefined ? this.event.name : '';
+					return 'Create an EventSession for ' + name;
+				}
+				case 'update':
+					return 'Update Session ' + this.eventsession.name + ' for ' + this.event.name;
+				default:
+					return '';
+			}
+		},
 		getAllSeries: function() {
 			let arr = [];
 			if (this.event === null) {
@@ -315,8 +293,6 @@ export default {
 			return this.eventsession.name.length > 0 &&
 			this.eventsession.series !== undefined && this.eventsession.series.id &&
 			this.eventtime.date !== null && this.eventtime.date !== '' &&
-			this.eventtime.hour !== '' && Number.isInteger(Number(this.eventtime.hour)) && Number(this.eventtime.hour) >= 0 && Number(this.eventtime.hour) <= 23 &&
-			this.eventtime.minute !== '' && Number.isInteger(Number(this.eventtime.minute)) && Number(this.eventtime.minute) >= 0 && Number(this.eventtime.minute) <= 59 &&
 			this.eventtime.duration_hours !== '' && Number.isInteger(Number(this.eventtime.duration_hours)) && Number(this.eventtime.duration_hours) >= 0 && Number(this.eventtime.duration_hours) <= 96 &&
 			this.eventtime.duration_minutes !== '' && Number.isInteger(Number(this.eventtime.duration_minutes)) && Number(this.eventtime.duration_minutes) >= 0 && Number(this.eventtime.duration_minutes) <= 60;
 		}
@@ -326,19 +302,9 @@ export default {
 
 <style lang="scss" scoped>
 .md-dialog {
-	min-width: 33%;
+	min-width: 50%;
 }
-
-.md-field {
-	width: auto;
-	margin-left: 1em;
-	margin-right: 1em;
-}
-
 .md-menu-content {
 	z-index: 100;
-}
-.md-subheading {
-	margin-left: 1em;
 }
 </style>

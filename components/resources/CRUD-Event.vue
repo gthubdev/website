@@ -1,125 +1,141 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showEventDialog">
-		<md-dialog-title>{{ headline }}</md-dialog-title>
+		<md-dialog-content>
+			<md-dialog-title>{{ headline() }}</md-dialog-title>
 
-		<md-field :class="requiredName">
-			<label>Name</label>
-			<md-input v-model="event.name" required />
-			<span class="md-error">Please enter a name</span>
-		</md-field>
+			<md-field :class="requiredName">
+				<label>Name</label>
+				<md-input v-model="event.name" required />
+				<span class="md-error">Please enter a name</span>
+			</md-field>
 
-		<md-autocomplete v-model="event.track" :md-options="tracks.map(x=>({
-			'id':x.id,
-			'name':x.name,
-			'toLowerCase':()=>x.name.toLowerCase(),
-			'toString':()=>x.name
-		}))" :class="requiredTrack"
-		>
-			<label>Track</label>
-			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="term.name ? term.name : term">
-					{{ item.name }}
-				</md-highlight-text>
-			</template>
+			<md-autocomplete v-model="event.track" :md-options="tracks.map(x=>({
+				'id':x.id,
+				'name':x.name,
+				'toLowerCase':()=>x.name.toLowerCase(),
+				'toString':()=>x.name
+			}))" :class="requiredTrack"
+			>
+				<label>Track</label>
+				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+					<span class="color" :style="`background-color: ${item.color}`" />
+					<md-highlight-text :md-term="term.name ? term.name : term">
+						{{ item.name }}
+					</md-highlight-text>
+				</template>
 
-			<template slot="md-autocomplete-empty" slot-scope="{ term }">
-				"{{ term }}" not found!
-			</template>
+				<template slot="md-autocomplete-empty" slot-scope="{ term }">
+					"{{ term }}" not found!
+				</template>
 
-			<span class="md-error">Please choose a track</span>
-		</md-autocomplete>
+				<span class="md-error">Please choose a track</span>
+			</md-autocomplete>
 
-		<md-autocomplete v-model="event.mainseries" :md-options="series.map(x=>({
-			'id':x.id,
-			'name':x.name,
-			'toLowerCase':()=>x.name.toLowerCase(),
-			'toString':()=>x.name
-		}))" :class="requiredSeries"
-		>
-			<label>Main Series</label>
-			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="term.name ? term.name : term">
-					{{ item.name }}
-				</md-highlight-text>
-			</template>
+			<md-autocomplete v-model="event.mainseries" :md-options="series.map(x=>({
+				'id':x.id,
+				'name':x.name,
+				'toLowerCase':()=>x.name.toLowerCase(),
+				'toString':()=>x.name
+			}))" :class="requiredSeries"
+			>
+				<label>Main Series</label>
+				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+					<span class="color" :style="`background-color: ${item.color}`" />
+					<md-highlight-text :md-term="term.name ? term.name : term">
+						{{ item.name }}
+					</md-highlight-text>
+				</template>
 
-			<template slot="md-autocomplete-empty" slot-scope="{ term }">
-				"{{ term }}" not found!
-			</template>
+				<template slot="md-autocomplete-empty" slot-scope="{ term }">
+					"{{ term }}" not found!
+				</template>
 
-			<span class="md-error">Please choose a main series</span>
-		</md-autocomplete>
+				<span class="md-error">Please choose a main series</span>
+			</md-autocomplete>
 
-		<div v-if="event.mainseries !== undefined && event.mainseries.id" class="chips">
-			<md-chip v-for="(ss, index) in supportseries" :key="ss.id" class="md-primary" md-deletable @md-delete="removeSupportSeries(ss, index)">
-				{{ ss.name }}
-			</md-chip>
-		</div>
-
-		<md-autocomplete v-if="event.mainseries !== undefined && event.mainseries.id" v-model="chosenSupportSeries" :md-options="tmpSupportSeries.map(x=>({
-			'id':x.id,
-			'name':x.name,
-			'toLowerCase':()=>x.name.toLowerCase(),
-			'toString':()=>x.name
-		}))" :class="requiredSeries" :md-fuzzy-search="false"
-		>
-			<label>Support Series</label>
-			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-				<span class="color" :style="`background-color: ${item.color}`" />
-				<md-highlight-text :md-term="typeof term === 'object' && term.name ? term.name : ''">
-					{{ item.name }}
-				</md-highlight-text>
-			</template>
-
-			<template slot="md-autocomplete-empty" slot-scope="{ term }">
-				"{{ term }}" not found!
-			</template>
-
-			<span class="md-error">Please choose a main series</span>
-		</md-autocomplete>
-
-		<div class="md-layout">
-			<div class="block md-layout-item">
-				<label>Startdate</label>
-				<md-datepicker v-model="event.startdate" md-immediately :class="requiredStartdate">
-					<span class="md-error">Please choose a startdate</span>
-				</md-datepicker>
+			<div v-if="event.mainseries !== undefined && event.mainseries.id && supportseries.length">
+				<md-chip v-for="(ss, index) in supportseries" :key="ss.id" class="md-primary" md-deletable @md-delete="removeSupportSeries(ss, index)">
+					{{ ss.name }}
+				</md-chip>
 			</div>
 
-			<div class="block md-layout-item">
-				<label>Enddate</label>
-				<md-datepicker v-model="event.enddate" md-immediately :class="requiredEnddate">
-					<span class="md-error">Please choose an enddate</span>
-				</md-datepicker>
+			<md-autocomplete v-if="event.mainseries !== undefined && event.mainseries.id" v-model="chosenSupportSeries" :md-options="tmpSupportSeries.map(x=>({
+				'id':x.id,
+				'name':x.name,
+				'toLowerCase':()=>x.name.toLowerCase(),
+				'toString':()=>x.name
+			}))" :class="requiredSeries" :md-fuzzy-search="false"
+			>
+				<label>Support Series</label>
+				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+					<span class="color" :style="`background-color: ${item.color}`" />
+					<md-highlight-text :md-term="typeof term === 'object' && term.name ? term.name : ''">
+						{{ item.name }}
+					</md-highlight-text>
+				</template>
+
+				<template slot="md-autocomplete-empty" slot-scope="{ term }">
+					"{{ term }}" not found!
+				</template>
+
+				<span class="md-error">Please choose a main series</span>
+			</md-autocomplete>
+
+			<div class="md-layout">
+				<div class="md-layout-item">
+					<label>Startdate</label>
+					<VueCtkDateTimePicker
+						v-model="event.startdate"
+						format="YYYY-MM-DD"
+						formatted="ddd, Do MMMM YYYY"
+						:only-date="true"
+						:auto-close="true"
+						locale="en"
+						:first-day-of-week="1"
+						:dark="true"
+					/>
+				</div>
+
+				<div class="md-layout-item">
+					<label>Enddate</label>
+					<VueCtkDateTimePicker
+						v-model="event.enddate"
+						format="YYYY-MM-DD"
+						formatted="ddd, Do MMMM YYYY"
+						:only-date="true"
+						:auto-close="true"
+						locale="en"
+						:first-day-of-week="1"
+						:dark="true"
+					/>
+				</div>
 			</div>
-		</div>
 
-		<md-field :class="requiredPriority">
-			<label for="priority">Priority (will be pre-filled from Series-priority in future)</label>
-			<md-select id="priority" v-model="event.priority" name="priority" placeholder="Priority" required>
-				<md-option v-for="i in 4" :key="i" :value="i">
-					{{ i }}
-				</md-option>
-			</md-select>
-			<span class="md-error">Please choose a priority</span>
-		</md-field>
+			<md-field :class="requiredPriority">
+				<label for="priority">Priority</label>
+				<md-select id="priority" v-model="event.priority" name="priority" placeholder="Priority" required>
+					<md-option v-for="i in 4" :key="i" :value="i">
+						{{ i }}
+					</md-option>
+				</md-select>
+				<span class="md-error">Please choose a priority</span>
+			</md-field>
 
-		<md-field>
-			<label>Logo</label>
-			<md-input v-model="event.logo" />
-		</md-field>
+			<md-field>
+				<label>Logo</label>
+				<md-input v-model="event.logo" />
+			</md-field>
 
-		<md-dialog-actions>
-			<md-button class="md-primary md-accent" @click="showEventDialog = false">
-				Cancel
-			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-				{{ action }}
-			</md-button>
-		</md-dialog-actions>
+			<md-dialog-actions>
+				<md-button class="md-primary md-accent" @click="showEventDialog = false">
+					Cancel
+				</md-button>
+				<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+					{{ action }}
+				</md-button>
+			</md-dialog-actions>
+		</md-dialog-content>
 	</md-dialog>
 </div>
 </template>
@@ -161,25 +177,17 @@ export default {
 				mainseries: '',
 				startdate: '',
 				enddate: '',
-				logo: ''
+				logo: '',
+				priority: ''
 			},
 			chosenSupportSeries: '',
 			supportseries: [],
 			tmpSupportSeries: [],
-			validss: false
+			validss: false,
+			initMainSet: false
 		};
 	},
 	computed: {
-		headline() {
-			switch(this.mode) {
-				case 'create':
-					return 'Create an Event';
-				case 'update':
-					return 'Update ' + this.event.name;
-				default:
-					return '';
-			}
-		},
 		action() {
 			switch(this.mode) {
 				case 'create':
@@ -202,7 +210,7 @@ export default {
 		},
 		requiredPriority() {
 			return {
-				'md-invalid': !(this.event.priority >= 1)
+				'md-invalid': this.event.priority === undefined || this.event.priority === ''
 			};
 		},
 		requiredSeries() {
@@ -230,6 +238,7 @@ export default {
 				this.$root.$emit('toggleCrudEvent');
 			if (newValue === true && this.mode === 'create') {
 				Object.keys(this.event).forEach(key => (this.event[key] = ''));
+				this.initMainSet = true;
 				// Reset arrays
 				this.supportseries.splice(0);
 				this.tmpSupportSeries.splice(0);
@@ -242,6 +251,7 @@ export default {
 				};
 			}
 			if (newValue === true && this.mode === 'update' && this.activeEvent !== undefined) {
+				this.initMainSet = false;
 				this.event = JSON.parse(JSON.stringify(this.activeEvent));
 				let track = this.tracks.find(t => t.id == this.event.track);
 				this.event.track = {
@@ -271,9 +281,10 @@ export default {
 		},
 		'event.mainseries': function(newValue, oldValue) {
 			// if a main series is removed as main series, add it to the list of possible support series
-			if (newValue === '') {
+			if (typeof newValue !== 'object') {
 				if (oldValue.id && this.tmpSupportSeries.findIndex(ss => ss.id == oldValue.id) < 0)
 					this.tmpSupportSeries.push(oldValue);
+				this.event.priority = '';
 				return;
 			}
 			// if a series is now the main series, remove it as an option for a support series
@@ -285,6 +296,16 @@ export default {
 			index = this.supportseries.findIndex(ss => ss.id == newValue.id);
 			if (index >= 0) {
 				this.supportseries.splice(index, 1);
+			}
+			// set priority for event
+			// somewhat dirty hack, because this function will override the initial value set when editing an event
+			// cannot guarantee the order since this is a watch-function
+			// must therefore use an indicator to not override the value
+			if (this.initMainSet == true) {
+				let series = this.series.find(s => s.id == newValue.id);
+				this.event.priority = series.priority;
+			} else {
+				this.initMainSet = true;
 			}
 		},
 		chosenSupportSeries: function(newValue) {
@@ -327,6 +348,16 @@ export default {
 			}
 			this.showEventDialog = false;
 		},
+		headline() {
+			switch(this.mode) {
+				case 'create':
+					return 'Create an Event';
+				case 'update':
+					return 'Update ' + this.event.name;
+				default:
+					return '';
+			}
+		},
 		removeSupportSeries: function(series, index) {
 			this.supportseries.splice(index, 1);
 			this.tmpSupportSeries.push(series);
@@ -345,23 +376,9 @@ export default {
 
 <style lang="scss">
 .md-dialog {
-	min-width: 33%;
+	min-width: 50%;
 }
-
-.md-field {
-	width: auto;
-	margin-left: 1em;
-	margin-right: 1em;
-}
-
 .md-menu-content {
 	z-index: 100;
-}
-
-.block {
-	padding-left: 1em;
-}
-.chips {
-	padding: 1em 1em 0 1em;
 }
 </style>

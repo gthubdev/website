@@ -1,43 +1,45 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showSeriesDialog">
-		<md-dialog-title>{{ headline }}</md-dialog-title>
+		<md-dialog-content>
+			<md-dialog-title>{{ headline }}</md-dialog-title>
 
-		<md-field :class="requiredName">
-			<label>Name</label>
-			<md-input v-model="series.name" required />
-			<span class="md-error">Please enter a name</span>
-		</md-field>
+			<md-field :class="requiredName">
+				<label>Name</label>
+				<md-input v-model="series.name" required />
+				<span class="md-error">Please enter a name</span>
+			</md-field>
 
-		<md-field :class="requiredLogo">
-			<label>Logo</label>
-			<md-input v-model="series.logo" required />
-			<span class="md-error">Please enter a URL</span>
-		</md-field>
+			<md-field :class="requiredLogo">
+				<label>Logo</label>
+				<md-input v-model="series.logo" required />
+				<span class="md-error">Please enter a URL</span>
+			</md-field>
 
-		<md-field>
-			<label>Homepage</label>
-			<md-input v-model="series.homepage" />
-		</md-field>
+			<md-field>
+				<label>Homepage</label>
+				<md-input v-model="series.homepage" />
+			</md-field>
 
-		<md-field :class="requiredPriority">
-			<label for="priority">Priority</label>
-			<md-select id="priority" v-model="series.priority" name="priority" placeholder="Priority" required>
-				<md-option v-for="i in 4" :key="i" :value="i">
-					{{ i }}
-				</md-option>
-			</md-select>
-			<span class="md-error">Please choose a priority</span>
-		</md-field>
+			<md-field :class="requiredPriority">
+				<label for="priority">Priority</label>
+				<md-select id="priority" v-model="series.priority" name="priority" placeholder="Priority" required>
+					<md-option v-for="i in 4" :key="i" :value="i">
+						{{ i }}
+					</md-option>
+				</md-select>
+				<span class="md-error">Please choose a priority</span>
+			</md-field>
 
-		<md-dialog-actions>
-			<md-button class="md-primary md-accent" @click="showSeriesDialog = false">
-				Cancel
-			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-				{{ action }}
-			</md-button>
-		</md-dialog-actions>
+			<md-dialog-actions>
+				<md-button class="md-primary md-accent" @click="showSeriesDialog = false">
+					Cancel
+				</md-button>
+				<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+					{{ action }}
+				</md-button>
+			</md-dialog-actions>
+		</md-dialog-content>
 	</md-dialog>
 </div>
 </template>
@@ -154,12 +156,6 @@ export default {
 
 <style lang="scss">
 .md-dialog {
-	min-width: 33%;
-}
-
-.md-field {
-	width: auto;
-	margin-left: 1em;
-	margin-right: 1em;
+	min-width: 50%;
 }
 </style>
