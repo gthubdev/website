@@ -1,60 +1,62 @@
 <template>
 <div>
 	<md-dialog :md-active.sync="showTrackDialog">
-		<md-dialog-title>{{ headline }}</md-dialog-title>
+		<md-dialog-content>
+			<md-dialog-title>{{ headline }}</md-dialog-title>
 
-		<md-field :class="requiredName">
-			<label>Name</label>
-			<md-input v-model="track.name" required />
-			<span class="md-error">Please enter a name</span>
-		</md-field>
+			<md-field :class="requiredName">
+				<label>Name</label>
+				<md-input v-model="track.name" required />
+				<span class="md-error">Please enter a name</span>
+			</md-field>
 
-		<md-field>
-			<label>Location</label>
-			<md-input v-model="track.location" />
-		</md-field>
+			<md-field>
+				<label>Location</label>
+				<md-input v-model="track.location" />
+			</md-field>
 
-		<md-autocomplete v-model="track.timezone" md-dense :md-options="tz.tz_array.map(x=>({
-			'name':x.name,
-			'desc': x.desc,
-			'toLowerCase':()=>x.desc.toLowerCase(),
-			'toString':()=>x.desc
-		}))" :class="requiredTimezone" :md-fuzzy-search="false"
-		>
-			<label>Timezone</label>
+			<md-autocomplete v-model="track.timezone" md-dense :md-options="tz.tz_array.map(x=>({
+				'name':x.name,
+				'desc': x.desc,
+				'toLowerCase':()=>x.desc.toLowerCase(),
+				'toString':()=>x.desc
+			}))" :class="requiredTimezone" :md-fuzzy-search="false"
+			>
+				<label>Timezone</label>
 
-			<template slot="md-autocomplete-item" slot-scope="{ item }">
-				<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
-				<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
-				{{ tzDisplay(item) }}
-			</template>
+				<template slot="md-autocomplete-item" slot-scope="{ item }">
+					<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
+					<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
+					{{ tzDisplay(item) }}
+				</template>
 
-			<template slot="md-autocomplete-empty" slot-scope="{ term }">
-				"{{ term }}" not found!
-			</template>
+				<template slot="md-autocomplete-empty" slot-scope="{ term }">
+					"{{ term }}" not found!
+				</template>
 
-			<span class="md-error">Please choose a timezone</span>
-		</md-autocomplete>
+				<span class="md-error">Please choose a timezone</span>
+			</md-autocomplete>
 
-		<md-field :class="requiredLength">
-			<label>Length</label>
-			<md-input v-model="track.length" required />
-			<span class="md-error">Please enter a valid length</span>
-		</md-field>
+			<md-field :class="requiredLength">
+				<label>Length</label>
+				<md-input v-model="track.length" required />
+				<span class="md-error">Please enter a valid length</span>
+			</md-field>
 
-		<md-field>
-			<label>Map</label>
-			<md-input v-model="track.map" />
-		</md-field>
+			<md-field>
+				<label>Map</label>
+				<md-input v-model="track.map" />
+			</md-field>
 
-		<md-dialog-actions>
-			<md-button class="md-primary md-accent" @click="showTrackDialog = false">
-				Cancel
-			</md-button>
-			<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-				{{ action }}
-			</md-button>
-		</md-dialog-actions>
+			<md-dialog-actions>
+				<md-button class="md-primary md-accent" @click="showTrackDialog = false">
+					Cancel
+				</md-button>
+				<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
+					{{ action }}
+				</md-button>
+			</md-dialog-actions>
+		</md-dialog-content>
 	</md-dialog>
 </div>
 </template>
@@ -203,15 +205,8 @@ export default {
 
 <style lang="scss">
 .md-dialog {
-	min-width: 33%;
+	min-width: 50%;
 }
-
-.md-field {
-	width: auto;
-	margin-left: 1em;
-	margin-right: 1em;
-}
-
 .md-menu-content {
 	z-index: 100;
 }
