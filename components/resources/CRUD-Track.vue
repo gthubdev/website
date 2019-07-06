@@ -11,8 +11,8 @@
 			</md-field>
 
 			<md-field>
-				<label>Location</label>
-				<md-input v-model="track.location" />
+				<label>Country</label>
+				<md-input v-model="track.country" />
 			</md-field>
 
 			<md-autocomplete v-model="track.timezone" md-dense :md-options="tz.tz_array.map(x=>({
@@ -88,7 +88,7 @@ export default {
 			showTrackDialog: false,
 			track: {
 				name: '',
-				location: '',
+				country: '',
 				timezone: '',
 				length: '',
 				map: ''
