@@ -18,7 +18,9 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 * Create the file `.env` and enter your configuration:
 ```
 # For the web server
+# Defaults to 3000 if not set
 PORT=3000
+# Defaults to 127.0.0.1 if not set
 IP=localhost
 
 # For MariaDB
@@ -27,7 +29,8 @@ DBName=DATABASE_NAME
 DBUser=DATABASE_USER
 DBPass=DATABASE_PASSWORD
 # Defaults to 3306 (MariaDB default)
-DBPort=DATABASE_PORT
+# Uncomment the following line, if you run MariaDB on a different port
+#DBPort=DATABASE_PORT
 ```
 You can use the supplied `.env.sample` as a base.
 
