@@ -17,10 +17,10 @@
 		>
 			<label>Local Timezone</label>
 
-			<template slot="md-autocomplete-item" slot-scope="{ item }">
-				<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
-				<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
-				{{ tzDisplay(item) }}
+			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+				<md-highlight-text :md-term="term.desc ? term.desc : term">
+					{{ tzDisplay(item) }}
+				</md-highlight-text>
 			</template>
 
 			<template slot="md-autocomplete-empty" slot-scope="{ term }">

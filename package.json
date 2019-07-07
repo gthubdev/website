@@ -20,6 +20,8 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.4",
+    "country-code-emoji": "^1.0.0",
+    "country-list": "^2.1.1",
     "cross-env": "^5.2.0",
     "dotenv": "^8.0.0",
     "eslint-plugin-html": "^6.0.0",

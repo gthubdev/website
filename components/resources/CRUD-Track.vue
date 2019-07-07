@@ -10,24 +10,35 @@
 				<span class="md-error">Please enter a name</span>
 			</md-field>
 
-			<md-field>
+			<md-autocomplete v-model="track.country" md-dense :md-options="getCountryNames()" :class="requiredCountry" :md-fuzzy-search="false">
 				<label>Country</label>
-				<md-input v-model="track.country" />
-			</md-field>
+
+				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+					<md-highlight-text :md-term="term">
+						{{ getCountryFlag(item) }} {{ item }}
+					</md-highlight-text>
+				</template>
+
+				<template slot="md-autocomplete-empty" slot-scope="{ term }">
+					"{{ term }}" not found!
+				</template>
+
+				<span class="md-error">Please choose a country</span>
+			</md-autocomplete>
 
 			<md-autocomplete v-model="track.timezone" md-dense :md-options="tz.tz_array.map(x=>({
 				'name':x.name,
 				'desc': x.desc,
 				'toLowerCase':()=>x.desc.toLowerCase(),
-				'toString':()=>x.desc
+				'toString':()=>tzDisplay(x)
 			}))" :class="requiredTimezone" :md-fuzzy-search="false"
 			>
 				<label>Timezone</label>
 
-				<template slot="md-autocomplete-item" slot-scope="{ item }">
-					<!-- <span class="color" :style="`background-color: ${item.color}`"></span> -->
-					<!-- <md-highlight-text :md-term="tzDisplay(item)">{{ tzDisplay(item) }}</md-highlight-text> -->
-					{{ tzDisplay(item) }}
+				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
+					<md-highlight-text :md-term="term.desc ? term.desc : term">
+						{{ tzDisplay(item) }}
+					</md-highlight-text>
 				</template>
 
 				<template slot="md-autocomplete-empty" slot-scope="{ term }">
@@ -63,6 +74,8 @@
 
 <script>
 import moment from 'moment-timezone';
+import cl from 'country-list';
+import flag from 'country-code-emoji';
 
 export default {
 	props: {
@@ -115,6 +128,11 @@ export default {
 				default:
 					return '';
 			}
+		},
+		requiredCountry() {
+			return {
+				'md-invalid': cl.getCode(this.track.country) === undefined
+			};
 		},
 		requiredName() {
 			return {
@@ -189,15 +207,19 @@ export default {
 		},
 		validInput: function() {
 			return this.track.name.length > 0 &&
-				this.validTimezone() &&
+				cl.getCode(this.track.country) !== undefined &&
+				this.track.timezone.desc &&
 				!isNaN(Number(this.track.length)) &&
 				Number(this.track.length) > 0;
 		},
-		validTimezone: function() {
-			return this.track.timezone.desc;
-		},
 		tzDisplay: function(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
+		},
+		getCountryNames: function() {
+			return cl.getNames();
+		},
+		getCountryFlag: function(country) {
+			return flag(cl.getCode(country));
 		}
 	}
 };
