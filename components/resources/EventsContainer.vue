@@ -4,6 +4,14 @@
 		<div class="md-layout-item md-display-1">
 			Events
 		</div>
+
+		<div class="md-layout-item">
+			<md-field md-clearable>
+				<label>Search term</label>
+				<md-input v-model="searchTerm" />
+			</md-field>
+		</div>
+
 		<div class="md-layout-item align-right">
 			<md-button class="md-raised md-primary btn-primary" @click.native="createEvent()">
 				Create Event
@@ -97,18 +105,21 @@ export default {
 			activeEvent: null,
 			activeEventSession: null,
 			showCurrentEvents: true,
-			mode: ''
+			mode: '',
+			searchTerm: ''
 		};
 	},
 	computed: {
 		filterEvents() {
 			if (this.showCurrentEvents === true)
 				return this.events.filter(event => {
-					return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
+					return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD')) &&
+					event.name.toLowerCase().includes(this.searchTerm.trim());
 				});
 			else
 				return this.events.filter(event => {
-					return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD'));
+					return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD')) &&
+					event.name.toLowerCase().includes(this.searchTerm.trim());
 				});
 		}
 	},
