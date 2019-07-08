@@ -180,10 +180,10 @@ export default {
 		}
 	},
 	watch: {
-		showDialog: function(newValue) {
+		showDialog(newValue) {
 			this.showEventSessionDialog = newValue;
 		},
-		showEventSessionDialog: function(newValue, oldValue) {
+		showEventSessionDialog(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudEventSession');
 			if (newValue === true && this.mode === 'create') {
@@ -205,7 +205,7 @@ export default {
 				this.eventtime.date = start.format('YYYY-MM-DD HH:mm');
 			}
 		},
-		activeSession: function(newValue) {
+		activeSession(newValue) {
 			if (this.mode === 'update' && newValue !== undefined) {
 				this.eventsession = JSON.parse(JSON.stringify(this.activeSession));
 				let s = this.eventsession.Series;
@@ -274,7 +274,7 @@ export default {
 					return '';
 			}
 		},
-		getAllSeries: function() {
+		getAllSeries() {
 			let arr = [];
 			if (this.event === null) {
 				return arr;
@@ -285,11 +285,11 @@ export default {
 			});
 			return arr;
 		},
-		getLocalTime: function(session) {
+		getLocalTime(session) {
 			let local_tz = this.event.Track.timezone;
 			return moment(session.starttime).tz(local_tz).format();
 		},
-		validInput: function() {
+		validInput() {
 			return this.eventsession.name.length > 0 &&
 			this.eventsession.series !== undefined && this.eventsession.series.id &&
 			this.eventtime.date !== null && this.eventtime.date !== '' &&

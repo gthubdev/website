@@ -109,10 +109,10 @@ export default {
 		}
 	},
 	watch: {
-		showDialog: function(newValue) {
+		showDialog(newValue) {
 			this.showSeriesDialog = newValue;
 		},
-		showSeriesDialog: function(newValue, oldValue) {
+		showSeriesDialog(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudSeries');
 			if (newValue === true && this.mode === 'create')
@@ -122,7 +122,7 @@ export default {
 				// Might need to reset the object
 				this.series = JSON.parse(JSON.stringify(this.activeSeries));
 		},
-		activeSeries: function(newValue) {
+		activeSeries(newValue) {
 			if (this.mode === 'update' && newValue !== undefined)
 				// Need to copy the object in order to not change it when cancelling
 				this.series = JSON.parse(JSON.stringify(this.activeSeries));
@@ -147,7 +147,7 @@ export default {
 			}
 			this.showSeriesDialog = false;
 		},
-		validInput: function() {
+		validInput() {
 			return this.series.name.length > 0 && this.series.priority >= 1;
 		}
 	}

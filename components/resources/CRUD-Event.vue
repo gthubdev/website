@@ -230,10 +230,10 @@ export default {
 		},
 	},
 	watch: {
-		showDialog: function(newValue) {
+		showDialog(newValue) {
 			this.showEventDialog = newValue;
 		},
-		showEventDialog: function(newValue, oldValue) {
+		showEventDialog(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudEvent');
 			if (newValue === true && this.mode === 'create') {
@@ -279,7 +279,7 @@ export default {
 				});
 			}
 		},
-		'event.mainseries': function(newValue, oldValue) {
+		'event.mainseries'(newValue, oldValue) {
 			// if a main series is removed as main series, add it to the list of possible support series
 			if (typeof newValue !== 'object') {
 				if (oldValue.id && this.tmpSupportSeries.findIndex(ss => ss.id == oldValue.id) < 0)
@@ -308,7 +308,7 @@ export default {
 				this.initMainSet = true;
 			}
 		},
-		chosenSupportSeries: function(newValue) {
+		chosenSupportSeries(newValue) {
 			if (newValue !== undefined && newValue.name && newValue.name.length) {
 				this.series.forEach(s => {
 					if (s.name === newValue.name) {
@@ -358,11 +358,11 @@ export default {
 					return '';
 			}
 		},
-		removeSupportSeries: function(series, index) {
+		removeSupportSeries(series, index) {
 			this.supportseries.splice(index, 1);
 			this.tmpSupportSeries.push(series);
 		},
-		validInput: function() {
+		validInput() {
 			return this.event.name.length > 0 &&
 			this.event.track !== undefined && this.event.track.id &&
 			this.event.mainseries !== undefined && this.event.mainseries.id &&

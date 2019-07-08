@@ -151,10 +151,10 @@ export default {
 		}
 	},
 	watch: {
-		showDialog: function(newValue) {
+		showDialog(newValue) {
 			this.showTrackDialog = newValue;
 		},
-		showTrackDialog: function(newValue, oldValue) {
+		showTrackDialog(newValue, oldValue) {
 			if (oldValue === true)
 				this.$root.$emit('toggleCrudTrack');
 			if (newValue === true && this.mode === 'create')
@@ -172,7 +172,7 @@ export default {
 				};
 			}
 		},
-		activeTrack: function(newValue) {
+		activeTrack(newValue) {
 			if (this.mode === 'update' && newValue !== undefined)
 				// Need to copy the object in order to not change it when cancelling
 				this.track = JSON.parse(JSON.stringify(this.activeTrack));
@@ -205,20 +205,20 @@ export default {
 			}
 			this.showTrackDialog = false;
 		},
-		validInput: function() {
+		validInput() {
 			return this.track.name.length > 0 &&
 				cl.getCode(this.track.country) !== undefined &&
 				this.track.timezone.desc &&
 				!isNaN(Number(this.track.length)) &&
 				Number(this.track.length) > 0;
 		},
-		tzDisplay: function(item) {
+		tzDisplay(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
 		},
-		getCountryNames: function() {
+		getCountryNames() {
 			return cl.getNames();
 		},
-		getCountryFlag: function(country) {
+		getCountryFlag(country) {
 			return flag(cl.getCode(country));
 		}
 	}
