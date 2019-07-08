@@ -4,6 +4,14 @@
 		<div class="md-layout-item md-display-1">
 			Tracks
 		</div>
+
+		<div class="md-layout-item">
+			<md-field md-clearable>
+				<label>Search term</label>
+				<md-input v-model="searchTerm" />
+			</md-field>
+		</div>
+
 		<div class="md-layout-item align-right">
 			<md-button class="md-raised md-primary btn-primary" @click.native="createTrack()">
 				Create Track
@@ -12,7 +20,7 @@
 	</div>
 
 	<md-list>
-		<md-list-item v-for="t in tracks" :key="t.id">
+		<md-list-item v-for="t in filterTracks" :key="t.id">
 			<span class="md-list-item-text">{{ t.name }}</span>
 			<md-icon @click.native="updateTrack(t)">
 				edit
@@ -53,8 +61,19 @@ export default {
 		return {
 			showDialog: false,
 			activeTrack: null,
-			mode: ''
+			mode: '',
+			searchTerm: ''
 		};
+	},
+	computed: {
+		filterTracks() {
+			if (this.searchTerm.trim() === '')
+				return this.tracks;
+			else
+				return this.tracks.filter(track => {
+					return track.name.toLowerCase().includes(this.searchTerm.trim());
+				});
+		}
 	},
 	mounted() {
 		this.$root.$on('toggleCrudTrack', () => {
