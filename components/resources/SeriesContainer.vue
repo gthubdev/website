@@ -4,6 +4,14 @@
 		<div class="md-layout-item md-display-1">
 			Series
 		</div>
+
+		<div class="md-layout-item">
+			<md-field md-clearable>
+				<label>Search term</label>
+				<md-input v-model="searchTerm" />
+			</md-field>
+		</div>
+
 		<div class="md-layout-item align-right">
 			<md-button class="md-raised md-primary btn-primary" @click.native="createSeries()">
 				Create Series
@@ -11,7 +19,7 @@
 		</div>
 	</div>
 	<md-list>
-		<md-list-item v-for="s in series" :key="s.id">
+		<md-list-item v-for="s in filterSeries" :key="s.id">
 			<span class="md-list-item-text">{{ s.name }}</span>
 			<md-icon @click.native="updateSeries(s)">
 				edit
@@ -47,8 +55,19 @@ export default {
 		return {
 			showDialog: false,
 			activeSeries: null,
-			mode: ''
+			mode: '',
+			searchTerm: ''
 		};
+	},
+	computed: {
+		filterSeries() {
+			if (this.searchTerm.trim() === '')
+				return this.series;
+			else
+				return this.series.filter(series => {
+					return series.name.toLowerCase().includes(this.searchTerm.trim());
+				});
+		}
 	},
 	mounted() {
 		this.$root.$on('toggleCrudSeries', () => {
