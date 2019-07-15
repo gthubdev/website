@@ -20,7 +20,7 @@ function buildCalendar(req, res, timezone) {
 		db.Event.findAll({
 			include: [
 				{ model: db.Track },
-				{ model: db.Series},
+				{ model: db.Series },
 				{
 					model: db.SupportSeries,
 				 	include: [
@@ -50,8 +50,24 @@ function buildCalendar(req, res, timezone) {
 			order: [
 				['name', 'ASC']
 			]
+		}),
+		db.VehicleClassCategory.findAll({
+			include: [
+				{ model: db.VehicleClass }
+			],
+			order: [
+				['name', 'ASC'],
+			]
+		}),
+		db.VehicleClass.findAll({
+			include: [
+				{ model: db.VehicleClassCategory }
+			],
+			order: [
+				['name', 'ASC']
+			]
 		})
-	]).spread((events, series, tracks) => {
+	]).spread((events, series, tracks, vehicleclasscategories, vehicleclasses) => {
 
 		// timezone-info
 		let tz = {
@@ -65,6 +81,8 @@ function buildCalendar(req, res, timezone) {
 			events: events,
 			series: series,
 			tracks: tracks,
+			vehicleclasscategories: vehicleclasscategories,
+			vehicleclasses: vehicleclasses,
 			tz: tz
 		};
 
