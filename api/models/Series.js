@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'series',
 			onDelete: 'RESTRICT'
 		});
+		models.Series.hasMany(models.SeriesType, {
+			foreignKey: 'series',
+			onDelete: 'RESTRICT'
+		});
 	};
 
 	return Series;

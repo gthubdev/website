@@ -1,9 +1,3 @@
-INSERT INTO Usertype (id, name) VALUES (1, 'Admin');
-INSERT INTO Usertype (id, name) VALUES (2, 'TV Crew');
-
-# Password is 'admin'
-INSERT INTO User (username, password, name, usertype) VALUES ('admin', '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.', 'Admin', 1);
-
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (1, "Nordschleife", "Germany", 20.832, "", "Europe/Brussels");
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (2, "Mount Panorama Circuit", "Australia", 6.213, "", "Australia/Sydney");
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (3, "Circuit de Spa-Francorchamps", "Belgium", 7.004, "", "Europe/Brussels");
@@ -46,3 +40,19 @@ INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Top
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Inaugural GT2 race", "2019-07-26 18:00", 3, 4, 60);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Top 30 Qualifying", "2019-07-27 10:00", 3, 3, 45);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Race", "2019-07-27 16:00", 3, 3, 1440);
+
+# Vehicle Class Categories
+INSERT INTO VehicleClassCategory (id, name) VALUES (1, 'Prototype');
+INSERT INTO VehicleClassCategory (id, name) VALUES (2, 'Sportscar');
+INSERT INTO VehicleClassCategory (id, name) VALUES (3, 'Open Wheeler');
+
+# Vehicle Classes
+INSERT INTO VehicleClass (id, name, category) VALUES (1, 'LMP1', 1);
+INSERT INTO VehicleClass (id, name, category) VALUES (2, 'LMP2', 1);
+INSERT INTO VehicleClass (id, name, category) VALUES (3, 'LMP3', 1);
+INSERT INTO VehicleClass (id, name, category) VALUES (4, 'GT2', 2);
+INSERT INTO VehicleClass (id, name, category) VALUES (5, 'GT3', 2);
+INSERT INTO VehicleClass (id, name, category) VALUES (6, 'GT4', 2);
+INSERT INTO VehicleClass (id, name, category) VALUES (7, 'Formula 1', 3);
+INSERT INTO VehicleClass (id, name, category) VALUES (8, 'Formula 2', 3);
+INSERT INTO VehicleClass (id, name, category) VALUES (9, 'Formula 3', 3);
