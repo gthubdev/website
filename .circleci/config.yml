@@ -41,6 +41,9 @@ jobs:
       # create the database
       - run: npm run create_tables
 
+      # initialize data
+      - run: npm run init_data
+
       # insert the testdata
       - run: npm run insert_testdata
 
