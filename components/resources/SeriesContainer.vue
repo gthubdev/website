@@ -34,6 +34,7 @@
 		:show-dialog="showDialog"
 		:active-series="activeSeries"
 		:mode="mode"
+		:vc="vehicleclasses"
 	/>
 </div>
 </template>
@@ -47,6 +48,10 @@ export default {
 	},
 	props: {
 		series: {
+			type: Array,
+			default() { return []; }
+		},
+		vehicleclasses: {
 			type: Array,
 			default() { return []; }
 		}
@@ -105,5 +110,6 @@ export default {
 .md-list {
 	background-color: rgba(0, 0, 0, 0.3);
 	margin-top: 0.5em;
+	border-radius: 20px;
 }
 </style>

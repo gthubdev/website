@@ -191,5 +191,6 @@ export default {
 .md-list {
 	background-color: rgba(0, 0, 0, 0.3);
 	margin-top: 0.5em;
+	border-radius: 20px;
 }
 </style>

@@ -41,6 +41,19 @@ function buildCalendar(req, res, timezone) {
 			]
 		}),
 		db.Series.findAll({
+			include: [
+				{
+					model: db.SeriesType,
+					include: [
+						{
+							model: db.VehicleClass,
+							include: [
+								{ model: db.VehicleClassCategory }
+							]
+						}
+					]
+				}
+			],
 			order: [
 				['priority', 'ASC'],
 				['name', 'ASC']

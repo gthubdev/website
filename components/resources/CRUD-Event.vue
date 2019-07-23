@@ -70,7 +70,7 @@
 				<label>Support Series</label>
 				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
 					<span class="color" :style="`background-color: ${item.color}`" />
-					<md-highlight-text :md-term="typeof term === 'object' && term.name ? term.name : ''">
+					<md-highlight-text :md-term="typeof term === 'object' && term.name ? term.name : term.toString()">
 						{{ item.name }}
 					</md-highlight-text>
 				</template>
