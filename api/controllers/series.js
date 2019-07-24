@@ -1,23 +1,87 @@
 const db = require('../models/');
+const Sequelize = require('sequelize');
 const util = require('../util/util.js');
 
 module.exports.createSeries = (req, res) => {
 	db.Series.create(req.body.series)
-	.then(series => {
-		util.print('Series \'' + series.name + '\' created');
-		res.json(series.get({plain:true}));
+	.then(newseries => {
+		let vclarray = [];
+		req.body.series.vehicleClasses.forEach(vcl => {
+			vclarray.push({
+				series: newseries.id,
+				class: vcl.id
+			});
+		});
+		db.SeriesType.bulkCreate(vclarray)
+		.then(() => {
+			return db.Series.findOne({
+				where: { id: newseries.id },
+				include: [
+					{
+						model: db.SeriesType,
+						include: [
+							{
+								model: db.VehicleClass,
+								include: [
+									{ model: db.VehicleClassCategory }
+								]
+							}
+						]
+					}
+				]
+			})
+		}).then(series => {
+			util.print('Series \'' + series.name + '\' created');
+			res.json(series.get({plain:true}));
+		}, err => {
+			util.error(req, res, err);
+		});
 	}, err => {
 		util.error(req, res, err);
 	});
 };
 
 module.exports.updateSeries = (req, res) => {
-	db.Series.update(req.body.series,
-		{where: { id: req.params.id }
-	}).then(response => {
-		if (response[0] >= 1)
-			util.print(response[0] + ' Series updated');
-		res.json({ updated: response[0] });
+	Sequelize.Promise.all([
+		db.Series.update(req.body.series,
+			{ where: { id: req.params.id } }
+		),
+		db.SeriesType.destroy({
+			where: { series: req.params.id }
+		})
+	]).spread((updated, deleted) => {
+		//build the array with the series.id for vehicle classes
+		let vclarray = [];
+		req.body.series.vehicleClasses.forEach(vcl => {
+			vclarray.push({
+				series: req.params.id,
+				class: vcl.id
+			});
+		});
+		db.SeriesType.bulkCreate(vclarray)
+		.then(() => {
+			return db.Series.findOne({
+				where: { id: req.params.id },
+				include: [
+					{
+						model: db.SeriesType,
+						include: [
+							{
+								model: db.VehicleClass,
+								include: [
+									{ model: db.VehicleClassCategory }
+								]
+							}
+						]
+					}
+				]
+			})
+		}).then(series => {
+			util.print('Series \'' + series.name + '\' updated');
+			res.json(series.get({plain:true}));
+		}, err => {
+			util.error(req, res, err);
+		});
 	}, err => {
 		util.error(req, res, err);
 	});

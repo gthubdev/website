@@ -28,9 +28,8 @@ DBHost=DATABASE_HOST
 DBName=DATABASE_NAME
 DBUser=DATABASE_USER
 DBPass=DATABASE_PASSWORD
-# Defaults to 3306 (MariaDB default)
-# Uncomment the following line, if you run MariaDB on a different port
-#DBPort=DATABASE_PORT
+# Defaults to 3306 if not set (MariaDB default)
+DBPort=3306
 ```
 You can use the supplied `.env.sample` as a base.
 
@@ -40,7 +39,11 @@ You can use the supplied `.env.sample` as a base.
 * Create the tables with:
 `npm run create_tables`
 
-* Insert testdata with:
+* Initialize data with:
+`npm run init_data`<br>
+You can now login with `admin / admin`.
+
+* [Optional] Insert testdata with:
 `npm run insert_testdata`
 
 ## Run

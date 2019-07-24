@@ -8,15 +8,16 @@
 				:tracks="data.tracks"
 			/>
 		</md-tab>
+		<md-tab id="tab-series" md-label="Series">
+			<SeriesContainer
+				:series="data.series"
+				:vehicleclasses="data.vehicleclasses"
+			/>
+		</md-tab>
 		<md-tab id="tab-tracks" md-label="Tracks">
 			<TracksContainer
 				:tracks="data.tracks"
 				:tz="data.tz"
-			/>
-		</md-tab>
-		<md-tab id="tab-series" md-label="Series">
-			<SeriesContainer
-				:series="data.series"
 			/>
 		</md-tab>
 	</md-tabs>
