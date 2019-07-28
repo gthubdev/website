@@ -113,6 +113,7 @@ export default {
 			event.EventSessions.splice(sessionindex, 1);
 			this.$root.$emit('showToast', 'Session ' + session.name + ' deleted');
 		});
+		// Series
 		this.$root.$on('seriesCreated', obj => {
 			this.data.series.push(obj);
 			this.data.series.sort((a,b) => {
@@ -134,12 +135,13 @@ export default {
 			});
 			this.$root.$emit('showToast', 'Series ' + updatedSeries.name + ' updated');
 		});
-		this.$root.$on('seriesDeleted', seriesid => {
-			let index = this.data.series.findIndex(s => s.id == seriesid);
-			let series = this.data.series.find(s => s.id == seriesid);
-			this.data.series.splice(index, 1);
-			this.$root.$emit('showToast', 'Series ' + series.name + ' deleted');
+		this.$root.$on('confirmDeleteSeries', series => {
+			this.confirmDelete.type = 'series';
+			this.confirmDelete.resource = series;
+			this.confirmDelete.content = 'Do you really want to delete Series \"' + series.name + '\" ?';
+			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
+		// Tracks
 		this.$root.$on('trackCreated', obj => {
 			this.data.tracks.push(obj);
 			this.data.tracks.sort((a,b) => {
@@ -163,12 +165,22 @@ export default {
 		async deleteResource(type, resource) {
 			try {
 				const res = await this.$axios.$post('/api/calendar/' + type + '/delete/' + resource.id);
-				if (res.deleted >= 1)
-					this.trackDeleted(resource.id);
+				if (res.deleted >= 1) {
+					switch (type) {
+						case 'series': this.seriesDeleted(resource.id); break;
+						case 'track': this.trackDeleted(resource.id); break;
+					}
+				}
 			} catch(err) {
 				if (err.response && err.response.status === 409)
 					alert(err.response.data);
 			}
+		},
+		seriesDeleted(seriesid) {
+			let index = this.data.series.findIndex(s => s.id == seriesid);
+			let series = this.data.series.find(s => s.id == seriesid);
+			this.data.series.splice(index, 1);
+			this.$root.$emit('showToast', 'Series ' + series.name + ' deleted');
 		},
 		trackDeleted(trackid) {
 			let index = this.data.tracks.findIndex(t => t.id == trackid);
