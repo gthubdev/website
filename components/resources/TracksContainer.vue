@@ -25,7 +25,7 @@
 			<md-icon @click.native="updateTrack(t)">
 				edit
 			</md-icon>
-			<md-icon @click.native="deleteTrack(t.id)">
+			<md-icon @click.native="deleteTrack(t)">
 				delete
 			</md-icon>
 		</md-list-item>
@@ -81,16 +81,6 @@ export default {
 		});
 	},
 	methods: {
-		async deleteTrack(id) {
-			try {
-				const res = await this.$axios.$post('/api/calendar/track/delete/' + id);
-				if (res.deleted >= 1)
-					this.$root.$emit('trackDeleted', id);
-			} catch(err) {
-				if (err.response && err.response.status === 409)
-					alert(err.response.data);
-			}
-		},
 		createTrack() {
 			this.mode = 'create';
 			this.showDialog = !this.showDialog;
@@ -99,6 +89,9 @@ export default {
 			this.activeTrack = track;
 			this.mode = 'update';
 			this.showDialog = !this.showDialog;
+		},
+		deleteTrack(track) {
+			this.$root.$emit('confirmDeleteTrack', track);
 		}
 	}
 };

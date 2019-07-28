@@ -21,6 +21,14 @@
 			/>
 		</md-tab>
 	</md-tabs>
+	<md-dialog-confirm
+		:md-active.sync="confirmDelete.showDialog"
+		md-title="Are you sure ?"
+		:md-content="confirmDelete.content"
+		md-confirm-text="Delete"
+		md-cancel-text="Cancel"
+		@md-confirm="deleteResource(confirmDelete.type, confirmDelete.resource)"
+	/>
 </div>
 </template>
 
@@ -35,7 +43,13 @@ export default {
 	},
 	data: function() {
 		return {
-			data: []
+			data: [],
+			confirmDelete: {
+				showDialog: false,
+				type: '',
+				resource: {},
+				content: ''
+			}
 		};
 	},
 	async asyncData({
@@ -138,12 +152,30 @@ export default {
 			this.data.tracks.splice(index, 1, updatedTrack);
 			this.$root.$emit('showToast', 'Track ' + updatedTrack.name + ' updated');
 		});
-		this.$root.$on('trackDeleted', trackid => {
+		this.$root.$on('confirmDeleteTrack', track => {
+			this.confirmDelete.type = 'track';
+			this.confirmDelete.resource = track;
+			this.confirmDelete.content = 'Do you really want to delete Track \"' + track.name + '\" ?';
+			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
+		});
+	},
+	methods: {
+		async deleteResource(type, resource) {
+			try {
+				const res = await this.$axios.$post('/api/calendar/' + type + '/delete/' + resource.id);
+				if (res.deleted >= 1)
+					this.trackDeleted(resource.id);
+			} catch(err) {
+				if (err.response && err.response.status === 409)
+					alert(err.response.data);
+			}
+		},
+		trackDeleted(trackid) {
 			let index = this.data.tracks.findIndex(t => t.id == trackid);
 			let track = this.data.tracks.find(t => t.id == trackid);
 			this.data.tracks.splice(index, 1);
 			this.$root.$emit('showToast', 'Track ' + track.name + ' deleted');
-		});
+		}
 	}
 };
 </script>

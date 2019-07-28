@@ -53,6 +53,7 @@ module.exports = {
 			'svg': 'always',
 			'math': 'always'
 		}],
-		'vue/max-attributes-per-line': 'off'
+		'vue/max-attributes-per-line': 'off',
+		'no-useless-escape': 'off'
 	}
 };
