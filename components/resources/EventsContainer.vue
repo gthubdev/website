@@ -52,7 +52,7 @@
 			<md-icon @click.native="updateEvent(e)">
 				edit
 			</md-icon>
-			<md-icon @click.native="deleteEvent(e.id)">
+			<md-icon @click.native="deleteEvent(e)">
 				delete
 			</md-icon>
 		</md-list-item>
@@ -136,11 +136,6 @@ export default {
 		});
 	},
 	methods: {
-		async deleteEvent(id) {
-			const res = await this.$axios.$post('/api/calendar/event/delete/' + id);
-			if (res.deleted >= 1)
-				this.$root.$emit('eventDeleted', id);
-		},
 		async deleteSession(eventid, sessionid) {
 			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
 			if (res.deleted >= 1)
@@ -165,6 +160,9 @@ export default {
 			this.activeEventSession = session;
 			this.mode = 'update';
 			this.showSessionDialog = !this.showSessionDialog;
+		},
+		deleteEvent(event) {
+			this.$root.$emit('confirmDeleteEvent', event);
 		},
 		toggleSessions(id) {
 			if (this.shownSessions.includes(id)) {

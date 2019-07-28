@@ -61,6 +61,7 @@ export default {
 		};
 	},
 	mounted() {
+		// Events
 		this.$root.$on('eventCreated', obj => {
 			this.data.events.push(obj);
 			this.data.events.sort((a,b) => {
@@ -82,11 +83,11 @@ export default {
 			});
 			this.$root.$emit('showToast', 'Event ' + event.name + ' updated');
 		});
-		this.$root.$on('eventDeleted', eventid => {
-			let index = this.data.events.findIndex(e => e.id == eventid);
-			let event = this.data.events.find(e => e.id == eventid);
-			this.data.events.splice(index, 1);
-			this.$root.$emit('showToast', 'Event ' + event.name + ' deleted');
+		this.$root.$on('confirmDeleteEvent', event => {
+			this.confirmDelete.type = 'event';
+			this.confirmDelete.resource = event;
+			this.confirmDelete.content = 'Do you really want to delete the Event \"' + event.name + '\" ?';
+			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
 		// EventSessions
 		this.$root.$on('eventSessionCreated', session => {
@@ -138,7 +139,7 @@ export default {
 		this.$root.$on('confirmDeleteSeries', series => {
 			this.confirmDelete.type = 'series';
 			this.confirmDelete.resource = series;
-			this.confirmDelete.content = 'Do you really want to delete Series \"' + series.name + '\" ?';
+			this.confirmDelete.content = 'Do you really want to delete the Series \"' + series.name + '\" ?';
 			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
 		// Tracks
@@ -157,7 +158,7 @@ export default {
 		this.$root.$on('confirmDeleteTrack', track => {
 			this.confirmDelete.type = 'track';
 			this.confirmDelete.resource = track;
-			this.confirmDelete.content = 'Do you really want to delete Track \"' + track.name + '\" ?';
+			this.confirmDelete.content = 'Do you really want to delete the Track \"' + track.name + '\" ?';
 			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
 	},
@@ -167,6 +168,7 @@ export default {
 				const res = await this.$axios.$post('/api/calendar/' + type + '/delete/' + resource.id);
 				if (res.deleted >= 1) {
 					switch (type) {
+						case 'event': this.eventDeleted(resource.id); break;
 						case 'series': this.seriesDeleted(resource.id); break;
 						case 'track': this.trackDeleted(resource.id); break;
 					}
@@ -175,6 +177,12 @@ export default {
 				if (err.response && err.response.status === 409)
 					alert(err.response.data);
 			}
+		},
+		eventDeleted(eventid) {
+			let index = this.data.events.findIndex(e => e.id == eventid);
+			let event = this.data.events.find(e => e.id == eventid);
+			this.data.events.splice(index, 1);
+			this.$root.$emit('showToast', 'Event ' + event.name + ' deleted');
 		},
 		seriesDeleted(seriesid) {
 			let index = this.data.series.findIndex(s => s.id == seriesid);
