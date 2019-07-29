@@ -15,7 +15,7 @@
 								<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ getLocalTime(es) }}
 							</div>
 							<div class="md-layout-item">
-								<md-icon class="" @click.native="deleteSession(es.id)">
+								<md-icon class="" @click.native="deleteSession(es)">
 									delete
 								</md-icon>
 							</div>
@@ -252,10 +252,8 @@ export default {
 				this.showEventSessionDialog = false;
 			}
 		},
-		async deleteSession(sessionid) {
-			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
-			if (res.deleted >= 1)
-				this.$root.$emit('eventSessionDeleted', this.event.id, sessionid);
+		deleteSession(session) {
+			this.$root.$emit('confirmDeleteEventSession', session);
 		},
 		headline() {
 			switch(this.mode) {

@@ -39,7 +39,7 @@
 							<md-icon @click.native="updateEventSession(e, s)">
 								edit
 							</md-icon>
-							<md-icon @click.native="deleteSession(e.id, s.id)">
+							<md-icon @click.native="deleteSession(s)">
 								delete
 							</md-icon>
 						</md-list-item>
@@ -136,11 +136,6 @@ export default {
 		});
 	},
 	methods: {
-		async deleteSession(eventid, sessionid) {
-			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
-			if (res.deleted >= 1)
-				this.$root.$emit('eventSessionDeleted', eventid, sessionid);
-		},
 		createEvent() {
 			this.mode = 'create';
 			this.showEventDialog = !this.showEventDialog;
@@ -163,6 +158,9 @@ export default {
 		},
 		deleteEvent(event) {
 			this.$root.$emit('confirmDeleteEvent', event);
+		},
+		deleteSession(session) {
+			this.$root.$emit('confirmDeleteEventSession', session);
 		},
 		toggleSessions(id) {
 			if (this.shownSessions.includes(id)) {

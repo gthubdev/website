@@ -107,12 +107,11 @@ export default {
 			});
 			this.$root.$emit('showToast', 'Session ' + session.name + ' updated');
 		});
-		this.$root.$on('eventSessionDeleted', (eventid, sessionid) => {
-			let event = this.data.events.find(e => e.id == eventid);
-			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
-			let session = event.EventSessions.find(s => s.id == sessionid);
-			event.EventSessions.splice(sessionindex, 1);
-			this.$root.$emit('showToast', 'Session ' + session.name + ' deleted');
+		this.$root.$on('confirmDeleteEventSession', (session) => {
+			this.confirmDelete.type = 'eventsession';
+			this.confirmDelete.resource = session;
+			this.confirmDelete.content = 'Do you really want to delete the Session \"' + session.name + '\" ?';
+			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
 		// Series
 		this.$root.$on('seriesCreated', obj => {
@@ -169,13 +168,17 @@ export default {
 				if (res.deleted >= 1) {
 					switch (type) {
 						case 'event': this.eventDeleted(resource.id); break;
+						case 'eventsession': this.eventSessionDeleted(resource.id); break;
 						case 'series': this.seriesDeleted(resource.id); break;
 						case 'track': this.trackDeleted(resource.id); break;
+						default: alert('Something is fucked. Please call the SRO Press Office.');
 					}
 				}
 			} catch(err) {
 				if (err.response && err.response.status === 409)
 					alert(err.response.data);
+				else if (err.response)
+					alert(err.response);
 			}
 		},
 		eventDeleted(eventid) {
@@ -183,6 +186,13 @@ export default {
 			let event = this.data.events.find(e => e.id == eventid);
 			this.data.events.splice(index, 1);
 			this.$root.$emit('showToast', 'Event ' + event.name + ' deleted');
+		},
+		eventSessionDeleted(sessionid) {
+			let event = this.findEventBySessionId(sessionid);
+			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
+			let session = event.EventSessions.find(s => s.id == sessionid);
+			event.EventSessions.splice(sessionindex, 1);
+			this.$root.$emit('showToast', 'Session ' + session.name + ' deleted');
 		},
 		seriesDeleted(seriesid) {
 			let index = this.data.series.findIndex(s => s.id == seriesid);
@@ -195,6 +205,14 @@ export default {
 			let track = this.data.tracks.find(t => t.id == trackid);
 			this.data.tracks.splice(index, 1);
 			this.$root.$emit('showToast', 'Track ' + track.name + ' deleted');
+		},
+		findEventBySessionId(sessionid) {
+			for (let i = 0; i < this.data.events.length; i++) {
+				for (let j = 0; j < this.data.events[i].EventSessions.length; j++) {
+					if (this.data.events[i].EventSessions[j].id == sessionid)
+						return this.data.events[i];
+				}
+			}
 		}
 	}
 };
