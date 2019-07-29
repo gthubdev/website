@@ -15,7 +15,7 @@
 								<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ getLocalTime(es) }}
 							</div>
 							<div class="md-layout-item">
-								<md-icon class="" @click.native="deleteSession(es.id)">
+								<md-icon class="" @click.native="deleteSession(es)">
 									delete
 								</md-icon>
 							</div>
@@ -234,28 +234,36 @@ export default {
 			session.timezone = this.event.Track.timezone;
 
 			if (this.mode === 'create') {
-				const res = await this.$axios.$post('/api/calendar/eventsession/create', {
-					session
-				});
-				this.$root.$emit('eventSessionCreated', res);
-				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
-				Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
-				if (event !== null)
+				try {
+					const res = await this.$axios.$post('/api/calendar/eventsession/create', {
+						session
+					});
+					this.$root.$emit('eventSessionCreated', res);
+					Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
+					Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
+					if (event !== null)
 					this.eventname = this.event.name;
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			} else if (this.mode === 'update') {
 				delete session.createdAt;
-				const res = await this.$axios.$post('/api/calendar/eventsession/update/' + session.id, {
-					session
-				});
-				if (res.id)
+				try {
+					const res = await this.$axios.$post('/api/calendar/eventsession/update/' + session.id, {
+						session
+					});
+					if (res.id)
 					this.$root.$emit('eventSessionUpdated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 				this.showEventSessionDialog = false;
 			}
 		},
-		async deleteSession(sessionid) {
-			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
-			if (res.deleted >= 1)
-				this.$root.$emit('eventSessionDeleted', this.event.id, sessionid);
+		deleteSession(session) {
+			this.$root.$emit('confirmDeleteEventSession', session);
 		},
 		headline() {
 			switch(this.mode) {

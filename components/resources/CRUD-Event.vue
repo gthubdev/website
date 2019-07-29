@@ -334,17 +334,27 @@ export default {
 			event.supportseries = this.supportseries;
 
 			if (this.mode === 'create') {
-				const res = await this.$axios.$post('/api/calendar/event/create', {
-					event
-				});
-				this.$root.$emit('eventCreated', res);
+				try {
+					const res = await this.$axios.$post('/api/calendar/event/create', {
+						event
+					});
+					this.$root.$emit('eventCreated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			} else if (this.mode === 'update') {
 				delete event.createdAt;
-				const res = await this.$axios.$post('/api/calendar/event/update/' + event.id, {
-					event
-				});
-				if (res.id && res.id >= 1)
-					this.$root.$emit('eventUpdated', res);
+				try {
+					const res = await this.$axios.$post('/api/calendar/event/update/' + event.id, {
+						event
+					});
+					if (res.id && res.id >= 1)
+						this.$root.$emit('eventUpdated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			}
 			this.showEventDialog = false;
 		},

@@ -39,7 +39,7 @@
 							<md-icon @click.native="updateEventSession(e, s)">
 								edit
 							</md-icon>
-							<md-icon @click.native="deleteSession(e.id, s.id)">
+							<md-icon @click.native="deleteSession(s)">
 								delete
 							</md-icon>
 						</md-list-item>
@@ -52,7 +52,7 @@
 			<md-icon @click.native="updateEvent(e)">
 				edit
 			</md-icon>
-			<md-icon @click.native="deleteEvent(e.id)">
+			<md-icon @click.native="deleteEvent(e)">
 				delete
 			</md-icon>
 		</md-list-item>
@@ -136,16 +136,6 @@ export default {
 		});
 	},
 	methods: {
-		async deleteEvent(id) {
-			const res = await this.$axios.$post('/api/calendar/event/delete/' + id);
-			if (res.deleted >= 1)
-				this.$root.$emit('eventDeleted', id);
-		},
-		async deleteSession(eventid, sessionid) {
-			const res = await this.$axios.$post('/api/calendar/eventsession/delete/' + sessionid);
-			if (res.deleted >= 1)
-				this.$root.$emit('eventSessionDeleted', eventid, sessionid);
-		},
 		createEvent() {
 			this.mode = 'create';
 			this.showEventDialog = !this.showEventDialog;
@@ -165,6 +155,12 @@ export default {
 			this.activeEventSession = session;
 			this.mode = 'update';
 			this.showSessionDialog = !this.showSessionDialog;
+		},
+		deleteEvent(event) {
+			this.$root.$emit('confirmDeleteEvent', event);
+		},
+		deleteSession(session) {
+			this.$root.$emit('confirmDeleteEventSession', session);
 		},
 		toggleSessions(id) {
 			if (this.shownSessions.includes(id)) {

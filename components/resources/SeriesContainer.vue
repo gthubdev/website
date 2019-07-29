@@ -24,7 +24,7 @@
 			<md-icon @click.native="updateSeries(s)">
 				edit
 			</md-icon>
-			<md-icon @click.native="deleteSeries(s.id)">
+			<md-icon @click.native="deleteSeries(s)">
 				delete
 			</md-icon>
 		</md-list-item>
@@ -80,16 +80,6 @@ export default {
 		});
 	},
 	methods: {
-		async deleteSeries(id) {
-			try {
-				const res = await this.$axios.$post('/api/calendar/series/delete/' + id);
-				if (res.deleted >= 1)
-					this.$root.$emit('seriesDeleted', id);
-			} catch(err) {
-				if (err.response && err.response.status == 409)
-					alert(err.response.data);
-			}
-		},
 		createSeries() {
 			this.mode = 'create';
 			this.showDialog = !this.showDialog;
@@ -98,6 +88,9 @@ export default {
 			this.activeSeries = series;
 			this.mode = 'update';
 			this.showDialog = !this.showDialog;
+		},
+		deleteSeries(series) {
+			this.$root.$emit('confirmDeleteSeries', series);
 		}
 	}
 };
