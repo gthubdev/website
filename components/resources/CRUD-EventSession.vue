@@ -234,21 +234,31 @@ export default {
 			session.timezone = this.event.Track.timezone;
 
 			if (this.mode === 'create') {
-				const res = await this.$axios.$post('/api/calendar/eventsession/create', {
-					session
-				});
-				this.$root.$emit('eventSessionCreated', res);
-				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
-				Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
-				if (event !== null)
+				try {
+					const res = await this.$axios.$post('/api/calendar/eventsession/create', {
+						session
+					});
+					this.$root.$emit('eventSessionCreated', res);
+					Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
+					Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
+					if (event !== null)
 					this.eventname = this.event.name;
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			} else if (this.mode === 'update') {
 				delete session.createdAt;
-				const res = await this.$axios.$post('/api/calendar/eventsession/update/' + session.id, {
-					session
-				});
-				if (res.id)
+				try {
+					const res = await this.$axios.$post('/api/calendar/eventsession/update/' + session.id, {
+						session
+					});
+					if (res.id)
 					this.$root.$emit('eventSessionUpdated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 				this.showEventSessionDialog = false;
 			}
 		},

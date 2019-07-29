@@ -223,18 +223,28 @@ export default {
 			const series = JSON.parse(JSON.stringify(this.series));
 			series.vehicleClasses = this.vehicleClasses;
 			if (this.mode === 'create') {
-				const res = await this.$axios.$post('/api/calendar/series/create', {
-					series
-				});
-				this.$root.$emit('seriesCreated', res);
+				try {
+					const res = await this.$axios.$post('/api/calendar/series/create', {
+						series
+					});
+					this.$root.$emit('seriesCreated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			} else if (this.mode === 'update') {
 				// no need to update that
 				delete series.createdAt;
-				const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
-					series
-				});
-				if (res.id && res.id >= 1)
+				try {
+					const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
+						series
+					});
+					if (res.id && res.id >= 1)
 					this.$root.$emit('seriesUpdated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			}
 			this.showSeriesDialog = false;
 		},

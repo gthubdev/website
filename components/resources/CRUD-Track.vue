@@ -190,18 +190,28 @@ export default {
 			let track = JSON.parse(JSON.stringify(this.track));
 			track.timezone = track.timezone.name;
 			if (this.mode === 'create') {
-				const res = await this.$axios.$post('/api/calendar/track/create', {
-					track
-				});
-				this.$root.$emit('trackCreated', res);
+				try {
+					const res = await this.$axios.$post('/api/calendar/track/create', {
+						track
+					});
+					this.$root.$emit('trackCreated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			} else if (this.mode === 'update') {
 				// no need to update that
 				delete track.createdAt;
-				const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
-					track
-				});
-				if (res.updated >= 1)
+				try {
+					const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
+						track
+					});
+					if (res.updated >= 1)
 					this.$root.$emit('trackUpdated', track);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
 			}
 			this.showTrackDialog = false;
 		},

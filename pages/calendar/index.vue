@@ -96,10 +96,18 @@ export default {
 	async asyncData({
 		$axios
 	}) {
-		const resdata = await $axios.$get('/api/calendar');
-		return {
-			data: resdata
-		};
+		try {
+			const resdata = await $axios.$get('/api/calendar');
+			return {
+				data: resdata
+			};
+		} catch (err) {
+			if (err.response)
+				alert(err.response);
+			return {
+				data: []
+			};
+		}
 	},
 	mounted() {
 		this.$root.$on('toggleCurrentEvents', () => {
