@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 			primaryKey: true
 		},
 		name: DataTypes.STRING,
+		shortname: DataTypes.STRING,
 		logo: {
 			type: DataTypes.STRING,
 			defaultValue: ''

@@ -5,9 +5,15 @@
 			<md-dialog-title>{{ headline }}</md-dialog-title>
 
 			<md-field :class="requiredName">
-				<label>Name</label>
+				<label>Fullname</label>
 				<md-input v-model="series.name" required />
 				<span class="md-error">Please enter a name</span>
+			</md-field>
+
+			<md-field :class="requiredShortName">
+				<label>Shortname</label>
+				<md-input v-model="series.shortname" required />
+				<span class="md-error">Please enter a shortname</span>
 			</md-field>
 
 			<md-field :class="requiredLogo">
@@ -98,6 +104,7 @@ export default {
 			showSeriesDialog: false,
 			series: {
 				name: '',
+				shortname: '',
 				logo: '',
 				homepage: '',
 				priority: ''
@@ -131,6 +138,11 @@ export default {
 		requiredName() {
 			return {
 				'md-invalid': !(this.series.name.length > 0)
+			};
+		},
+		requiredShortName() {
+			return {
+				'md-invalid': !(this.series.shortname.length > 0)
 			};
 		},
 		requiredLogo() {
@@ -255,6 +267,7 @@ export default {
 		},
 		validInput() {
 			return this.series.name.length &&
+			this.series.shortname.length &&
 			this.series.logo.length &&
 			this.series.priority >= 1 &&
 			this.vehicleClasses.length;
