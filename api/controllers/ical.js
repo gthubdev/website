@@ -11,7 +11,8 @@ module.exports.createIcal = (req, res) => {
 				include: [
 					{ model: db.Series }
 				]
-			}
+			},
+			{ model: db.Track }
 		]
 	}).then(event => {
 		const cal = ical({
@@ -24,7 +25,8 @@ module.exports.createIcal = (req, res) => {
 			cal.createEvent({
 				start: moment(s.starttime),
 				end: moment(s.starttime).add(s.duration, 'minute'),
-				summary: s.name
+				summary: s.Series.shortname + ' (' + s.name + ')',
+				location: event.Track.name
 			});
 		});
 		res.json(cal.toString());
