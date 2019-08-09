@@ -3,15 +3,16 @@ const router = express.Router();
 const util = require('../util/util.js');
 
 // controllers
-const StartpageCtrl = require('../controllers/startpage');
+// const StartpageCtrl = require('../controllers/startpage');
 const CalendarCtrl = require('../controllers/calendar');
-const AuthCtrl = require('../controllers/auth.js');
-const EventCtrl = require('../controllers/event.js');
-const EventSessionCtrl = require('../controllers/eventsession.js');
-const SeriesCtrl = require('../controllers/series.js');
+const AuthCtrl = require('../controllers/auth');
+const EventCtrl = require('../controllers/event');
+const EventSessionCtrl = require('../controllers/eventsession');
+const SeriesCtrl = require('../controllers/series');
 const TrackCtrl = require('../controllers/track');
-const GalleryCtrl = require('../controllers/gallery');
-const PodcastCtrl = require('../controllers/podcast');
+const iCalCtrl = require('../controllers/ical');
+// const GalleryCtrl = require('../controllers/gallery');
+// const PodcastCtrl = require('../controllers/podcast');
 
 
 // routes ==================================================
@@ -26,7 +27,6 @@ router.post('/logout', AuthCtrl.logout);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
-// router.post('/calendar/timezone', CalendarCtrl.getCalendarWithTimezone);
 
 // Event
 router.post('/calendar/event/create', EventCtrl.createEvent);
@@ -47,6 +47,9 @@ router.post('/calendar/series/delete/:id', SeriesCtrl.deleteSeries);
 router.post('/calendar/track/create', TrackCtrl.createTrack);
 router.post('/calendar/track/update/:id', TrackCtrl.updateTrack);
 router.post('/calendar/track/delete/:id', TrackCtrl.deleteTrack);
+
+// iCal
+router.get('/ical/event/:id', iCalCtrl.createIcal);
 
 // // Gallery
 // router.get('/gallery', GalleryCtrl.getGallery);

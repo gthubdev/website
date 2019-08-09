@@ -52,6 +52,9 @@
 			<md-icon @click.native="updateEvent(e)">
 				edit
 			</md-icon>
+			<md-icon @click.native="getIcal(e.id)">
+				calendar_today
+			</md-icon>
 			<md-icon @click.native="deleteEvent(e)">
 				delete
 			</md-icon>
@@ -172,6 +175,19 @@ export default {
 		},
 		sessionStart(starttime) {
 			return moment(starttime).format('ddd Do HH:mm')+'h';
+		},
+		async getIcal(eventid) {
+			try {
+				const res = await this.$axios.$get('/api/ical/event/' + eventid);
+				let blob = new Blob([res.toString()], { type: 'text/calendar' });
+				let link = document.createElement('a');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = 'cal.ics';
+				link.click();
+			} catch(err) {
+				if (err.response)
+					alert(err.response);
+			}
 		}
 	}
 };
