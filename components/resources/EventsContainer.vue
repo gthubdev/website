@@ -178,7 +178,7 @@ export default {
 		},
 		async getIcal(eventid) {
 			try {
-				const res = await this.$axios.$get('/api/ical/event/' + eventid);
+				const res = await this.$axios.$get('/api/calendar/ical/event/' + eventid);
 				let blob = new Blob([res.toString()], { type: 'text/calendar' });
 				let link = document.createElement('a');
 				link.href = window.URL.createObjectURL(blob);

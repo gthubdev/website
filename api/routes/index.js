@@ -49,7 +49,7 @@ router.post('/calendar/track/update/:id', TrackCtrl.updateTrack);
 router.post('/calendar/track/delete/:id', TrackCtrl.deleteTrack);
 
 // iCal
-router.get('/ical/event/:id', iCalCtrl.createIcal);
+router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
 
 // // Gallery
 // router.get('/gallery', GalleryCtrl.getGallery);
