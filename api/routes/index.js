@@ -1,29 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const util = require('../util/util.js');
 
 // controllers
-// const StartpageCtrl = require('../controllers/startpage');
-const CalendarCtrl = require('../controllers/calendar');
 const AuthCtrl = require('../controllers/auth');
+const CalendarCtrl = require('../controllers/calendar');
 const EventCtrl = require('../controllers/event');
 const EventSessionCtrl = require('../controllers/eventsession');
 const SeriesCtrl = require('../controllers/series');
 const TrackCtrl = require('../controllers/track');
 const iCalCtrl = require('../controllers/ical');
-// const GalleryCtrl = require('../controllers/gallery');
-// const PodcastCtrl = require('../controllers/podcast');
 
 
 // routes ==================================================
 
-// Startpage
-// router.get('/', StartpageCtrl.getStartpage);
-
 // Authentication
 router.post('/login', AuthCtrl.login);
 router.post('/logout', AuthCtrl.logout);
-// router.post('/changepassword', AuthCtrl.changepassword);
+router.post('/changepassword', AuthCtrl.changepassword);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
@@ -51,15 +44,8 @@ router.post('/calendar/track/delete/:id', TrackCtrl.deleteTrack);
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
 
-// // Gallery
-// router.get('/gallery', GalleryCtrl.getGallery);
-//
-// // Podcast
-// router.get('/podcast', PodcastCtrl.getPodcast);
-//
-//
-// Error-handling
-// TODO
+
+// Catch-all, will return 404
 router.get('*', (req, res) => {
 	res.status(404).send();
 });

@@ -16,22 +16,16 @@ module.exports.login = (req, res) => {
 					return;
 				}
 				if (matches) {
-					// TODO, redirect to somewhere
 					util.print('User ' + req.body.username + ', password matched');
 					req.session.user = user;
 					res.status(200).send();
-					// res.redirect('/');
 				} else {
-					// TODO, redirect & print error
 					util.print('User ' + req.body.username + ', password did not match');
-					// res.redirect('/api/error');
 					res.status(403).send();
 				}
 			});
 		} else {
-			// TODO, redirect & display error
 			util.print('User ' + req.body.username + ' does not exist');
-			// res.redirect('/api/error');
 			res.status(403).send();
 		}
 	}, err => {
@@ -44,7 +38,6 @@ module.exports.logout = (req, res) => {
 	res.clearCookie('connect.sid');
 	req.session.destroy();
 	res.status(200).send();
-	// res.redirect('/');
 };
 
 module.exports.changepassword = (req, res) => {
@@ -62,24 +55,22 @@ module.exports.changepassword = (req, res) => {
 						password: bCrypt.hashSync(req.body.newpassword, bCrypt.genSaltSync(8), null)
 					}).then(result => {
 						util.print('Password for user \'' + result.get('username') + '\' successfully changed.');
-						res.redirect('/');
+						res.status(200).send();
 					}, err => {
 						util.error(req, res, err);
 					});
 				} else {
 					// TODO, redirect & print error
 					util.print('User ' + req.body.username + ' tried changing passwords, passwords did not match.');
-					res.redirect('/error');
+					res.status(401).send('Wrong user/password combination.');
 				}
 			});
 		}
 		else {
-			// TODO, redirect & display error
 			util.print('User ' + req.body.username + ' does not exist');
-			res.redirect('/error');
+			res.status(401).send('Wrong user/password combination.');
 		}
 	}, err => {
-		// TODO, print/redirect
 		util.error(req, res, err);
 	});
 };
