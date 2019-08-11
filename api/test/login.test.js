@@ -3,7 +3,7 @@ const server = require('../index');
 
 const should = require('chai').should();
 
-describe('Testing the login- and logout-function', () => {
+describe('Authentication', () => {
 	it('Valid login for an admin', done => {
 		supertest(server)
 			.post('/api/login')
@@ -28,7 +28,7 @@ describe('Testing the login- and logout-function', () => {
 			// });
 	});
 
-	it('Sending logout-request', done => {
+	it('Logout', done => {
 		supertest(server)
 			.post('/api/logout')
 			.send()

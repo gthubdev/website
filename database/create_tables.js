@@ -1,7 +1,7 @@
 const db = require('../api/models/');
 
 // set the delay in milliseconds
-let delay = 2000;
+let delay = 1000;
 
 console.log('Recreating tables...');
 setTimeout(() => {

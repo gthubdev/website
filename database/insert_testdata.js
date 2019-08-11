@@ -2,7 +2,7 @@ const db = require('../api/models/');
 const fs = require('fs');
 
 // set the delay in milliseconds
-let delay = 2000;
+let delay = 1000;
 
 console.log('Inserting testdata...');
 setTimeout(() => {

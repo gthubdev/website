@@ -1,6 +1,6 @@
 const request = require('supertest');
 
-describe('Testing routes', () => {
+describe('Routes', () => {
 	let server;
 	before(() => {
 		server = require('../index');
