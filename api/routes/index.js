@@ -58,19 +58,10 @@ router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
 // router.get('/podcast', PodcastCtrl.getPodcast);
 //
 //
-// // Error-handling
-// // TODO
-router.get('/error', (req, res) => {
-	// res.render('landing.ejs', {
-	// 	loggedIn: util.isLoggedIn(req)
-	// });
-	res.status(403).send();
+// Error-handling
+// TODO
+router.get('*', (req, res) => {
+	res.status(404).send();
 });
-//
-//
-// // route to handle all other requests
-// router.get('*', function (req, res) {
-// 	res.redirect('/');
-// });
 
 module.exports = router;
