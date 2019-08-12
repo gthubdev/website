@@ -35,9 +35,8 @@ function isLoggedIn(req) {
 module.exports.isLoggedIn = isLoggedIn;
 
 // print error & redirect
-// TODO: decide what to do here
 function error(req, res, err) {
 	console.error(err);
-	res.redirect('/');
+	res.status(500).send('Unexpected fire in the car. In case of door emergencies, please call Rob.');
 }
 module.exports.error = error;
