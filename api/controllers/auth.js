@@ -17,7 +17,7 @@ module.exports.login = (req, res) => {
 				}
 				if (matches) {
 					util.print('User ' + req.body.username + ', password matched');
-					req.session.user = user;
+					req.session.user = user.id;
 					res.status(200).send();
 				} else {
 					util.print('User ' + req.body.username + ', password did not match');

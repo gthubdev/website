@@ -23,11 +23,11 @@ describe('Tracks', () => {
 			supertest(server)
 				.post('/api/calendar/track/create')
 				.send(tmp)
-				.expect(200)
 				.end((err, res) => {
+					res.status.should.equal(200);
 					should.not.exist(err);
 					callback();
-				})
+				});
 		}, err => {
 			should.not.exist(err);
 			done();
@@ -53,7 +53,7 @@ describe('Tracks', () => {
 			}).then(() => {
 				done();
 			});
-		})
+		});
 	});
 
 	it('Creating tracks', done => {
@@ -94,8 +94,8 @@ describe('Tracks', () => {
 			supertest(server)
 				.post('/api/calendar/track/update/' + tracks[0].id)
 				.send(tmp)
-				.expect(200)
 				.end((err, res) => {
+					res.status.should.equal(200);
 					should.not.exist(err);
 					db.Track.findOne({
 						where: { id: tracks[0].id }
@@ -111,7 +111,7 @@ describe('Tracks', () => {
 		}, err => {
 			should.not.exist(err);
 			done();
-		})
+		});
 	});
 
 	it('Deleting tracks', done => {
@@ -132,8 +132,9 @@ describe('Tracks', () => {
 				nrOfTracksBefore = tracks.length;
 				supertest(server)
 					.post('/api/calendar/track/delete/' + trackID)
-					.expect(200)
 					.end((err, res) => {
+						res.status.should.equal(200);
+						should.not.exist(err);
 						db.Track.findAll()
 						.then(response => {
 							response.length.should.equal(nrOfTracksBefore - 1);
@@ -152,7 +153,7 @@ describe('Tracks', () => {
 			}, err => {
 				should.not.exist(err);
 				done();
-			})
+			});
 		}, err => {
 			should.not.exist(err);
 			done();

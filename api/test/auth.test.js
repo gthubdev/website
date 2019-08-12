@@ -21,7 +21,7 @@ describe('Authentication', () => {
 		}, err => {
 			should.not.exist(err);
 			done();
-		})
+		});
 	});
 	afterEach(done => {
 		db.User.destroy({
@@ -32,7 +32,7 @@ describe('Authentication', () => {
 		}, err => {
 			should.not.exist(err);
 			done();
-		})
+		});
 	});
 
 
@@ -66,8 +66,9 @@ describe('Authentication', () => {
 		supertest(server)
 			.post('/api/changepassword')
 			.send(newpw)
-			.expect(200)
 			.end((err, res) => {
+				res.status.should.equal(200);
+				should.not.exist(err);
 				let newpw2 = {
 					username: 'testadmin',
 					oldpassword: 'newpw',
