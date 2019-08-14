@@ -7,12 +7,26 @@ INSERT INTO Track (id, name, country, length, map, timezone) VALUES (6, "Surfers
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (7, "Phillip Island Grand Prix Circuit", "Australia", 4.445, "", "Australia/Sydney");
 
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (1, "VLN Langstreckenmeisterschaft Nürburgring", "VLN", 1, "https://kappelermotorsport.files.wordpress.com/2015/08/logovln.gif");
+INSERT INTO SeriesType (series, class) VALUES (1, 3);
+INSERT INTO SeriesType (series, class) VALUES (1, 5);
+INSERT INTO SeriesType (series, class) VALUES (1, 24);
+INSERT INTO SeriesType (series, class) VALUES (1, 28);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (2, "Intercontinental GT Challenge", "IGTC", 2, "https://www.intercontinentalgtchallenge.com/images/logo-intercontinental-gt-challenge.png");
+INSERT INTO SeriesType (series, class) VALUES (2, 3);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (3, "Blancpain Endurance Cup", "BES", 2, "https://www.norbert-siedler.com/wp-content/uploads/2016/02/BlancpainGTSeriesLogo.jpg");
+INSERT INTO SeriesType (series, class) VALUES (3, 3);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (4, "GT2", "GT2", 2, "https://upload.wikimedia.org/wikipedia/commons/c/cf/SROMotorsportsGroup_logo.png");
+INSERT INTO SeriesType (series, class) VALUES (4, 4);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (5, "IMSA WeatherTech SportsCar Championship", "WSCC", 1, "https://upload.wikimedia.org/wikipedia/en/thumb/2/28/WeatherTech_SportsCar_Championship_logo.png/300px-WeatherTech_SportsCar_Championship_logo.png");
+INSERT INTO SeriesType (series, class) VALUES (5, 9);
+INSERT INTO SeriesType (series, class) VALUES (5, 10);
+INSERT INTO SeriesType (series, class) VALUES (5, 2);
+INSERT INTO SeriesType (series, class) VALUES (5, 3);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (6, "Virgin Australia Supercars Championship", "V8SC", 3, "https://upload.wikimedia.org/wikipedia/en/thumb/d/dd/Supercars_Championship_logo.svg/1200px-Supercars_Championship_logo.svg.png");
+INSERT INTO SeriesType (series, class) VALUES (6, 26);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (7, "SUPER GT", "SGT", 1, "https://en.wikipedia.org/wiki/Super_GT#/media/File:SUPER_GT_logo.svg");
+INSERT INTO SeriesType (series, class) VALUES (7, 1);
+INSERT INTO SeriesType (series, class) VALUES (7, 3);
 
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, "Bathurst 12 Hour", "https://da2.rbmbtnx.net/v4/RBTV/pd/FO-1Y9A5DRAW5N11/im:i:q_70,f_png,e_trim/im:i:w_600,c_limit/a:s/st:iAJvI63Os4zYB9_BGlY7jW/bathurst12hour_titletreatment_squarelogo.svg", "2019-02-01", "2019-02-03", 2, 2, 2);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, "Nürburgring 24 Hours", "https://reifenpresse.de/wp-content/uploads/2018/11/ADAC-neuer-24h-Titelsponsor.jpg","2019-06-20", "2019-06-23", 1, 1, 1);
@@ -40,19 +54,3 @@ INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Top
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Inaugural GT2 race", "2019-07-26 18:00", 3, 4, 60);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Top 30 Qualifying", "2019-07-27 10:00", 3, 3, 45);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Race", "2019-07-27 16:00", 3, 3, 1440);
-
-# Vehicle Class Categories
-INSERT INTO VehicleClassCategory (id, name) VALUES (1, 'Prototype');
-INSERT INTO VehicleClassCategory (id, name) VALUES (2, 'Sportscar');
-INSERT INTO VehicleClassCategory (id, name) VALUES (3, 'Open Wheeler');
-
-# Vehicle Classes
-INSERT INTO VehicleClass (id, name, category) VALUES (1, 'LMP1', 1);
-INSERT INTO VehicleClass (id, name, category) VALUES (2, 'LMP2', 1);
-INSERT INTO VehicleClass (id, name, category) VALUES (3, 'LMP3', 1);
-INSERT INTO VehicleClass (id, name, category) VALUES (4, 'GT2', 2);
-INSERT INTO VehicleClass (id, name, category) VALUES (5, 'GT3', 2);
-INSERT INTO VehicleClass (id, name, category) VALUES (6, 'GT4', 2);
-INSERT INTO VehicleClass (id, name, category) VALUES (7, 'Formula 1', 3);
-INSERT INTO VehicleClass (id, name, category) VALUES (8, 'Formula 2', 3);
-INSERT INTO VehicleClass (id, name, category) VALUES (9, 'Formula 3', 3);

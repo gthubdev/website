@@ -70,14 +70,14 @@
 			</div>
 			<div class="md-layout">
 				<div class="block md-layout-item md-size-25">
-					<md-field :class="requiredDurationHours">
+					<md-field :class="requiredDuration">
 						<label>Hours</label>
 						<md-input v-model="eventtime.duration_hours" required />
 						<span class="md-error">Please enter hours</span>
 					</md-field>
 				</div>
 				<div class="block md-layout-item md-size-25">
-					<md-field :class="requiredDurationMinutes">
+					<md-field :class="requiredDuration">
 						<label>Minutes</label>
 						<md-input v-model="eventtime.duration_minutes" required />
 						<span class="md-error">Please enter minutes</span>
@@ -158,14 +158,9 @@ export default {
 				'md-invalid': this.eventtime.date === null || this.eventtime.date === ''
 			};
 		},
-		requiredDurationHours() {
+		requiredDuration() {
 			return {
-				'md-invalid': this.eventtime.duration_hours === '' || !Number.isInteger(Number(this.eventtime.duration_hours)) || Number(this.eventtime.duration_hours) < 0 || Number(this.eventtime.duration_hours) > 96
-			};
-		},
-		requiredDurationMinutes() {
-			return {
-				'md-invalid': this.eventtime.duration_minutes === '' || !Number.isInteger(Number(this.eventtime.duration_minutes)) || Number(this.eventtime.duration_minutes) < 0 || Number(this.eventtime.duration_minutes) > 60
+				'md-invalid': !this.validDuration()
 			};
 		},
 		requiredName() {
@@ -230,7 +225,10 @@ export default {
 			session.event = this.event.id;
 			session.series = session.series.id;
 			session.starttime = this.eventtime.date;
-			session.duration = parseInt(this.eventtime.duration_hours) * 60 + parseInt(this.eventtime.duration_minutes);
+			// hours/minutes might not be a number, set it to 0 otherwise
+			let tmp_hours = isNaN(parseInt(this.eventtime.duration_hours)) ? 0 : parseInt(this.eventtime.duration_hours);
+			let tmp_minutes = isNaN(parseInt(this.eventtime.duration_minutes)) ? 0 : parseInt(this.eventtime.duration_minutes);
+			session.duration = tmp_hours * 60 + tmp_minutes;
 			session.timezone = this.event.Track.timezone;
 
 			if (this.mode === 'create') {
@@ -301,8 +299,33 @@ export default {
 			return this.eventsession.name.length > 0 &&
 			this.eventsession.series !== undefined && this.eventsession.series.id &&
 			this.eventtime.date !== null && this.eventtime.date !== '' &&
-			this.eventtime.duration_hours !== '' && Number.isInteger(Number(this.eventtime.duration_hours)) && Number(this.eventtime.duration_hours) >= 0 && Number(this.eventtime.duration_hours) <= 96 &&
-			this.eventtime.duration_minutes !== '' && Number.isInteger(Number(this.eventtime.duration_minutes)) && Number(this.eventtime.duration_minutes) >= 0 && Number(this.eventtime.duration_minutes) <= 60;
+			this.validDuration();
+		},
+		validDuration() {
+			// both are valid
+			if (this.validHours() && this.validMinutes() &&
+				(Number(this.eventtime.duration_hours) > 0 || Number(this.eventtime.duration_minutes) > 0))
+				return true;
+			// only hours are valid
+			if (this.validHours() && Number(this.eventtime.duration_hours) > 0 && this.eventtime.duration_minutes.trim() === '')
+				return true;
+			// only minutes are valid
+			if (this.validMinutes() && Number(this.eventtime.duration_minutes) > 0 && this.eventtime.duration_hours.trim() === '')
+				return true;
+			// neither is valid
+			return false;
+		},
+		validHours() {
+			if (this.eventtime.duration_hours !== '' && Number.isInteger(Number(this.eventtime.duration_hours)) && Number(this.eventtime.duration_hours) >= 0 && Number(this.eventtime.duration_hours) <= 96)
+				return true;
+			else
+				return false;
+		},
+		validMinutes() {
+			if (this.eventtime.duration_minutes !== '' && Number.isInteger(Number(this.eventtime.duration_minutes)) && Number(this.eventtime.duration_minutes) >= 0 && Number(this.eventtime.duration_minutes) <= 60)
+				return true;
+			else
+				return false;
 		}
 	}
 };

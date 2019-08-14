@@ -1,6 +1,7 @@
 const db = require('../models');
 const ical = require('ical-generator');
 const moment = require('moment');
+const util = require('../util/util');
 
 module.exports.createIcal = (req, res) => {
 	db.Event.findOne({

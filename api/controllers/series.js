@@ -29,7 +29,7 @@ module.exports.createSeries = (req, res) => {
 						]
 					}
 				]
-			})
+			});
 		}).then(series => {
 			util.print('Series \'' + series.name + '\' created');
 			res.json(series.get({plain:true}));
@@ -50,6 +50,12 @@ module.exports.updateSeries = (req, res) => {
 			where: { series: req.params.id }
 		})
 	]).spread((updated, deleted) => {
+		if (updated !== 1 && deleted < 1) {
+			util.print('Error updating event ' + req.body.event.name);
+			util.error(req, res, 'Error updating event ' + req.body.event.name);
+			return;
+		}
+
 		//build the array with the series.id for vehicle classes
 		let vclarray = [];
 		req.body.series.vehicleClasses.forEach(vcl => {
@@ -75,7 +81,7 @@ module.exports.updateSeries = (req, res) => {
 						]
 					}
 				]
-			})
+			});
 		}).then(series => {
 			util.print('Series \'' + series.name + '\' updated');
 			res.json(series.get({plain:true}));

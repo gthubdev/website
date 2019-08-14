@@ -1,7 +1,7 @@
 const db = require('../api/models/');
 
 // set the delay in milliseconds
-let delay = 2000;
+let delay = 1000;
 
 console.log('Recreating tables...');
 setTimeout(() => {
@@ -25,8 +25,8 @@ setTimeout(() => {
 
 }, delay);
 
-printError = err => {
+function printError(err) {
 	console.log(err);
 	console.log('Error syncing database.');
 	process.exit(1);
-};
+}

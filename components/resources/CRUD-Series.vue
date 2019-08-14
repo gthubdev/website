@@ -43,7 +43,7 @@
 				</md-chip>
 			</div>
 
-			<md-autocomplete v-model="chosenVC" :md-options="tmpVehicleClasses.map(x=>({
+			<md-autocomplete v-model="chosenVC" md-dense :md-options="tmpVehicleClasses.map(x=>({
 				'id':x.id,
 				'name':x.name,
 				'category':x.VehicleClassCategory.name,
