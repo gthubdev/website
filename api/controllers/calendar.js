@@ -1,6 +1,7 @@
 const db = require('../models/');
 const Sequelize = require('sequelize');
-const dateutil = require('../util/dateutil.js');
+const dateutil = require('../util/dateutil');
+const util = require('../util/util');
 
 const DEFAULT_TIMEZONE = 'Europe/Brussels';
 
@@ -23,7 +24,7 @@ function buildCalendar(req, res, timezone) {
 				{ model: db.Series },
 				{
 					model: db.SupportSeries,
-				 	include: [
+					include: [
 						{ model: db.Series }
 					]
 				},

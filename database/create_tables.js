@@ -25,8 +25,8 @@ setTimeout(() => {
 
 }, delay);
 
-printError = err => {
+function printError(err) {
 	console.log(err);
 	console.log('Error syncing database.');
 	process.exit(1);
-};
+}

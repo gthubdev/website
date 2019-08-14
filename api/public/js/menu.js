@@ -1,7 +1,7 @@
 const ToggleMenu = () => {
-  const sideMenu = document.querySelector('.side-menu');
-  sideMenu.classList.toggle('side-menu--out');
-}
+const sideMenu = document.querySelector('.side-menu');
+	sideMenu.classList.toggle('side-menu--out');
+};
 
 const openBtn = document.querySelector('#menuOpen');
 const closeBtn = document.querySelector('#menuClose');

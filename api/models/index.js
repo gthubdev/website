@@ -22,7 +22,7 @@ if (process.env.DBHost) {
 		user: process.env.DBUser,
 		password: process.env.DBPass,
 		port: process.env.DBPort
-	}
+	};
 } else {
 	dbconfig = require('../../database/circleci.js');
 }

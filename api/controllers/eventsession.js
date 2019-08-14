@@ -15,7 +15,7 @@ module.exports.createEventSession = (req, res) => {
 			include : [
 				{ model: db.Series }
 			]
-		})
+		});
 	}).then(eventsession => {
 		util.print('EventSession \'' + eventsession.name + '\' created');
 		res.json(eventsession.get({plain:true}));

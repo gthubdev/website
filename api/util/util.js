@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 
 // prints something to the console
 // console.log clutters the test-output otherwise

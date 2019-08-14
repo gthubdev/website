@@ -21,15 +21,17 @@ module.exports = {
 				content: pkg.description
 			}
 		],
-		link: [{
-			rel: 'icon',
-			type: 'image/x-icon',
-			href: '/favicon.ico'
-		}],
-		link: [{
-			rel: 'stylesheet',
-			href: '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
-		}]
+		link: [
+			{
+				rel: 'icon',
+				type: 'image/x-icon',
+				href: '/favicon.ico'
+			},
+			{
+				rel: 'stylesheet',
+				href: '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
+			}
+		]
 	},
 
 	/*
@@ -64,7 +66,7 @@ module.exports = {
 	*/
 	vueMaterial: {
 		theme: 'default-dark'
-	}, 
+	},
 	/*
 	 ** Axios module configuration
 	 */

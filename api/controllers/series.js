@@ -50,10 +50,11 @@ module.exports.updateSeries = (req, res) => {
 			where: { series: req.params.id }
 		})
 	]).spread((updated, deleted) => {
-		// TODO
-		// check number
-		// console.log('updated: ' + updated);
-		// console.log('deleted: ' + deleted);
+		if (updated !== 1 && deleted < 1) {
+			util.print('Error updating event ' + req.body.event.name);
+			util.error(req, res, 'Error updating event ' + req.body.event.name);
+			return;
+		}
 
 		//build the array with the series.id for vehicle classes
 		let vclarray = [];
