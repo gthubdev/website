@@ -71,7 +71,11 @@ if (process.env.NODE_ENV !== 'test') {
 		handler: app
 	};
 } else {
-	const port = process.env.PORT || 3000;
+	let port;
+	if (process.env.NODE_ENV === 'test')
+		port = process.env.TESTPORT || 3001;
+	else
+		port = process.env.PORT || 3000;
 	const ip = process.env.IP || '127.0.0.1';
 	const server = app.listen(port, ip, () => {
 		util.print('Server running on ' + ip + ':' + port);
