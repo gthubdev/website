@@ -5,7 +5,7 @@
 			<md-dialog-title>{{ headline() }}</md-dialog-title>
 
 			<md-list v-if="event !== null" class="md-dense">
-				<md-list-item v-for="es in event.EventSessions" :key="es.id">
+				<md-list-item v-for="es in getSessions()" :key="es.id">
 					<!-- <md-avatar>
 						<img :src="es.Series.logo" alt="Logo" />
 					</md-avatar> -->
@@ -279,6 +279,15 @@ export default {
 				default:
 					return '';
 			}
+		},
+		getSessions() {
+			// don't show the active session in the list
+			return this.event.EventSessions.filter(es => {
+				if (this.mode === 'create')
+					return true;
+				else if (this.activeSession && this.activeSession.id)
+					return es.id !== this.activeSession.id;
+			});
 		},
 		getAllSeries() {
 			let arr = [];
