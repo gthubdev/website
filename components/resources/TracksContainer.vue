@@ -36,6 +36,9 @@
 			:page-count="pageCount"
 			:click-handler="pageClicked"
 			:no-li-surround="true"
+			:container-class="'pag-container'"
+			:active-class="'pag-active'"
+			:page-link-class="'pag-page-link'"
 			:hide-prev-next="true"
 		/>
 	</div>
