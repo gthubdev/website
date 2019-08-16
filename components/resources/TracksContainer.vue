@@ -20,7 +20,7 @@
 	</div>
 
 	<md-list>
-		<md-list-item v-for="t in filterTracks" :key="t.id">
+		<md-list-item v-for="t in filterTracks()" :key="t.id">
 			<span class="md-list-item-text">{{ t.name }}</span>
 			<md-icon @click.native="updateTrack(t)">
 				edit
@@ -30,6 +30,15 @@
 			</md-icon>
 		</md-list-item>
 	</md-list>
+
+	<div v-if="tracks.length && tracks.length > itemsPerPage">
+		<paginate
+			:page-count="pageCount"
+			:click-handler="pageClicked"
+			:no-li-surround="true"
+			:hide-prev-next="true"
+		/>
+	</div>
 
 	<CRUDTrack
 		:show-dialog="showDialog"
@@ -42,10 +51,11 @@
 
 <script>
 import CRUDTrack from '~/components/resources/CRUD-Track.vue';
+import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 
 export default {
 	components: {
-		CRUDTrack
+		CRUDTrack, Paginate
 	},
 	props: {
 		tracks: {
@@ -62,17 +72,17 @@ export default {
 			showDialog: false,
 			activeTrack: null,
 			mode: '',
-			searchTerm: ''
+			searchTerm: '',
+			pageNumber: 1,
+			pageCount: 1,
+			itemsPerPage: 3
 		};
 	},
-	computed: {
-		filterTracks() {
-			if (this.searchTerm.trim() === '')
-				return this.tracks;
-			else
-				return this.tracks.filter(track => {
-					return track.name.toLowerCase().includes(this.searchTerm.trim());
-				});
+	watch: {
+		tracks(newValue) {
+			if (newValue !== undefined && newValue.length) {
+				this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
+			}
 		}
 	},
 	mounted() {
@@ -92,6 +102,32 @@ export default {
 		},
 		deleteTrack(track) {
 			this.$root.$emit('confirmDeleteTrack', track);
+		},
+		filterTracks() {
+			let arr = [], nrMatches = 0;
+
+			// count number of elements matching
+			for (let i = 0; i < this.tracks.length; i++) {
+				if (this.searchTerm.trim() === '')
+					nrMatches++;
+				else if (this.tracks[i].name.toLowerCase().includes(this.searchTerm.trim()))
+					nrMatches++;
+			}
+
+			// do the actual filtering
+			for (let i = (this.pageNumber - 1) * this.itemsPerPage; i < this.tracks.length && arr.length < this.itemsPerPage; i++) {
+				if (this.searchTerm.trim() === '')
+					arr.push(this.tracks[i]);
+				else if (this.tracks[i].name.toLowerCase().includes(this.searchTerm.trim()))
+					arr.push(this.tracks[i]);
+			}
+
+			this.pageCount = Math.ceil(nrMatches / this.itemsPerPage);
+			return arr;
+		},
+		pageClicked(newPageNum) {
+			console.log('Active Page: ' + newPageNum);
+			this.pageNumber = newPageNum;
 		}
 	}
 };
