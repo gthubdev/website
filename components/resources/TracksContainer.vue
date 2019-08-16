@@ -31,7 +31,7 @@
 		</md-list-item>
 	</md-list>
 
-	<div v-if="tracks.length && tracks.length > itemsPerPage">
+	<div v-if="showPagination">
 		<paginate
 			:page-count="pageCount"
 			:click-handler="pageClicked"
@@ -73,6 +73,7 @@ export default {
 			activeTrack: null,
 			mode: '',
 			searchTerm: '',
+			showPagination: false,
 			pageNumber: 1,
 			pageCount: 1,
 			itemsPerPage: 3
@@ -82,6 +83,7 @@ export default {
 		tracks(newValue) {
 			if (newValue !== undefined && newValue.length) {
 				this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
+				this.showPagination = this.pageCount > 1;
 			}
 		}
 	},
@@ -123,6 +125,7 @@ export default {
 			}
 
 			this.pageCount = Math.ceil(nrMatches / this.itemsPerPage);
+			this.showPagination = this.pageCount > 1;
 			return arr;
 		},
 		pageClicked(newPageNum) {
