@@ -78,18 +78,12 @@ export default {
 			itemsPerPage: 3
 		};
 	},
-	watch: {
-		series(newValue) {
-			if (newValue !== undefined && newValue.length) {
-				this.pageCount = Math.ceil(this.series.length / this.itemsPerPage);
-				this.showPagination = this.pageCount > 1;
-			}
-		}
-	},
 	mounted() {
 		this.$root.$on('toggleCrudSeries', () => {
 			this.showDialog = !this.showDialog;
 		});
+		this.pageCount = Math.ceil(this.series.length / this.itemsPerPage);
+		this.showPagination = this.pageCount > 1;
 	},
 	methods: {
 		createSeries() {

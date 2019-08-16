@@ -79,18 +79,12 @@ export default {
 			itemsPerPage: 3
 		};
 	},
-	watch: {
-		tracks(newValue) {
-			if (newValue !== undefined && newValue.length) {
-				this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
-				this.showPagination = this.pageCount > 1;
-			}
-		}
-	},
 	mounted() {
 		this.$root.$on('toggleCrudTrack', () => {
 			this.showDialog = !this.showDialog;
 		});
+		this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
+		this.showPagination = this.pageCount > 1;
 	},
 	methods: {
 		createTrack() {

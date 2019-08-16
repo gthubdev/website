@@ -26,7 +26,7 @@
 	</md-button>
 
 	<md-list v-if="events.length > 0">
-		<md-list-item v-for="e in filterEvents" :key="e.id">
+		<md-list-item v-for="e in filterEvents()" :key="e.id">
 			<div class="md-list-item-text">
 				<span @click="toggleSessions(e.id)">
 					<strong>{{ e.name }}</strong><br />
@@ -61,6 +61,15 @@
 		</md-list-item>
 	</md-list>
 
+	<div v-if="showPagination">
+		<paginate
+			:page-count="pageCount"
+			:click-handler="pageClicked"
+			:no-li-surround="true"
+			:hide-prev-next="true"
+		/>
+	</div>
+
 	<CRUDEvent
 		:show-dialog="showEventDialog"
 		:active-event="activeEvent"
@@ -80,11 +89,12 @@
 <script>
 import CRUDEvent from '~/components/resources/CRUD-Event.vue';
 import CRUDEventSession from '~/components/resources/CRUD-EventSession.vue';
+import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import moment from 'moment';
 
 export default {
 	components: {
-		CRUDEvent, CRUDEventSession
+		CRUDEvent, CRUDEventSession, Paginate
 	},
 	props: {
 		events: {
@@ -102,6 +112,8 @@ export default {
 	},
 	data: function() {
 		return {
+			currentEvents: [],
+			pastEvents: [],
 			showEventDialog: false,
 			showSessionDialog: false,
 			shownSessions: [],
@@ -109,22 +121,12 @@ export default {
 			activeEventSession: null,
 			showCurrentEvents: true,
 			mode: '',
-			searchTerm: ''
+			searchTerm: '',
+			showPagination: false,
+			pageNumber: 1,
+			pageCount: 1,
+			itemsPerPage: 3
 		};
-	},
-	computed: {
-		filterEvents() {
-			if (this.showCurrentEvents === true)
-				return this.events.filter(event => {
-					return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD')) &&
-					event.name.toLowerCase().includes(this.searchTerm.trim());
-				});
-			else
-				return this.events.filter(event => {
-					return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD')) &&
-					event.name.toLowerCase().includes(this.searchTerm.trim());
-				});
-		}
 	},
 	mounted() {
 		this.$root.$on('toggleCrudEvent', () => {
@@ -137,6 +139,21 @@ export default {
 			this.activeEvent = event;
 			this.showSessionDialog = !this.showSessionDialog;
 		});
+
+		// set the arrays
+		this.currentEvents = this.events.filter(event => {
+			return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
+		});
+		this.pastEvents = this.events.filter(event => {
+			return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD'));
+		});
+
+		if (this.showCurrentEvents === true)
+			this.pageCount = Math.ceil(this.currentEvents.length / this.itemsPerPage);
+		else
+			this.pageCount = Math.ceil(this.pastEvents.length / this.itemsPerPage);
+
+		this.showPagination = this.pageCount > 1;
 	},
 	methods: {
 		createEvent() {
@@ -188,6 +205,37 @@ export default {
 				if (err.response)
 					alert(err.response);
 			}
+		},
+		filterEvents() {
+			let arr = [], res_arr = [], nrMatches = 0;
+			if (this.showCurrentEvents === true)
+				arr = this.currentEvents;
+			else
+				arr = this.pastEvents;
+
+			// count number of elements matching
+			for (let i = 0; i < arr.length; i++) {
+				if (this.searchTerm.trim() === '')
+					nrMatches++;
+				else if (arr[i].name.toLowerCase().includes(this.searchTerm.trim()))
+					nrMatches++;
+			}
+
+			// do the actual filtering
+			for (let i = (this.pageNumber - 1) * this.itemsPerPage; i < arr.length && res_arr.length < this.itemsPerPage; i++) {
+				if (this.searchTerm.trim() === '')
+					res_arr.push(arr[i]);
+				else if (arr[i].name.toLowerCase().includes(this.searchTerm.trim()))
+					res_arr.push(arr[i]);
+			}
+
+			this.pageCount = Math.ceil(nrMatches / this.itemsPerPage);
+			this.showPagination = this.pageCount > 1;
+			return res_arr;
+		},
+		pageClicked(newPageNum) {
+			console.log('Active Page: ' + newPageNum);
+			this.pageNumber = newPageNum;
 		}
 	}
 };
