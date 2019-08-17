@@ -10,7 +10,7 @@
 				<span class="md-error">Please enter a name</span>
 			</md-field>
 
-			<md-autocomplete v-model="event.track" :md-options="tracks.map(x=>({
+			<md-autocomplete v-model="event.track" md-dense :md-options="tracks.map(x=>({
 				'id':x.id,
 				'name':x.name,
 				'toLowerCase':()=>x.name.toLowerCase(),
@@ -32,7 +32,7 @@
 				<span class="md-error">Please choose a track</span>
 			</md-autocomplete>
 
-			<md-autocomplete v-model="event.mainseries" :md-options="series.map(x=>({
+			<md-autocomplete v-model="event.mainseries" md-dense :md-options="series.map(x=>({
 				'id':x.id,
 				'name':x.name,
 				'toLowerCase':()=>x.name.toLowerCase(),
