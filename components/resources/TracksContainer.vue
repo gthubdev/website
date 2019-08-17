@@ -106,11 +106,13 @@ export default {
 			let arr = [], nrMatches = 0;
 
 			// count number of elements matching
-			for (let i = 0; i < this.tracks.length; i++) {
-				if (this.searchTerm.trim() === '')
-					nrMatches++;
-				else if (this.tracks[i].name.toLowerCase().includes(this.searchTerm.trim()))
-					nrMatches++;
+			if (this.searchTerm.trim() === '') {
+				nrMatches = this.tracks.length;
+			} else {
+				this.tracks.forEach(e => {
+					if (e.name.toLowerCase().includes(this.searchTerm.trim()))
+						nrMatches++;
+				});
 			}
 
 			// do the actual filtering

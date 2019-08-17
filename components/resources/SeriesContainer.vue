@@ -105,11 +105,13 @@ export default {
 			let arr = [], nrMatches = 0;
 
 			// count number of elements matching
-			for (let i = 0; i < this.series.length; i++) {
-				if (this.searchTerm.trim() === '')
-					nrMatches++;
-				else if (this.series[i].name.toLowerCase().includes(this.searchTerm.trim()))
-					nrMatches++;
+			if (this.searchTerm.trim() === '') {
+				nrMatches = this.series.length;
+			} else {
+				this.series.forEach(e => {
+					if (e.name.toLowerCase().includes(this.searchTerm.trim()))
+						nrMatches++;
+				});
 			}
 
 			// do the actual filtering

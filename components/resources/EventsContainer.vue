@@ -212,11 +212,13 @@ export default {
 				arr = this.pastEvents;
 
 			// count number of elements matching
-			for (let i = 0; i < arr.length; i++) {
-				if (this.searchTerm.trim() === '')
-					nrMatches++;
-				else if (arr[i].name.toLowerCase().includes(this.searchTerm.trim()))
-					nrMatches++;
+			if (this.searchTerm.trim() === '') {
+				nrMatches = arr.length;
+			} else {
+				arr.forEach(e => {
+					if (e.name.toLowerCase().includes(this.searchTerm.trim()))
+						nrMatches++;
+				});
 			}
 
 			// do the actual filtering
