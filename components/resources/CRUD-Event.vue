@@ -83,12 +83,17 @@
 			</md-autocomplete>
 
 			<div class="md-layout">
-				<div class="md-layout-item">
+				<div class="md-layout-item md-size-45">
 					<label>Startdate</label>
 					<VueCtkDateTimePicker
 						v-model="event.startdate"
+						:label="dateLabel()"
 						format="YYYY-MM-DD"
 						formatted="ddd, Do MMMM YYYY"
+						:hint="dateHint()"
+						:error="isInvalidDate()"
+						color="#ed6400"
+						button-color="#ed6400"
 						:only-date="true"
 						:auto-close="true"
 						locale="en"
@@ -98,11 +103,21 @@
 				</div>
 
 				<div class="md-layout-item">
+					&nbsp;
+				</div>
+
+				<div class="md-layout-item md-size-45">
 					<label>Enddate</label>
 					<VueCtkDateTimePicker
 						v-model="event.enddate"
+						:label="dateLabel()"
 						format="YYYY-MM-DD"
 						formatted="ddd, Do MMMM YYYY"
+						:hint="dateHint()"
+						:error="isInvalidDate()"
+						color="#ed6400"
+						button-color="#ed6400"
+						:min-date="event.startdate"
 						:only-date="true"
 						:auto-close="true"
 						locale="en"
@@ -141,6 +156,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
 	props: {
 		showDialog: {
@@ -376,9 +393,23 @@ export default {
 			return this.event.name.length > 0 &&
 			this.event.track !== undefined && this.event.track.id &&
 			this.event.mainseries !== undefined && this.event.mainseries.id &&
-			this.event.startdate !== null && this.event.startdate !== '' &&
-			this.event.enddate !== null && this.event.enddate !== '' &&
+			!this.isInvalidDate() &&
 			this.event.priority >= 1;
+		},
+		isInvalidDate() {
+			if (this.event.startdate === null ||
+				this.event.startdate === '' ||
+				this.event.enddate === null ||
+				this.event.enddate === '')
+				return true;
+
+			return moment(this.event.enddate).isBefore(moment(this.event.startdate).format('YYYY-MM-DD'));
+		},
+		dateLabel() {
+			return this.isInvalidDate() ? 'Select date' : '';
+		},
+		dateHint() {
+			return this.isInvalidDate() ? 'Please select valid dates' : '';
 		}
 	}
 };
