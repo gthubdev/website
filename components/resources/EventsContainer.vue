@@ -131,6 +131,13 @@ export default {
 			itemsPerPage: 3
 		};
 	},
+	watch: {
+		events(newValue) {
+			if (newValue === undefined || !newValue.length) return;
+
+			this.setArrays();
+		}
+	},
 	mounted() {
 		this.$root.$on('toggleCrudEvent', () => {
 			this.showEventDialog = !this.showEventDialog;
@@ -144,19 +151,7 @@ export default {
 		});
 
 		// set the arrays
-		this.currentEvents = this.events.filter(event => {
-			return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
-		});
-		this.pastEvents = this.events.filter(event => {
-			return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD'));
-		});
-
-		if (this.showCurrentEvents === true)
-			this.pageCount = Math.ceil(this.currentEvents.length / this.itemsPerPage);
-		else
-			this.pageCount = Math.ceil(this.pastEvents.length / this.itemsPerPage);
-
-		this.showPagination = this.pageCount > 1;
+		this.setArrays();
 	},
 	methods: {
 		createEvent() {
@@ -239,6 +234,22 @@ export default {
 		pageClicked(newPageNum) {
 			console.log('Active Page: ' + newPageNum);
 			this.pageNumber = newPageNum;
+		},
+		setArrays() {
+			// methods splist the events in current and past events
+			this.currentEvents = this.events.filter(event => {
+				return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
+			});
+			this.pastEvents = this.events.filter(event => {
+				return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD'));
+			});
+
+			if (this.showCurrentEvents === true)
+				this.pageCount = Math.ceil(this.currentEvents.length / this.itemsPerPage);
+			else
+				this.pageCount = Math.ceil(this.pastEvents.length / this.itemsPerPage);
+
+			this.showPagination = this.pageCount > 1;
 		}
 	}
 };
