@@ -50,8 +50,7 @@ module.exports.updateSeries = (req, res) => {
 			where: { series: req.params.id }
 		})
 	]).spread((updated, deleted) => {
-		if (updated !== 1 && deleted < 1) {
-			util.print('Error updating event ' + req.body.event.name);
+		if (updated !== 1 && deleted < 0) {
 			util.error(req, res, 'Error updating event ' + req.body.event.name);
 			return;
 		}
