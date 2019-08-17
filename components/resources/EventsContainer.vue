@@ -18,10 +18,10 @@
 			</md-button>
 		</div>
 	</div>
-	<md-button class="md-raised md-primary" :class="showCurrentEvents ? 'btn-primary' : 'btn-secondary'" @click.native="showCurrentEvents = true">
+	<md-button class="md-raised md-primary" :class="showCurrentEvents ? 'btn-primary' : 'btn-secondary'" @click.native="showCurrentEvents = true; pageClicked(1); setArrays()">
 		Current Events
 	</md-button>
-	<md-button class="md-raised md-primary" :class="showCurrentEvents ? 'btn-secondary' : 'btn-primary'" @click.native="showCurrentEvents = false">
+	<md-button class="md-raised md-primary" :class="showCurrentEvents ? 'btn-secondary' : 'btn-primary'" @click.native="showCurrentEvents = false; pageClicked(1); setArrays();">
 		Past events
 	</md-button>
 
@@ -63,6 +63,7 @@
 
 	<div v-if="showPagination">
 		<paginate
+			v-model="pageNumber"
 			:page-count="pageCount"
 			:click-handler="pageClicked"
 			:no-li-surround="true"
