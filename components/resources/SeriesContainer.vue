@@ -78,7 +78,7 @@ export default {
 			showPagination: false,
 			pageNumber: 1,
 			pageCount: 1,
-			itemsPerPage: 3
+			itemsPerPage: 5
 		};
 	},
 	mounted() {

@@ -27,6 +27,18 @@
 
 	<md-list v-if="events.length > 0">
 		<md-list-item v-for="e in filterEvents()" :key="e.id">
+			<div class="icon">
+				<div v-if="!shownSessions.includes(e.id) && e.EventSessions.length">
+					<md-icon>
+						chevron_right
+					</md-icon>
+				</div>
+				<div v-else class="invisible">
+					<md-icon>
+						expand_less
+					</md-icon>
+				</div>
+			</div>
 			<div class="md-list-item-text">
 				<span @click="toggleSessions(e.id)">
 					<strong>{{ e.name }}</strong><br />
@@ -129,7 +141,7 @@ export default {
 			showPagination: false,
 			pageNumber: 1,
 			pageCount: 1,
-			itemsPerPage: 3
+			itemsPerPage: 5
 		};
 	},
 	watch: {
@@ -269,5 +281,11 @@ export default {
 	background-color: rgba(0, 0, 0, 0.3);
 	margin-top: 0.5em;
 	border-radius: 20px;
+}
+.icon {
+	margin-right: .5em;
+}
+.invisible {
+	visibility: hidden;
 }
 </style>
