@@ -1,8 +1,29 @@
 const db = require('../models');
 const Sequelize = require('sequelize');
 const util = require('../util/util.js');
+const moment = require('moment');
 
 module.exports.createEvent = (req, res) => {
+	moment.suppressDeprecationWarnings = true;
+	let startdate = moment(req.body.event.startdate);
+	let enddate = moment(req.body.event.enddate);
+
+	if (!startdate.isValid() || !enddate.isValid()) {
+		res.status(409).send('Invalid dates');
+		return;
+	}
+
+	if (startdate.isAfter(enddate.format('YYYY-MM-DD'))) {
+		res.status(409).send('Enddate cannot be before startdate');
+		return;
+	}
+
+	let prio = req.body.event.priority;
+	if (prio < 1 || prio > 4) {
+		res.status(409).send('Invalid priority');
+		return;
+	}
+
 	db.Event.create(req.body.event)
 	.then(newevent => {
 		// build the array with the event.id for the support series
@@ -50,6 +71,33 @@ module.exports.createEvent = (req, res) => {
 };
 
 module.exports.updateEvent = (req, res) => {
+	moment.suppressDeprecationWarnings = true;
+	if (req.body.event.startdate && req.body.event.enddate) {
+		let startdate = moment(req.body.event.startdate);
+		let enddate = moment(req.body.event.enddate);
+
+		if (!startdate.isValid() || !enddate.isValid()) {
+			res.status(409).send('Invalid dates');
+			return;
+		}
+
+		if (startdate.isAfter(enddate.format('YYYY-MM-DD'))) {
+			res.status(409).send('Enddate cannot be before startdate');
+			return;
+		}
+	} else if (req.body.event.startdate || req.body.event.enddate) {
+		res.status(409).send('Must supply both startdate and enddate');
+		return;
+	}
+
+	if (req.body.event.priority) {
+		let prio = req.body.event.priority;
+		if (prio < 1 || prio > 4) {
+			res.status(409).send('Invalid priority');
+			return;
+		}
+	}
+
 	Sequelize.Promise.all([
 		db.Event.update(req.body.event,
 			{ where: { id: req.params.id } }

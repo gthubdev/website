@@ -48,12 +48,14 @@ module.exports.createSeries = (req, res) => {
 };
 
 module.exports.updateSeries = (req, res) => {
-	let prio = req.body.series.priority;
-	if (prio < 1 || prio > 4) {
-		res.status(409).send('Invalid priority');
-		return;
+	if (req.body.series.priority) {
+		let prio = req.body.series.priority;
+		if (prio < 1 || prio > 4) {
+			res.status(409).send('Invalid priority');
+			return;
+		}
 	}
-	
+
 	Sequelize.Promise.all([
 		db.Series.update(req.body.series,
 			{ where: { id: req.params.id } }
