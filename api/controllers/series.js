@@ -5,7 +5,7 @@ const util = require('../util/util.js');
 module.exports.createSeries = (req, res) => {
 	let prio = req.body.series.priority;
 	if (prio < 1 || prio > 4) {
-		res.status(409).send('Invalid priority');
+		res.status(400).send('Invalid priority');
 		return;
 	}
 
@@ -51,7 +51,7 @@ module.exports.updateSeries = (req, res) => {
 	if (req.body.series.priority) {
 		let prio = req.body.series.priority;
 		if (prio < 1 || prio > 4) {
-			res.status(409).send('Invalid priority');
+			res.status(400).send('Invalid priority');
 			return;
 		}
 	}

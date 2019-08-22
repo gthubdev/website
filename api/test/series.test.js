@@ -141,7 +141,7 @@ describe('Series', () => {
 				.post('/api/calendar/series/create')
 				.send(tmp)
 				.end((err, res) => {
-					res.status.should.equal(409);
+					res.status.should.equal(400);
 					should.not.exist(err);
 					done();
 				});
@@ -214,7 +214,7 @@ describe('Series', () => {
 				.post('/api/calendar/series/update/' + series[0].id)
 				.send(tmp)
 				.end((err, res) => {
-					res.status.should.equal(409);
+					res.status.should.equal(400);
 					should.not.exist(err);
 					done();
 				});

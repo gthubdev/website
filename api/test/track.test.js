@@ -86,7 +86,7 @@ describe('Tracks', () => {
 			.post('/api/calendar/track/create')
 			.send(tmp)
 			.end((err, res) => {
-				res.status.should.equal(409);
+				res.status.should.equal(400);
 				should.not.exist(err);
 				done();
 			});
@@ -101,7 +101,7 @@ describe('Tracks', () => {
 			.post('/api/calendar/track/create')
 			.send(tmp)
 			.end((err, res) => {
-				res.status.should.equal(409);
+				res.status.should.equal(400);
 				should.not.exist(err);
 				done();
 			});
@@ -163,7 +163,7 @@ describe('Tracks', () => {
 				.post('/api/calendar/track/update/' + tracks[0].id)
 				.send(tmp)
 				.end((err, res) => {
-					res.status.should.equal(409);
+					res.status.should.equal(400);
 					should.not.exist(err);
 					done();
 				});
@@ -192,7 +192,7 @@ describe('Tracks', () => {
 				.post('/api/calendar/track/update/' + tracks[0].id)
 				.send(tmp)
 				.end((err, res) => {
-					res.status.should.equal(409);
+					res.status.should.equal(400);
 					should.not.exist(err);
 					done();
 				});

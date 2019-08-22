@@ -5,12 +5,12 @@ const moment = require('moment-timezone');
 
 module.exports.createTrack = (req, res) => {
 	if (countryList.getCode(req.body.track.country) === undefined) {
-		res.status(409).send('Invalid country');
+		res.status(400).send('Invalid country');
 		return;
 	}
 
 	if (!moment.tz.zone(req.body.track.timezone)) {
-		res.status(409).send('Invalid timezone');
+		res.status(400).send('Invalid timezone');
 		return;
 	}
 
@@ -25,12 +25,12 @@ module.exports.createTrack = (req, res) => {
 
 module.exports.updateTrack = (req, res) => {
 	if (req.body.track.country && countryList.getCode(req.body.track.country) === undefined) {
-		res.status(409).send('Invalid country');
+		res.status(400).send('Invalid country');
 		return;
 	}
 
 	if (req.body.track.timezone && !moment.tz.zone(req.body.track.timezone)) {
-		res.status(409).send('Invalid timezone');
+		res.status(400).send('Invalid timezone');
 		return;
 	}
 
