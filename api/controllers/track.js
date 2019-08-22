@@ -1,7 +1,19 @@
 const db = require('../models');
 const util = require('../util/util.js');
+const countryList = require('country-list');
+const moment = require('moment-timezone');
 
 module.exports.createTrack = (req, res) => {
+	if (countryList.getCode(req.body.track.country) === undefined) {
+		res.status(409).send('Invalid country');
+		return;
+	}
+
+	if (!moment.tz.zone(req.body.track.timezone)) {
+		res.status(409).send('Invalid timezone');
+		return;
+	}
+
 	db.Track.create(req.body.track)
 	.then(track => {
 		util.print('Track \'' + track.name + '\' created');
@@ -12,6 +24,16 @@ module.exports.createTrack = (req, res) => {
 };
 
 module.exports.updateTrack = (req, res) => {
+	if (req.body.track.country && countryList.getCode(req.body.track.country) === undefined) {
+		res.status(409).send('Invalid country');
+		return;
+	}
+
+	if (req.body.track.timezone && !moment.tz.zone(req.body.track.timezone)) {
+		res.status(409).send('Invalid timezone');
+		return;
+	}
+
 	db.Track.update(req.body.track,
 		{ where: { id: req.params.id }
 	}).then(response => {

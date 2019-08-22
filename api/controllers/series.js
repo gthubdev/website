@@ -3,6 +3,12 @@ const Sequelize = require('sequelize');
 const util = require('../util/util.js');
 
 module.exports.createSeries = (req, res) => {
+	let prio = req.body.series.priority;
+	if (prio < 1 || prio > 4) {
+		res.status(409).send('Invalid priority');
+		return;
+	}
+
 	db.Series.create(req.body.series)
 	.then(newseries => {
 		let vclarray = [];
@@ -42,6 +48,12 @@ module.exports.createSeries = (req, res) => {
 };
 
 module.exports.updateSeries = (req, res) => {
+	let prio = req.body.series.priority;
+	if (prio < 1 || prio > 4) {
+		res.status(409).send('Invalid priority');
+		return;
+	}
+	
 	Sequelize.Promise.all([
 		db.Series.update(req.body.series,
 			{ where: { id: req.params.id } }
