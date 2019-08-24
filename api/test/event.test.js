@@ -8,13 +8,93 @@ const Op = Sequelize.Op;
 const moment = require('moment');
 
 describe('Events', () => {
+	let seriesID, trackID, vcl_cat_id, vcl_id;
+
+	before(done => {
+		let tmp1 = {
+			name: 'Test Vehicle Class Category'
+		};
+		db.VehicleClassCategory.create(tmp1)
+		.then(vcl_cat => {
+			vcl_cat_id = vcl_cat.id;
+			let tmp2 = {
+				name: 'Test Vehicle Class',
+				category: vcl_cat_id
+			};
+			db.VehicleClass.create(tmp2)
+			.then(vcl => {
+				vcl_id = vcl.id;
+
+				let tmptrack = {
+					track: { name: 'Test Track 1', country: 'Sweden', timezone: 'Europe/Amsterdam', length: 5, map: ''}
+				};
+
+				let vehicleClasses = [];
+				vehicleClasses.push({id: vcl_id});
+				let tmpseries = {
+					series: { name: 'Test Series 1', shortname: 'TS1', priority: 1, vehicleClasses: vehicleClasses }
+				};
+
+				Sequelize.Promise.all([
+					db.Track.create(tmptrack),
+					db.Series.create(tmpseries)
+				]).spread((track, series) => {
+					trackID = track.id;
+					seriesID = series.id;
+					done();
+				}, err => {
+					should.not.exist(err);
+					done();
+				});
+			}, err => {
+				should.not.exist(err);
+				done();
+			});
+		}, err => {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	after(done => {
+		Sequelize.Promise.all([
+			db.VehicleClass.destroy({
+				where: { id: vcl_id }
+			})
+		]).spread(res1 => {
+			res1.should.equal(1);
+			Sequelize.Promise.all([
+				db.Series.destroy({
+					where: { id: seriesID }
+				}),
+				db.Track.destroy({
+					where: { id: trackID }
+				}),
+				db.VehicleClassCategory.destroy({
+					where: { id: vcl_cat_id }
+				})
+			]).spread((res3, res4, res5) => {
+				res3.should.equal(1);
+				res4.should.equal(1);
+				res5.should.equal(1);
+				done();
+			}, err => {
+				should.not.exist(err);
+				done();
+			});
+		}, err => {
+			should.not.exist(err);
+			done();
+		});
+	});
+
 	beforeEach(done => {
 		let events = [
-			{ name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries : [] },
-			{ name: 'Test Event 2', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries : [] },
-			{ name: 'Test Event 3', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries : [] },
-			{ name: 'Test Event 4', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries : [] },
-			{ name: 'Test Event 5', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries : [] }
+			{ name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries : [] },
+			{ name: 'Test Event 2', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries : [] },
+			{ name: 'Test Event 3', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries : [] },
+			{ name: 'Test Event 4', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries : [] },
+			{ name: 'Test Event 5', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries : [] }
 		];
 		each(events, function(event, callback) {
 			event.supportseries = [];
@@ -71,8 +151,8 @@ describe('Events', () => {
 				event.logo.should.equal('...');
 				event.startdate.should.equal('2019-07-01');
 				event.enddate.should.equal('2019-07-03');
-				(event.track === null).should.be.true;
-				(event.mainseries === null).should.be.true;
+				event.track.should.equal(trackID);
+				event.mainseries.should.equal(seriesID);
 			});
 			done();
 		}, err => {
@@ -328,6 +408,48 @@ describe('Events', () => {
 				should.not.exist(err);
 				done();
 			});
+		}, err => {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	it('Deleting a series which is used by an event', done => {
+		db.Event.findAll({
+			limit: 1,
+			order: [
+				['createdAt', 'DESC'],
+				['id', 'DESC']
+			]
+		}).then(events => {
+			supertest(server)
+				.post('/api/calendar/series/delete/' + events[0].mainseries)
+				.end((err, res) => {
+					res.status.should.equal(409);
+					should.not.exist(err);
+					done();
+				});
+		}, err => {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	it('Deleting a track which is used by an event', done => {
+		db.Event.findAll({
+			limit: 1,
+			order: [
+				['createdAt', 'DESC'],
+				['id', 'DESC']
+			]
+		}).then(events => {
+			supertest(server)
+				.post('/api/calendar/track/delete/' + events[0].track)
+				.end((err, res) => {
+					res.status.should.equal(409);
+					should.not.exist(err);
+					done();
+				});
 		}, err => {
 			should.not.exist(err);
 			done();
@@ -624,7 +746,7 @@ describe('EventSessions', () => {
 		});
 	});
 
-	it('Deleting an event', done => {
+	it('Deleting an event session', done => {
 		let nrOfSessionsBefore, sessionID;
 		let tmp = {
 			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
