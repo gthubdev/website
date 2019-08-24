@@ -101,10 +101,6 @@
 				&nbsp;
 			</div>
 
-			<p style="padding-left: 1em">
-				<strong>Info:</strong> When creating the 2nd session etc., you need to set the date again. Will be fixed later.
-			</p>
-
 			<md-dialog-actions>
 				<md-button class="md-primary md-accent" @click="showEventSessionDialog = false">
 					Cancel

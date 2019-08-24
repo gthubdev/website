@@ -107,6 +107,7 @@ import CRUDEvent from '~/components/resources/CRUD-Event.vue';
 import CRUDEventSession from '~/components/resources/CRUD-EventSession.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import moment from 'moment';
+import { constants } from '~/plugins/constants';
 
 export default {
 	components: {
@@ -141,7 +142,7 @@ export default {
 			showPagination: false,
 			pageNumber: 1,
 			pageCount: 1,
-			itemsPerPage: 5
+			itemsPerPage: constants.ITEMS_PER_PAGE_EVENTS
 		};
 	},
 	watch: {

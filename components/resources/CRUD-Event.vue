@@ -130,7 +130,7 @@
 			<md-field :class="requiredPriority">
 				<label for="priority">Priority</label>
 				<md-select id="priority" v-model="event.priority" name="priority" placeholder="Priority" required>
-					<md-option v-for="i in 4" :key="i" :value="i">
+					<md-option v-for="i in PRIORITY_MAX" :key="i" :value="i">
 						{{ i }}
 					</md-option>
 				</md-select>
@@ -157,6 +157,7 @@
 
 <script>
 import moment from 'moment';
+import { constants } from '~/plugins/constants';
 
 export default {
 	props: {
@@ -201,7 +202,8 @@ export default {
 			supportseries: [],
 			tmpSupportSeries: [],
 			validss: false,
-			initMainSet: false
+			initMainSet: false,
+			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
 	},
 	computed: {
