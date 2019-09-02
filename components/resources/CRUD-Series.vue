@@ -30,7 +30,7 @@
 			<md-field :class="requiredPriority">
 				<label for="priority">Priority</label>
 				<md-select id="priority" v-model="series.priority" name="priority" placeholder="Priority" required>
-					<md-option v-for="i in 4" :key="i" :value="i">
+					<md-option v-for="i in PRIORITY_MAX" :key="i" :value="i">
 						{{ i }}
 					</md-option>
 				</md-select>
@@ -80,6 +80,8 @@
 </template>
 
 <script>
+import { constants } from '~/plugins/constants';
+
 export default {
 	props: {
 		showDialog: {
@@ -111,7 +113,8 @@ export default {
 			},
 			chosenVC: '',
 			vehicleClasses: [],
-			tmpVehicleClasses: []
+			tmpVehicleClasses: [],
+			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
 	},
 	computed: {

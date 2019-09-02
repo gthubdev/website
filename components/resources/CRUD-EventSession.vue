@@ -5,14 +5,14 @@
 			<md-dialog-title>{{ headline() }}</md-dialog-title>
 
 			<md-list v-if="event !== null" class="md-dense">
-				<md-list-item v-for="es in event.EventSessions" :key="es.id">
+				<md-list-item v-for="es in getSessions()" :key="es.id">
 					<!-- <md-avatar>
 						<img :src="es.Series.logo" alt="Logo" />
 					</md-avatar> -->
 					<div class="md-list-item-text">
 						<div class="md-layout">
 							<div class="md-layout-item">
-								<strong>{{ es.name }} ({{ es.Series.name }})</strong> {{ getLocalTime(es) }}
+								<strong>{{ es.name }} ({{ es.Series.shortname }})</strong> {{ getLocalTime(es) }}
 							</div>
 							<div class="md-layout-item">
 								<md-icon class="" @click.native="deleteSession(es)">
@@ -57,10 +57,17 @@
 			</div>
 			<VueCtkDateTimePicker
 				v-model="eventtime.date"
+				:label="dateLabel()"
 				format="YYYY-MM-DD HH:mm"
 				formatted="ddd, Do MMMM YYYY, HH:mm"
 				minute-interval="15"
 				locale="en"
+				:hint="dateHint()"
+				:error="isInvalidStart()"
+				color="#ed6400"
+				button-color="#ed6400"
+				:min-date="getMinDate()"
+				:max-date="getMaxDate()"
 				:first-day-of-week="1"
 				:dark="true"
 			/>
@@ -76,6 +83,11 @@
 						<span class="md-error">Please enter hours</span>
 					</md-field>
 				</div>
+
+				<div class="md-layout-item md-size-5">
+					&nbsp;
+				</div>
+
 				<div class="block md-layout-item md-size-25">
 					<md-field :class="requiredDuration">
 						<label>Minutes</label>
@@ -85,9 +97,9 @@
 				</div>
 			</div>
 
-			<p style="padding-left: 1em">
-				<strong>Info:</strong> When creating the 2nd session etc., you need to set the date again. Will be fixed later.
-			</p>
+			<div class="md-layout-item">
+				&nbsp;
+			</div>
 
 			<md-dialog-actions>
 				<md-button class="md-primary md-accent" @click="showEventSessionDialog = false">
@@ -280,6 +292,15 @@ export default {
 					return '';
 			}
 		},
+		getSessions() {
+			// don't show the active session in the list
+			return this.event.EventSessions.filter(es => {
+				if (this.mode === 'create')
+					return true;
+				else if (this.activeSession && this.activeSession.id)
+					return es.id !== this.activeSession.id;
+			});
+		},
 		getAllSeries() {
 			let arr = [];
 			if (this.event === null) {
@@ -293,12 +314,12 @@ export default {
 		},
 		getLocalTime(session) {
 			let local_tz = this.event.Track.timezone;
-			return moment(session.starttime).tz(local_tz).format();
+			return moment(session.starttime).tz(local_tz).format('Do MMM, HH:mm');
 		},
 		validInput() {
 			return this.eventsession.name.length > 0 &&
 			this.eventsession.series !== undefined && this.eventsession.series.id &&
-			this.eventtime.date !== null && this.eventtime.date !== '' &&
+			!this.isInvalidStart() &&
 			this.validDuration();
 		},
 		validDuration() {
@@ -326,6 +347,32 @@ export default {
 				return true;
 			else
 				return false;
+		},
+		isInvalidStart() {
+			if (this.eventtime.date === null ||
+				this.eventtime.date === '')
+				return true;
+
+			return moment(this.event.startdate).isAfter(moment(this.eventtime.date).format('YYYY-MM-DD')) &&
+				moment(this.event.enddate).isBefore(moment(this.eventtime.date).format('YYYY-MM-DD'));
+		},
+		dateLabel() {
+			return this.isInvalidStart() ? 'Select date' : '';
+		},
+		dateHint() {
+			return this.isInvalidStart() ? 'Please select a valid date' : '';
+		},
+		getMinDate() {
+			if (this.event === null || this.event.startdate === null)
+				return '';
+			else
+				return this.event.startdate;
+		},
+		getMaxDate() {
+			if (this.event === null || this.event.enddate === null)
+				return '';
+			else
+				return this.event.enddate;
 		}
 	}
 };

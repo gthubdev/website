@@ -3,6 +3,18 @@ const util = require('../util/util.js');
 const moment = require('moment-timezone');
 
 module.exports.createEventSession = (req, res) => {
+	moment.suppressDeprecationWarnings = true;
+	let starttime = moment(req.body.session.starttime);
+	if (!starttime.isValid()) {
+		res.status(400).send('Invalid starttime');
+		return;
+	}
+
+	let duration = req.body.session.duration;
+	if (duration <= 0) {
+		res.status(400).send('Invalid duration');
+		return;
+	}
 
 	// need to convert the local starttime into UTC
 	req.body.session.starttime = getLocalTime(req.body.session);
@@ -20,15 +32,33 @@ module.exports.createEventSession = (req, res) => {
 		util.print('EventSession \'' + eventsession.name + '\' created');
 		res.json(eventsession.get({plain:true}));
 	}, err => {
+		console.log(err);
 		util.error(req, res, err);
 	});
 };
 
 module.exports.updateEventSession = (req, res) => {
+	moment.suppressDeprecationWarnings = true;
 
 	if (!req.body.session || !req.body.session.timezone) {
 		res.status(400).send('Bad request');
 		return;
+	}
+
+	if (req.body.session.starttime) {
+		let starttime = moment(req.body.session.starttime);
+		if (starttime && !starttime.isValid()) {
+			res.status(400).send('Invalid starttime');
+			return;
+		}
+	}
+
+	if (req.body.session.duration) {
+		let duration = req.body.session.duration;
+		if (duration <= 0) {
+			res.status(400).send('Invalid duration');
+			return;
+		}
 	}
 
 	// need to convert the local starttime into UTC

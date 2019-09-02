@@ -9,6 +9,7 @@
 
 
 // Layout
+@import 'layout/body';
 @import 'layout/align';
 
 // Abstracts
@@ -19,6 +20,7 @@
 // Components
 @import 'components/button';
 @import 'components/nav';
+@import 'components/pagination';
 
 // Pages
 @import 'pages/index';

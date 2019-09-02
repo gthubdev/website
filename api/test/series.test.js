@@ -109,7 +109,7 @@ describe('Series', () => {
 		});
 	});
 
-	it('Creating series', done => {
+	it('Creating a series', done => {
 		db.Series.findAll({
 			limit: 5,
 			order: [
@@ -129,7 +129,25 @@ describe('Series', () => {
 		});
 	});
 
-	it('Updating series', done => {
+	it('Creating a series with an invalid priority', done => {
+		let series = { name: 'Test Series 1', shortname: 'TS1', priority: -2};
+		let tmp = {
+			series: series,
+			vehicleClasses: [
+				{ id: vcl_id }
+			]
+		};
+		supertest(server)
+				.post('/api/calendar/series/create')
+				.send(tmp)
+				.end((err, res) => {
+					res.status.should.equal(400);
+					should.not.exist(err);
+					done();
+				});
+	});
+
+	it('Updating a series', done => {
 		db.Series.findAll({
 			limit: 1,
 			order: [
@@ -174,7 +192,39 @@ describe('Series', () => {
 		});
 	});
 
-	it('Deleting series', done => {
+	it('Updating a series with an invalid priority', done => {
+		db.Series.findAll({
+			limit: 1,
+			order: [
+				['createdAt', 'DESC'],
+				['id', 'DESC']
+			]
+		}).then(series => {
+			let vehicleClasses = [];
+			vehicleClasses.push({id: vcl_id});
+			let tmp = {
+				series: {
+					id: series[0].id,
+					name: 'NEW_SERIES_NAME',
+					priority: 20,
+					vehicleClasses: vehicleClasses
+				}
+			};
+			supertest(server)
+				.post('/api/calendar/series/update/' + series[0].id)
+				.send(tmp)
+				.end((err, res) => {
+					res.status.should.equal(400);
+					should.not.exist(err);
+					done();
+				});
+		}, err => {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	it('Deleting a series', done => {
 		let nrOfSeriesBefore, seriesID;
 		let tmp = {
 			name: 'Test Series 6',

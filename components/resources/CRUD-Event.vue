@@ -10,7 +10,7 @@
 				<span class="md-error">Please enter a name</span>
 			</md-field>
 
-			<md-autocomplete v-model="event.track" :md-options="tracks.map(x=>({
+			<md-autocomplete v-model="event.track" md-dense :md-options="tracks.map(x=>({
 				'id':x.id,
 				'name':x.name,
 				'toLowerCase':()=>x.name.toLowerCase(),
@@ -32,7 +32,7 @@
 				<span class="md-error">Please choose a track</span>
 			</md-autocomplete>
 
-			<md-autocomplete v-model="event.mainseries" :md-options="series.map(x=>({
+			<md-autocomplete v-model="event.mainseries" md-dense :md-options="series.map(x=>({
 				'id':x.id,
 				'name':x.name,
 				'toLowerCase':()=>x.name.toLowerCase(),
@@ -83,12 +83,17 @@
 			</md-autocomplete>
 
 			<div class="md-layout">
-				<div class="md-layout-item">
+				<div class="md-layout-item md-size-45">
 					<label>Startdate</label>
 					<VueCtkDateTimePicker
 						v-model="event.startdate"
+						:label="dateLabel()"
 						format="YYYY-MM-DD"
 						formatted="ddd, Do MMMM YYYY"
+						:hint="dateHint()"
+						:error="isInvalidDate()"
+						color="#ed6400"
+						button-color="#ed6400"
 						:only-date="true"
 						:auto-close="true"
 						locale="en"
@@ -98,11 +103,21 @@
 				</div>
 
 				<div class="md-layout-item">
+					&nbsp;
+				</div>
+
+				<div class="md-layout-item md-size-45">
 					<label>Enddate</label>
 					<VueCtkDateTimePicker
 						v-model="event.enddate"
+						:label="dateLabel()"
 						format="YYYY-MM-DD"
 						formatted="ddd, Do MMMM YYYY"
+						:hint="dateHint()"
+						:error="isInvalidDate()"
+						color="#ed6400"
+						button-color="#ed6400"
+						:min-date="event.startdate"
 						:only-date="true"
 						:auto-close="true"
 						locale="en"
@@ -115,7 +130,7 @@
 			<md-field :class="requiredPriority">
 				<label for="priority">Priority</label>
 				<md-select id="priority" v-model="event.priority" name="priority" placeholder="Priority" required>
-					<md-option v-for="i in 4" :key="i" :value="i">
+					<md-option v-for="i in PRIORITY_MAX" :key="i" :value="i">
 						{{ i }}
 					</md-option>
 				</md-select>
@@ -141,6 +156,9 @@
 </template>
 
 <script>
+import moment from 'moment';
+import { constants } from '~/plugins/constants';
+
 export default {
 	props: {
 		showDialog: {
@@ -184,7 +202,8 @@ export default {
 			supportseries: [],
 			tmpSupportSeries: [],
 			validss: false,
-			initMainSet: false
+			initMainSet: false,
+			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
 	},
 	computed: {
@@ -376,9 +395,23 @@ export default {
 			return this.event.name.length > 0 &&
 			this.event.track !== undefined && this.event.track.id &&
 			this.event.mainseries !== undefined && this.event.mainseries.id &&
-			this.event.startdate !== null && this.event.startdate !== '' &&
-			this.event.enddate !== null && this.event.enddate !== '' &&
+			!this.isInvalidDate() &&
 			this.event.priority >= 1;
+		},
+		isInvalidDate() {
+			if (this.event.startdate === null ||
+				this.event.startdate === '' ||
+				this.event.enddate === null ||
+				this.event.enddate === '')
+				return true;
+
+			return moment(this.event.enddate).isBefore(moment(this.event.startdate).format('YYYY-MM-DD'));
+		},
+		dateLabel() {
+			return this.isInvalidDate() ? 'Select date' : '';
+		},
+		dateHint() {
+			return this.isInvalidDate() ? 'Please select valid dates' : '';
 		}
 	}
 };

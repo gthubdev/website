@@ -3,6 +3,12 @@ const Sequelize = require('sequelize');
 const util = require('../util/util.js');
 
 module.exports.createSeries = (req, res) => {
+	let prio = req.body.series.priority;
+	if (prio < 1 || prio > 4) {
+		res.status(400).send('Invalid priority');
+		return;
+	}
+
 	db.Series.create(req.body.series)
 	.then(newseries => {
 		let vclarray = [];
@@ -42,6 +48,14 @@ module.exports.createSeries = (req, res) => {
 };
 
 module.exports.updateSeries = (req, res) => {
+	if (req.body.series.priority) {
+		let prio = req.body.series.priority;
+		if (prio < 1 || prio > 4) {
+			res.status(400).send('Invalid priority');
+			return;
+		}
+	}
+
 	Sequelize.Promise.all([
 		db.Series.update(req.body.series,
 			{ where: { id: req.params.id } }
@@ -50,8 +64,7 @@ module.exports.updateSeries = (req, res) => {
 			where: { series: req.params.id }
 		})
 	]).spread((updated, deleted) => {
-		if (updated !== 1 && deleted < 1) {
-			util.print('Error updating event ' + req.body.event.name);
+		if (updated !== 1 && deleted < 0) {
 			util.error(req, res, 'Error updating event ' + req.body.event.name);
 			return;
 		}

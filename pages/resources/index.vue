@@ -240,4 +240,7 @@ export default {
 .md-tabs {
 	width: 100%;
 }
+.md-dialog {
+	z-index: 125;
+}
 </style>

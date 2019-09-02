@@ -56,7 +56,7 @@ describe('Tracks', () => {
 		});
 	});
 
-	it('Creating tracks', done => {
+	it('Creating a track', done => {
 		db.Track.findAll({
 			limit: 5,
 			order: [
@@ -77,7 +77,37 @@ describe('Tracks', () => {
 		});
 	});
 
-	it('Updating tracks', done => {
+	it('Creating a track with an invalid country', done => {
+		let track = { name: 'Test Track 1', country: 'Swedennn', timezone: 'Europe/Amsterdam', length: 5, map: ''};
+		let tmp = {
+			track: track
+		};
+		supertest(server)
+			.post('/api/calendar/track/create')
+			.send(tmp)
+			.end((err, res) => {
+				res.status.should.equal(400);
+				should.not.exist(err);
+				done();
+			});
+	});
+
+	it('Creating a track with an invalid timezone', done => {
+		let track = { name: 'Test Track 1', country: 'Sweden', timezone: 'Europe/Amsterdammmm', length: 5, map: ''};
+		let tmp = {
+			track: track
+		};
+		supertest(server)
+			.post('/api/calendar/track/create')
+			.send(tmp)
+			.end((err, res) => {
+				res.status.should.equal(400);
+				should.not.exist(err);
+				done();
+			});
+	});
+
+	it('Updating a track', done => {
 		db.Track.findAll({
 			limit: 1,
 			order: [
@@ -114,7 +144,65 @@ describe('Tracks', () => {
 		});
 	});
 
-	it('Deleting tracks', done => {
+	it('Updating a track with an invalid country', done => {
+		db.Track.findAll({
+			limit: 1,
+			order: [
+				['createdAt', 'DESC'],
+				['id', 'DESC']
+			]
+		}).then(tracks => {
+			let tmp = {
+				track: {
+					name: 'UPDATED_TRACKNAME',
+					country: 'Ratel Country',
+					length: 16
+				}
+			};
+			supertest(server)
+				.post('/api/calendar/track/update/' + tracks[0].id)
+				.send(tmp)
+				.end((err, res) => {
+					res.status.should.equal(400);
+					should.not.exist(err);
+					done();
+				});
+		}, err => {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	it('Updating a track with an invalid timezone', done => {
+		db.Track.findAll({
+			limit: 1,
+			order: [
+				['createdAt', 'DESC'],
+				['id', 'DESC']
+			]
+		}).then(tracks => {
+			let tmp = {
+				track: {
+					name: 'UPDATED_TRACKNAME',
+					timezone: 'Europe/Ratel',
+					length: 16
+				}
+			};
+			supertest(server)
+				.post('/api/calendar/track/update/' + tracks[0].id)
+				.send(tmp)
+				.end((err, res) => {
+					res.status.should.equal(400);
+					should.not.exist(err);
+					done();
+				});
+		}, err => {
+			should.not.exist(err);
+			done();
+		});
+	});
+
+	it('Deleting a track', done => {
 		let nrOfTracksBefore, trackID;
 		let tmp = {
 			track: {
