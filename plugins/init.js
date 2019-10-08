@@ -1,9 +1,7 @@
 import Vue from 'vue';
 
-// have to import the datepicker this way
-// will get 'window is not defined'-error otherwise
+// import the datepicker
+import VueCtkDateTimePicker from 'vue-ctk-date-time-picker';
 import 'vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css';
-if (process.client) {
-	const VueCtkDateTimePicker = require('vue-ctk-date-time-picker');
-	Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
-}
+
+Vue.component('VueCtkDateTimePicker', VueCtkDateTimePicker);
