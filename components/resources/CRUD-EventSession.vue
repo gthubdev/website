@@ -60,7 +60,7 @@
 				:label="dateLabel()"
 				format="YYYY-MM-DD HH:mm"
 				formatted="ddd, Do MMMM YYYY, HH:mm"
-				minute-interval="15"
+				minute-interval="5"
 				locale="en"
 				:hint="dateHint()"
 				:error="isInvalidStart()"
