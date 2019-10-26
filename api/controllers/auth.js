@@ -76,6 +76,10 @@ module.exports.changepassword = async (req, res) => {
 	}
 };
 
+module.exports.me = async (req, res) => {
+	res.json({});
+};
+
 function generatePayload(user) {
 	const payload = {
 		id: user.id,
