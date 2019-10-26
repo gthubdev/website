@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const util = require('../util/util.js');
 const moment = require('moment');
 
-module.exports.createEvent = (req, res) => {
+module.exports.createEvent = async (req, res) => {
 	moment.suppressDeprecationWarnings = true;
 	let startdate = moment(req.body.event.startdate);
 	let enddate = moment(req.body.event.enddate);
@@ -24,8 +24,9 @@ module.exports.createEvent = (req, res) => {
 		return;
 	}
 
-	db.Event.create(req.body.event)
-	.then(newevent => {
+	try {
+		const newevent = await db.Event.create(req.body.event);
+
 		// build the array with the event.id for the support series
 		let supportarray = [];
 		req.body.event.supportseries.forEach(s => {
@@ -34,43 +35,39 @@ module.exports.createEvent = (req, res) => {
 				series: s.id
 			});
 		});
-		db.SupportSeries.bulkCreate(supportarray)
-		.then(() => {
-			return db.Event.findOne({
-				where: {id: newevent.id},
-				include: [
-					{ model: db.Track },
-					{ model: db.Series},
-					{
-						model: db.SupportSeries,
-						include: [
-							{ model: db.Series }
-						]
-					},
-					{
-						model: db.EventSession,
-						include: [
-							{ model: db.Series }
-						]
-					}
-				],
-				order: [
-					['priority', 'ASC'],
-					['startdate', 'ASC'],
-					[db.EventSession, 'starttime', 'ASC']
-				]
-			});
-		}).then(event => {
-			res.json(event.get({plain:true}));
-		}, err => {
-			util.error(req, res, err);
+		await db.SupportSeries.bulkCreate(supportarray);
+
+		const event = await db.Event.findOne({
+			where: {id: newevent.id},
+			include: [
+				{ model: db.Track },
+				{ model: db.Series},
+				{
+					model: db.SupportSeries,
+					include: [
+						{ model: db.Series }
+					]
+				},
+				{
+					model: db.EventSession,
+					include: [
+						{ model: db.Series }
+					]
+				}
+			],
+			order: [
+				['priority', 'ASC'],
+				['startdate', 'ASC'],
+				[db.EventSession, 'starttime', 'ASC']
+			]
 		});
-	}, err => {
+		res.json(event.get({plain:true}));
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
 
-module.exports.updateEvent = (req, res) => {
+module.exports.updateEvent = async (req, res) => {
 	moment.suppressDeprecationWarnings = true;
 	if (req.body.event.startdate && req.body.event.enddate) {
 		let startdate = moment(req.body.event.startdate);
@@ -98,14 +95,15 @@ module.exports.updateEvent = (req, res) => {
 		}
 	}
 
-	Sequelize.Promise.all([
-		db.Event.update(req.body.event,
-			{ where: { id: req.params.id } }
-		),
-		db.SupportSeries.destroy({
-			where: { event: req.params.id }
-		})
-	]).spread((updated, deleted) => {
+	try {
+		const [ updated, deleted ] = await Sequelize.Promise.all([
+			db.Event.update(req.body.event,
+				{ where: { id: req.params.id } }
+			),
+			db.SupportSeries.destroy({
+				where: { event: req.params.id }
+			})
+		]);
 		if (updated !== 1 && deleted < 0) {
 			util.error(req, res, 'Error updating event ' + req.body.event.name);
 			return;
@@ -119,50 +117,47 @@ module.exports.updateEvent = (req, res) => {
 				series: s.id
 			});
 		});
-		db.SupportSeries.bulkCreate(supportarray)
-		.then(() => {
-			return  db.Event.findOne({
-						where: {id: req.params.id},
-						include: [
-							{ model: db.Track },
-							{ model: db.Series},
-							{
-								model: db.SupportSeries,
-								include: [
-									{ model: db.Series }
-								]
-							},
-							{
-								model: db.EventSession,
-								include: [
-									{ model: db.Series }
-								]
-							}
-						],
-						order: [
-							['priority', 'ASC'],
-							['startdate', 'ASC'],
-							[db.EventSession, 'starttime', 'ASC']
-						]
-					});
-		}).then(event => {
-			res.json(event.get({plain:true}));
-		}, err => {
-			util.error(req, res, err);
+		await db.SupportSeries.bulkCreate(supportarray);
+
+		const event = await db.Event.findOne({
+			where: {id: req.params.id},
+			include: [
+				{ model: db.Track },
+				{ model: db.Series},
+				{
+					model: db.SupportSeries,
+					include: [
+						{ model: db.Series }
+					]
+				},
+				{
+					model: db.EventSession,
+					include: [
+						{ model: db.Series }
+					]
+				}
+			],
+			order: [
+				['priority', 'ASC'],
+				['startdate', 'ASC'],
+				[db.EventSession, 'starttime', 'ASC']
+			]
 		});
-	}, err => {
+		res.json(event.get({plain:true}));
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
 
-module.exports.deleteEvent = (req, res) => {
-	db.Event.destroy({
-		where: { id: req.params.id }
-	}).then(response => {
+module.exports.deleteEvent = async (req, res) => {
+	try {
+		const response = await db.Event.destroy({
+			where: { id: req.params.id }
+		});
 		if (response === 1)
 			util.print('Deleted Event with id ' + req.params.id);
 		res.json({ deleted: response });
-	}, err => {
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
