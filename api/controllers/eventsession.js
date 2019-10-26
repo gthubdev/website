@@ -2,7 +2,7 @@ const db = require('../models');
 const util = require('../util/util.js');
 const moment = require('moment-timezone');
 
-module.exports.createEventSession = (req, res) => {
+module.exports.createEventSession = async (req, res) => {
 	moment.suppressDeprecationWarnings = true;
 	let starttime = moment(req.body.session.starttime);
 	if (!starttime.isValid()) {
@@ -19,25 +19,23 @@ module.exports.createEventSession = (req, res) => {
 	// need to convert the local starttime into UTC
 	req.body.session.starttime = getLocalTime(req.body.session);
 
-	db.EventSession.create(req.body.session)
-	.then(newsession => {
+	try {
+		const newsession = await db.EventSession.create(req.body.session);
 		// query the newly created session to include series-info
-		return db.EventSession.findOne({
+		const eventsession = await db.EventSession.findOne({
 			where: {id: newsession.id},
 			include : [
 				{ model: db.Series }
 			]
 		});
-	}).then(eventsession => {
 		util.print('EventSession \'' + eventsession.name + '\' created');
 		res.json(eventsession.get({plain:true}));
-	}, err => {
-		console.log(err);
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
 
-module.exports.updateEventSession = (req, res) => {
+module.exports.updateEventSession = async (req, res) => {
 	moment.suppressDeprecationWarnings = true;
 
 	if (!req.body.session || !req.body.session.timezone) {
@@ -64,38 +62,38 @@ module.exports.updateEventSession = (req, res) => {
 	// need to convert the local starttime into UTC
 	req.body.session.starttime = getLocalTime(req.body.session);
 
-	db.EventSession.update(req.body.session,
-		{ where: { id: req.params.id } }
-	).then(response => {
+	try {
+		const response = await db.EventSession.update(req.body.session,
+			{ where: { id: req.params.id } }
+		);
 		if (response[0] == 0)
 			return;
 
 		util.print(response[0] + ' EventSession updated');
-		db.EventSession.findOne({
+
+		const session = await db.EventSession.findOne({
 			where: { id: req.params.id },
 			include: [
 				{ model: db.Series }
 			]
-		}).then(session => {
-			res.json(session.get({plain:true}));
-		}, err => {
-			util.error(req, res, err);
 		});
-	}, err => {
+		res.json(session.get({plain:true}));
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
 
-module.exports.deleteEventSession = (req, res) => {
-	db.EventSession.destroy({
-		where: { id: req.params.id }
-	}).then(response => {
+module.exports.deleteEventSession = async (req, res) => {
+	try {
+		const response = await db.EventSession.destroy({
+			where: { id: req.params.id }
+		});
 		if (response >= 1)
 			util.print('EventSessions deleted: ' + response);
 		res.json({ deleted: response });
-	}, err => {
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
 
 function getLocalTime(session) {

@@ -32,7 +32,7 @@ module.exports.createIcal = async (req, res) => {
 			});
 		});
 		res.json(cal.toString());
-	} catch(er) {
+	} catch(err) {
 		util.error(req, res, err);
 	}
 };
