@@ -18,7 +18,6 @@ module.exports.login = async (req, res) => {
 				}
 				if (matches) {
 					util.print('User ' + req.body.username + ', password matched');
-					req.session.user = user.id;
 					res.status(200).send();
 				} else {
 					util.print('User ' + req.body.username + ', password did not match');
@@ -35,8 +34,6 @@ module.exports.login = async (req, res) => {
 };
 
 module.exports.logout = (req, res) => {
-	res.clearCookie('connect.sid');
-	req.session.destroy();
 	res.status(200).send();
 };
 
