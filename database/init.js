@@ -6,18 +6,19 @@ let delay = 1000;
 
 console.log('Initializing data...');
 setTimeout(() => {
-	fs.readFile(__dirname + '/init_data.sql', (err, data) => {
+	fs.readFile(__dirname + '/init_data.sql', async (err, data) => {
 		if (err) {
 			throw err;
 		}
-		db.sequelize.query(data.toString()).then(() => {
+
+		try {
+			await db.sequelize.query(data.toString());
 			console.log('Initializing data completed.');
 			process.exit(0);
-		}).catch(err => {
-			console.log(err);
+		} catch(error) {
+			console.log(error);
 			console.log('Error initializing data.');
 			process.exit(1);
-		});
-
+		}
 	});
 }, delay);

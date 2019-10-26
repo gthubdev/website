@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const dateutil = require('../util/dateutil');
 const util = require('../util/util');
 
-const DEFAULT_TIMEZONE = 'Europe/Brussels';
+const DEFAULT_TIMEZONE = 'Europe/Stockholm';
 
 module.exports.getCalendar = (req, res) => {
 	let timezone = req.cookies.timezone !== undefined ? req.cookies.timezone : DEFAULT_TIMEZONE;
@@ -16,72 +16,73 @@ module.exports.getCalendarWithTimezone = (req, res) => {
 	res.redirect('/calendar');
 };
 
-function buildCalendar(req, res, timezone) {
-	Sequelize.Promise.all([
-		db.Event.findAll({
-			include: [
-				{ model: db.Track },
-				{ model: db.Series },
-				{
-					model: db.SupportSeries,
-					include: [
-						{ model: db.Series }
-					]
-				},
-				{
-					model: db.EventSession,
-					include: [
-						{ model: db.Series }
-					]
-				}
-			],
-			order: [
-				['priority', 'ASC'],
-				['startdate', 'ASC'],
-				[db.EventSession, 'starttime', 'ASC']
-			]
-		}),
-		db.Series.findAll({
-			include: [
-				{
-					model: db.SeriesType,
-					include: [
-						{
-							model: db.VehicleClass,
-							include: [
-								{ model: db.VehicleClassCategory }
-							]
-						}
-					]
-				}
-			],
-			order: [
-				['priority', 'ASC'],
-				['name', 'ASC']
-			]
-		}),
-		db.Track.findAll({
-			order: [
-				['name', 'ASC']
-			]
-		}),
-		db.VehicleClassCategory.findAll({
-			include: [
-				{ model: db.VehicleClass }
-			],
-			order: [
-				['name', 'ASC'],
-			]
-		}),
-		db.VehicleClass.findAll({
-			include: [
-				{ model: db.VehicleClassCategory }
-			],
-			order: [
-				['name', 'ASC']
-			]
-		})
-	]).spread((events, series, tracks, vehicleclasscategories, vehicleclasses) => {
+async function buildCalendar(req, res, timezone) {
+	try {
+		const [ events, series, tracks, vehicleclasscategories, vehicleclasses ] = await Sequelize.Promise.all([
+			db.Event.findAll({
+				include: [
+					{ model: db.Track },
+					{ model: db.Series },
+					{
+						model: db.SupportSeries,
+						include: [
+							{ model: db.Series }
+						]
+					},
+					{
+						model: db.EventSession,
+						include: [
+							{ model: db.Series }
+						]
+					}
+				],
+				order: [
+					['priority', 'ASC'],
+					['startdate', 'ASC'],
+					[db.EventSession, 'starttime', 'ASC']
+				]
+			}),
+			db.Series.findAll({
+				include: [
+					{
+						model: db.SeriesType,
+						include: [
+							{
+								model: db.VehicleClass,
+								include: [
+									{ model: db.VehicleClassCategory }
+								]
+							}
+						]
+					}
+				],
+				order: [
+					['priority', 'ASC'],
+					['name', 'ASC']
+				]
+			}),
+			db.Track.findAll({
+				order: [
+					['name', 'ASC']
+				]
+			}),
+			db.VehicleClassCategory.findAll({
+				include: [
+					{ model: db.VehicleClass }
+				],
+				order: [
+					['name', 'ASC'],
+				]
+			}),
+			db.VehicleClass.findAll({
+				include: [
+					{ model: db.VehicleClassCategory }
+				],
+				order: [
+					['name', 'ASC']
+				]
+			})
+		]);
 
 		// timezone-info
 		let tz = {
@@ -101,7 +102,7 @@ function buildCalendar(req, res, timezone) {
 		};
 
 		res.json(data);
-	}, err => {
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 }

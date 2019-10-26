@@ -3,19 +3,20 @@ const ical = require('ical-generator');
 const moment = require('moment');
 const util = require('../util/util');
 
-module.exports.createIcal = (req, res) => {
-	db.Event.findOne({
-		where: { id: req.params.id },
-		include: [
-			{
-				model: db.EventSession,
-				include: [
-					{ model: db.Series }
-				]
-			},
-			{ model: db.Track }
-		]
-	}).then(event => {
+module.exports.createIcal = async (req, res) => {
+	try {
+		const event = await db.Event.findOne({
+			where: { id: req.params.id },
+			include: [
+				{
+					model: db.EventSession,
+					include: [
+						{ model: db.Series }
+					]
+				},
+				{ model: db.Track }
+			]
+		});
 		const cal = ical({
 			domain: 'gthub.eu',
 			prodId: {company: 'GTHub Inc.', product: 'ical-generator'},
@@ -31,7 +32,7 @@ module.exports.createIcal = (req, res) => {
 			});
 		});
 		res.json(cal.toString());
-	}, err => {
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };

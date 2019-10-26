@@ -38,21 +38,21 @@ describe('Authentication', () => {
 
 	it('Valid login for an admin', done => {
 		supertest(server)
-			.post('/api/login')
+			.post('/api/auth/login')
 			.send({ username: 'testadmin', password: 'admin' })
 			.expect(200, done);
 	});
 
 	it('Invalid login', done => {
 		supertest(server)
-			.post('/api/login')
+			.post('/api/auth/login')
 			.send({ username: 'admin4353', password: 'admin5t6346' })
 			.expect(403, done);
 	});
 
 	it('Logout', done => {
 		supertest(server)
-			.post('/api/logout')
+			.post('/api/auth/logout')
 			.send()
 			.expect(200, done);
 	});
@@ -64,7 +64,7 @@ describe('Authentication', () => {
 			newpassword: 'newpw'
 		};
 		supertest(server)
-			.post('/api/changepassword')
+			.post('/api/auth/changepassword')
 			.send(newpw)
 			.end((err, res) => {
 				res.status.should.equal(200);
@@ -75,7 +75,7 @@ describe('Authentication', () => {
 					newpassword: 'newerpw'
 				};
 				supertest(server)
-					.post('/api/changepassword')
+					.post('/api/auth/changepassword')
 					.send(newpw2)
 					.expect(200, done);
 			}, err => {
@@ -91,7 +91,7 @@ describe('Authentication', () => {
 			newpassword: 'newpw'
 		};
 		supertest(server)
-			.post('/api/changepassword')
+			.post('/api/auth/changepassword')
 			.send(newpw)
 			.expect(401, done);
 	});
@@ -103,7 +103,7 @@ describe('Authentication', () => {
 			newpassword: 'newpw'
 		};
 		supertest(server)
-			.post('/api/changepassword')
+			.post('/api/auth/changepassword')
 			.send(newpw)
 			.expect(401, done);
 	});
