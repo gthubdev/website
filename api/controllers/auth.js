@@ -1,6 +1,8 @@
 const db = require('../models/');
 const util = require('../util/util.js');
 const bCrypt = require('bcryptjs');
+const env = require('dotenv');
+const jwt = require('jsonwebtoken');
 
 module.exports.login = async (req, res) => {
 	try {
@@ -10,24 +12,25 @@ module.exports.login = async (req, res) => {
 				{ model: db.Usertype }
 			]
 		});
-		if (user) {
-			bCrypt.compare(req.body.password, user.password, (err, matches) => {
-				if (err) {
-					util.error(req, res, err);
-					return;
-				}
-				if (matches) {
-					util.print('User ' + req.body.username + ', password matched');
-					res.status(200).send();
-				} else {
-					util.print('User ' + req.body.username + ', password did not match');
-					res.status(403).send();
-				}
-			});
-		} else {
+		if (!user) {
 			util.print('User ' + req.body.username + ' does not exist');
 			res.status(403).send();
+			return;
 		}
+
+		const passwordMatch = bCrypt.compareSync(req.body.password, user.password);
+
+		if (!passwordMatch) {
+			util.print('User ' + req.body.username + ', password did not match');
+			res.status(403).send();
+			return;
+		}
+
+		const data = generatePayload(user);
+		const token = await generateToken(user);
+
+		util.print('User ' + req.body.username + ', password matched');
+		res.json({data, token});
 	} catch(err) {
 		util.error(req, res, err);
 	}
@@ -72,3 +75,39 @@ module.exports.changepassword = async (req, res) => {
 		util.error(req, res, err);
 	}
 };
+
+function generatePayload(user) {
+	const payload = {
+		id: user.id,
+		username: user.username,
+		name: user.name,
+		usertype: user.usertype
+	};
+
+	return payload;
+}
+
+async function generateToken(user) {
+	// loads .env variables
+	env.config();
+
+	const info = {
+		id: user.id,
+		usertype: user.usertype
+	};
+
+	const gentoken = jwt.sign(info, process.env.JWT_KEY);
+
+	try {
+		await db.Auth.create({
+			user: user.id,
+			token: gentoken
+		});
+
+		return gentoken;
+	} catch(err) {
+		console.log('error happened.');
+		throw new Error(err);
+	}
+
+}
