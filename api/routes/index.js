@@ -14,9 +14,9 @@ const iCalCtrl = require('../controllers/ical');
 // routes ==================================================
 
 // Authentication
-router.post('/login', AuthCtrl.login);
-router.post('/logout', AuthCtrl.logout);
-router.post('/changepassword', AuthCtrl.changepassword);
+router.post('/auth/login', AuthCtrl.login);
+router.post('/auth/logout', AuthCtrl.logout);
+router.post('/auth/changepassword', AuthCtrl.changepassword);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
