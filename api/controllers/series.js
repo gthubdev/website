@@ -2,15 +2,15 @@ const db = require('../models/');
 const Sequelize = require('sequelize');
 const util = require('../util/util.js');
 
-module.exports.createSeries = (req, res) => {
+module.exports.createSeries = async (req, res) => {
 	let prio = req.body.series.priority;
 	if (prio < 1 || prio > 4) {
 		res.status(400).send('Invalid priority');
 		return;
 	}
 
-	db.Series.create(req.body.series)
-	.then(newseries => {
+	try {
+		const newseries = await db.Series.create(req.body.series);
 		let vclarray = [];
 		req.body.series.vehicleClasses.forEach(vcl => {
 			vclarray.push({
@@ -18,9 +18,8 @@ module.exports.createSeries = (req, res) => {
 				class: vcl.id
 			});
 		});
-		db.SeriesType.bulkCreate(vclarray)
-		.then(() => {
-			return db.Series.findOne({
+		await db.SeriesType.bulkCreate(vclarray);
+		const series = await db.Series.findOne({
 				where: { id: newseries.id },
 				include: [
 					{
@@ -36,18 +35,14 @@ module.exports.createSeries = (req, res) => {
 					}
 				]
 			});
-		}).then(series => {
-			util.print('Series \'' + series.name + '\' created');
-			res.json(series.get({plain:true}));
-		}, err => {
-			util.error(req, res, err);
-		});
-	}, err => {
+		util.print('Series \'' + series.name + '\' created');
+		res.json(series.get({plain:true}));
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
 
-module.exports.updateSeries = (req, res) => {
+module.exports.updateSeries = async (req, res) => {
 	if (req.body.series.priority) {
 		let prio = req.body.series.priority;
 		if (prio < 1 || prio > 4) {
@@ -56,14 +51,16 @@ module.exports.updateSeries = (req, res) => {
 		}
 	}
 
-	Sequelize.Promise.all([
-		db.Series.update(req.body.series,
-			{ where: { id: req.params.id } }
-		),
-		db.SeriesType.destroy({
-			where: { series: req.params.id }
-		})
-	]).spread((updated, deleted) => {
+	try {
+		const [ updated, deleted ] = await Sequelize.Promise.all([
+			db.Series.update(req.body.series,
+				{ where: { id: req.params.id } }
+			),
+			db.SeriesType.destroy({
+				where: { series: req.params.id }
+			})
+		]);
+
 		if (updated !== 1 && deleted < 0) {
 			util.error(req, res, 'Error updating event ' + req.body.event.name);
 			return;
@@ -77,50 +74,46 @@ module.exports.updateSeries = (req, res) => {
 				class: vcl.id
 			});
 		});
-		db.SeriesType.bulkCreate(vclarray)
-		.then(() => {
-			return db.Series.findOne({
-				where: { id: req.params.id },
-				include: [
-					{
-						model: db.SeriesType,
-						include: [
-							{
-								model: db.VehicleClass,
-								include: [
-									{ model: db.VehicleClassCategory }
-								]
-							}
-						]
-					}
-				]
-			});
-		}).then(series => {
-			util.print('Series \'' + series.name + '\' updated');
-			res.json(series.get({plain:true}));
-		}, err => {
-			util.error(req, res, err);
+		await db.SeriesType.bulkCreate(vclarray);
+		const series = await db.Series.findOne({
+			where: { id: req.params.id },
+			include: [
+				{
+					model: db.SeriesType,
+					include: [
+						{
+							model: db.VehicleClass,
+							include: [
+								{ model: db.VehicleClassCategory }
+							]
+						}
+					]
+				}
+			]
 		});
-	}, err => {
+		util.print('Series \'' + series.name + '\' updated');
+		res.json(series.get({plain:true}));
+	} catch(err) {
 		util.error(req, res, err);
-	});
+	}
 };
 
-module.exports.deleteSeries = (req, res) => {
+module.exports.deleteSeries = async (req, res) => {
 	// A series cannot be deleted, if it is the main series of an event,
 	// used as a support series in an event or used in an event session
-	db.Series.destroy({
-		where: { id: req.params.id }
-	}).then(response => {
+	try {
+		const response = await db.Series.destroy({
+			where: { id: req.params.id }
+		});
 		if (response >= 1)
 			util.print('Series deleted: ' + response);
 		res.json({ deleted: response });
-	}, err => {
+	} catch(err) {
 		// Errno 1451 is when trying to delete a row which is referenced
 		// from another entity and 'On Delete' is set to 'RESTRICT'
 		if (err.parent && err.parent.errno && err.parent.errno === 1451)
 			res.status(409).send('The series is used in events.');
 		else
 			util.error(req, res, err);
-	});
+	}
 };
