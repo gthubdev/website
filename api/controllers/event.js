@@ -61,6 +61,7 @@ module.exports.createEvent = async (req, res) => {
 				[db.EventSession, 'starttime', 'ASC']
 			]
 		});
+		util.print('Event \'' + event.name + '\' created');
 		res.json(event.get({plain:true}));
 	} catch(err) {
 		util.error(req, res, err);

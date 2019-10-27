@@ -104,6 +104,9 @@ module.exports.me = async (req, res) => {
 	}
 
 	try {
+		// load .env variables
+		env.config();
+
 		const token = req.header('Authorization').replace('Bearer ', '');
 		const data = jwt.verify(token, process.env.JWT_KEY);
 		const user = await db.User.findOne({

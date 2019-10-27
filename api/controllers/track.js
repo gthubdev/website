@@ -39,7 +39,7 @@ module.exports.updateTrack = async (req, res) => {
 			{ where: { id: req.params.id }
 		});
 		if (response[0] >= 1)
-			util.print(response[0] + ' Tracks updated');
+			util.print('Tracks updated: ' + response[0]);
 		res.json({ updated: response[0] });
 	} catch(err) {
 		util.error(req, res, err);

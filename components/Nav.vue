@@ -21,7 +21,7 @@
 			<md-button class="md-primary" @click="testClick()">
 				About
 			</md-button>
-			<md-button class="md-primary" href="/resources">
+			<md-button v-if="loggedIn" class="md-primary" href="/resources">
 				Resources
 			</md-button>
 			<md-button v-if="!loggedIn" class="md-raised md-primary btn-primary" @click="login()">
