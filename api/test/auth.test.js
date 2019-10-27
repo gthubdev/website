@@ -4,7 +4,7 @@ const db = require('../models/');
 const should = require('chai').should();
 
 describe('Authentication', () => {
-	let userid;
+	let userid, token;
 	// Create user testuser/admin
 	beforeEach(done => {
 		let newuser = {
@@ -40,7 +40,14 @@ describe('Authentication', () => {
 		supertest(server)
 			.post('/api/auth/login')
 			.send({ username: 'testadmin', password: 'admin' })
-			.expect(200, done);
+			.end((err, res) => {
+				res.status.should.equal(200);
+				should.not.exist(err);
+				done();
+			}, err => {
+				should.not.exist(err);
+				done();
+			});
 	});
 
 	it('Invalid login', done => {
@@ -50,11 +57,31 @@ describe('Authentication', () => {
 			.expect(403, done);
 	});
 
-	it('Logout', done => {
+	it('Valid logout', done => {
+		supertest(server)
+			.post('/api/auth/login')
+			.send({ username: 'testadmin', password: 'admin' })
+			.end(async (err, res) => {
+				res.status.should.equal(200);
+				should.not.exist(err);
+				token = res.body.token;
+				supertest(server)
+					.post('/api/auth/logout')
+					.set('Authorization', 'Bearer ' + token)
+					.send()
+					.expect(200, done);
+			}, err => {
+				should.not.exist(err);
+				done();
+			});
+	});
+
+	it('Invalid logout', done => {
 		supertest(server)
 			.post('/api/auth/logout')
+			.set('Authorization', 'Bearer ' + token)
 			.send()
-			.expect(200, done);
+			.expect(401, done);
 	});
 
 	it('Changing password successfully', done => {
