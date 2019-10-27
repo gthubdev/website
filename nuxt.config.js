@@ -82,7 +82,7 @@ module.exports = {
 					login: {
 						url: '/api/auth/login',
 						method: 'post',
-						propertyName: 'data'
+						propertyName: 'token'
 					},
 					logout: {
 						url: '/api/auth/logout',
@@ -94,8 +94,8 @@ module.exports = {
 						propertyName: false
 					}
 				},
-				tokenRequired: false,
-				tokenType: false
+				tokenRequired: true,
+				tokenType: 'Bearer'
 			}
 		}
 	},

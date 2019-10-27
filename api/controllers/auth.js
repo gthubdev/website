@@ -26,18 +26,39 @@ module.exports.login = async (req, res) => {
 			return;
 		}
 
-		const data = generatePayload(user);
 		const token = await generateToken(user);
 
-		util.print('User ' + req.body.username + ', password matched');
-		res.json({data, token});
+		util.print('User ' + req.body.username + ' logged in successfully.');
+		res.json({token});
 	} catch(err) {
 		util.error(req, res, err);
 	}
 };
 
-module.exports.logout = (req, res) => {
-	res.status(200).send();
+module.exports.logout = async (req, res) => {
+	if (!req.header('Authorization')) {
+		res.status(400).send();
+		return;
+	}
+
+	try {
+		const token = req.header('Authorization').replace('Bearer ', '');
+		const data = jwt.verify(token, process.env.JWT_KEY);
+		const response = await db.Auth.destroy({
+			where: { token: token }
+		});
+
+		if (response === 1) {
+			util.print('User ' + data.username + ' logged out successfully.');
+			res.status(200).send();
+		} else {
+			res.status(401).send();
+		}
+
+	} catch(err) {
+		util.error(req, res, err);
+	}
+
 };
 
 module.exports.changepassword = async (req, res) => {
@@ -77,28 +98,38 @@ module.exports.changepassword = async (req, res) => {
 };
 
 module.exports.me = async (req, res) => {
-	res.json({});
+	if (!req.header('Authorization')) {
+		res.status(400).send();
+		return;
+	}
+
+	try {
+		const token = req.header('Authorization').replace('Bearer ', '');
+		const data = jwt.verify(token, process.env.JWT_KEY);
+		const user = await db.User.findOne({
+			where: { id: data.id },
+			attributes: ['id', 'username', 'name', 'usertype']
+		});
+		res.json(user);
+	} catch(err) {
+		util.error(req, res, err);
+	}
 };
 
-function generatePayload(user) {
-	const payload = {
-		id: user.id,
-		username: user.username,
-		name: user.name,
-		usertype: user.usertype
-	};
-
-	return payload;
-}
-
 async function generateToken(user) {
-	// loads .env variables
+	// load .env variables
 	env.config();
 
 	const info = {
 		id: user.id,
+		username: user.username,
 		usertype: user.usertype
 	};
+
+	if (!process.env.JWT_KEY) {
+		console.error('No JWT-key in .env found.');
+		process.exit(1);
+	}
 
 	const gentoken = jwt.sign(info, process.env.JWT_KEY);
 
@@ -110,8 +141,7 @@ async function generateToken(user) {
 
 		return gentoken;
 	} catch(err) {
-		console.log('error happened.');
+		console.error('Could not generate JWT-token.');
 		throw new Error(err);
 	}
-
 }
