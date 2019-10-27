@@ -1,8 +1,12 @@
 INSERT INTO Usertype (id, name) VALUES (1, 'Admin');
 INSERT INTO Usertype (id, name) VALUES (2, 'TV Crew');
 
-# Password is 'admin'
+# Login for admin/admin
 INSERT INTO User (username, password, name, usertype) VALUES ('admin', '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.', 'Admin', 1);
+# Login for dan/dan
+INSERT INTO User (username, password, name, usertype) VALUES ('dan', '$2a$10$mefD9jPsx1dxsm3RlHWQOOu.yLiUWkHk2QWPvTVLOgyPoxkTyILGG', 'Dan', 2);
+# Login for stuff/stuff
+INSERT INTO User (username, password, name, usertype) VALUES ('stuff', '$2a$10$Kk7ipyDS/tjcHzOGbaBfg.yc1nXoniOrLaXJsKuko2eU0vpIATjFS', 'StuffAndMore', 2);
 
 # Vehicle Classes
 INSERT INTO VehicleClassCategory (id, name) VALUES (1, 'Sportscar');
