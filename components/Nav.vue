@@ -24,10 +24,10 @@
 			<md-button class="md-primary" href="/resources">
 				Resources
 			</md-button>
-			<md-button class="md-raised md-primary btn-primary" @click="login()">
+			<md-button v-if="!loggedIn" class="md-raised md-primary btn-primary" @click="login()">
 				Log In
 			</md-button>
-			<md-button class="md-raised md-primary btn-primary" @click="logout()">
+			<md-button v-if="loggedIn" class="md-raised md-primary btn-primary" @click="logout()">
 				Log Out
 			</md-button>
 			<md-button class="icon md-primary" @click="responsive()">
