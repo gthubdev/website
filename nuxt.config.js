@@ -97,6 +97,12 @@ module.exports = {
 				tokenRequired: true,
 				tokenType: 'Bearer'
 			}
+		},
+		redirect: {
+			login: '/',
+			logout: '/',
+			home: '/',
+			callback: '/'
 		}
 	},
 	/*
