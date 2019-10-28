@@ -5,9 +5,9 @@
 			<md-dialog-title>{{ headline() }}</md-dialog-title>
 
 			<md-field :class="requiredName">
-				<label>Name</label>
+				<label>Event Name</label>
 				<md-input v-model="event.name" required />
-				<span class="md-error">Please enter a name</span>
+				<span class="md-error">Please enter the event name</span>
 			</md-field>
 
 			<md-autocomplete v-model="event.track" md-dense :md-options="tracks.map(x=>({

@@ -25,9 +25,9 @@
 			</md-list>
 
 			<md-field :class="requiredName">
-				<label>Name</label>
+				<label>Session Name</label>
 				<md-input v-model="eventsession.name" required />
-				<span class="md-error">Please enter a name</span>
+				<span class="md-error">Please enter the session name</span>
 			</md-field>
 
 			<md-autocomplete v-model="eventsession.series" :md-options="getAllSeries().map(x=>({
