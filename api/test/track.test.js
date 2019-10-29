@@ -17,9 +17,9 @@ describe('Tracks', () => {
 			email: '',
 			usertype: 1
 		};
-		const user = await db.User.create(newuser);
-		userid = user.id;
 		try {
+			const user = await db.User.create(newuser);
+			userid = user.id;
 			const res = await supertest(server)
 				.post('/api/auth/login')
 				.send({ username: 'testadmin', password: 'admin' });
