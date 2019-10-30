@@ -65,8 +65,17 @@ Object.keys(db).forEach(model => {
 // Create tables, if necessary
 sequelize.sync();
 
+// Delete all tokens
+deleteTokens();
+
 // Export the db Object
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
+async function deleteTokens() {
+	await db.Auth.destroy({
+		where: {}
+	});
+}

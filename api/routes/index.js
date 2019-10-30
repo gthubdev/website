@@ -9,6 +9,7 @@ const EventSessionCtrl = require('../controllers/eventsession');
 const SeriesCtrl = require('../controllers/series');
 const TrackCtrl = require('../controllers/track');
 const iCalCtrl = require('../controllers/ical');
+const auth = require('../middleware/auth');
 
 
 // routes ==================================================
@@ -17,29 +18,30 @@ const iCalCtrl = require('../controllers/ical');
 router.post('/auth/login', AuthCtrl.login);
 router.post('/auth/logout', AuthCtrl.logout);
 router.post('/auth/changepassword', AuthCtrl.changepassword);
+router.get('/auth/me', AuthCtrl.me);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
 
 // Event
-router.post('/calendar/event/create', EventCtrl.createEvent);
-router.post('/calendar/event/update/:id', EventCtrl.updateEvent);
-router.post('/calendar/event/delete/:id', EventCtrl.deleteEvent);
+router.post('/calendar/event/create', auth.tvcrew_auth, EventCtrl.createEvent);
+router.post('/calendar/event/update/:id', auth.tvcrew_auth, EventCtrl.updateEvent);
+router.post('/calendar/event/delete/:id', auth.tvcrew_auth, EventCtrl.deleteEvent);
 
 // EventSession
-router.post('/calendar/eventsession/create', EventSessionCtrl.createEventSession);
-router.post('/calendar/eventsession/update/:id', EventSessionCtrl.updateEventSession);
-router.post('/calendar/eventsession/delete/:id', EventSessionCtrl.deleteEventSession);
+router.post('/calendar/eventsession/create', auth.tvcrew_auth, EventSessionCtrl.createEventSession);
+router.post('/calendar/eventsession/update/:id', auth.tvcrew_auth, EventSessionCtrl.updateEventSession);
+router.post('/calendar/eventsession/delete/:id', auth.tvcrew_auth, EventSessionCtrl.deleteEventSession);
 
 // Series
-router.post('/calendar/series/create', SeriesCtrl.createSeries);
-router.post('/calendar/series/update/:id', SeriesCtrl.updateSeries);
-router.post('/calendar/series/delete/:id', SeriesCtrl.deleteSeries);
+router.post('/calendar/series/create', auth.tvcrew_auth, SeriesCtrl.createSeries);
+router.post('/calendar/series/update/:id', auth.tvcrew_auth, SeriesCtrl.updateSeries);
+router.post('/calendar/series/delete/:id', auth.tvcrew_auth, SeriesCtrl.deleteSeries);
 
 // Track
-router.post('/calendar/track/create', TrackCtrl.createTrack);
-router.post('/calendar/track/update/:id', TrackCtrl.updateTrack);
-router.post('/calendar/track/delete/:id', TrackCtrl.deleteTrack);
+router.post('/calendar/track/create', auth.tvcrew_auth, TrackCtrl.createTrack);
+router.post('/calendar/track/update/:id', auth.tvcrew_auth, TrackCtrl.updateTrack);
+router.post('/calendar/track/delete/:id', auth.tvcrew_auth, TrackCtrl.deleteTrack);
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);

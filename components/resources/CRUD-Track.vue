@@ -5,9 +5,9 @@
 			<md-dialog-title>{{ headline }}</md-dialog-title>
 
 			<md-field :class="requiredName">
-				<label>Name</label>
+				<label>Track Name</label>
 				<md-input v-model="track.name" required />
-				<span class="md-error">Please enter a name</span>
+				<span class="md-error">Please enter a track name</span>
 			</md-field>
 
 			<md-autocomplete v-model="track.country" md-dense :md-options="getCountryNames()" :class="requiredCountry" :md-fuzzy-search="false">

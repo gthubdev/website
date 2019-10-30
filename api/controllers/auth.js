@@ -1,6 +1,8 @@
 const db = require('../models/');
 const util = require('../util/util.js');
 const bCrypt = require('bcryptjs');
+const env = require('dotenv');
+const jwt = require('jsonwebtoken');
 
 module.exports.login = async (req, res) => {
 	try {
@@ -10,34 +12,53 @@ module.exports.login = async (req, res) => {
 				{ model: db.Usertype }
 			]
 		});
-		if (user) {
-			bCrypt.compare(req.body.password, user.password, (err, matches) => {
-				if (err) {
-					util.error(req, res, err);
-					return;
-				}
-				if (matches) {
-					util.print('User ' + req.body.username + ', password matched');
-					req.session.user = user.id;
-					res.status(200).send();
-				} else {
-					util.print('User ' + req.body.username + ', password did not match');
-					res.status(403).send();
-				}
-			});
-		} else {
+		if (!user) {
 			util.print('User ' + req.body.username + ' does not exist');
 			res.status(403).send();
+			return;
 		}
+
+		const passwordMatch = bCrypt.compareSync(req.body.password, user.password);
+
+		if (!passwordMatch) {
+			util.print('User ' + req.body.username + ', password did not match');
+			res.status(403).send();
+			return;
+		}
+
+		const token = await generateToken(user);
+
+		util.print('User ' + req.body.username + ' logged in successfully.');
+		res.json({token});
 	} catch(err) {
 		util.error(req, res, err);
 	}
 };
 
-module.exports.logout = (req, res) => {
-	res.clearCookie('connect.sid');
-	req.session.destroy();
-	res.status(200).send();
+module.exports.logout = async (req, res) => {
+	if (!req.header('Authorization')) {
+		res.status(400).send();
+		return;
+	}
+
+	try {
+		const token = req.header('Authorization').replace('Bearer ', '');
+		const data = jwt.verify(token, process.env.JWT_KEY);
+		const response = await db.Auth.destroy({
+			where: { token: token }
+		});
+
+		if (response === 1) {
+			util.print('User ' + data.username + ' logged out successfully.');
+			res.status(200).send();
+		} else {
+			res.status(401).send();
+		}
+
+	} catch(err) {
+		util.error(req, res, err);
+	}
+
 };
 
 module.exports.changepassword = async (req, res) => {
@@ -75,3 +96,55 @@ module.exports.changepassword = async (req, res) => {
 		util.error(req, res, err);
 	}
 };
+
+module.exports.me = async (req, res) => {
+	if (!req.header('Authorization')) {
+		res.status(400).send();
+		return;
+	}
+
+	try {
+		// load .env variables
+		env.config();
+
+		const token = req.header('Authorization').replace('Bearer ', '');
+		const data = jwt.verify(token, process.env.JWT_KEY);
+		const user = await db.User.findOne({
+			where: { id: data.id },
+			attributes: ['id', 'username', 'name', 'usertype']
+		});
+		res.json(user);
+	} catch(err) {
+		util.error(req, res, err);
+	}
+};
+
+async function generateToken(user) {
+	// load .env variables
+	env.config();
+
+	const info = {
+		id: user.id,
+		username: user.username,
+		usertype: user.usertype
+	};
+
+	if (!process.env.JWT_KEY) {
+		console.error('No JWT-key in .env found.');
+		process.exit(1);
+	}
+
+	const gentoken = jwt.sign(info, process.env.JWT_KEY);
+
+	try {
+		await db.Auth.create({
+			user: user.id,
+			token: gentoken
+		});
+
+		return gentoken;
+	} catch(err) {
+		console.error('Could not generate JWT-token.');
+		throw new Error(err);
+	}
+}

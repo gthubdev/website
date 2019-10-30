@@ -62,19 +62,54 @@ module.exports = {
 	modules: [
 		// Doc: https://axios.nuxtjs.org/usage
 		'@nuxtjs/axios',
+		'@nuxtjs/auth',
 		'nuxt-vue-material'
 	],
+	/*
+	** Axios module configuration
+	*/
+	axios: {
+		// See https://github.com/nuxt-community/axios-module#options
+		credentials: true
+	},
+	/*
+	** Auth module configuration
+	*/
+	auth: {
+		strategies: {
+			local: {
+				endpoints: {
+					login: {
+						url: '/api/auth/login',
+						method: 'post',
+						propertyName: 'token'
+					},
+					logout: {
+						url: '/api/auth/logout',
+						method: 'post'
+					},
+					user: {
+						url: '/api/auth/me',
+						method: 'get',
+						propertyName: false
+					}
+				},
+				tokenRequired: true,
+				tokenType: 'Bearer'
+			}
+		},
+		redirect: {
+			login: '/',
+			logout: '/',
+			home: '/',
+			callback: '/'
+		}
+	},
 	/*
 	 ** Vue Material config
 	*/
 	vueMaterial: {
 		theme: 'default-dark'
-	},
-	/*
-	 ** Axios module configuration
-	 */
-	axios: {
-		// See https://github.com/nuxt-community/axios-module#options
 	},
 
 	/*

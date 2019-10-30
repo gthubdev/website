@@ -5,15 +5,15 @@
 			<md-dialog-title>{{ headline }}</md-dialog-title>
 
 			<md-field :class="requiredName">
-				<label>Fullname</label>
+				<label>Fullname of the Series</label>
 				<md-input v-model="series.name" required />
-				<span class="md-error">Please enter a name</span>
+				<span class="md-error">Please enter the series' name</span>
 			</md-field>
 
 			<md-field :class="requiredShortName">
-				<label>Shortname</label>
+				<label>Shortname of the Series</label>
 				<md-input v-model="series.shortname" required />
-				<span class="md-error">Please enter a shortname</span>
+				<span class="md-error">Please enter the series' shortname</span>
 			</md-field>
 
 			<md-field :class="requiredLogo">

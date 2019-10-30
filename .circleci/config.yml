@@ -38,6 +38,12 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      # setting .env-variables
+      - run:
+          name: "Setting env-variables"
+          command: |
+            echo 'export JWT_KEY=MySecretJWTKey' >> $BASH_ENV
+
       # create the database
       - run: npm run create_tables
 
