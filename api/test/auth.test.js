@@ -47,6 +47,29 @@ describe('Authentication', () => {
 		}
 	});
 
+	it('Getting profile-info', async () => {
+		try {
+			const res = await supertest(server)
+				.post('/api/auth/login')
+				.send({ username: 'testadmin', password: 'admin' })
+				.expect(200);
+
+			token = res.body.token;
+
+			const res2 = await supertest(server)
+				.get('/api/auth/me')
+				.set('Authorization', 'Bearer ' + token)
+				.send();
+			let user = res2.body;
+
+			user.username.should.have.string('testadmin');
+			user.name.should.have.string('Testadmin');
+			user.usertype.should.equal(1);
+		} catch(err) {
+			should.not.exist(err);
+		}
+	});
+
 	it('Invalid login', done => {
 		supertest(server)
 			.post('/api/auth/login')
