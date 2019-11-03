@@ -20,6 +20,22 @@ module.exports.createEventSession = async (req, res) => {
 	req.body.session.starttime = getLocalTime(req.body.session);
 
 	try {
+		const event = await db.Event.findOne({
+			where: {id: req.body.session.event}
+		});
+		let ev_startdate = event.startdate;
+		let ev_enddate = event.enddate;
+
+		if (moment(ev_startdate).isAfter(starttime.format('YYYY-MM-DD'))) {
+			res.status(400).send('Session is outside event-dates');
+			return;
+		}
+
+		if (moment(ev_enddate).isBefore(starttime.format('YYYY-MM-DD'))) {
+			res.status(400).send('Session is outside event-dates');
+			return;
+		}
+
 		const newsession = await db.EventSession.create(req.body.session);
 		// query the newly created session to include series-info
 		const eventsession = await db.EventSession.findOne({
