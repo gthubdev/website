@@ -20,6 +20,24 @@ module.exports.createEventSession = async (req, res) => {
 	req.body.session.starttime = getLocalTime(req.body.session);
 
 	try {
+		// check for a start/end outside the event's dates
+		const event = await db.Event.findOne({
+			where: {id: req.body.session.event}
+		});
+		let ev_startdate = event.startdate;
+		let ev_enddate = event.enddate;
+
+		if (moment(ev_startdate).isAfter(starttime.format('YYYY-MM-DD'))) {
+			res.status(400).send('Session is outside event-dates');
+			return;
+		}
+
+		if (moment(ev_enddate).isBefore(starttime.format('YYYY-MM-DD'))) {
+			res.status(400).send('Session is outside event-dates');
+			return;
+		}
+
+		// create
 		const newsession = await db.EventSession.create(req.body.session);
 		// query the newly created session to include series-info
 		const eventsession = await db.EventSession.findOne({
@@ -43,8 +61,9 @@ module.exports.updateEventSession = async (req, res) => {
 		return;
 	}
 
+	let starttime;
 	if (req.body.session.starttime) {
-		let starttime = moment(req.body.session.starttime);
+		starttime = moment(req.body.session.starttime);
 		if (starttime && !starttime.isValid()) {
 			res.status(400).send('Invalid starttime');
 			return;
@@ -63,6 +82,30 @@ module.exports.updateEventSession = async (req, res) => {
 	req.body.session.starttime = getLocalTime(req.body.session);
 
 	try {
+		// check for a start/end outside the event's dates
+		const tmpsession = await db.EventSession.findOne({
+			where: {id: req.body.session.id},
+			include: [
+				{ model: db.Event }
+			]
+		});
+		const event = await db.Event.findOne({
+			where: {id: tmpsession.Event.id}
+		});
+		let ev_startdate = event.startdate;
+		let ev_enddate = event.enddate;
+
+		if (moment(ev_startdate).isAfter(starttime.format('YYYY-MM-DD'))) {
+			res.status(400).send('Session is outside event-dates');
+			return;
+		}
+
+		if (moment(ev_enddate).isBefore(starttime.format('YYYY-MM-DD'))) {
+			res.status(400).send('Session is outside event-dates');
+			return;
+		}
+
+		// update
 		const response = await db.EventSession.update(req.body.session,
 			{ where: { id: req.params.id } }
 		);

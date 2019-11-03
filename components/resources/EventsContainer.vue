@@ -47,7 +47,7 @@
 				<span v-if="shownSessions.includes(e.id) && e.EventSessions.length" class="sessions">
 					<md-list>
 						<md-list-item v-for="s in e.EventSessions" :key="s.id">
-							<strong>{{ sessionStart(s.starttime) }} {{ s.name }} ({{ s.Series.name }})</strong>
+							<strong>{{ sessionStart(s, e) }} {{ s.name }} ({{ s.Series.name }})</strong>
 							<md-icon @click.native="updateEventSession(e, s)">
 								edit
 							</md-icon>
@@ -202,8 +202,8 @@ export default {
 				this.shownSessions.push(id);
 			}
 		},
-		sessionStart(starttime) {
-			return moment(starttime).format('ddd Do HH:mm')+'h';
+		sessionStart(session, event) {
+			return moment(session.starttime).tz(event.Track.timezone).format('ddd Do HH:mm')+'h';
 		},
 		async getIcal(eventid) {
 			try {
