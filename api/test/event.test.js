@@ -479,7 +479,7 @@ describe('EventSessions', () => {
 			vcl_id = vcl.id;
 
 			let tmpevent = {
-				event: { name: 'Test Event 1', priority: -5, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries : [] }
+				event: { name: 'Test Event 1', priority: 5, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries : [] }
 			};
 			let vehicleClasses = [];
 			vehicleClasses.push({id: vcl_id});
@@ -488,7 +488,7 @@ describe('EventSessions', () => {
 			};
 
 			const [event, series] = await Sequelize.Promise.all([
-				db.Event.create(tmpevent),
+				db.Event.create(tmpevent.event),
 				db.Series.create(tmpseries)
 			]);
 			eventID = event.id;
@@ -619,9 +619,39 @@ describe('EventSessions', () => {
 		}
 	});
 
-	// it('Creating an event session outside the event-dates', done => {
-	//
-	// });
+	it('Creating an event session starting before the event', async () => {
+		try {
+			let tmpsession = {
+				session: { name: 'Test Session 6', starttime: '2019-06-30 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
+			};
+
+			await supertest(server)
+				.post('/api/calendar/eventsession/create')
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmpsession)
+				.expect(400);
+
+		} catch(err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Creating an event session starting after the event', async () => {
+		try {
+			let tmpsession = {
+				session: { name: 'Test Session 6', starttime: '2019-07-05 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
+			};
+
+			await supertest(server)
+				.post('/api/calendar/eventsession/create')
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmpsession)
+				.expect(400);
+
+		} catch(err) {
+			should.not.exist(err);
+		}
+	});
 
 	it('Creating an event session with an invalid duration', async () => {
 		let tmpsession = {
