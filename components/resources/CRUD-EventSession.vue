@@ -197,6 +197,8 @@ export default {
 				// Reset all values
 				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
 				Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
+				// preselect chosen day to first day of event
+				this.eventtime.date = this.event.startdate;
 			}
 			if (newValue === true && this.mode === 'update' && this.activeSession !== undefined) {
 				this.eventsession = JSON.parse(JSON.stringify(this.activeSession));
