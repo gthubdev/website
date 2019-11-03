@@ -681,6 +681,7 @@ describe('EventSessions', () => {
 
 			let tmp = {
 				session: {
+					id: sessions[0].id,
 					name: 'UPDATED_NAME',
 					starttime: '2019-07-02 12:00',
 					timezone: 'UTC',
@@ -704,9 +705,67 @@ describe('EventSessions', () => {
 		}
 	});
 
-	// it('Updating an event session outside the event-dates', done => {
-	//
-	// });
+	it('Updating an event session with a start before the event', async () => {
+		try {
+			const sessions = await db.EventSession.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			let tmp = {
+				session: {
+					id: sessions[0].id,
+					name: 'UPDATED_NAME',
+					starttime: '2019-06-29 12:00',
+					timezone: 'UTC',
+					duration: 30
+				}
+			};
+
+			await supertest(server)
+				.post('/api/calendar/eventsession/update/' + sessions[0].id)
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmp)
+				.expect(400);
+
+		} catch(err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Updating an event session with a start after the event', async () => {
+		try {
+			const sessions = await db.EventSession.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			let tmp = {
+				session: {
+					id: sessions[0].id,
+					name: 'UPDATED_NAME',
+					starttime: '2019-07-29 12:00',
+					timezone: 'UTC',
+					duration: 30
+				}
+			};
+
+			await supertest(server)
+				.post('/api/calendar/eventsession/update/' + sessions[0].id)
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmp)
+				.expect(400);
+
+		} catch(err) {
+			should.not.exist(err);
+		}
+	});
 
 	it('Updating an event session with an illegal starttime', async () => {
 		try {
@@ -720,6 +779,7 @@ describe('EventSessions', () => {
 
 			let tmp = {
 				session: {
+					id: sessions[0].id,
 					name: 'UPDATED_NAME',
 					starttime: '2019-07-XX 12:00',
 					timezone: 'UTC',
@@ -749,6 +809,7 @@ describe('EventSessions', () => {
 
 			let tmp = {
 				session: {
+					id: sessions[0].id,
 					name: 'UPDATED_NAME',
 					starttime: '2019-07-02 12:00',
 					timezone: 'UTC',
