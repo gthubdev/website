@@ -43,23 +43,28 @@
 		/>
 	</div>
 
-	<CRUDTrack
-		:show-dialog="showDialog"
+	<CreateTrack
+		:show-dialog="showCreateDialog"
+		:tz="tz"
+	/>
+
+	<UpdateTrack
+		:show-dialog="showUpdateDialog"
 		:active-track="activeTrack"
-		:mode="mode"
 		:tz="tz"
 	/>
 </div>
 </template>
 
 <script>
-import CRUDTrack from '~/components/resources/CRUD-Track.vue';
+import CreateTrack from '~/components/resources/track/Create-Track.vue';
+import UpdateTrack from '~/components/resources/track/Update-Track.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import { constants } from '~/plugins/constants';
 
 export default {
 	components: {
-		CRUDTrack, Paginate
+		CreateTrack, UpdateTrack, Paginate
 	},
 	props: {
 		tracks: {
@@ -73,9 +78,9 @@ export default {
 	},
 	data: function() {
 		return {
-			showDialog: false,
+			showCreateDialog: false,
+			showUpdateDialog: false,
 			activeTrack: null,
-			mode: '',
 			searchTerm: '',
 			showPagination: false,
 			pageNumber: 1,
@@ -89,16 +94,55 @@ export default {
 		});
 		this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
 		this.showPagination = this.pageCount > 1;
+
+		this.$root.$on('crudTrackClosed', () => {
+			this.showCreateDialog = false;
+		});
+
+		// handle requests to create/update a track
+		this.$root.$on('sendRequestCrudTrack', async obj => {
+			console.log('RECEIVED CREATE/UPDATE TRACK REQUEST');
+
+			let track = JSON.parse(JSON.stringify(obj));
+			track.timezone = obj.timezone.name;
+			// create a track
+			if (this.showCreateDialog) {
+				try {
+					const res = await this.$axios.$post('/api/calendar/track/create', {
+						track
+					});
+					this.$root.$emit('trackCreated', res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
+				this.showCreateDialog = false;
+			}
+			// update a track
+			if (this.showUpdateDialog) {
+				// no need to update that
+				delete track.createdAt;
+				try {
+					const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
+						track
+					});
+					if (res.updated >= 1)
+						this.$root.$emit('trackUpdated', track);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
+				this.showUpdateDialog = false;
+			}
+		});
 	},
 	methods: {
 		createTrack() {
-			this.mode = 'create';
-			this.showDialog = !this.showDialog;
+			this.showCreateDialog = true;
 		},
 		updateTrack(track) {
 			this.activeTrack = track;
-			this.mode = 'update';
-			this.showDialog = !this.showDialog;
+			this.showUpdateDialog = !this.showUpdateDialog;
 		},
 		deleteTrack(track) {
 			this.$root.$emit('confirmDeleteTrack', track);

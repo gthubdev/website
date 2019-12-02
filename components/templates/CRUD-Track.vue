@@ -87,7 +87,11 @@ export default {
 			type: Object,
 			default: null
 		},
-		mode: {
+		headline: {
+			type: String,
+			default: ''
+		},
+		action: {
 			type: String,
 			default: ''
 		},
@@ -109,26 +113,6 @@ export default {
 		};
 	},
 	computed: {
-		headline() {
-			switch(this.mode) {
-				case 'create':
-					return 'Create a Track';
-				case 'update':
-					return 'Update ' + this.track.name;
-				default:
-					return '';
-			}
-		},
-		action() {
-			switch(this.mode) {
-				case 'create':
-					return 'Create';
-				case 'update':
-					return 'Update';
-				default:
-					return '';
-			}
-		},
 		requiredCountry() {
 			return {
 				'md-invalid': cl.getCode(this.track.country) === undefined
@@ -154,66 +138,47 @@ export default {
 		showDialog(newValue) {
 			this.showTrackDialog = newValue;
 		},
-		showTrackDialog(newValue, oldValue) {
-			if (oldValue === true)
-				this.$root.$emit('toggleCrudTrack');
-			if (newValue === true && this.mode === 'create')
-				// Reset all values
-				Object.keys(this.track).forEach(key => (this.track[key] = ''));
-			if (newValue === true && this.mode === 'update' && this.activeTrack !== undefined) {
-				// Might need to reset the object
-				this.track = JSON.parse(JSON.stringify(this.activeTrack));
-				let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
-				this.track.timezone = {
-					'name':tz.name,
-					'desc':tz.desc,
-					'toLowerCase':()=>tz.desc.toLowerCase(),
-					'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
-				};
-			}
+		showTrackDialog(newValue) {
+			if (newValue === false)
+				this.$root.$emit('crudTrackClosed');
 		},
 		activeTrack(newValue) {
-			if (this.mode === 'update' && newValue !== undefined)
-				// Need to copy the object in order to not change it when cancelling
-				this.track = JSON.parse(JSON.stringify(this.activeTrack));
-				let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
-				this.track.timezone = {
-					'name':tz.name,
-					'desc':tz.desc,
-					'toLowerCase':()=>tz.desc.toLowerCase(),
-					'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
-				};
+			this.track = newValue;
 		}
+		// showTrackDialog(newValue, oldValue) {
+		// 	if (oldValue === true)
+		// 		this.$root.$emit('toggleCrudTrack');
+		// 	if (newValue === true && this.mode === 'create')
+		// 		// Reset all values
+		// 		Object.keys(this.track).forEach(key => (this.track[key] = ''));
+		// 	if (newValue === true && this.mode === 'update' && this.activeTrack !== undefined) {
+		// 		// Might need to reset the object
+		// 		this.track = JSON.parse(JSON.stringify(this.activeTrack));
+		// 		let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
+		// 		this.track.timezone = {
+		// 			'name':tz.name,
+		// 			'desc':tz.desc,
+		// 			'toLowerCase':()=>tz.desc.toLowerCase(),
+		// 			'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
+		// 		};
+		// 	}
+		// },
+		// activeTrack(newValue) {
+		// 	if (this.mode === 'update' && newValue !== undefined)
+		// 		// Need to copy the object in order to not change it when cancelling
+		// 		this.track = JSON.parse(JSON.stringify(this.activeTrack));
+		// 		let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
+		// 		this.track.timezone = {
+		// 			'name':tz.name,
+		// 			'desc':tz.desc,
+		// 			'toLowerCase':()=>tz.desc.toLowerCase(),
+		// 			'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
+		// 		};
+		// }
 	},
 	methods: {
-		async sendRequest() {
-			let track = JSON.parse(JSON.stringify(this.track));
-			track.timezone = track.timezone.name;
-			if (this.mode === 'create') {
-				try {
-					const res = await this.$axios.$post('/api/calendar/track/create', {
-						track
-					});
-					this.$root.$emit('trackCreated', res);
-				} catch(err) {
-					if (err.response)
-						alert(err.response);
-				}
-			} else if (this.mode === 'update') {
-				// no need to update that
-				delete track.createdAt;
-				try {
-					const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
-						track
-					});
-					if (res.updated >= 1)
-					this.$root.$emit('trackUpdated', track);
-				} catch(err) {
-					if (err.response)
-						alert(err.response);
-				}
-			}
-			this.showTrackDialog = false;
+		sendRequest() {
+			this.$root.$emit('sendRequestCrudTrack', this.track);
 		},
 		validInput() {
 			return this.track.name.length > 0 &&
