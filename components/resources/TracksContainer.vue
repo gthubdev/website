@@ -97,11 +97,12 @@ export default {
 
 		this.$root.$on('crudTrackClosed', () => {
 			this.showCreateDialog = false;
+			this.showUpdateDialog = false;
 		});
 
 		// handle requests to create/update a track
 		this.$root.$on('sendRequestCrudTrack', async obj => {
-			console.log('RECEIVED CREATE/UPDATE TRACK REQUEST');
+			// console.log('RECEIVED CREATE/UPDATE TRACK REQUEST');
 
 			let track = JSON.parse(JSON.stringify(obj));
 			track.timezone = obj.timezone.name;
@@ -142,7 +143,7 @@ export default {
 		},
 		updateTrack(track) {
 			this.activeTrack = track;
-			this.showUpdateDialog = !this.showUpdateDialog;
+			this.showUpdateDialog = true;
 		},
 		deleteTrack(track) {
 			this.$root.$emit('confirmDeleteTrack', track);
@@ -173,7 +174,7 @@ export default {
 			return arr;
 		},
 		pageClicked(newPageNum) {
-			console.log('Active Page: ' + newPageNum);
+			// console.log('Active Page: ' + newPageNum);
 			this.pageNumber = newPageNum;
 		}
 	}

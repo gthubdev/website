@@ -1,13 +1,12 @@
 <template>
-<div>
-	<CRUDTrack
-		:show-dialog="showCRUD"
-		:active-track="track"
-		:headline="'Create a track'"
-		:action="'Create'"
-		:tz="tz"
-	/>
-</div>
+<CRUDTrack
+	:show-dialog="showCRUD"
+	:active-track="track"
+	:headline="'Create a track'"
+	:action="'Create'"
+	:update-mode="false"
+	:tz="tz"
+/>
 </template>
 
 <script>

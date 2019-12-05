@@ -1,13 +1,12 @@
 <template>
-<div>
-	<CRUDTrack
-		:show-dialog="showCRUD"
-		:active-track="track"
-		:headline="headline"
-		:action="'Update'"
-		:tz="tz"
-	/>
-</div>
+<CRUDTrack
+	:show-dialog="showCRUD"
+	:active-track="track"
+	:headline="headline()"
+	:action="'Update'"
+	:update-mode="true"
+	:tz="tz"
+/>
 </template>
 
 <script>
@@ -34,19 +33,26 @@ export default {
 	data: function() {
 		return {
 			showCRUD: false,
-			track: null
+			track: {
+				name: '',
+				country: '',
+				timezone: '',
+				length: '',
+				map: ''
+			}
 		};
-	},
-	computed: {
-		headline() {
-			return 'Update';
-		}
 	},
 	watch: {
 		showDialog(newValue) {
-			this.showCRUD = newValue;
 			if (newValue === true)
 				this.track = this.activeTrack;
+
+			this.showCRUD = newValue;
+		}
+	},
+	methods: {
+		headline() {
+			return 'Update track ' + this.track.name;
 		}
 	}
 };

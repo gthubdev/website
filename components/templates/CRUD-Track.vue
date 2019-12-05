@@ -95,6 +95,10 @@ export default {
 			type: String,
 			default: ''
 		},
+		updateMode: {
+			type: Boolean,
+			default: false
+		},
 		tz: {
 			type: Object,
 			default: null
@@ -141,40 +145,18 @@ export default {
 		showTrackDialog(newValue) {
 			if (newValue === false)
 				this.$root.$emit('crudTrackClosed');
+
+			if (newValue === true && this.updateMode === true)
+				this.resetActiveTrack();
 		},
 		activeTrack(newValue) {
+			if (newValue === undefined) return;
+
 			this.track = newValue;
+
+			if (this.updateMode === true)
+				this.resetActiveTrack();
 		}
-		// showTrackDialog(newValue, oldValue) {
-		// 	if (oldValue === true)
-		// 		this.$root.$emit('toggleCrudTrack');
-		// 	if (newValue === true && this.mode === 'create')
-		// 		// Reset all values
-		// 		Object.keys(this.track).forEach(key => (this.track[key] = ''));
-		// 	if (newValue === true && this.mode === 'update' && this.activeTrack !== undefined) {
-		// 		// Might need to reset the object
-		// 		this.track = JSON.parse(JSON.stringify(this.activeTrack));
-		// 		let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
-		// 		this.track.timezone = {
-		// 			'name':tz.name,
-		// 			'desc':tz.desc,
-		// 			'toLowerCase':()=>tz.desc.toLowerCase(),
-		// 			'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
-		// 		};
-		// 	}
-		// },
-		// activeTrack(newValue) {
-		// 	if (this.mode === 'update' && newValue !== undefined)
-		// 		// Need to copy the object in order to not change it when cancelling
-		// 		this.track = JSON.parse(JSON.stringify(this.activeTrack));
-		// 		let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
-		// 		this.track.timezone = {
-		// 			'name':tz.name,
-		// 			'desc':tz.desc,
-		// 			'toLowerCase':()=>tz.desc.toLowerCase(),
-		// 			'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
-		// 		};
-		// }
 	},
 	methods: {
 		sendRequest() {
@@ -195,6 +177,16 @@ export default {
 		},
 		getCountryFlag(country) {
 			return flag(cl.getCode(country));
+		},
+		resetActiveTrack() {
+			this.track = JSON.parse(JSON.stringify(this.activeTrack));
+			let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
+			this.track.timezone = {
+				'name':tz.name,
+				'desc':tz.desc,
+				'toLowerCase':()=>tz.desc.toLowerCase(),
+				'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
+			};
 		}
 	}
 };
