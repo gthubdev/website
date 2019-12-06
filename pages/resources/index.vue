@@ -41,17 +41,6 @@ export default {
 	components: {
 		EventsContainer, SeriesContainer, TracksContainer
 	},
-	data: function() {
-		return {
-			data: [],
-			confirmDelete: {
-				showDialog: false,
-				type: '',
-				resource: {},
-				content: ''
-			}
-		};
-	},
 	async asyncData({
 		$axios
 	}) {
@@ -62,11 +51,22 @@ export default {
 			};
 		} catch(err) {
 			if (err.response)
-				alert(err.response);
+			alert(err.response);
 			return {
 				data: []
 			};
 		}
+	},
+	data: function() {
+		return {
+			data: [],
+			confirmDelete: {
+				showDialog: false,
+				type: '',
+				resource: {},
+				content: ''
+			}
+		};
 	},
 	mounted() {
 		// Events
