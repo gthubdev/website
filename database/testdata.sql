@@ -1,8 +1,8 @@
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (1, "Nordschleife", "Germany", 20.832, "", "Europe/Brussels");
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (2, "Mount Panorama Circuit", "Australia", 6.213, "", "Australia/Sydney");
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (3, "Circuit de Spa-Francorchamps", "Belgium", 7.004, "", "Europe/Brussels");
-INSERT INTO Track (id, name, country, length, map, timezone) VALUES (4, "Daytona International Speedway", "United States", 5.73, "", "America/New_York");
-INSERT INTO Track (id, name, country, length, map, timezone) VALUES (5, "Road America", "United States", 6.515, "", "America/Chicago");
+INSERT INTO Track (id, name, country, length, map, timezone) VALUES (4, "Daytona International Speedway", "United States of America", 5.73, "", "America/New_York");
+INSERT INTO Track (id, name, country, length, map, timezone) VALUES (5, "Road America", "United States of America", 6.515, "", "America/Chicago");
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (6, "Surfers Paradise Street Circuit", "Australia", 2.98, "", "Australia/Brisbane");
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (7, "Phillip Island Grand Prix Circuit", "Australia", 4.445, "", "Australia/Sydney");
 
