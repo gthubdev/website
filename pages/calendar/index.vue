@@ -59,6 +59,22 @@ export default {
 	components: {
 		Event, FilterPanel,	SidePanel
 	},
+	async asyncData({
+		$axios
+	}) {
+		try {
+			const resdata = await $axios.$get('/api/calendar');
+			return {
+				data: resdata
+			};
+		} catch (err) {
+			if (err.response)
+			alert(err.response);
+			return {
+				data: []
+			};
+		}
+	},
 	data: function() {
 		return {
 			data: [],
@@ -91,22 +107,6 @@ export default {
 					'desc': newValue.desc
 				};
 			}
-		}
-	},
-	async asyncData({
-		$axios
-	}) {
-		try {
-			const resdata = await $axios.$get('/api/calendar');
-			return {
-				data: resdata
-			};
-		} catch (err) {
-			if (err.response)
-				alert(err.response);
-			return {
-				data: []
-			};
 		}
 	},
 	mounted() {
