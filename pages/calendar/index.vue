@@ -52,6 +52,7 @@
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import SidePanel from '~/components/calendar/SidePanel.vue';
+import { strings } from '~/plugins/constants';
 
 import moment from 'moment-timezone';
 
@@ -110,10 +111,10 @@ export default {
 		}
 	},
 	mounted() {
-		this.$root.$on('toggleCurrentEvents', () => {
+		this.$root.$on(strings.TOGGLE_CURRENT_EVENTS, () => {
 			this.showCurrentEvents = !this.showCurrentEvents;
 		});
-		this.$root.$on('toggleSessions', event => {
+		this.$root.$on(strings.TOGGLE_SESSIONS, event => {
 			if (!this.showEvent) {
 				this.showEvent = true;
 				this.activeEvent = event;

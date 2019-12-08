@@ -87,7 +87,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.$root.$on('toggleCrudTrack', () => {
+		this.$root.$on(strings.TOGGLE_CRUD_TRACK, () => {
 			this.showDialog = !this.showDialog;
 		});
 		this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);

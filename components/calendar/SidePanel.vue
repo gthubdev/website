@@ -19,6 +19,7 @@
 
 <script>
 import EventSession from '~/components/calendar/EventSession.vue';
+import { strings } from '~/plugins/constants';
 
 export default {
 	components: {
@@ -26,12 +27,10 @@ export default {
 	},
 	props: {
 		event: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		},
 		showEvent: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		userTimezone: {
 			type: Object,
@@ -45,7 +44,7 @@ export default {
 	},
 	methods: {
 		toggleSessions: function() {
-			this.$root.$emit('toggleSessions', null);
+			this.$root.$emit(strings.TOGGLE_SESSIONS, null);
 		}
 	}
 };

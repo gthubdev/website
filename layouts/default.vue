@@ -14,6 +14,7 @@
 
 <script>
 import Nav from '~/components/Nav.vue';
+import { strings } from '~/plugins/constants';
 
 export default {
 	components: {
@@ -21,12 +22,11 @@ export default {
 	},
 	data: function() {
 		return {
-			showToast: false,
-			toastMsg: ''
+			showToast: false, toastMsg: ''
 		};
 	},
 	mounted() {
-		this.$root.$on('showToast', msg => {
+		this.$root.$on(strings.SHOW_TOAST, msg => {
 			this.toastMsg = msg;
 			this.showToast = !this.showToast;
 		});

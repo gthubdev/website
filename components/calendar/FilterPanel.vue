@@ -4,28 +4,16 @@
 	<md-button class="md-raised md-primary" @click.native="toggleCurrentEvents()">
 		{{ showCurrentEventsLabel }}
 	</md-button>
-	<!-- <br />
-	<md-button class="md-raised md-primary" @click.native="createSeries()">
-		Create Series
-	</md-button>
-	<br />
-	<md-button class="md-raised md-primary" @click.native="createTrack()">
-		Create Track
-	</md-button>
-	<br />
-	<md-button class="md-raised md-primary" @click.native="createEvent()">
-		Create Event
-	</md-button> -->
 </div>
 </template>
 
 <script>
+import { strings } from '~/plugins/constants';
 
 export default {
 	props: {
 		showCurrentEvents: {
-			type: Boolean,
-			default: true
+			type: Boolean, default: true
 		}
 	},
 	computed: {
@@ -34,17 +22,8 @@ export default {
 		}
 	},
 	methods: {
-		// createEvent: function() {
-		// 	this.$root.$emit('toggleCrudEvent');
-		// },
-		// createSeries: function() {
-		// 	this.$root.$emit('toggleCrudSeries');
-		// },
-		// createTrack: function() {
-		// 	this.$root.$emit('toggleCrudTrack');
-		// },
 		toggleCurrentEvents: function() {
-			this.$root.$emit('toggleCurrentEvents');
+			this.$root.$emit(strings.TOGGLE_CURRENT_EVENTS);
 		}
 	}
 };

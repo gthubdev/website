@@ -22,10 +22,13 @@ export const strings = {
 	SEND_REQUEST_CRUD_TRACK: 'sendRequestCrudTrack',
 	SERIES_CREATED: 'seriesCreated',
 	SERIES_UPDATED: 'seriesUpdated',
+	SHOW_TOAST: 'showToast',
 	TOGGLE_CRUD_EVENT: 'toggleCrudEvent',
 	TOGGLE_CRUD_EVENTSESSION: 'toggleCrudEventSession',
 	TOGGLE_CRUD_SERIES: 'toggleCrudSeries',
 	TOGGLE_CRUD_TRACK: 'toggleCrudTrack',
+	TOGGLE_CURRENT_EVENTS: 'toggleCurrentEvents',
+	TOGGLE_SESSIONS: 'toggleSessions',
 	TRACK_CREATED: 'trackCreated',
 	TRACK_UPDATED: 'trackUpdated'
 };
