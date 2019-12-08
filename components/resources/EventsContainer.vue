@@ -153,7 +153,7 @@ export default {
 		this.$root.$on(strings.TOGGLE_CRUD_EVENT, () => {
 			this.showEventDialog = !this.showEventDialog;
 		});
-		this.$root.$on('toggleCrudEventSession', () => {
+		this.$root.$on(strings.TOGGLE_CRUD_EVENTSESSION, () => {
 			this.showSessionDialog = !this.showSessionDialog;
 		});
 		this.$root.$on(strings.EVENT_CREATED, event => {
@@ -189,7 +189,7 @@ export default {
 			this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
 		},
 		deleteSession(session) {
-			this.$root.$emit('confirmDeleteEventSession', session);
+			this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
 		},
 		toggleSessions(id) {
 			if (this.shownSessions.includes(id)) {

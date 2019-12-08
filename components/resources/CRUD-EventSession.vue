@@ -116,28 +116,21 @@
 
 <script>
 import moment from 'moment-timezone';
+import { strings } from '~/plugins/constants';
 
 export default {
 	props: {
 		showDialog: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		event: {
-			type: Object,
-			default() {
-				return '';
-			}
+			type: Object, default() { return ''; }
 		},
 		activeSession: {
-			type: Object,
-			default() {
-				return '';
-			}
+			type: Object, default() { return ''; }
 		},
 		mode: {
-			type: String,
-			default: ''
+			type: String, default: ''
 		}
 	},
 	data: function() {
@@ -192,7 +185,7 @@ export default {
 		},
 		showEventSessionDialog(newValue, oldValue) {
 			if (oldValue === true)
-				this.$root.$emit('toggleCrudEventSession');
+				this.$root.$emit(strings.TOGGLE_CRUD_EVENTSESSION);
 			if (newValue === true && this.mode === 'create') {
 				// Reset all values
 				Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
@@ -250,7 +243,7 @@ export default {
 					const res = await this.$axios.$post('/api/calendar/eventsession/create', {
 						session
 					});
-					this.$root.$emit('eventSessionCreated', res);
+					this.$root.$emit(strings.EVENTSESSION_CREATED, res);
 					Object.keys(this.eventsession).forEach(key => (this.eventsession[key] = ''));
 					Object.keys(this.eventtime).forEach(key => (this.eventtime[key] = ''));
 					if (event !== null)
@@ -266,7 +259,7 @@ export default {
 						session
 					});
 					if (res.id)
-					this.$root.$emit('eventSessionUpdated', res);
+					this.$root.$emit(strings.EVENTSESSIONS_UPDATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);
@@ -275,7 +268,7 @@ export default {
 			}
 		},
 		deleteSession(session) {
-			this.$root.$emit('confirmDeleteEventSession', session);
+			this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
 		},
 		headline() {
 			switch(this.mode) {
