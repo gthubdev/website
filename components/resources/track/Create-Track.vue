@@ -18,12 +18,10 @@ export default {
 	},
 	props: {
 		showDialog: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		tz: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		}
 	},
 	data: function() {
