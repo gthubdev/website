@@ -10,9 +10,13 @@ export const constants = {
 };
 
 export const strings = {
+	CONFIRM_DELETE_SERIES: 'confirmDeleteSeries',
 	CONFIRM_DELETE_TRACK: 'confirmDeleteTrack',
-	CLOSED_CRUD_TRACK: 'crudTrackClosed',
+	CLOSED_CRUD_TRACK: 'closedCrudTrack',
 	SEND_REQUEST_CRUD_TRACK: 'sendRequestCrudTrack',
+	SERIES_CREATED: 'seriesCreated',
+	SERIES_UPDATED: 'seriesUpdated',
+	TOGGLE_CRUD_SERIES: 'toggleCrudSeries',
 	TOGGLE_CRUD_TRACK: 'toggleCrudTrack',
 	TRACK_CREATED: 'trackCreated',
 	TRACK_UPDATED: 'trackUpdated'
