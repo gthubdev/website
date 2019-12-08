@@ -107,7 +107,7 @@ import CRUDEvent from '~/components/resources/CRUD-Event.vue';
 import CRUDEventSession from '~/components/resources/CRUD-EventSession.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import moment from 'moment';
-import { constants } from '~/plugins/constants';
+import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
@@ -115,16 +115,13 @@ export default {
 	},
 	props: {
 		events: {
-			type: Array,
-			default() { return []; }
+			type: Array, default() { return []; }
 		},
 		series: {
-			type: Array,
-			default() { return []; }
+			type: Array, default() { return []; }
 		},
 		tracks: {
-			type: Array,
-			default() { return []; }
+			type: Array, default() { return []; }
 		}
 	},
 	data: function() {
@@ -153,13 +150,13 @@ export default {
 		}
 	},
 	mounted() {
-		this.$root.$on('toggleCrudEvent', () => {
+		this.$root.$on(strings.TOGGLE_CRUD_EVENT, () => {
 			this.showEventDialog = !this.showEventDialog;
 		});
 		this.$root.$on('toggleCrudEventSession', () => {
 			this.showSessionDialog = !this.showSessionDialog;
 		});
-		this.$root.$on('eventCreated', event => {
+		this.$root.$on(strings.EVENT_CREATED, event => {
 			this.activeEvent = event;
 			this.showSessionDialog = !this.showSessionDialog;
 		});
@@ -189,7 +186,7 @@ export default {
 			this.showSessionDialog = !this.showSessionDialog;
 		},
 		deleteEvent(event) {
-			this.$root.$emit('confirmDeleteEvent', event);
+			this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
 		},
 		deleteSession(session) {
 			this.$root.$emit('confirmDeleteEventSession', session);
@@ -248,11 +245,11 @@ export default {
 			return res_arr;
 		},
 		pageClicked(newPageNum) {
-			console.log('Active Page: ' + newPageNum);
+			//console.log('Active Page: ' + newPageNum);
 			this.pageNumber = newPageNum;
 		},
 		setArrays() {
-			// methods splist the events in current and past events
+			// methods splits the events in current and past events
 			this.currentEvents = this.events.filter(event => {
 				return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
 			});
