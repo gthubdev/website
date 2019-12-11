@@ -42,23 +42,28 @@
 		/>
 	</div>
 
-	<CRUDSeries
+	<!-- <CRUDSeries
 		:show-dialog="showDialog"
 		:active-series="activeSeries"
 		:mode="mode"
+		:vc="vehicleclasses"
+	/> -->
+	<CreateSeries
+		:show-dialog="showCreateDialog"
 		:vc="vehicleclasses"
 	/>
 </div>
 </template>
 
 <script>
-import CRUDSeries from '~/components/resources/CRUD-Series.vue';
+// import CRUDSeries from '~/components/resources/CRUD-Series.vue';
+import CreateSeries from '~/components/resources/series/Create-Series.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
-		CRUDSeries, Paginate
+		CreateSeries, Paginate
 	},
 	props: {
 		series: {
@@ -70,7 +75,7 @@ export default {
 	},
 	data: function() {
 		return {
-			showDialog: false,
+			showCreateDialog: false,
 			activeSeries: null,
 			mode: '',
 			searchTerm: '',
@@ -82,15 +87,56 @@ export default {
 	},
 	mounted() {
 		this.$root.$on(strings.TOGGLE_CRUD_SERIES, () => {
-			this.showDialog = !this.showDialog;
+			this.showCreateDialog = !this.showDialog;
 		});
 		this.pageCount = Math.ceil(this.series.length / this.itemsPerPage);
 		this.showPagination = this.pageCount > 1;
+
+		this.$root.$on(strings.CLOSED_CRUD_SERIES, () => {
+			this.showCreateDialog = false;
+		});
+
+		// handle requests to create/update a series
+		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, vehicleClasses) => {
+			console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
+
+			const series = JSON.parse(JSON.stringify(tmpseries));
+			series.vehicleClasses = vehicleClasses;
+			// create a series
+			if (this.showCreateDialog) {
+				try {
+					const res = await this.$axios.$post('/api/calendar/series/create', {
+						series
+					});
+					this.$root.$emit(strings.SERIES_CREATED, res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
+				this.showCreateDialog = false;
+			}
+			/*
+			} else if (this.mode === 'update') {
+				// no need to update that
+				delete series.createdAt;
+				try {
+					const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
+						series
+					});
+					if (res.id && res.id >= 1)
+					this.$root.$emit(strings.SERIES_UPDATED, res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
+			}
+			this.showSeriesDialog = false;
+			*/
+		});
 	},
 	methods: {
 		createSeries() {
-			this.mode = 'create';
-			this.showDialog = !this.showDialog;
+			this.showCreateDialog = true;
 		},
 		updateSeries(series) {
 			this.activeSeries = series;
