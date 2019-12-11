@@ -54,7 +54,7 @@
 <script>
 import CRUDSeries from '~/components/resources/CRUD-Series.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
-import { constants } from '~/plugins/constants';
+import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
@@ -62,12 +62,10 @@ export default {
 	},
 	props: {
 		series: {
-			type: Array,
-			default() { return []; }
+			type: Array, default() { return []; }
 		},
 		vehicleclasses: {
-			type: Array,
-			default() { return []; }
+			type: Array, default() { return []; }
 		}
 	},
 	data: function() {
@@ -83,7 +81,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.$root.$on('toggleCrudSeries', () => {
+		this.$root.$on(strings.TOGGLE_CRUD_SERIES, () => {
 			this.showDialog = !this.showDialog;
 		});
 		this.pageCount = Math.ceil(this.series.length / this.itemsPerPage);
@@ -100,7 +98,7 @@ export default {
 			this.showDialog = !this.showDialog;
 		},
 		deleteSeries(series) {
-			this.$root.$emit('confirmDeleteSeries', series);
+			this.$root.$emit(strings.CONFIRM_DELETE_SERIES, series);
 		},
 		filterSeries() {
 			let arr = [], nrMatches = 0;
@@ -128,7 +126,7 @@ export default {
 			return arr;
 		},
 		pageClicked(newPageNum) {
-			console.log('Active Page: ' + newPageNum);
+			//console.log('Active Page: ' + newPageNum);
 			this.pageNumber = newPageNum;
 		}
 	}

@@ -76,32 +76,27 @@
 import moment from 'moment-timezone';
 import cl from 'country-list';
 import flag from 'country-code-emoji';
+import { strings } from '~/plugins/constants';
 
 export default {
 	props: {
 		showDialog: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		activeTrack: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		},
 		headline: {
-			type: String,
-			default: ''
+			type: String, default: ''
 		},
 		action: {
-			type: String,
-			default: ''
+			type: String, default: ''
 		},
 		updateMode: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		tz: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		}
 	},
 	data: function() {
@@ -144,7 +139,7 @@ export default {
 		},
 		showTrackDialog(newValue) {
 			if (newValue === false)
-				this.$root.$emit('crudTrackClosed');
+				this.$root.$emit(strings.CLOSED_CRUD_TRACK);
 
 			if (newValue === true && this.updateMode === true)
 				this.resetActiveTrack();
@@ -160,7 +155,7 @@ export default {
 	},
 	methods: {
 		sendRequest() {
-			this.$root.$emit('sendRequestCrudTrack', this.track);
+			this.$root.$emit(strings.SEND_REQUEST_CRUD_TRACK, this.track);
 		},
 		validInput() {
 			return this.track.name.length > 0 &&

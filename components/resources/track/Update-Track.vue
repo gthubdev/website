@@ -18,16 +18,13 @@ export default {
 	},
 	props: {
 		showDialog: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		activeTrack: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		},
 		tz: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		}
 	},
 	data: function() {

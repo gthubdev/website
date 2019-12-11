@@ -157,33 +157,26 @@
 
 <script>
 import moment from 'moment';
-import { constants } from '~/plugins/constants';
+import { constants, strings } from '~/plugins/constants';
 
 export default {
 	props: {
 		showDialog: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		activeEvent: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		},
 		series: {
-			type: Array,
-			default() {
+			type: Array, default() {
 				return [];
 			}
 		},
 		tracks: {
-			type: Array,
-			default() {
-				return [];
-			}
+			type: Array, default() { return []; }
 		},
 		mode: {
-			type: String,
-			default: ''
+			type: String, default: ''
 		}
 	},
 	data: function() {
@@ -254,7 +247,7 @@ export default {
 		},
 		showEventDialog(newValue, oldValue) {
 			if (oldValue === true)
-				this.$root.$emit('toggleCrudEvent');
+				this.$root.$emit(strings.TOGGLE_CRUD_EVENT);
 			if (newValue === true && this.mode === 'create') {
 				Object.keys(this.event).forEach(key => (this.event[key] = ''));
 				this.initMainSet = true;
@@ -357,7 +350,7 @@ export default {
 					const res = await this.$axios.$post('/api/calendar/event/create', {
 						event
 					});
-					this.$root.$emit('eventCreated', res);
+					this.$root.$emit(strings.EVENT_CREATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);
@@ -369,7 +362,7 @@ export default {
 						event
 					});
 					if (res.id && res.id >= 1)
-						this.$root.$emit('eventUpdated', res);
+						this.$root.$emit(strings.EVENT_UPDATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);

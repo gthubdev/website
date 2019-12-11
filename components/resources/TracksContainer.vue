@@ -60,7 +60,7 @@
 import CreateTrack from '~/components/resources/track/Create-Track.vue';
 import UpdateTrack from '~/components/resources/track/Update-Track.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
-import { constants } from '~/plugins/constants';
+import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
@@ -68,12 +68,10 @@ export default {
 	},
 	props: {
 		tracks: {
-			type: Array,
-			default() { return []; }
+			type: Array, default() { return []; }
 		},
 		tz: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		}
 	},
 	data: function() {
@@ -89,19 +87,19 @@ export default {
 		};
 	},
 	mounted() {
-		this.$root.$on('toggleCrudTrack', () => {
+		this.$root.$on(strings.TOGGLE_CRUD_TRACK, () => {
 			this.showDialog = !this.showDialog;
 		});
 		this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
 		this.showPagination = this.pageCount > 1;
 
-		this.$root.$on('crudTrackClosed', () => {
+		this.$root.$on(strings.CLOSED_CRUD_TRACK, () => {
 			this.showCreateDialog = false;
 			this.showUpdateDialog = false;
 		});
 
 		// handle requests to create/update a track
-		this.$root.$on('sendRequestCrudTrack', async obj => {
+		this.$root.$on(strings.SEND_REQUEST_CRUD_TRACK, async obj => {
 			// console.log('RECEIVED CREATE/UPDATE TRACK REQUEST');
 
 			let track = JSON.parse(JSON.stringify(obj));
@@ -112,7 +110,7 @@ export default {
 					const res = await this.$axios.$post('/api/calendar/track/create', {
 						track
 					});
-					this.$root.$emit('trackCreated', res);
+					this.$root.$emit(strings.TRACK_CREATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);
@@ -128,7 +126,7 @@ export default {
 						track
 					});
 					if (res.updated >= 1)
-						this.$root.$emit('trackUpdated', track);
+						this.$root.$emit(strings.TRACK_UPDATED, track);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);
@@ -146,7 +144,7 @@ export default {
 			this.showUpdateDialog = true;
 		},
 		deleteTrack(track) {
-			this.$root.$emit('confirmDeleteTrack', track);
+			this.$root.$emit(strings.CONFIRM_DELETE_TRACK, track);
 		},
 		filterTracks() {
 			let arr = [], nrMatches = 0;

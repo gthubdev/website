@@ -80,25 +80,21 @@
 </template>
 
 <script>
-import { constants } from '~/plugins/constants';
+import { constants, strings } from '~/plugins/constants';
 
 export default {
 	props: {
 		showDialog: {
-			type: Boolean,
-			default: false
+			type: Boolean, default: false
 		},
 		activeSeries: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		},
 		mode: {
-			type: String,
-			default: ''
+			type: String, default: ''
 		},
 		vc: {
-			type: Array,
-			default() { return []; }
+			type: Array, default() { return []; }
 		}
 	},
 	data: function() {
@@ -170,7 +166,7 @@ export default {
 		},
 		showSeriesDialog(newValue, oldValue) {
 			if (oldValue === true)
-				this.$root.$emit('toggleCrudSeries');
+				this.$root.$emit(strings.TOGGLE_CRUD_SERIES);
 			if (newValue === true && this.mode === 'create') {
 				// Reset all values
 				Object.keys(this.series).forEach(key => (this.series[key] = ''));
@@ -242,7 +238,7 @@ export default {
 					const res = await this.$axios.$post('/api/calendar/series/create', {
 						series
 					});
-					this.$root.$emit('seriesCreated', res);
+					this.$root.$emit(strings.SERIES_CREATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);
@@ -255,7 +251,7 @@ export default {
 						series
 					});
 					if (res.id && res.id >= 1)
-					this.$root.$emit('seriesUpdated', res);
+					this.$root.$emit(strings.SERIES_UPDATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);

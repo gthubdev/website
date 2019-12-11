@@ -39,20 +39,18 @@
 
 <script>
 import moment from 'moment-timezone';
+import { strings } from '~/plugins/constants';
 
 export default {
 	props: {
 		event: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		},
 		tz: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		},
 		activeEvent: {
-			type: Object,
-			default: null
+			type: Object, default: null
 		}
 	},
 	computed: {
@@ -79,7 +77,7 @@ export default {
 		// 	this.$root.$emit('addEventSession', this.event);
 		// },
 		toggleSessions: function() {
-			this.$root.$emit('toggleSessions', this.event);
+			this.$root.$emit(strings.TOGGLE_SESSIONS, this.event);
 		}
 	}
 };

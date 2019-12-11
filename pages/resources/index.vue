@@ -36,6 +36,7 @@
 import EventsContainer from '~/components/resources/EventsContainer.vue';
 import SeriesContainer from '~/components/resources/SeriesContainer.vue';
 import TracksContainer from '~/components/resources/TracksContainer.vue';
+import { strings } from '~/plugins/constants';
 
 export default {
 	components: {
@@ -70,7 +71,7 @@ export default {
 	},
 	mounted() {
 		// Events
-		this.$root.$on('eventCreated', obj => {
+		this.$root.$on(strings.EVENT_CREATED, obj => {
 			this.data.events.push(obj);
 			this.data.events.sort((a,b) => {
 				if (a.priority === b.priority)
@@ -78,9 +79,9 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit('showToast', 'Event ' + obj.name + ' created');
+			this.$root.$emit(strings.SHOW_TOAST, 'Event ' + obj.name + ' created');
 		});
-		this.$root.$on('eventUpdated', event => {
+		this.$root.$on(strings.EVENT_UPDATED, event => {
 			let index = this.data.events.findIndex(e => e.id == event.id);
 			this.data.events.splice(index, 1, event);
 			this.data.events.sort((a,b) => {
@@ -89,40 +90,40 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit('showToast', 'Event ' + event.name + ' updated');
+			this.$root.$emit(strings.SHOW_TOAST, 'Event ' + event.name + ' updated');
 		});
-		this.$root.$on('confirmDeleteEvent', event => {
+		this.$root.$on(strings.CONFIRM_DELETE_EVENT, event => {
 			this.confirmDelete.type = 'event';
 			this.confirmDelete.resource = event;
 			this.confirmDelete.content = 'Do you really want to delete the Event \"' + event.name + '\" ?';
 			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
 		// EventSessions
-		this.$root.$on('eventSessionCreated', session => {
+		this.$root.$on(strings.EVENTSESSION_CREATED, session => {
 			let event = this.data.events.find(e => e.id == session.event);
 			event.EventSessions.push(session);
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
-			this.$root.$emit('showToast', 'Session ' + session.name + ' created');
+			this.$root.$emit(strings.SHOW_TOAST, 'Session ' + session.name + ' created');
 		});
-		this.$root.$on('eventSessionUpdated', session => {
+		this.$root.$on(strings.EVENTSESSIONS_UPDATED, session => {
 			let event = this.data.events.find(e => e.id == session.event);
 			let sessionindex = event.EventSessions.findIndex(s => s.id == session.id);
 			event.EventSessions.splice(sessionindex, 1, session);
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
-			this.$root.$emit('showToast', 'Session ' + session.name + ' updated');
+			this.$root.$emit(strings.SHOW_TOAST, 'Session ' + session.name + ' updated');
 		});
-		this.$root.$on('confirmDeleteEventSession', (session) => {
+		this.$root.$on(strings.CONFIRM_DELETE_EVENTSESSION, (session) => {
 			this.confirmDelete.type = 'eventsession';
 			this.confirmDelete.resource = session;
 			this.confirmDelete.content = 'Do you really want to delete the Session \"' + session.name + '\" ?';
 			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
 		// Series
-		this.$root.$on('seriesCreated', obj => {
+		this.$root.$on(strings.SERIES_CREATED, obj => {
 			this.data.series.push(obj);
 			this.data.series.sort((a,b) => {
 				if (a.priority === b.priority)
@@ -130,9 +131,9 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit('showToast', 'Series ' + obj.name + ' created');
+			this.$root.$emit(strings.SHOW_TOAST, 'Series ' + obj.name + ' created');
 		});
-		this.$root.$on('seriesUpdated', updatedSeries => {
+		this.$root.$on(strings.SERIES_UPDATED, updatedSeries => {
 			let index = this.data.series.findIndex(s => s.id == updatedSeries.id);
 			this.data.series.splice(index, 1, updatedSeries);
 			this.data.series.sort((a,b) => {
@@ -141,28 +142,28 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit('showToast', 'Series ' + updatedSeries.name + ' updated');
+			this.$root.$emit(strings.SHOW_TOAST, 'Series ' + updatedSeries.name + ' updated');
 		});
-		this.$root.$on('confirmDeleteSeries', series => {
+		this.$root.$on(strings.CONFIRM_DELETE_SERIES, series => {
 			this.confirmDelete.type = 'series';
 			this.confirmDelete.resource = series;
 			this.confirmDelete.content = 'Do you really want to delete the Series \"' + series.name + '\" ?';
 			this.confirmDelete.showDialog = !this.confirmDelete.showDialog;
 		});
 		// Tracks
-		this.$root.$on('trackCreated', obj => {
+		this.$root.$on(strings.TRACK_CREATED, obj => {
 			this.data.tracks.push(obj);
 			this.data.tracks.sort((a,b) => {
 				return a.name.localeCompare(b.name);
 			});
-			this.$root.$emit('showToast', 'Track ' + obj.name + ' created');
+			this.$root.$emit(strings.SHOW_TOAST, 'Track ' + obj.name + ' created');
 		});
-		this.$root.$on('trackUpdated', updatedTrack => {
+		this.$root.$on(strings.TRACK_UPDATED, updatedTrack => {
 			let index = this.data.tracks.findIndex(t => t.id == updatedTrack.id);
 			this.data.tracks.splice(index, 1, updatedTrack);
-			this.$root.$emit('showToast', 'Track ' + updatedTrack.name + ' updated');
+			this.$root.$emit(strings.SHOW_TOAST, 'Track ' + updatedTrack.name + ' updated');
 		});
-		this.$root.$on('confirmDeleteTrack', track => {
+		this.$root.$on(strings.CONFIRM_DELETE_TRACK, track => {
 			this.confirmDelete.type = 'track';
 			this.confirmDelete.resource = track;
 			this.confirmDelete.content = 'Do you really want to delete the Track \"' + track.name + '\" ?';
@@ -193,26 +194,26 @@ export default {
 			let index = this.data.events.findIndex(e => e.id == eventid);
 			let event = this.data.events.find(e => e.id == eventid);
 			this.data.events.splice(index, 1);
-			this.$root.$emit('showToast', 'Event ' + event.name + ' deleted');
+			this.$root.$emit(strings.SHOW_TOAST, 'Event ' + event.name + ' deleted');
 		},
 		eventSessionDeleted(sessionid) {
 			let event = this.findEventBySessionId(sessionid);
 			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
 			let session = event.EventSessions.find(s => s.id == sessionid);
 			event.EventSessions.splice(sessionindex, 1);
-			this.$root.$emit('showToast', 'Session ' + session.name + ' deleted');
+			this.$root.$emit(strings.SHOW_TOAST, 'Session ' + session.name + ' deleted');
 		},
 		seriesDeleted(seriesid) {
 			let index = this.data.series.findIndex(s => s.id == seriesid);
 			let series = this.data.series.find(s => s.id == seriesid);
 			this.data.series.splice(index, 1);
-			this.$root.$emit('showToast', 'Series ' + series.name + ' deleted');
+			this.$root.$emit(strings.SHOW_TOAST, 'Series ' + series.name + ' deleted');
 		},
 		trackDeleted(trackid) {
 			let index = this.data.tracks.findIndex(t => t.id == trackid);
 			let track = this.data.tracks.find(t => t.id == trackid);
 			this.data.tracks.splice(index, 1);
-			this.$root.$emit('showToast', 'Track ' + track.name + ' deleted');
+			this.$root.$emit(strings.SHOW_TOAST, 'Track ' + track.name + ' deleted');
 		},
 		findEventBySessionId(sessionid) {
 			for (let i = 0; i < this.data.events.length; i++) {
