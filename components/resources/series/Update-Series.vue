@@ -1,55 +1,55 @@
 <template>
-<CRUDTrack
+<CRUDSeries
 	:show-dialog="showCRUD"
-	:active-track="track"
+	:active-series="series"
 	:headline="headline()"
 	:action="'Update'"
 	:update-mode="true"
-	:tz="tz"
+	:vc="vc"
 />
 </template>
 
 <script>
-import CRUDTrack from '~/components/templates/CRUD-Track.vue';
+import CRUDSeries from '~/components/templates/CRUD-Series.vue';
 
 export default {
 	components: {
-		CRUDTrack
+		CRUDSeries
 	},
 	props: {
 		showDialog: {
 			type: Boolean, default: false
 		},
-		activeTrack: {
+		activeSeries: {
 			type: Object, default: null
 		},
-		tz: {
-			type: Object, default: null
+		vc: {
+			type: Array, default() { return []; }
 		}
 	},
 	data: function() {
 		return {
 			showCRUD: false,
-			track: {
+			series: {
 				name: '',
-				country: '',
-				timezone: '',
-				length: '',
-				map: ''
+				shortname: '',
+				logo: '',
+				homepage: '',
+				priority: ''
 			}
 		};
 	},
 	watch: {
 		showDialog(newValue) {
 			if (newValue === true)
-				this.track = this.activeTrack;
+				this.series = this.activeSeries;
 
 			this.showCRUD = newValue;
 		}
 	},
 	methods: {
 		headline() {
-			return 'Update track ' + this.track.name;
+			return 'Update series ' + this.series.name;
 		}
 	}
 };

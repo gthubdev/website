@@ -87,9 +87,6 @@ export default {
 		};
 	},
 	mounted() {
-		// this.$root.$on(strings.TOGGLE_CRUD_TRACK, () => {
-		// 	this.showDialog = !this.showDialog;
-		// });
 		this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
 		this.showPagination = this.pageCount > 1;
 
@@ -140,7 +137,7 @@ export default {
 			this.showCreateDialog = true;
 		},
 		updateTrack(track) {
-			this.activeTrack = track;
+			this.activeTrack = JSON.parse(JSON.stringify(track));
 			this.showUpdateDialog = true;
 		},
 		deleteTrack(track) {

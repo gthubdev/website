@@ -42,28 +42,28 @@
 		/>
 	</div>
 
-	<!-- <CRUDSeries
-		:show-dialog="showDialog"
-		:active-series="activeSeries"
-		:mode="mode"
-		:vc="vehicleclasses"
-	/> -->
 	<CreateSeries
 		:show-dialog="showCreateDialog"
+		:vc="vehicleclasses"
+	/>
+
+	<UpdateSeries
+		:show-dialog="showUpdateDialog"
+		:active-series="activeSeries"
 		:vc="vehicleclasses"
 	/>
 </div>
 </template>
 
 <script>
-// import CRUDSeries from '~/components/resources/CRUD-Series.vue';
 import CreateSeries from '~/components/resources/series/Create-Series.vue';
+import UpdateSeries from '~/components/resources/series/Update-Series.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
-		CreateSeries, Paginate
+		CreateSeries, UpdateSeries, Paginate
 	},
 	props: {
 		series: {
@@ -76,6 +76,7 @@ export default {
 	data: function() {
 		return {
 			showCreateDialog: false,
+			showUpdateDialog: false,
 			activeSeries: null,
 			mode: '',
 			searchTerm: '',
@@ -86,24 +87,22 @@ export default {
 		};
 	},
 	mounted() {
-		this.$root.$on(strings.TOGGLE_CRUD_SERIES, () => {
-			this.showCreateDialog = !this.showDialog;
-		});
 		this.pageCount = Math.ceil(this.series.length / this.itemsPerPage);
 		this.showPagination = this.pageCount > 1;
 
 		this.$root.$on(strings.CLOSED_CRUD_SERIES, () => {
 			this.showCreateDialog = false;
+			this.showUpdateDialog = false;
 		});
 
 		// handle requests to create/update a series
 		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, vehicleClasses) => {
-			console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
+			//console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
 
 			const series = JSON.parse(JSON.stringify(tmpseries));
 			series.vehicleClasses = vehicleClasses;
 			// create a series
-			if (this.showCreateDialog) {
+			if (this.showCreateDialog === true) {
 				try {
 					const res = await this.$axios.$post('/api/calendar/series/create', {
 						series
@@ -115,8 +114,8 @@ export default {
 				}
 				this.showCreateDialog = false;
 			}
-			/*
-			} else if (this.mode === 'update') {
+			// update a series
+			if (this.showUpdateDialog === true) {
 				// no need to update that
 				delete series.createdAt;
 				try {
@@ -129,9 +128,8 @@ export default {
 					if (err.response)
 						alert(err.response);
 				}
+				this.showUpdateDialog = false;
 			}
-			this.showSeriesDialog = false;
-			*/
 		});
 	},
 	methods: {
@@ -139,9 +137,8 @@ export default {
 			this.showCreateDialog = true;
 		},
 		updateSeries(series) {
-			this.activeSeries = series;
-			this.mode = 'update';
-			this.showDialog = !this.showDialog;
+			this.activeSeries = JSON.parse(JSON.stringify(series));
+			this.showUpdateDialog = true;
 		},
 		deleteSeries(series) {
 			this.$root.$emit(strings.CONFIRM_DELETE_SERIES, series);
