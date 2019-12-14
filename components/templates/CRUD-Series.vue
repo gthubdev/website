@@ -90,8 +90,14 @@ export default {
 		activeSeries: {
 			type: Object, default: null
 		},
-		mode: {
+		headline: {
 			type: String, default: ''
+		},
+		action: {
+			type: String, default: ''
+		},
+		updateMode: {
+			type: Boolean, default: false
 		},
 		vc: {
 			type: Array, default() { return []; }
@@ -114,26 +120,6 @@ export default {
 		};
 	},
 	computed: {
-		headline() {
-			switch(this.mode) {
-				case 'create':
-					return 'Create a Series';
-				case 'update':
-					return 'Update ' + this.series.name;
-				default:
-					return '';
-			}
-		},
-		action() {
-			switch(this.mode) {
-				case 'create':
-					return 'Create';
-				case 'update':
-					return 'Update';
-				default:
-					return '';
-			}
-		},
 		requiredName() {
 			return {
 				'md-invalid': !(this.series.name.length > 0)
@@ -164,16 +150,16 @@ export default {
 		showDialog(newValue) {
 			this.showSeriesDialog = newValue;
 		},
-		showSeriesDialog(newValue, oldValue) {
-			if (oldValue === true)
-				this.$root.$emit(strings.TOGGLE_CRUD_SERIES);
-			if (newValue === true && this.mode === 'create') {
+		showSeriesDialog(newValue) {
+			if (newValue === false)
+				this.$root.$emit(strings.CLOSED_CRUD_SERIES);
+
+			if (newValue === true && this.updateMode === false) {
 				// Reset all values
 				Object.keys(this.series).forEach(key => (this.series[key] = ''));
 				// Reset arrays
-				this.vehicleClasses.splice(0);
-				this.tmpVehicleClasses.splice(0);
-				this.tmpVehicleClasses = Array.from(this.vc);
+				this.resetArrays();
+				// Reset values for the chosen category
 				this.chosenVC = {
 					'id':'',
 					'name':'',
@@ -182,13 +168,11 @@ export default {
 					'toString':()=>''
 				};
 			}
-			if (newValue === true && this.mode === 'update' && this.activeSeries !== undefined) {
+			if (newValue === true && this.updateMode === true && this.activeSeries !== undefined) {
 				// Might need to reset the object
-				this.series = JSON.parse(JSON.stringify(this.activeSeries));
+				this.resetActiveSeries();
 				// Reset arrays
-				this.vehicleClasses.splice(0);
-				this.tmpVehicleClasses.splice(0);
-				this.tmpVehicleClasses = Array.from(this.vc);
+				this.resetArrays();
 				// Move all vehicle classes to corresponding array
 				this.series.SeriesTypes.forEach(st => {
 					let index = this.tmpVehicleClasses.findIndex(tvc => tvc.id == st.class);
@@ -206,9 +190,12 @@ export default {
 			}
 		},
 		activeSeries(newValue) {
-			if (this.mode === 'update' && newValue !== undefined)
-				// Need to copy the object in order to not change it when cancelling
-				this.series = JSON.parse(JSON.stringify(this.activeSeries));
+			if (newValue === undefined) return;
+
+			this.series = newValue;
+
+			if (newValue === true && this.updateMode === true)
+				this.resetActiveSeries();
 		},
 		chosenVC(newValue) {
 			if (newValue !== undefined && newValue.name && newValue.name.length) {
@@ -230,34 +217,8 @@ export default {
 		}
 	},
 	methods: {
-		async sendRequest() {
-			const series = JSON.parse(JSON.stringify(this.series));
-			series.vehicleClasses = this.vehicleClasses;
-			if (this.mode === 'create') {
-				try {
-					const res = await this.$axios.$post('/api/calendar/series/create', {
-						series
-					});
-					this.$root.$emit(strings.SERIES_CREATED, res);
-				} catch(err) {
-					if (err.response)
-						alert(err.response);
-				}
-			} else if (this.mode === 'update') {
-				// no need to update that
-				delete series.createdAt;
-				try {
-					const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
-						series
-					});
-					if (res.id && res.id >= 1)
-					this.$root.$emit(strings.SERIES_UPDATED, res);
-				} catch(err) {
-					if (err.response)
-						alert(err.response);
-				}
-			}
-			this.showSeriesDialog = false;
+		sendRequest() {
+			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series,this.vehicleClasses);
 		},
 		removeVehicleClass(vc, index) {
 			this.vehicleClasses.splice(index, 1);
@@ -270,6 +231,14 @@ export default {
 			this.series.logo.length &&
 			this.series.priority >= 1 &&
 			this.vehicleClasses.length;
+		},
+		resetActiveSeries() {
+			this.series = JSON.parse(JSON.stringify(this.activeSeries));
+		},
+		resetArrays() {
+			this.vehicleClasses.splice(0);
+			this.tmpVehicleClasses.splice(0);
+			this.tmpVehicleClasses = Array.from(this.vc);
 		}
 	}
 };

@@ -42,23 +42,28 @@
 		/>
 	</div>
 
-	<CRUDSeries
-		:show-dialog="showDialog"
+	<CreateSeries
+		:show-dialog="showCreateDialog"
+		:vc="vehicleclasses"
+	/>
+
+	<UpdateSeries
+		:show-dialog="showUpdateDialog"
 		:active-series="activeSeries"
-		:mode="mode"
 		:vc="vehicleclasses"
 	/>
 </div>
 </template>
 
 <script>
-import CRUDSeries from '~/components/resources/CRUD-Series.vue';
+import CreateSeries from '~/components/resources/series/Create-Series.vue';
+import UpdateSeries from '~/components/resources/series/Update-Series.vue';
 import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
-		CRUDSeries, Paginate
+		CreateSeries, UpdateSeries, Paginate
 	},
 	props: {
 		series: {
@@ -70,7 +75,8 @@ export default {
 	},
 	data: function() {
 		return {
-			showDialog: false,
+			showCreateDialog: false,
+			showUpdateDialog: false,
 			activeSeries: null,
 			mode: '',
 			searchTerm: '',
@@ -81,21 +87,58 @@ export default {
 		};
 	},
 	mounted() {
-		this.$root.$on(strings.TOGGLE_CRUD_SERIES, () => {
-			this.showDialog = !this.showDialog;
-		});
 		this.pageCount = Math.ceil(this.series.length / this.itemsPerPage);
 		this.showPagination = this.pageCount > 1;
+
+		this.$root.$on(strings.CLOSED_CRUD_SERIES, () => {
+			this.showCreateDialog = false;
+			this.showUpdateDialog = false;
+		});
+
+		// handle requests to create/update a series
+		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, vehicleClasses) => {
+			//console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
+
+			const series = JSON.parse(JSON.stringify(tmpseries));
+			series.vehicleClasses = vehicleClasses;
+			// create a series
+			if (this.showCreateDialog === true) {
+				try {
+					const res = await this.$axios.$post('/api/calendar/series/create', {
+						series
+					});
+					this.$root.$emit(strings.SERIES_CREATED, res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
+				this.showCreateDialog = false;
+			}
+			// update a series
+			if (this.showUpdateDialog === true) {
+				// no need to update that
+				delete series.createdAt;
+				try {
+					const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
+						series
+					});
+					if (res.id && res.id >= 1)
+					this.$root.$emit(strings.SERIES_UPDATED, res);
+				} catch(err) {
+					if (err.response)
+						alert(err.response);
+				}
+				this.showUpdateDialog = false;
+			}
+		});
 	},
 	methods: {
 		createSeries() {
-			this.mode = 'create';
-			this.showDialog = !this.showDialog;
+			this.showCreateDialog = true;
 		},
 		updateSeries(series) {
-			this.activeSeries = series;
-			this.mode = 'update';
-			this.showDialog = !this.showDialog;
+			this.activeSeries = JSON.parse(JSON.stringify(series));
+			this.showUpdateDialog = true;
 		},
 		deleteSeries(series) {
 			this.$root.$emit(strings.CONFIRM_DELETE_SERIES, series);
