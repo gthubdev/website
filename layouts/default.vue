@@ -22,7 +22,8 @@ export default {
 	},
 	data: function() {
 		return {
-			showToast: false, toastMsg: ''
+			showToast: false,
+			toastMsg: ''
 		};
 	},
 	mounted() {

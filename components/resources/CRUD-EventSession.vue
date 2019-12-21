@@ -259,7 +259,7 @@ export default {
 						session
 					});
 					if (res.id)
-					this.$root.$emit(strings.EVENTSESSIONS_UPDATED, res);
+					this.$root.$emit(strings.EVENTSESSION_UPDATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response);

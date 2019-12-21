@@ -7,9 +7,8 @@ let delay = 1000;
 console.log('Initializing data...');
 setTimeout(() => {
 	fs.readFile(__dirname + '/init_data.sql', async (err, data) => {
-		if (err) {
+		if (err)
 			throw err;
-		}
 
 		try {
 			await db.sequelize.query(data.toString());
