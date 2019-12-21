@@ -107,7 +107,7 @@ export default {
 			});
 			this.$root.$emit(strings.SHOW_TOAST, 'Session ' + session.name + ' created');
 		});
-		this.$root.$on(strings.EVENTSESSIONS_UPDATED, session => {
+		this.$root.$on(strings.EVENTSESSION_UPDATED, session => {
 			let event = this.data.events.find(e => e.id == session.event);
 			let sessionindex = event.EventSessions.findIndex(s => s.id == session.id);
 			event.EventSessions.splice(sessionindex, 1, session);

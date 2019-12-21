@@ -35,4 +35,6 @@ async function start() {
 		badge: true
 	});
 }
-start();
+start()
+	.then()
+	.catch(console.error);

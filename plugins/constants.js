@@ -19,7 +19,7 @@ export const strings = {
 	EVENT_CREATED: 'eventCreated',
 	EVENT_UPDATED: 'eventUpdated',
 	EVENTSESSION_CREATED: 'eventSessionCreated',
-	EVENTSESSIONS_UPDATED: 'eventSessionUpdated',
+	EVENTSESSION_UPDATED: 'eventSessionUpdated',
 	SEND_REQUEST_CRUD_SERIES: 'sendRequestCrudSeries',
 	SEND_REQUEST_CRUD_TRACK: 'sendRequestCrudTrack',
 	SERIES_CREATED: 'seriesCreated',
