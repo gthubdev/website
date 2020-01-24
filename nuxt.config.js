@@ -45,6 +45,9 @@ module.exports = {
 	 ** Global CSS
 	 */
 	css: [
+		{ src: 'primevue/resources/primevue.min.css' },
+		{ src: 'primevue/resources/themes/nova-light/theme.css' },
+		{ src: 'primeicons/primeicons.css' },
 		'@/assets/scss/main.scss'
 	],
 
@@ -53,7 +56,9 @@ module.exports = {
 	 */
 	plugins: [
 		// initialize external libraries here
-		{ src: '~/plugins/init', mode: 'client' }
+		{ src: '~/plugins/init', mode: 'client' },
+		// define all used PrimeVUE components here
+		{ src: '~/plugins/primevue.js', mode: 'client' }
 	],
 
 	/*
