@@ -15,12 +15,9 @@
 			<md-button class="md-primary" href="/calendar">
 				Calendar
 			</md-button>
-			<md-button class="md-primary" @click="testClick()">
-				Gallery
-			</md-button>
-			<md-button class="md-primary" @click="testClick()">
-				About
-			</md-button>
+			<Button label="Gallery" class="p-button-raised p-button-rounded" @click="testClick()" />
+			<Button label="About" class="p-button-raised p-button-rounded p-button-success" icon="pi pi-check" icon-pos="right" @click="testClick()" />
+			<Button label="Danger" class="p-button-raised p-button-rounded p-button-danger" icon="pi pi-times-circle" icon-pos="left" @click="testClick()" />
 			<md-button v-if="loggedIn" class="md-primary" href="/resources">
 				Resources
 			</md-button>
