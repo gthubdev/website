@@ -6,27 +6,15 @@
 			<img class="logo" src="~/assets/img/GTHubNoBackground.svg" alt="GTHub's logo" />
 		</a>
 		<div class="buttonContainer">
-			<md-button v-if="loggedIn" class="md-primary">
-				Logged in as {{ user.username }}
-			</md-button>
-			<md-button class="md-primary" href="/">
-				Home
-			</md-button>
-			<md-button class="md-primary" href="/calendar">
-				Calendar
-			</md-button>
-			<Button label="Gallery" class="p-button-raised p-button-rounded" @click="testClick()" />
-			<Button label="About" class="p-button-raised p-button-rounded p-button-success" icon="pi pi-check" icon-pos="right" @click="testClick()" />
-			<Button label="Danger" class="p-button-raised p-button-rounded p-button-danger" icon="pi pi-times-circle" icon-pos="left" @click="testClick()" />
-			<md-button v-if="loggedIn" class="md-primary" href="/resources">
-				Resources
-			</md-button>
-			<md-button v-if="!loggedIn" class="md-raised md-primary btn-primary" @click="login()">
-				Log In
-			</md-button>
-			<md-button v-if="loggedIn" class="md-raised md-primary btn-primary" @click="logout()">
-				Log Out
-			</md-button>
+			<Button v-if="loggedIn" :label="displayUsername()" class="p-button-raised p-button-rounded p-button-secondary" />
+			<Button label="Home" class="p-button-raised p-button-rounded p-button-secondary" onclick="window.location.href = '/home';" />
+			<Button label="Calendar" class="p-button-raised p-button-rounded p-button-secondary" onclick="window.location.href = '/calendar';" />
+			<Button label="Gallery" class="p-button-raised p-button-rounded p-button-secondary" @click="testClick()" />
+			<Button label="About" class="p-button-raised p-button-rounded p-button-secondary" @click="testClick()" />
+			<Button v-if="loggedIn" label="Resources" class="p-button-raised p-button-rounded p-button-secondary" onclick="window.location.href = '/resources';" />
+			<Button v-if="!loggedIn" label="LOGIN" class="p-button-raised p-button-rounded btn-primary" @click="login()" />
+			<Button v-if="loggedIn" label="LOGOUT" class="p-button-raised p-button-rounded btn-primary" @click="logout()" />
+
 			<md-button class="icon md-primary" @click="responsive()">
 				<md-icon style="color:white;">
 					menu
@@ -68,15 +56,16 @@ export default {
 				console.log('Logout was not successful.');
 			}
 		},
-		testClick: function() {
+		testClick() {
 			alert('Don\'t click that button, idiot!');
 		},
-		responsive: function() {
-			var x = document.getElementsByTagName('nav')[0];
+		displayUsername() {
+			return this.loggedIn ? 'Logged in as ' + this.user.username : '';
+		},
+		responsive() {
+			let x = document.getElementsByTagName('nav')[0];
 			if (x.className === 'topnav') {
 				x.className += ' responsive';
-			} else {
-				x.className = 'topnav';
 			}
 		}
 	}
