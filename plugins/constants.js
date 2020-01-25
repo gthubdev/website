@@ -24,7 +24,6 @@ export const strings = {
 	SEND_REQUEST_CRUD_TRACK: 'sendRequestCrudTrack',
 	SERIES_CREATED: 'seriesCreated',
 	SERIES_UPDATED: 'seriesUpdated',
-	SHOW_TOAST: 'showToast',
 	TOGGLE_CRUD_EVENT: 'toggleCrudEvent',
 	TOGGLE_CRUD_EVENTSESSION: 'toggleCrudEventSession',
 	TOGGLE_CRUD_SERIES: 'toggleCrudSeries',

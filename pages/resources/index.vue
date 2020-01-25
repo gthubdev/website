@@ -79,10 +79,10 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit(strings.SHOW_TOAST, 'Event ' + obj.name + ' created');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + obj.name + ' created.', life: 10000 });
 		});
 		this.$root.$on(strings.EVENT_UPDATED, event => {
-			let index = this.data.events.findIndex(e => e.id == event.id);
+			let index = this.data.events.findIndex(e => e.id === event.id);
 			this.data.events.splice(index, 1, event);
 			this.data.events.sort((a,b) => {
 				if (a.priority === b.priority)
@@ -90,7 +90,7 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit(strings.SHOW_TOAST, 'Event ' + event.name + ' updated');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' updated.', life: 10000 });
 		});
 		this.$root.$on(strings.CONFIRM_DELETE_EVENT, event => {
 			this.confirmDelete.type = 'event';
@@ -100,21 +100,21 @@ export default {
 		});
 		// EventSessions
 		this.$root.$on(strings.EVENTSESSION_CREATED, session => {
-			let event = this.data.events.find(e => e.id == session.event);
+			let event = this.data.events.find(e => e.id === session.event);
 			event.EventSessions.push(session);
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
-			this.$root.$emit(strings.SHOW_TOAST, 'Session ' + session.name + ' created');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Session ' + session.name + ' created.', life: 10000 });
 		});
 		this.$root.$on(strings.EVENTSESSION_UPDATED, session => {
-			let event = this.data.events.find(e => e.id == session.event);
-			let sessionindex = event.EventSessions.findIndex(s => s.id == session.id);
+			let event = this.data.events.find(e => e.id === session.event);
+			let sessionindex = event.EventSessions.findIndex(s => s.id === session.id);
 			event.EventSessions.splice(sessionindex, 1, session);
 			event.EventSessions.sort((a,b) => {
 				return a.starttime.localeCompare(b.starttime);
 			});
-			this.$root.$emit(strings.SHOW_TOAST, 'Session ' + session.name + ' updated');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Session ' + session.name + ' updated.', life: 10000 });
 		});
 		this.$root.$on(strings.CONFIRM_DELETE_EVENTSESSION, (session) => {
 			this.confirmDelete.type = 'eventsession';
@@ -131,10 +131,10 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit(strings.SHOW_TOAST, 'Series ' + obj.name + ' created');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + obj.name + ' created.', life: 10000 });
 		});
 		this.$root.$on(strings.SERIES_UPDATED, updatedSeries => {
-			let index = this.data.series.findIndex(s => s.id == updatedSeries.id);
+			let index = this.data.series.findIndex(s => s.id === updatedSeries.id);
 			this.data.series.splice(index, 1, updatedSeries);
 			this.data.series.sort((a,b) => {
 				if (a.priority === b.priority)
@@ -142,7 +142,7 @@ export default {
 				else
 					return a.priority - b.priority;
 			});
-			this.$root.$emit(strings.SHOW_TOAST, 'Series ' + updatedSeries.name + ' updated');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + updatedSeries.name + ' updated.', life: 10000 });
 		});
 		this.$root.$on(strings.CONFIRM_DELETE_SERIES, series => {
 			this.confirmDelete.type = 'series';
@@ -156,12 +156,12 @@ export default {
 			this.data.tracks.sort((a,b) => {
 				return a.name.localeCompare(b.name);
 			});
-			this.$root.$emit(strings.SHOW_TOAST, 'Track ' + obj.name + ' created');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + obj.name + ' created.', life: 10000 });
 		});
 		this.$root.$on(strings.TRACK_UPDATED, updatedTrack => {
-			let index = this.data.tracks.findIndex(t => t.id == updatedTrack.id);
+			let index = this.data.tracks.findIndex(t => t.id === updatedTrack.id);
 			this.data.tracks.splice(index, 1, updatedTrack);
-			this.$root.$emit(strings.SHOW_TOAST, 'Track ' + updatedTrack.name + ' updated');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + updatedTrack.name + ' updated.', life: 10000 });
 		});
 		this.$root.$on(strings.CONFIRM_DELETE_TRACK, track => {
 			this.confirmDelete.type = 'track';
@@ -191,34 +191,34 @@ export default {
 			}
 		},
 		eventDeleted(eventid) {
-			let index = this.data.events.findIndex(e => e.id == eventid);
-			let event = this.data.events.find(e => e.id == eventid);
+			let index = this.data.events.findIndex(e => e.id === eventid);
+			let event = this.data.events.find(e => e.id === eventid);
 			this.data.events.splice(index, 1);
-			this.$root.$emit(strings.SHOW_TOAST, 'Event ' + event.name + ' deleted');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' deleted.', life: 10000 });
 		},
 		eventSessionDeleted(sessionid) {
 			let event = this.findEventBySessionId(sessionid);
-			let sessionindex = event.EventSessions.findIndex(s => s.id == sessionid);
-			let session = event.EventSessions.find(s => s.id == sessionid);
+			let sessionindex = event.EventSessions.findIndex(s => s.id === sessionid);
+			let session = event.EventSessions.find(s => s.id === sessionid);
 			event.EventSessions.splice(sessionindex, 1);
-			this.$root.$emit(strings.SHOW_TOAST, 'Session ' + session.name + ' deleted');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Session ' + session.name + ' deleted.', life: 10000 });
 		},
 		seriesDeleted(seriesid) {
-			let index = this.data.series.findIndex(s => s.id == seriesid);
-			let series = this.data.series.find(s => s.id == seriesid);
+			let index = this.data.series.findIndex(s => s.id === seriesid);
+			let series = this.data.series.find(s => s.id === seriesid);
 			this.data.series.splice(index, 1);
-			this.$root.$emit(strings.SHOW_TOAST, 'Series ' + series.name + ' deleted');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' deleted.', life: 10000 });
 		},
 		trackDeleted(trackid) {
-			let index = this.data.tracks.findIndex(t => t.id == trackid);
-			let track = this.data.tracks.find(t => t.id == trackid);
+			let index = this.data.tracks.findIndex(t => t.id === trackid);
+			let track = this.data.tracks.find(t => t.id === trackid);
 			this.data.tracks.splice(index, 1);
-			this.$root.$emit(strings.SHOW_TOAST, 'Track ' + track.name + ' deleted');
+			this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + track.name + ' deleted.', life: 10000 });
 		},
 		findEventBySessionId(sessionid) {
 			for (let i = 0; i < this.data.events.length; i++) {
 				for (let j = 0; j < this.data.events[i].EventSessions.length; j++) {
-					if (this.data.events[i].EventSessions[j].id == sessionid)
+					if (this.data.events[i].EventSessions[j].id === sessionid)
 						return this.data.events[i];
 				}
 			}
