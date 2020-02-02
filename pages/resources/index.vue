@@ -1,6 +1,20 @@
 <template>
 <div class="md-layout">
-	<md-tabs md-alignment="fixed" :md-dynamic-height="true" class="md-transparent">
+	<TabView class="full-width">
+		<TabPanel header="Events">
+			Events
+		</TabPanel>
+		<TabPanel header="Series">
+			Series
+		</TabPanel>
+		<TabPanel header="Tracks">
+			<TracksContainer
+				:tracks="data.tracks"
+				:tz="data.tz"
+			/>
+		</TabPanel>
+	</TabView>
+	<!--	<md-tabs md-alignment="fixed" :md-dynamic-height="true" class="md-transparent">
 		<md-tab id="tab-events" md-label="Events">
 			<EventsContainer
 				:events="data.events"
@@ -28,19 +42,29 @@
 		md-confirm-text="Delete"
 		md-cancel-text="Cancel"
 		@md-confirm="deleteResource(confirmDelete.type, confirmDelete.resource)"
+	/>-->
+	<md-dialog-confirm
+		:md-active.sync="confirmDelete.showDialog"
+		md-title="Are you sure ?"
+		:md-content="confirmDelete.content"
+		md-confirm-text="Delete"
+		md-cancel-text="Cancel"
+		@md-confirm="deleteResource(confirmDelete.type, confirmDelete.resource)"
 	/>
 </div>
 </template>
 
 <script>
-import EventsContainer from '~/components/resources/EventsContainer.vue';
-import SeriesContainer from '~/components/resources/SeriesContainer.vue';
+//import EventsContainer from '~/components/resources/EventsContainer.vue';
+//import SeriesContainer from '~/components/resources/SeriesContainer.vue';
 import TracksContainer from '~/components/resources/TracksContainer.vue';
 import { strings } from '~/plugins/constants';
 
 export default {
 	components: {
-		EventsContainer, SeriesContainer, TracksContainer
+		//EventsContainer,
+		//SeriesContainer,
+		TracksContainer
 	},
 	async asyncData({
 		$axios

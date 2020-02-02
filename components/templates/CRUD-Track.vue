@@ -1,74 +1,57 @@
 <template>
-<div>
-	<md-dialog :md-active.sync="showTrackDialog">
-		<md-dialog-content>
-			<md-dialog-title>{{ headline }}</md-dialog-title>
+<div class="content-section implementation">
+	<Dialog :header="headline" :visible.sync="showTrackDialog" :modal="true">
+		<span class="p-float-label">
+			<InputText id="name" v-model="track.name" type="text" class="width-50" />
+			<ValidationMessage v-if="!validTrackName()">Please enter a track name</ValidationMessage>
+			<label for="name">Track Name</label>
+		</span>
 
-			<md-field :class="requiredName">
-				<label>Track Name</label>
-				<md-input v-model="track.name" required />
-				<span class="md-error">Please enter a track name</span>
-			</md-field>
+		<br />
 
-			<md-autocomplete v-model="track.country" md-dense :md-options="getCountryNames()" :class="requiredCountry" :md-fuzzy-search="false">
-				<label>Country</label>
+		<div class="p-grid">
+			<div class="p-col">
+				<AutoComplete v-model="track.country" :suggestions="countryNames" :dropdown="true" placeholder="Country" @complete="searchCountry($event)">
+					<template #item="slotProps" class="">
+						<div class="p-clearfix">
+							{{ getCountryFlag(slotProps.item) }} {{ slotProps.item }}
+						</div>
+					</template>
+				</AutoComplete>
+			</div>
+			<div class="p-col">
+				<AutoComplete v-model="track.timezone" :suggestions="timeZones" :dropdown="true" placeholder="Timezone" class="full-width" field="display" @complete="searchTimezone($event)">
+					<template #item="slotProps" class="full-width">
+						<div class="p-clearfix width-50">
+							{{ tzDisplay(slotProps.item) }}
+						</div>
+					</template>
+				</AutoComplete>
+			</div>
+		</div>
 
-				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-					<md-highlight-text :md-term="term">
-						{{ getCountryFlag(item) }} {{ item }}
-					</md-highlight-text>
-				</template>
+		<br />
 
-				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					"{{ term }}" not found!
-				</template>
+		<div class="p-grid">
+			<div class="p-col-2">
+				<span class="p-float-label">
+					<InputText id="length" v-model="track.length" type="text" class="full-width" />
+					<label for="name">Length</label>
+				</span>
+			</div>
+			<div class="p-col">
+				<span class="p-float-label">
+					<InputText id="map" v-model="track.map" type="text" class="full-width" />
+					<label for="name">Map</label>
+				</span>
+			</div>
+		</div>
 
-				<span class="md-error">Please choose a country</span>
-			</md-autocomplete>
-
-			<md-autocomplete v-model="track.timezone" md-dense :md-options="tz.tz_array.map(x=>({
-				'name':x.name,
-				'desc': x.desc,
-				'toLowerCase':()=>x.desc.toLowerCase(),
-				'toString':()=>tzDisplay(x)
-			}))" :class="requiredTimezone" :md-fuzzy-search="false"
-			>
-				<label>Timezone</label>
-
-				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-					<md-highlight-text :md-term="term.desc ? term.desc : term">
-						{{ tzDisplay(item) }}
-					</md-highlight-text>
-				</template>
-
-				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					"{{ term }}" not found!
-				</template>
-
-				<span class="md-error">Please choose a timezone</span>
-			</md-autocomplete>
-
-			<md-field :class="requiredLength">
-				<label>Length</label>
-				<md-input v-model="track.length" required />
-				<span class="md-error">Please enter a valid length</span>
-			</md-field>
-
-			<md-field>
-				<label>Map</label>
-				<md-input v-model="track.map" />
-			</md-field>
-
-			<md-dialog-actions>
-				<md-button class="md-primary md-accent" @click="showTrackDialog = false">
-					Cancel
-				</md-button>
-				<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-					{{ action }}
-				</md-button>
-			</md-dialog-actions>
-		</md-dialog-content>
-	</md-dialog>
+		<template #footer>
+			<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
+			<Button v-if="validInput()" :label="action" icon="pi pi-check" @click="sendRequest" />
+		</template>
+	</Dialog>
 </div>
 </template>
 
@@ -108,30 +91,10 @@ export default {
 				timezone: '',
 				length: '',
 				map: ''
-			}
+			},
+			countryNames: null,
+			timeZones: null
 		};
-	},
-	computed: {
-		requiredCountry() {
-			return {
-				'md-invalid': cl.getCode(this.track.country) === undefined
-			};
-		},
-		requiredName() {
-			return {
-				'md-invalid': !(this.track !== undefined && this.track.name.length > 0)
-			};
-		},
-		requiredLength() {
-			return {
-				'md-invalid': isNaN(Number(this.track.length)) || Number(this.track.length) <= 0
-			};
-		},
-		requiredTimezone() {
-			return {
-				'md-invalid': this.track.timezone === undefined || !this.track.timezone.desc
-			};
-		}
 	},
 	watch: {
 		showDialog(newValue) {
@@ -153,16 +116,35 @@ export default {
 				this.resetActiveTrack();
 		}
 	},
+	created() {
+		this.countryNames = this.getCountryNames();
+		this.timeZones = this.tz.tz_array;
+	},
 	methods: {
+		close() {
+			this.showTrackDialog = false;
+		},
 		sendRequest() {
+			//console.log(JSON.stringify(this.track));
 			this.$root.$emit(strings.SEND_REQUEST_CRUD_TRACK, this.track);
 		},
 		validInput() {
-			return this.track.name.length > 0 &&
-				cl.getCode(this.track.country) !== undefined &&
-				this.track.timezone.desc &&
-				!isNaN(Number(this.track.length)) &&
-				Number(this.track.length) > 0;
+			return this.validTrackName() &&
+				this.validCountry() &&
+				this.validTimeZone() &&
+				this.validLength();
+		},
+		validTrackName() {
+			return this.track !== undefined && this.track.name.length > 0;
+		},
+		validCountry() {
+			return cl.getCode(this.track.country) !== undefined;
+		},
+		validTimeZone() {
+			return this.track.timezone !== undefined && this.track.timezone.name;
+		},
+		validLength() {
+			return !isNaN(Number(this.track.length)) && Number(this.track.length) > 0;
 		},
 		tzDisplay(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
@@ -173,9 +155,25 @@ export default {
 		getCountryFlag(country) {
 			return flag(cl.getCode(country));
 		},
+		searchCountry(event) {
+			if (event.query.trim() === '')
+				this.countryNames = [...this.getCountryNames()];
+			else
+				this.countryNames = this.getCountryNames().filter(country => {
+					return country.toLowerCase().includes(event.query.toLowerCase());
+				});
+		},
+		searchTimezone(event) {
+			if (event.query.trim() === '')
+				this.timeZones = [...this.tz.tz_array];
+			else
+				this.timeZones = this.tz.tz_array.filter(tz => {
+					return tz.desc.toLowerCase().includes(event.query.toLowerCase());
+				});
+		},
 		resetActiveTrack() {
 			this.track = JSON.parse(JSON.stringify(this.activeTrack));
-			let tz = this.tz.tz_array.find(e => e.name == this.track.timezone);
+			let tz = this.tz.tz_array.find(e => e.name === this.track.timezone);
 			this.track.timezone = {
 				'name':tz.name,
 				'desc':tz.desc,
@@ -188,10 +186,4 @@ export default {
 </script>
 
 <style lang="scss">
-.md-dialog {
-	min-width: 50%;
-}
-.md-menu-content {
-	z-index: 100;
-}
 </style>

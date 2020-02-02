@@ -1,47 +1,36 @@
 <template>
-<div class="md-layout-item flex-start main-panel">
-	<div class="md-layout headline">
-		<div class="md-layout-item md-display-1">
-			Tracks
+<div>
+	<div class="p-grid p-align-center">
+		<div class="p-col-4">
+			<h2>
+				Tracks
+			</h2>
 		</div>
-
-		<div class="md-layout-item">
-			<md-field md-clearable>
-				<label>Search term</label>
-				<md-input v-model="searchTerm" />
-			</md-field>
+		<div class="p-col-4">
+			<span class="p-float-label">
+				<InputText id="searchTerm" v-model="searchTerm" type="text" class="full-width" />
+				<label for="searchTerm">Search term (does not work yet)</label>
+			</span>
 		</div>
-
-		<div class="md-layout-item align-right">
-			<md-button class="md-raised md-primary btn-primary" @click.native="createTrack()">
-				Create Track
-			</md-button>
+		<div class="p-col-4 align-right">
+			<Button label="CREATE TRACK" class="p-button-raised p-button-rounded btn-primary" @click="createTrack()" />
 		</div>
 	</div>
 
-	<md-list>
-		<md-list-item v-for="t in filterTracks()" :key="t.id">
-			<span class="md-list-item-text">{{ t.name }}</span>
-			<md-icon @click.native="updateTrack(t)">
-				edit
-			</md-icon>
-			<md-icon @click.native="deleteTrack(t)">
-				delete
-			</md-icon>
-		</md-list-item>
-	</md-list>
-
-	<div v-if="showPagination">
-		<paginate
-			:page-count="pageCount"
-			:click-handler="pageClicked"
-			:no-li-surround="true"
-			:container-class="'pag-container'"
-			:active-class="'pag-active'"
-			:page-link-class="'pag-page-link'"
-			:hide-prev-next="true"
-		/>
-	</div>
+	<DataView :value="tracks" paginator-position="both" :paginator="true" :rows="itemsPerPage" :always-show-paginator="false">
+		<template #list="slotProps">
+			<div class="p-grid p-align-center">
+				<div class="p-col-9">
+					<b>{{ slotProps.data.name }}</b>
+				</div>
+				<div class="p-col-3 align-right">
+					<Button icon="pi pi-pencil" @click="updateTrack(slotProps.data)" />
+					&nbsp; &nbsp;
+					<Button icon="pi pi-trash" @click="deleteTrack(slotProps.data)" />
+				</div>
+			</div>
+		</template>
+	</DataView>
 
 	<CreateTrack
 		:show-dialog="showCreateDialog"
@@ -59,12 +48,11 @@
 <script>
 import CreateTrack from '~/components/resources/track/Create-Track.vue';
 import UpdateTrack from '~/components/resources/track/Update-Track.vue';
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
 import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
-		CreateTrack, UpdateTrack, Paginate
+		CreateTrack, UpdateTrack
 	},
 	props: {
 		tracks: {
@@ -80,16 +68,10 @@ export default {
 			showUpdateDialog: false,
 			activeTrack: null,
 			searchTerm: '',
-			showPagination: false,
-			pageNumber: 1,
-			pageCount: 1,
 			itemsPerPage: constants.ITEMS_PER_PAGE_TRACKS
 		};
 	},
 	mounted() {
-		this.pageCount = Math.ceil(this.tracks.length / this.itemsPerPage);
-		this.showPagination = this.pageCount > 1;
-
 		this.$root.$on(strings.CLOSED_CRUD_TRACK, () => {
 			this.showCreateDialog = false;
 			this.showUpdateDialog = false;
@@ -109,6 +91,7 @@ export default {
 					});
 					this.$root.$emit(strings.TRACK_CREATED, res);
 				} catch(err) {
+					console.log(JSON.stringify(err.response));
 					if (err.response)
 						alert(err.response);
 				}
@@ -125,6 +108,7 @@ export default {
 					if (res.updated >= 1)
 						this.$root.$emit(strings.TRACK_UPDATED, track);
 				} catch(err) {
+					console.log(JSON.stringify(err.response));
 					if (err.response)
 						alert(err.response);
 				}
@@ -142,35 +126,6 @@ export default {
 		},
 		deleteTrack(track) {
 			this.$root.$emit(strings.CONFIRM_DELETE_TRACK, track);
-		},
-		filterTracks() {
-			let arr = [], nrMatches = 0;
-
-			// count number of elements matching
-			if (this.searchTerm.trim() === '') {
-				nrMatches = this.tracks.length;
-			} else {
-				this.tracks.forEach(e => {
-					if (e.name.toLowerCase().includes(this.searchTerm.trim()))
-						nrMatches++;
-				});
-			}
-
-			// do the actual filtering
-			for (let i = (this.pageNumber - 1) * this.itemsPerPage; i < this.tracks.length && arr.length < this.itemsPerPage; i++) {
-				if (this.searchTerm.trim() === '')
-					arr.push(this.tracks[i]);
-				else if (this.tracks[i].name.toLowerCase().includes(this.searchTerm.trim()))
-					arr.push(this.tracks[i]);
-			}
-
-			this.pageCount = Math.ceil(nrMatches / this.itemsPerPage);
-			this.showPagination = this.pageCount > 1;
-			return arr;
-		},
-		pageClicked(newPageNum) {
-			// console.log('Active Page: ' + newPageNum);
-			this.pageNumber = newPageNum;
 		}
 	}
 };
