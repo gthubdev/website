@@ -27,6 +27,8 @@ INSERT INTO SeriesType (series, class) VALUES (6, 27);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (7, "SUPER GT", "SGT", 1, "https://en.wikipedia.org/wiki/Super_GT#/media/File:SUPER_GT_logo.svg");
 INSERT INTO SeriesType (series, class) VALUES (7, 1);
 INSERT INTO SeriesType (series, class) VALUES (7, 3);
+INSERT INTO Series (id, name, shortname, priority, logo) VALUES (8, "C1 Racing Club", "C1", 4, "https://www.barc.net/wp-content/uploads/2018/09/C1-300x193.jpg");
+INSERT INTO SeriesType (series, class) VALUES (8, 30);
 
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, "Liqui-Moly Bathurst 12 Hour", "https://da2.rbmbtnx.net/v4/RBTV/pd/FO-1Y9A5DRAW5N11/im:i:q_70,f_png,e_trim/im:i:w_600,c_limit/a:s/st:iAJvI63Os4zYB9_BGlY7jW/bathurst12hour_titletreatment_squarelogo.svg", "2019-02-01", "2019-02-02", 2, 2, 2);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, "ADAC TOTALNürburgring 24 Hours", "https://reifenpresse.de/wp-content/uploads/2018/11/ADAC-neuer-24h-Titelsponsor.jpg","2020-05-21", "2020-05-24", 1, 1, 1);
@@ -50,7 +52,21 @@ INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Rac
 
 # Spa 24
 INSERT INTO SupportSeries (event, series) VALUES (3, 4);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Pointless Top 3 GT2 shootout", "2020-07-24 13:00", 3, 4, 30);
+INSERT INTO SupportSeries (event, series) VALUES (3, 8);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 1", "2020-07-23 10:00", 3, 4, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 1", "2020-07-23 12:00", 3, 3, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 2", "2020-07-23 15:00", 3, 4, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 2", "2020-07-23 16:30", 3, 3, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 1", "2020-07-23 19:00", 3, 8, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 3 (Night practice)", "2020-07-23 22:00", 3, 3, 90);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Qualifying 1", "2020-07-24 08:00", 3, 8, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Pointless Top 3 GT2 shootout", "2020-07-24 10:00", 3, 4, 30);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 4", "2020-07-24 11:30", 3, 3, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Race 1", "2020-07-24 13:00", 3, 8, 60);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Another shitty GT2 race", "2020-07-24 15:00", 3, 4, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Practice 5", "2020-07-24 17:00", 3, 3, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Qualifying", "2020-07-24 19:45", 3, 3, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Qualifying 2", "2020-07-25 07:00", 3, 8, 30);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Top 30 Qualifying", "2020-07-25 08:00", 3, 3, 45);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Race 2", "2020-07-25 11:00", 3, 8, 60);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ("Race", "2020-07-25 14:00", 3, 3, 1440);
