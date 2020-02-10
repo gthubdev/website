@@ -70,7 +70,7 @@ export default {
 			};
 		} catch (err) {
 			if (err.response)
-			alert(err.response);
+				alert(err.response);
 			return {
 				data: []
 			};
@@ -91,7 +91,7 @@ export default {
 	},
 	computed: {
 		headline: function() {
-			return this.showCurrentEvents ? 'This week\'s events' : 'All events';
+			return this.showCurrentEvents ? 'Upcoming events' : 'All events';
 		}
 	},
 	watch: {
@@ -138,12 +138,14 @@ export default {
 	},
 	methods: {
 		filterEvents: function() {
-			if (this.showCurrentEvents)
-				return this.data.events.filter(function(event) {
-					return moment(event.startdate).isBefore('2019-07-01');
+			if (this.showCurrentEvents) {
+				const now = moment.utc().format('YYYY-MM-DD');
+				return this.data.events.filter(event => {
+					return moment(event.startdate).isSameOrAfter(now);
 				});
-			else
+			} else {
 				return this.data.events;
+			}
 		},
 		tzDisplay: function(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
