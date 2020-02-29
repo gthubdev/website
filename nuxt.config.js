@@ -46,7 +46,7 @@ module.exports = {
 	 */
 	css: [
 		{ src: 'primevue/resources/primevue.min.css' },
-		{ src: 'primevue/resources/themes/nova-light/theme.css' },
+		{ src: 'primevue/resources/themes/luna-amber/theme.css' },
 		{ src: 'primeicons/primeicons.css' },
 		{ src: 'primeflex/primeflex.css' },
 		'@/assets/scss/main.scss'
