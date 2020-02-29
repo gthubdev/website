@@ -6,7 +6,7 @@ INSERT INTO Track (id, name, country, length, map, timezone) VALUES (5, "Road Am
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (6, "Surfers Paradise Street Circuit", "Australia", 2.98, "", "Australia/Brisbane");
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (7, "Phillip Island Grand Prix Circuit", "Australia", 4.445, "", "Australia/Sydney");
 
-INSERT INTO Series (id, name, shortname, priority, logo) VALUES (1, "Nürburgring Langstrecken-Serie", "NLS", 1, "https://kappelermotorsport.files.wordpress.com/2015/08/logovln.gif");
+INSERT INTO Series (id, name, shortname, priority, logo) VALUES (1, "Nürburgring Langstrecken-Serie", "NLS", 1, "https://www.vln.de/wp-content/uploads/2019/12/Nuerburgring-Langstrecken-Serie-Logo.png");
 INSERT INTO SeriesType (series, class) VALUES (1, 3);
 INSERT INTO SeriesType (series, class) VALUES (1, 5);
 INSERT INTO SeriesType (series, class) VALUES (1, 25);
@@ -15,7 +15,7 @@ INSERT INTO Series (id, name, shortname, priority, logo) VALUES (2, "Intercontin
 INSERT INTO SeriesType (series, class) VALUES (2, 3);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (3, "GT World Challenge Europe Endurance Cup", "GTWCEEC", 2, "https://www.norbert-siedler.com/wp-content/uploads/2016/02/BlancpainGTSeriesLogo.jpg");
 INSERT INTO SeriesType (series, class) VALUES (3, 3);
-INSERT INTO Series (id, name, shortname, priority, logo) VALUES (4, "GT2", "GT2 Sports Club", 2, "https://upload.wikimedia.org/wikipedia/commons/c/cf/SROMotorsportsGroup_logo.png");
+INSERT INTO Series (id, name, shortname, priority, logo) VALUES (4, "GT2 Sports Club", "GT2", 2, "https://upload.wikimedia.org/wikipedia/commons/c/cf/SROMotorsportsGroup_logo.png");
 INSERT INTO SeriesType (series, class) VALUES (4, 4);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (5, "IMSA WeatherTech SportsCar Championship", "WSCC", 1, "https://upload.wikimedia.org/wikipedia/en/thumb/2/28/WeatherTech_SportsCar_Championship_logo.png/300px-WeatherTech_SportsCar_Championship_logo.png");
 INSERT INTO SeriesType (series, class) VALUES (5, 10);
@@ -30,7 +30,7 @@ INSERT INTO SeriesType (series, class) VALUES (7, 3);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (8, "C1 Racing Club", "C1", 4, "https://www.barc.net/wp-content/uploads/2018/09/C1-300x193.jpg");
 INSERT INTO SeriesType (series, class) VALUES (8, 30);
 
-INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, "Liqui-Moly Bathurst 12 Hour", "https://da2.rbmbtnx.net/v4/RBTV/pd/FO-1Y9A5DRAW5N11/im:i:q_70,f_png,e_trim/im:i:w_600,c_limit/a:s/st:iAJvI63Os4zYB9_BGlY7jW/bathurst12hour_titletreatment_squarelogo.svg", "2019-02-01", "2019-02-02", 2, 2, 2);
+INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, "Liqui-Moly Bathurst 12 Hour", "https://upload.wikimedia.org/wikipedia/en/3/3a/Bathurst_12_hour_logo.png", "2019-02-01", "2019-02-02", 2, 2, 2);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, "ADAC TOTALNürburgring 24 Hours", "https://reifenpresse.de/wp-content/uploads/2018/11/ADAC-neuer-24h-Titelsponsor.jpg","2020-05-21", "2020-05-24", 1, 1, 1);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (3, "TOTAL Spa 24 Hours", "https://tickets-2-u.com/wp-content/uploads/2018/05/24Hours_Spa.png", "2020-07-23", "2020-07-26", 3, 2, 3);
 INSERT INTO Event (id, name, startdate, enddate, track, priority, mainseries) VALUES (4, "Supercheap Auto Bathurst 1000", "2020-10-08", "2020-10-11", 2, 3, 6);
