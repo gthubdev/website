@@ -1,10 +1,12 @@
 <template>
-<div class="md-layout">
-	<FilterPanel
-		:show-current-events="showCurrentEvents"
-	/>
+<div class="p-grid">
+	<div class="p-col-3">
+		<FilterPanel
+			:show-current-events="showCurrentEvents"
+		/>
+	</div>
 
-	<div class="md-layout-item flex-start">
+	<div class="p-col-9">
 		<div class="headline">
 			<span class="md-display-1">{{ headline }}</span><br />
 		</div>
@@ -29,7 +31,7 @@
 
 			<span class="md-error">Please choose a timezone</span>
 		</md-autocomplete>
-		<div class="md-layout">
+		<div class="p-grid">
 			<Event
 				v-for="event in filterEvents()"
 				:key="event.id"
@@ -40,25 +42,25 @@
 		</div>
 	</div>
 
-	<SidePanel
+	<!--<SidePanel
 		:event="activeEvent"
 		:show-event="showEvent"
 		:user-timezone="userTimezone"
-	/>
+	/>-->
 </div>
 </template>
 
 <script>
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
-import SidePanel from '~/components/calendar/SidePanel.vue';
+//import SidePanel from '~/components/calendar/SidePanel.vue';
 import { strings } from '~/plugins/constants';
 
 import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event, FilterPanel,	SidePanel
+		Event, FilterPanel//,	SidePanel
 	},
 	async asyncData({
 		$axios

@@ -1,0 +1,8 @@
+@import '../abstracts/variables';
+
+.headline-sep-line {
+	background-image: $default-gradient;
+	height: 3px;
+	width: 75%;
+	margin: 5px 0;
+}

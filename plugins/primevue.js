@@ -10,6 +10,9 @@ Vue.component('AutoComplete', AutoComplete);
 // Button
 import Button from 'primevue/button';
 Vue.component('Button', Button);
+// Card
+import Card from 'primevue/card';
+Vue.component('Card', Card);
 // DataView
 import DataView from 'primevue/dataview';
 Vue.component('DataView', DataView);
