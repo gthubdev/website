@@ -1,9 +1,13 @@
 <template>
-<div class="md-layout-item md-size-20 filter">
-	<div>FILTER-BOX</div>
-	<md-button class="md-raised md-primary" @click.native="toggleCurrentEvents()">
-		{{ showCurrentEventsLabel }}
-	</md-button>
+<div class="filter">
+	<div style="margin-bottom: 1em">
+		FILTER-BOX
+	</div>
+	<Button
+		:label="showCurrentEventsLabel"
+		class="p-button-raised p-button-info"
+		@click="toggleCurrentEvents()"
+	/>
 </div>
 </template>
 
