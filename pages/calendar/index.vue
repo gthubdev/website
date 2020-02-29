@@ -8,29 +8,19 @@
 
 	<div class="p-col-9">
 		<div class="headline">
-			<span class="md-display-1">{{ headline }}</span><br />
+			{{ headline }}<br />
 		</div>
-		<md-autocomplete v-model="selectedTimezone" md-dense :md-options="data.tz.tz_array.map(x=>({
-			'name':x.name,
-			'desc': x.desc,
-			'toLowerCase':()=>x.desc.toLowerCase(),
-			'toString':()=>tzDisplay(x)
-		}))" :md-fuzzy-search="false"
-		>
-			<label>Local Timezone</label>
 
-			<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-				<md-highlight-text :md-term="term.desc ? term.desc : term">
-					{{ tzDisplay(item) }}
-				</md-highlight-text>
-			</template>
+		<div style="margin-bottom: 1em;">
+			<AutoComplete v-model="selectedTimezone" :suggestions="timeZones" :dropdown="true" placeholder="Timezone" class="full-width" field="display" @complete="searchTimezone($event)">
+				<template #item="slotProps" class="full-width">
+					<div class="p-clearfix width-50">
+						{{ tzDisplay(slotProps.item) }}
+					</div>
+				</template>
+			</AutoComplete>
+		</div>
 
-			<template slot="md-autocomplete-empty" slot-scope="{ term }">
-				"{{ term }}" not found!
-			</template>
-
-			<span class="md-error">Please choose a timezone</span>
-		</md-autocomplete>
 		<div class="p-grid">
 			<Event
 				v-for="event in filterEvents()"
@@ -88,12 +78,13 @@ export default {
 				'name': '',
 				'desc': ''
 			},
-			selectedTimezone: ''
+			selectedTimezone: '',
+			timeZones: null
 		};
 	},
 	computed: {
 		headline: function() {
-			return this.showCurrentEvents ? 'Upcoming events' : 'All events';
+			return this.showCurrentEvents ? 'Upcoming Events' : 'All Events';
 		}
 	},
 	watch: {
@@ -126,7 +117,7 @@ export default {
 			}
 		});
 		// Set the initial timezone, load from cookie if possible
-		let tz_name = 'Europe/Brussels';
+		let tz_name = 'Europe/Stockholm';
 		if (document.cookie.split(';').filter((item) => item.trim().startsWith('localtz=')).length) {
 			tz_name = document.cookie.replace(/(?:(?:^|.*;\s*)localtz\s*=\s*([^;]*).*$)|^.*$/, '$1');
 		}
@@ -134,9 +125,11 @@ export default {
 		this.selectedTimezone = {
 			'name':tz_name,
 			'desc':tz_desc,
-			'toLowerCase':()=>tz_desc.toLowerCase(),
 			'toString':()=>'(UTC' + moment.tz(tz_name).format('Z') + ') ' + tz_desc
 		};
+	},
+	created() {
+		this.timeZones = this.data.tz.tz_array;
 	},
 	methods: {
 		filterEvents: function() {
@@ -151,16 +144,30 @@ export default {
 		},
 		tzDisplay: function(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
-		}
+		},
+		searchTimezone(event) {
+			if (event.query.trim() === '')
+				this.timeZones = [...this.data.tz.tz_array];
+			else
+				this.timeZones = this.data.tz.tz_array.filter(tz => {
+					return tz.desc.toLowerCase().includes(event.query.toLowerCase());
+				});
+		},
 	}
 };
 </script>
 
-<style lang="scss" scoped>
-.flex-start {
-	align-content: flex-start;
-}
+<style lang="scss">
 .headline {
-	padding: 1em;
+	padding: 1em 0;
+	font-size: 2.5em;
+	font-variant: small-caps;
+	font-weight: bold;
+}
+.p-autocomplete-input {
+	min-width: 50% !important;
+}
+.p-autocomplete {
+	width: 100% !important;
 }
 </style>
