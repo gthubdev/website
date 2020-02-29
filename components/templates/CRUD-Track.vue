@@ -49,6 +49,7 @@
 
 		<template #footer>
 			<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
+			<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />
 			<Button v-if="validInput()" :label="action" icon="pi pi-check" @click="sendRequest" />
 		</template>
 	</Dialog>
@@ -146,6 +147,8 @@ export default {
 		validLength() {
 			return !isNaN(Number(this.track.length)) && Number(this.track.length) > 0;
 		},
+		// TODO add validation for map
+		// either leave it empty or provide a valid URL
 		tzDisplay(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
 		},
