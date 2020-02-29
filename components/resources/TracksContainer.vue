@@ -13,7 +13,7 @@
 			</span>
 		</div>
 		<div class="p-col-4 align-right">
-			<Button label="CREATE TRACK" class="p-button-raised p-button-rounded btn-primary" @click="createTrack()" />
+			<Button label="CREATE TRACK" class="p-button-raised" @click="createTrack()" />
 		</div>
 	</div>
 

@@ -12,8 +12,8 @@
 			<Button label="Gallery" class="p-button-raised p-button-rounded p-button-secondary" @click="testClick()" />
 			<Button label="About" class="p-button-raised p-button-rounded p-button-secondary" @click="testClick()" />
 			<Button v-if="loggedIn" label="Resources" class="p-button-raised p-button-rounded p-button-secondary" onclick="window.location.href = '/resources';" />
-			<Button v-if="!loggedIn" label="LOGIN" class="p-button-raised p-button-rounded btn-primary" @click="login()" />
-			<Button v-if="loggedIn" label="LOGOUT" class="p-button-raised p-button-rounded btn-primary" @click="logout()" />
+			<Button v-if="!loggedIn" label="LOGIN" class="p-button-raised p-button-rounded" @click="login()" />
+			<Button v-if="loggedIn" label="LOGOUT" class="p-button-raised p-button-rounded" @click="logout()" />
 
 			<md-button class="icon md-primary" @click="responsive()">
 				<md-icon style="color:white;">
