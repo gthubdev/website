@@ -1,49 +1,52 @@
 <template>
 <Dialog :header="headline" :visible.sync="showTrackDialog" :modal="true">
-	<span class="p-float-label">
-		<InputText id="name" v-model="track.name" type="text" class="width-50" />
-		<ValidationMessage v-if="!validTrackName()">Please enter a track name</ValidationMessage>
-		<label for="name">Track Name</label>
-	</span>
-
-	<br />
-
-	<div class="p-grid">
-		<div class="p-col-12">
-			<AutoComplete v-model="track.country" :suggestions="countryNames" :dropdown="true" placeholder="Country" @complete="searchCountry($event)">
-				<template #item="slotProps" class="">
-					<div class="p-clearfix">
-						{{ getCountryFlag(slotProps.item) }} {{ slotProps.item }}
-					</div>
-				</template>
-			</AutoComplete>
-		</div>
-		<div class="p-col-12">
-			<AutoComplete v-model="track.timezone" :suggestions="timeZones" :dropdown="true" placeholder="Timezone" class="full-width" field="display" @complete="searchTimezone($event)">
-				<template #item="slotProps" class="full-width">
-					<div class="p-clearfix width-50">
-						{{ tzDisplay(slotProps.item) }}
-					</div>
-				</template>
-			</AutoComplete>
-		</div>
+	<div>
+		<span class="p-float-label">
+			<InputText id="name" v-model="track.name" type="text" class="full-width" />
+			<label for="name">Track Name</label>
+		</span>
 	</div>
 
 	<br />
 
-	<div class="p-grid">
-		<div class="p-col-12">
-			<span class="p-float-label">
-				<InputText id="length" v-model="track.length" type="text" class="full-width" />
-				<label for="name">Length</label>
-			</span>
-		</div>
-		<div class="p-col-12">
-			<span class="p-float-label">
-				<InputText id="map" v-model="track.map" type="text" class="full-width" />
-				<label for="name">Map</label>
-			</span>
-		</div>
+	<div>
+		<AutoComplete v-model="track.country" :suggestions="countryNames" :dropdown="true" placeholder="Country" @complete="searchCountry($event)">
+			<template #item="slotProps" class="">
+				<div class="p-clearfix">
+					{{ getCountryFlag(slotProps.item) }} {{ slotProps.item }}
+				</div>
+			</template>
+		</AutoComplete>
+	</div>
+
+	<br />
+
+	<div>
+		<AutoComplete v-model="track.timezone" :suggestions="timeZones" :dropdown="true" placeholder="Timezone" class="full-width" field="display" @complete="searchTimezone($event)">
+			<template #item="slotProps" class="full-width">
+				<div class="p-clearfix width-50">
+					{{ tzDisplay(slotProps.item) }}
+				</div>
+			</template>
+		</AutoComplete>
+	</div>
+
+	<br />
+
+	<div>
+		<span class="p-float-label">
+			<InputText id="length" v-model="track.length" type="text" class="full-width" />
+			<label for="name">Length (km)</label>
+		</span>
+	</div>
+
+	<br />
+
+	<div>
+		<span class="p-float-label">
+			<InputText id="map" v-model="track.map" type="text" class="full-width" />
+			<label for="name">Map</label>
+		</span>
 	</div>
 
 	<template #footer>
