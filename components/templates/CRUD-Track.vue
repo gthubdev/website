@@ -133,7 +133,8 @@ export default {
 			return this.validTrackName() &&
 				this.validCountry() &&
 				this.validTimeZone() &&
-				this.validLength();
+				this.validLength() &&
+				this.validMap();
 		},
 		validTrackName() {
 			return this.track !== undefined && this.track.name.length > 0;
@@ -147,8 +148,9 @@ export default {
 		validLength() {
 			return !isNaN(Number(this.track.length)) && Number(this.track.length) > 0;
 		},
-		// TODO add validation for map
-		// either leave it empty or provide a valid URL
+		validMap() {
+			return this.track.map.trim() === '' || this.track.map.startsWith('https://') || this.track.map.startsWith('http://');
+		},
 		tzDisplay(item) {
 			return '(UTC' + moment.tz(item.name).format('Z') + ') ' + item.desc;
 		},
@@ -180,7 +182,6 @@ export default {
 			this.track.timezone = {
 				'name':tz.name,
 				'desc':tz.desc,
-				'toLowerCase':()=>tz.desc.toLowerCase(),
 				'toString':()=>'(UTC' + moment.tz(tz.name).format('Z') + ') ' + tz.desc
 			};
 		}
