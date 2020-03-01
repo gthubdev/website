@@ -9,7 +9,7 @@
 		<div class="p-col-4">
 			<span class="p-float-label">
 				<InputText id="searchTerm" v-model="searchTerm" type="text" class="full-width" />
-				<label for="searchTerm">Search term (does not work yet)</label>
+				<label for="searchTerm">Search term</label>
 			</span>
 		</div>
 		<div class="p-col-4 align-right">
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 
-	<DataView :value="tracks" paginator-position="both" :paginator="true" :rows="itemsPerPage" :always-show-paginator="false">
+	<DataView :value="shownTracks" paginator-position="bottom" :paginator="true" :rows="itemsPerPage" :always-show-paginator="false">
 		<template #list="slotProps">
 			<div class="p-grid p-align-center">
 				<div class="p-col-9">
@@ -68,10 +68,24 @@ export default {
 			showUpdateDialog: false,
 			activeTrack: null,
 			searchTerm: '',
+			shownTracks: null,
 			itemsPerPage: constants.ITEMS_PER_PAGE_TRACKS
 		};
 	},
+	watch: {
+		searchTerm(newValue) {
+			if (newValue.trim() === '')
+				this.shownTracks = this.tracks;
+			else
+				this.shownTracks = this.tracks.filter(t => {
+					return t.name.toLowerCase().includes(newValue.toLowerCase());
+				});
+		}
+	},
 	mounted() {
+		// set the tracks
+		this.shownTracks = this.tracks;
+
 		this.$root.$on(strings.CLOSED_CRUD_TRACK, () => {
 			this.showCreateDialog = false;
 			this.showUpdateDialog = false;
@@ -134,10 +148,5 @@ export default {
 <style lang="scss" scoped>
 .headline {
 	margin-bottom: 1em;
-}
-.md-list {
-	background-color: rgba(0, 0, 0, 0.3);
-	margin-top: 0.5em;
-	border-radius: 20px;
 }
 </style>
