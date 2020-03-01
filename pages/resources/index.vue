@@ -1,6 +1,6 @@
 <template>
-<div class="md-layout">
-	<TabView class="full-width">
+<div class="resources">
+	<TabView>
 		<TabPanel header="Events">
 			Events
 		</TabPanel>
@@ -34,23 +34,14 @@
 				:tz="data.tz"
 			/>
 		</md-tab>
-	</md-tabs>
-	<md-dialog-confirm
-		:md-active.sync="confirmDelete.showDialog"
-		md-title="Are you sure ?"
-		:md-content="confirmDelete.content"
-		md-confirm-text="Delete"
-		md-cancel-text="Cancel"
-		@md-confirm="deleteResource(confirmDelete.type, confirmDelete.resource)"
-	/>-->
-	<md-dialog-confirm
-		:md-active.sync="confirmDelete.showDialog"
-		md-title="Are you sure ?"
-		:md-content="confirmDelete.content"
-		md-confirm-text="Delete"
-		md-cancel-text="Cancel"
-		@md-confirm="deleteResource(confirmDelete.type, confirmDelete.resource)"
-	/>
+	</md-tabs>-->
+	<Dialog header="Are you sure ?" :visible.sync="confirmDelete.showDialog" :style="{width: '30vw'}">
+		{{ confirmDelete.content }}
+		<template #footer>
+			<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="confirmDelete.showDialog = false" />
+			<Button label="Delete" icon="pi pi-check" @click="deleteResource(confirmDelete.type, confirmDelete.resource)" />
+		</template>
+	</Dialog>
 </div>
 </template>
 
@@ -207,6 +198,7 @@ export default {
 						default: alert('Something is fucked. Please call the SRO Press Office.');
 					}
 				}
+				this.confirmDelete.showDialog = false;
 			} catch(err) {
 				if (err.response && err.response.status === 409)
 					alert(err.response.data);
@@ -253,20 +245,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-panel {
-	// margin-right: 1em !important;
-	padding-top: 2em;
-}
-.md-layout {
-	margin: 2em 10em 2em 10em !important;
-}
-.md-tabs {
-	margin: 0 0 0 0 !important;
-}
-.md-tabs {
-	width: 100%;
-}
-.md-dialog {
-	z-index: 125;
+.resources {
+	margin: 2em 10em 2em 10em;
 }
 </style>
