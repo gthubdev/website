@@ -21,9 +21,9 @@ export default {
 			type: Object,
 			default: function() {
 				return	{
-							'name':'',
-							'desc':'',
-						};
+					'name':'',
+					'desc':'',
+				};
 			}
 		}
 	},
@@ -34,7 +34,7 @@ export default {
 		getUserTime: function() {
 			let local_tz;
 			if (this.userTimezone === undefined || moment.tz.zone(this.userTimezone.name) === null)
-				local_tz = 'Europe/Brussels';
+				local_tz = 'Europe/Stockholm';
 			else
 				local_tz = this.userTimezone.name;
 			return moment(this.session.starttime).tz(local_tz).format('ddd Do MMM HH:mm')+'h';

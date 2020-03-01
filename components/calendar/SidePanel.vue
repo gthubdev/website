@@ -1,9 +1,7 @@
 <template>
-<div class="md-layout-item md-size-20 sidepanel">
+<div class="sidepanel">
 	<div v-if="showEvent" class="sessions">
-		<md-icon class="md-size-2x" @click.native="toggleSessions()">
-			arrow_back
-		</md-icon>
+		<i class="pi pi-arrow-left" style="font-size: 3em" />
 		<br />
 		<br />
 		<EventSession
@@ -36,9 +34,9 @@ export default {
 			type: Object,
 			default: function() {
 				return	{
-							'name':'',
-							'desc':'',
-						};
+					'name':'',
+					'desc':'',
+				};
 			}
 		}
 	},
@@ -65,10 +63,6 @@ img {
 .textcontainer {
 	text-align: center;
 	padding: 10px 20px;
-}
-
-.md-layout-item {
-	padding: 0 !important;
 }
 
 .sessions {

@@ -27,7 +27,6 @@
 				:key="event.id"
 				:event="event"
 				:tz="data.tz"
-				:active-event="activeEvent"
 			/>
 		</div>
 	</div>
@@ -43,14 +42,13 @@
 <script>
 import Event from '~/components/calendar/Event.vue';
 import FilterPanel from '~/components/calendar/FilterPanel.vue';
-//import SidePanel from '~/components/calendar/SidePanel.vue';
 import { strings } from '~/plugins/constants';
 
 import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event, FilterPanel//,	SidePanel
+		Event, FilterPanel
 	},
 	async asyncData({
 		$axios
@@ -134,9 +132,9 @@ export default {
 	methods: {
 		filterEvents: function() {
 			if (this.showCurrentEvents) {
-				const now = moment.utc().format('YYYY-MM-DD');
+				const today = moment.utc().format('YYYY-MM-DD');
 				return this.data.events.filter(event => {
-					return moment(event.startdate).isSameOrAfter(now);
+					return moment(event.startdate).isSameOrAfter(today);
 				});
 			} else {
 				return this.data.events;

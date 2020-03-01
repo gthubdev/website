@@ -45,9 +45,6 @@ export default {
         },
         tz: {
             type: Object, default: null
-        },
-        activeEvent: {
-            type: Object, default: null
         }
     },
     computed: {
