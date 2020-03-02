@@ -5,7 +5,10 @@
 			Events
 		</TabPanel>
 		<TabPanel header="Series">
-			Series
+			<SeriesContainer
+				:series="data.series"
+				:vehicleclasses="data.vehicleclasses"
+			/>
 		</TabPanel>
 		<TabPanel header="Tracks">
 			<TracksContainer
@@ -47,14 +50,14 @@
 
 <script>
 //import EventsContainer from '~/components/resources/EventsContainer.vue';
-//import SeriesContainer from '~/components/resources/SeriesContainer.vue';
+import SeriesContainer from '~/components/resources/SeriesContainer.vue';
 import TracksContainer from '~/components/resources/TracksContainer.vue';
 import { strings } from '~/plugins/constants';
 
 export default {
 	components: {
 		//EventsContainer,
-		//SeriesContainer,
+		SeriesContainer,
 		TracksContainer
 	},
 	async asyncData({

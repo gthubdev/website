@@ -98,7 +98,7 @@ export default {
 			let track = JSON.parse(JSON.stringify(obj));
 			track.timezone = obj.timezone.name;
 			// create a track
-			if (this.showCreateDialog) {
+			if (this.showCreateDialog === true) {
 				try {
 					const res = await this.$axios.$post('/api/calendar/track/create', {
 						track
@@ -112,7 +112,7 @@ export default {
 				this.showCreateDialog = false;
 			}
 			// update a track
-			if (this.showUpdateDialog) {
+			if (this.showUpdateDialog === true) {
 				// no need to update that
 				delete track.createdAt;
 				try {
