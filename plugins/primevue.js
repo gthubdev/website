@@ -19,9 +19,15 @@ Vue.component('DataView', DataView);
 // Dialog
 import Dialog from 'primevue/dialog';
 Vue.component('Dialog', Dialog);
+// Dropdown
+import Dropdown from 'primevue/dropdown';
+Vue.component('Dropdown', Dropdown);
 // InputText
 import InputText from 'primevue/inputtext';
 Vue.component('InputText', InputText);
+// MultiSelect
+import MultiSelect from 'primevue/multiselect';
+Vue.component('MultiSelect', MultiSelect);
 // Tabs
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';

@@ -72,16 +72,16 @@ export default {
 			itemsPerPage: constants.ITEMS_PER_PAGE_SERIES
 		};
 	},
-    watch: {
-        searchTerm(newValue) {
-            if (newValue.trim() === '')
-                this.shownSeries = this.series;
-            else
-                this.shownSeries = this.series.filter(s => {
-                    return s.name.toLowerCase().includes(newValue.toLowerCase());
-                });
-        }
-    },
+	watch: {
+		searchTerm(newValue) {
+			if (newValue.trim() === '')
+				this.shownSeries = this.series;
+			else
+				this.shownSeries = this.series.filter(s => {
+					return s.name.toLowerCase().includes(newValue.toLowerCase());
+				});
+		}
+	},
 	mounted() {
 		// set the series
 		this.shownSeries = this.series;
@@ -92,27 +92,30 @@ export default {
 		});
 
 		// handle requests to create/update a series
-		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, vehicleClasses) => {
+		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, priority, vehicleClasses) => {
 			//console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
 
 			const series = JSON.parse(JSON.stringify(tmpseries));
+			series.priority = priority.value;
 			series.vehicleClasses = vehicleClasses;
+
 			// create a series
 			if (this.showCreateDialog === true) {
+				//console.log('Creating a series.');
 				try {
 					const res = await this.$axios.$post('/api/calendar/series/create', {
 						series
 					});
 					this.$root.$emit(strings.SERIES_CREATED, res);
 				} catch(err) {
-					console.log(JSON.stringify(err.response));
 					if (err.response)
-						alert(err.response);
+						alert(err.response.data);
 				}
 				this.showCreateDialog = false;
 			}
 			// update a series
 			if (this.showUpdateDialog === true) {
+				//console.log('Updating a series.');
 				// no need to update that
 				delete series.createdAt;
 				try {
@@ -122,9 +125,8 @@ export default {
 					if (res.id && res.id >= 1)
 					this.$root.$emit(strings.SERIES_UPDATED, res);
 				} catch(err) {
-					console.log(JSON.stringify(err.response));
 					if (err.response)
-						alert(err.response);
+						alert(err.response.data);
 				}
 				this.showUpdateDialog = false;
 			}
@@ -132,9 +134,11 @@ export default {
 	},
 	methods: {
 		createSeries() {
+			this.showUpdateDialog = false;
 			this.showCreateDialog = true;
 		},
 		updateSeries(series) {
+			this.showCreateDialog = false;
 			this.activeSeries = JSON.parse(JSON.stringify(series));
 			this.showUpdateDialog = true;
 		},

@@ -1,82 +1,87 @@
 <template>
-<div>
-	<md-dialog :md-active.sync="showSeriesDialog">
-		<md-dialog-content>
-			<md-dialog-title>{{ headline }}</md-dialog-title>
+<Dialog :header="headline" :visible.sync="showSeriesDialog" :modal="true">
+	<div>
+		<span class="p-float-label">
+			<InputText id="name" v-model="series.name" type="text" class="full-width" />
+			<label for="name">Full Name of the Series</label>
+		</span>
+	</div>
 
-			<md-field :class="requiredName">
-				<label>Fullname of the Series</label>
-				<md-input v-model="series.name" required />
-				<span class="md-error">Please enter the series' name</span>
-			</md-field>
+	<br />
 
-			<md-field :class="requiredShortName">
-				<label>Shortname of the Series</label>
-				<md-input v-model="series.shortname" required />
-				<span class="md-error">Please enter the series' shortname</span>
-			</md-field>
+	<div>
+		<span class="p-float-label">
+			<InputText id="shortname" v-model="series.shortname" type="text" class="full-width" />
+			<label for="name">Short Name of the Series</label>
+		</span>
+	</div>
 
-			<md-field :class="requiredLogo">
-				<label>Logo</label>
-				<md-input v-model="series.logo" required />
-				<span class="md-error">Please enter a URL</span>
-			</md-field>
-
-			<md-field>
-				<label>Homepage</label>
-				<md-input v-model="series.homepage" />
-			</md-field>
-
-			<md-field :class="requiredPriority">
-				<label for="priority">Priority</label>
-				<md-select id="priority" v-model="series.priority" name="priority" placeholder="Priority" required>
-					<md-option v-for="i in PRIORITY_MAX" :key="i" :value="i">
-						{{ i }}
-					</md-option>
-				</md-select>
-				<span class="md-error">Please choose a priority</span>
-			</md-field>
-
-			<div v-if="vehicleClasses.length">
-				<md-chip v-for="(vcl, index) in vehicleClasses" :key="vcl.id" class="md-primary" md-deletable @md-delete="removeVehicleClass(vcl, index)">
-					{{ vcl.name }}
-				</md-chip>
-			</div>
-
-			<md-autocomplete v-model="chosenVC" md-dense :md-options="tmpVehicleClasses.map(x=>({
-				'id':x.id,
-				'name':x.name,
-				'category':x.VehicleClassCategory.name,
-				'toLowerCase':()=>x.name.toLowerCase(),
-				'toString':()=>x.name + ' (' + (x.VehicleClassCategory.name) + ')'
-			}))" :class="requiredVehicleClass"
+	<br />
+	<div class="p-grid p-align-center">
+		<div class="p-col-4">
+			Vehicle classes:
+		</div>
+		<div class="p-col-8">
+			<MultiSelect
+				v-model="chosenVC"
+				:options="vc"
+				option-label="name"
+				placeholder="Select vehicle classes"
+				:filter="true"
 			>
-				<label>Vehicle Class</label>
-				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-					<span class="color" :style="`background-color: ${item.color}`" />
-					<md-highlight-text :md-term="typeof term === 'object' && term.name ? term.name : term.toString()">
-						{{ item }}
-					</md-highlight-text>
+				<template #value="slotProps">
+					<div v-for="option of slotProps.value" :key="option.id" class="p-multiselect-vc-token">
+						<span>{{ option.name }}</span>
+					</div>
+					<div v-if="!slotProps.value || slotProps.value.length === 0">
+						Select Vehicle Classes
+					</div>
 				</template>
-
-				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					"{{ term }}" not found!
+				<template #option="slotProps">
+					<div class="p-multiselect-vc-option">
+						<span>
+							{{ slotProps.option.name }} ({{ slotProps.option.VehicleClassCategory.name }})
+						</span>
+					</div>
 				</template>
+			</MultiSelect>
+		</div>
+	</div>
 
-				<span class="md-error">Please choose a vehicle class</span>
-			</md-autocomplete>
+	<br />
+	<div class="p-grid p-align-center">
+		<div class="p-col-4">
+			Priority:
+		</div>
+		<div class="p-col-8">
+			<Dropdown v-model="chosenPriority" :options="availablePriorities" option-label="name" placeholder="Select a priority" />
+		</div>
+	</div>
 
-			<md-dialog-actions>
-				<md-button class="md-primary md-accent" @click="showSeriesDialog = false">
-					Cancel
-				</md-button>
-				<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-					{{ action }}
-				</md-button>
-			</md-dialog-actions>
-		</md-dialog-content>
-	</md-dialog>
-</div>
+	<br />
+
+	<div>
+		<span class="p-float-label">
+			<InputText id="logo" v-model="series.logo" type="text" class="full-width" />
+			<label for="name">Logo of the Series</label>
+		</span>
+	</div>
+
+	<br />
+
+	<div>
+		<span class="p-float-label">
+			<InputText id="homepage" v-model="series.homepage" type="text" class="full-width" />
+			<label for="name">Homepage of the Series</label>
+		</span>
+	</div>
+
+	<template #footer>
+		<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
+		<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />
+		<Button v-if="validInput()" :label="action" icon="pi pi-check" @click="sendRequest" />
+	</template>
+</Dialog>
 </template>
 
 <script>
@@ -113,38 +118,11 @@ export default {
 				homepage: '',
 				priority: ''
 			},
-			chosenVC: '',
-			vehicleClasses: [],
-			tmpVehicleClasses: [],
+			chosenVC: [],
+			chosenPriority: '',
+			availablePriorities: [],
 			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
-	},
-	computed: {
-		requiredName() {
-			return {
-				'md-invalid': !(this.series.name.length > 0)
-			};
-		},
-		requiredShortName() {
-			return {
-				'md-invalid': !(this.series.shortname.length > 0)
-			};
-		},
-		requiredLogo() {
-			return {
-				'md-invalid': !(this.series.logo.length >= 1)
-			};
-		},
-		requiredPriority() {
-			return {
-				'md-invalid': !(this.series.priority >= 1)
-			};
-		},
-		requiredVehicleClass() {
-			return {
-				'md-invalid': !this.vehicleClasses.length
-			};
-		}
 	},
 	watch: {
 		showDialog(newValue) {
@@ -154,39 +132,9 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_SERIES);
 
-			if (newValue === true && this.updateMode === false) {
-				// Reset all values
-				Object.keys(this.series).forEach(key => (this.series[key] = ''));
-				// Reset arrays
-				this.resetArrays();
-				// Reset values for the chosen category
-				this.chosenVC = {
-					'id':'',
-					'name':'',
-					'category':'',
-					'toLowerCase':()=>'',
-					'toString':()=>''
-				};
-			}
 			if (newValue === true && this.updateMode === true && this.activeSeries !== undefined) {
 				// Might need to reset the object
 				this.resetActiveSeries();
-				// Reset arrays
-				this.resetArrays();
-				// Move all vehicle classes to corresponding array
-				this.series.SeriesTypes.forEach(st => {
-					let index = this.tmpVehicleClasses.findIndex(tvc => tvc.id == st.class);
-					let vclass = this.tmpVehicleClasses[index];
-					let newobj = {
-						'id':vclass.id,
-						'name':vclass.name,
-						'category':vclass.VehicleClassCategory.name,
-						'toLowerCase':()=>vclass.name.toLowerCase(),
-						'toString':()=>vclass.name + ' (' + (vclass.VehicleClassCategory.name) + ')'
-					};
-					this.vehicleClasses.push(newobj);
-					this.tmpVehicleClasses.splice(index, 1);
-				});
 			}
 		},
 		activeSeries(newValue) {
@@ -196,56 +144,84 @@ export default {
 
 			if (newValue === true && this.updateMode === true)
 				this.resetActiveSeries();
-		},
-		chosenVC(newValue) {
-			if (newValue !== undefined && newValue.name && newValue.name.length) {
-				this.vc.forEach(vc => {
-					if (vc.name === newValue.name) {
-						this.vehicleClasses.push(newValue);
-						let index = this.tmpVehicleClasses.findIndex(tcl => tcl.id == newValue.id);
-						this.tmpVehicleClasses.splice(index, 1);
-						this.chosenVC = {
-							'id':'',
-							'name':'',
-							'category':'',
-							'toLowerCase':()=>'',
-							'toString':()=>''
-						};
-					}
-				});
-			}
 		}
 	},
+	created() {
+		for (let i = 1; i <= this.PRIORITY_MAX; i++)
+			this.availablePriorities.push(
+				{
+					'value': i,
+					'name': 'Priority ' + i
+				});
+	},
 	methods: {
-		sendRequest() {
-			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series,this.vehicleClasses);
+		close() {
+			this.showSeriesDialog = false;
 		},
-		removeVehicleClass(vc, index) {
-			this.vehicleClasses.splice(index, 1);
-			vc.VehicleClassCategory = { name: vc.category };
-			this.tmpVehicleClasses.push(vc);
+		sendRequest() {
+			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series, this.chosenPriority, this.chosenVC);
 		},
 		validInput() {
-			return this.series.name.length &&
-			this.series.shortname.length &&
-			this.series.logo.length &&
-			this.series.priority >= 1 &&
-			this.vehicleClasses.length;
+			return this.validFullName() &&
+				this.validShortName() &&
+				this.validLogo() &&
+				this.validHomepage() &&
+				this.validPriority() &&
+				this.validVehicleClasses();
+		},
+		validFullName() {
+			return this.series !== undefined && this.series.name.length > 0;
+		},
+		validShortName() {
+			return this.series.shortname.length > 0;
+		},
+		validLogo() {
+			return this.series.logo.startsWith('https://') || this.series.logo.startsWith('http://');
+		},
+		validHomepage() {
+			return this.series.homepage.trim() === '' || this.series.homepage.startsWith('https://') || this.series.homepage.startsWith('http://');
+		},
+		validPriority() {
+			return !isNaN(Number(this.chosenPriority.value)) && Number(this.chosenPriority.value) >= 1 && Number(this.chosenPriority.value) <= this.PRIORITY_MAX;
+		},
+		validVehicleClasses() {
+			return this.chosenVC && this.chosenVC.length && this.chosenVC.length > 0;
 		},
 		resetActiveSeries() {
 			this.series = JSON.parse(JSON.stringify(this.activeSeries));
-		},
-		resetArrays() {
-			this.vehicleClasses.splice(0);
-			this.tmpVehicleClasses.splice(0);
-			this.tmpVehicleClasses = Array.from(this.vc);
+            // set the priority
+            this.chosenPriority =
+				{
+					'value': this.activeSeries.priority,
+					'name': 'Priority ' + this.activeSeries.priority
+				};
+            // set the vehicle classes
+			this.chosenVC = [];
+			this.activeSeries.SeriesTypes.forEach(t => this.chosenVC.push(t.VehicleClass));
 		}
 	}
 };
 </script>
 
 <style lang="scss">
-.md-dialog {
-	min-width: 50%;
+.p-dropdown, .p-multiselect {
+	min-width: 100%;
+}
+.p-dropdown-item, .p-multiselect-item {
+	min-width: 100%;
+}
+.p-multiselect-vc-option {
+	display: inline-block;
+	vertical-align: middle;
+}
+.p-multiselect-vc-token {
+	background: #FFB300;
+	color: #000;
+	padding: 2px 5px;
+	margin: 0 0.5em 0.4em 0;
+	display: inline-block;
+	vertical-align: middle;
+	height: 1.8em;
+	border-radius: 5px;
 }
 </style>

@@ -24,7 +24,7 @@
 	<div>
 		<AutoComplete v-model="track.timezone" :suggestions="timeZones" :dropdown="true" placeholder="Timezone" class="full-width" field="display" @complete="searchTimezone($event)">
 			<template #item="slotProps" class="full-width">
-				<div class="p-clearfix width-50">
+				<div class="p-clearfix">
 					{{ tzDisplay(slotProps.item) }}
 				</div>
 			</template>
