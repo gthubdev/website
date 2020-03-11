@@ -2,7 +2,11 @@
 <div class="resources">
 	<TabView>
 		<TabPanel header="Events">
-			Events
+			<EventsContainer
+				:events="data.events"
+				:series="data.series"
+				:tracks="data.tracks"
+			/>
 		</TabPanel>
 		<TabPanel header="Series">
 			<SeriesContainer
@@ -49,14 +53,14 @@
 </template>
 
 <script>
-//import EventsContainer from '~/components/resources/EventsContainer.vue';
+import EventsContainer from '~/components/resources/EventsContainer.vue';
 import SeriesContainer from '~/components/resources/SeriesContainer.vue';
 import TracksContainer from '~/components/resources/TracksContainer.vue';
 import { strings } from '~/plugins/constants';
 
 export default {
 	components: {
-		//EventsContainer,
+        EventsContainer,
 		SeriesContainer,
 		TracksContainer
 	},

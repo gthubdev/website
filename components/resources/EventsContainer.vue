@@ -1,5 +1,5 @@
 <template>
-<div class="md-layout-item flex-start main-panel">
+<!--<div class="md-layout-item flex-start main-panel">
 	<div class="md-layout headline">
 		<div class="md-layout-item md-display-1">
 			Events
@@ -99,19 +99,51 @@
 		:active-session="activeEventSession"
 		:mode="mode"
 	/>
+</div>-->
+<div>
+	<div class="p-grid p-align-center">
+		<div class="p-col-4">
+			<h2>
+				Events
+			</h2>
+		</div>
+		<div class="p-col-4">
+			<span class="p-float-label">
+				<InputText id="searchTerm" v-model="searchTerm" type="text" class="full-width" />
+				<label for="searchTerm">Search term</label>
+			</span>
+		</div>
+		<div class="p-col-4 align-right">
+			<Button label="CREATE EVENT" class="p-button-raised" disabled="true" @click="createEvent()" />
+		</div>
+	</div>
+
+	<DataView :value="shownEvents" paginator-position="bottom" :paginator="true" :rows="itemsPerPage" :always-show-paginator="false">
+		<template #list="slotProps">
+			<div class="p-grid p-align-center">
+				<div class="p-col-9">
+					<b>{{ slotProps.data.name }}</b>
+				</div>
+				<div class="p-col-3 align-right">
+					<Button icon="pi pi-pencil" disabled="true" @click="updateEvent(slotProps.data)" />
+					&nbsp; &nbsp;
+					<Button icon="pi pi-trash" @click="deleteEvent(slotProps.data)" />
+				</div>
+			</div>
+		</template>
+	</DataView>
 </div>
 </template>
 
 <script>
-import CRUDEvent from '~/components/resources/CRUD-Event.vue';
-import CRUDEventSession from '~/components/resources/CRUD-EventSession.vue';
-import Paginate from 'vuejs-paginate/src/components/Paginate.vue';
+//import CRUDEvent from '~/components/resources/CRUD-Event.vue';
+//import CRUDEventSession from '~/components/resources/CRUD-EventSession.vue';
 import moment from 'moment';
 import { constants, strings } from '~/plugins/constants';
 
 export default {
 	components: {
-		CRUDEvent, CRUDEventSession, Paginate
+		//CRUDEvent, CRUDEventSession
 	},
 	props: {
 		events: {
@@ -126,30 +158,29 @@ export default {
 	},
 	data: function() {
 		return {
-			currentEvents: [],
-			pastEvents: [],
 			showEventDialog: false,
 			showSessionDialog: false,
-			shownSessions: [],
 			activeEvent: null,
 			activeEventSession: null,
-			showCurrentEvents: true,
-			mode: '',
 			searchTerm: '',
-			showPagination: false,
-			pageNumber: 1,
-			pageCount: 1,
+			shownEvents: null,
 			itemsPerPage: constants.ITEMS_PER_PAGE_EVENTS
 		};
 	},
 	watch: {
-		events(newValue) {
-			if (newValue === undefined || !newValue.length) return;
-
-			this.setArrays();
+		searchTerm(newValue) {
+			if (newValue.trim() === '')
+				this.shownEvents = this.events;
+			else
+				this.shownEvents = this.events.filter(e => {
+					return e.name.toLowerCase().includes(newValue.toLowerCase());
+				});
 		}
 	},
 	mounted() {
+		// set the events
+		this.shownEvents = this.events;
+
 		this.$root.$on(strings.TOGGLE_CRUD_EVENT, () => {
 			this.showEventDialog = !this.showEventDialog;
 		});
@@ -214,39 +245,6 @@ export default {
 				if (err.response)
 					alert(err.response);
 			}
-		},
-		filterEvents() {
-			let arr = [], res_arr = [], nrMatches = 0;
-			if (this.showCurrentEvents === true)
-				arr = this.currentEvents;
-			else
-				arr = this.pastEvents;
-
-			// count number of elements matching
-			if (this.searchTerm.trim() === '') {
-				nrMatches = arr.length;
-			} else {
-				arr.forEach(e => {
-					if (e.name.toLowerCase().includes(this.searchTerm.trim()))
-						nrMatches++;
-				});
-			}
-
-			// do the actual filtering
-			for (let i = (this.pageNumber - 1) * this.itemsPerPage; i < arr.length && res_arr.length < this.itemsPerPage; i++) {
-				if (this.searchTerm.trim() === '')
-					res_arr.push(arr[i]);
-				else if (arr[i].name.toLowerCase().includes(this.searchTerm.trim()))
-					res_arr.push(arr[i]);
-			}
-
-			this.pageCount = Math.ceil(nrMatches / this.itemsPerPage);
-			this.showPagination = this.pageCount > 1;
-			return res_arr;
-		},
-		pageClicked(newPageNum) {
-			//console.log('Active Page: ' + newPageNum);
-			this.pageNumber = newPageNum;
 		},
 		setArrays() {
 			// methods splits the events in current and past events

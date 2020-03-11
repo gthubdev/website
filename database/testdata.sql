@@ -31,7 +31,7 @@ INSERT INTO Series (id, name, shortname, priority, logo) VALUES (8, "C1 Racing C
 INSERT INTO SeriesType (series, class) VALUES (8, 30);
 
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, "Liqui-Moly Bathurst 12 Hour", "https://upload.wikimedia.org/wikipedia/en/3/3a/Bathurst_12_hour_logo.png", "2019-02-01", "2019-02-02", 2, 2, 2);
-INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, "ADAC TOTALNürburgring 24 Hours", "https://reifenpresse.de/wp-content/uploads/2018/11/ADAC-neuer-24h-Titelsponsor.jpg","2020-05-21", "2020-05-24", 1, 1, 1);
+INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, "ADAC TOTAL Nürburgring 24 Hours", "https://reifenpresse.de/wp-content/uploads/2018/11/ADAC-neuer-24h-Titelsponsor.jpg","2020-05-21", "2020-05-24", 1, 1, 1);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (3, "TOTAL Spa 24 Hours", "https://tickets-2-u.com/wp-content/uploads/2018/05/24Hours_Spa.png", "2020-07-23", "2020-07-26", 3, 2, 3);
 INSERT INTO Event (id, name, startdate, enddate, track, priority, mainseries) VALUES (4, "Supercheap Auto Bathurst 1000", "2020-10-08", "2020-10-11", 2, 3, 6);
 INSERT INTO Event (id, name, startdate, enddate, track, priority, mainseries) VALUES (5, "Vodafone Gold Coast 600", "2020-10-30", "2020-11-01", 6, 3, 6);
