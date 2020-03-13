@@ -130,11 +130,6 @@
 				<span class="md-error">Please choose a priority</span>
 			</md-field>
 
-			<md-field>
-				<label>Logo</label>
-				<md-input v-model="event.logo" />
-			</md-field>
-
 			<md-dialog-actions>
 				<md-button class="md-primary md-accent" @click="showEventDialog = false">
 					Cancel
@@ -147,13 +142,23 @@
 	</md-dialog>
 </div>-->
 <Dialog :header="headline" :visible.sync="showEventDialog" :modal="true">
+	<!-- name, track, main series, support series, start, end, priority, logo -->
 	<div>
 		<span class="p-float-label">
 			<InputText id="name" v-model="event.name" type="text" class="full-width" />
 			<label for="name">Name of the Event</label>
 		</span>
-		<!-- track, main series, support series, start, end, priority, logo -->
 	</div>
+
+	<br />
+
+	<div>
+		<span class="p-float-label">
+			<InputText id="logo" v-model="event.logo" type="text" class="full-width" />
+			<label for="name">Logo of the Event</label>
+		</span>
+	</div>
+
 	<template #footer>
 		<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
 		<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />
@@ -347,10 +352,15 @@ export default {
 			this.showEventDialog = false;
 		},
 		validInput() {
-			return this.validName();
+			return this.validName() &&
+				this.validLogo();
 		},
 		validName() {
 			return this.event !== undefined && this.event.name.length > 0;
+		},
+		validLogo() {
+			return this.event.logo.trim() === '' || this.event.logo.startsWith('https://') || this.event.logo.startsWith('http://');
+
 		}
 		// async sendRequest() {
 		// 	const event = JSON.parse(JSON.stringify(this.event));
