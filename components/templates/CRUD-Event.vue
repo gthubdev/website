@@ -2,13 +2,6 @@
 <!--<div>
 	<md-dialog :md-active.sync="showEventDialog">
 		<md-dialog-content>
-			<md-dialog-title>{{ headline() }}</md-dialog-title>
-
-			<md-field :class="requiredName">
-				<label>Event Name</label>
-				<md-input v-model="event.name" required />
-				<span class="md-error">Please enter the event name</span>
-			</md-field>
 
 			<md-autocomplete v-model="event.track" md-dense :md-options="tracks.map(x=>({
 				'id':x.id,
@@ -155,12 +148,16 @@
 </div>-->
 <Dialog :header="headline" :visible.sync="showEventDialog" :modal="true">
 	<div>
-		<br />
+		<span class="p-float-label">
+			<InputText id="name" v-model="event.name" type="text" class="full-width" />
+			<label for="name">Name of the Event</label>
+		</span>
+		<!-- track, main series, support series, start, end, priority, logo -->
 	</div>
 	<template #footer>
 		<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
-	<!--		<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />-->
-	<!--		<Button v-if="validInput()" :label="action" icon="pi pi-check" @click="sendRequest" />-->
+		<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />
+		<Button v-if="validInput()" :label="action" icon="pi pi-check" />
 	</template>
 </Dialog>
 </template>
@@ -217,24 +214,9 @@ export default {
 		};
 	},
 	computed: {
-		// action() {
-		// 	switch(this.mode) {
-		// 		case 'create':
-		// 			return 'Create';
-		// 		case 'update':
-		// 			return 'Update';
-		// 		default:
-		// 			return '';
-		// 	}
-		// },
 		// requiredEnddate() {
 		// 	return {
 		// 		'md-invalid': this.event.enddate === null || this.event.enddate === ''
-		// 	};
-		// },
-		// requiredName() {
-		// 	return {
-		// 		'md-invalid': !(this.event.name.length > 0)
 		// 	};
 		// },
 		// requiredPriority() {
@@ -363,6 +345,12 @@ export default {
 	methods: {
 		close() {
 			this.showEventDialog = false;
+		},
+		validInput() {
+			return this.validName();
+		},
+		validName() {
+			return this.event !== undefined && this.event.name.length > 0;
 		}
 		// async sendRequest() {
 		// 	const event = JSON.parse(JSON.stringify(this.event));
