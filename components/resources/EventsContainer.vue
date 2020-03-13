@@ -114,7 +114,7 @@
 			</span>
 		</div>
 		<div class="p-col-4 align-right">
-			<Button label="CREATE EVENT" class="p-button-raised" disabled="true" @click="createEvent()" />
+			<Button label="CREATE EVENT" class="p-button-raised" @click="createEvent()" />
 		</div>
 	</div>
 
@@ -132,18 +132,23 @@
 			</div>
 		</template>
 	</DataView>
+
+	<CreateEvent
+		:show-dialog="showCreateEventDialog"
+		:series="series"
+		:tracks="tracks"
+	/>
 </div>
 </template>
 
 <script>
-//import CRUDEvent from '~/components/resources/CRUD-Event.vue';
-//import CRUDEventSession from '~/components/resources/CRUD-EventSession.vue';
-import moment from 'moment';
+//import moment from 'moment';
 import { constants, strings } from '~/plugins/constants';
+import CreateEvent from '~/components/resources/event/Create-Event.vue';
 
 export default {
 	components: {
-		//CRUDEvent, CRUDEventSession
+		CreateEvent,
 	},
 	props: {
 		events: {
@@ -158,8 +163,10 @@ export default {
 	},
 	data: function() {
 		return {
-			showEventDialog: false,
+			showDialog: false,
 			showSessionDialog: false,
+			showCreateEventDialog: false,
+			showUpdateEventDialog: false,
 			activeEvent: null,
 			activeEventSession: null,
 			searchTerm: '',
@@ -181,87 +188,92 @@ export default {
 		// set the events
 		this.shownEvents = this.events;
 
-		this.$root.$on(strings.TOGGLE_CRUD_EVENT, () => {
-			this.showEventDialog = !this.showEventDialog;
+		this.$root.$on(strings.CLOSED_CRUD_EVENT, () => {
+			this.showCreateEventDialog = false;
+			this.showUpdateEventDialog = false;
 		});
-		this.$root.$on(strings.TOGGLE_CRUD_EVENTSESSION, () => {
-			this.showSessionDialog = !this.showSessionDialog;
-		});
-		this.$root.$on(strings.EVENT_CREATED, event => {
-			this.activeEvent = event;
-			this.showSessionDialog = !this.showSessionDialog;
-		});
+		//
+		// this.$root.$on(strings.TOGGLE_CRUD_EVENT, () => {
+		// 	this.showEventDialog = !this.showEventDialog;
+		// });
+		// this.$root.$on(strings.TOGGLE_CRUD_EVENTSESSION, () => {
+		// 	this.showSessionDialog = !this.showSessionDialog;
+		// });
+		// this.$root.$on(strings.EVENT_CREATED, event => {
+		// 	this.activeEvent = event;
+		// 	this.showSessionDialog = !this.showSessionDialog;
+		// });
 
 		// set the arrays
-		this.setArrays();
+		// this.setArrays();
 	},
 	methods: {
 		createEvent() {
-			this.mode = 'create';
-			this.showEventDialog = !this.showEventDialog;
+			this.showUpdateEventDialog = false;
+			this.showCreateEventDialog = true;
 		},
-		createEventSession(event) {
-			this.activeEvent = event;
-			this.mode = 'create';
-			this.showSessionDialog = !this.showSessionDialog;
-		},
-		updateEvent(event) {
-			this.activeEvent = event;
-			this.mode = 'update';
-			this.showEventDialog = !this.showEventDialog;
-		},
-		updateEventSession(event, session) {
-			this.activeEvent = event;
-			this.activeEventSession = session;
-			this.mode = 'update';
-			this.showSessionDialog = !this.showSessionDialog;
-		},
-		deleteEvent(event) {
-			this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
-		},
-		deleteSession(session) {
-			this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
-		},
-		toggleSessions(id) {
-			if (this.shownSessions.includes(id)) {
-				let index = this.shownSessions.findIndex(e => e == id);
-				this.shownSessions.splice(index, 1);
-			} else {
-				this.shownSessions.push(id);
-			}
-		},
-		sessionStart(session, event) {
-			return moment(session.starttime).tz(event.Track.timezone).format('ddd Do HH:mm')+'h';
-		},
-		async getIcal(eventid) {
-			try {
-				const res = await this.$axios.$get('/api/calendar/ical/event/' + eventid);
-				let blob = new Blob([res.toString()], { type: 'text/calendar' });
-				let link = document.createElement('a');
-				link.href = window.URL.createObjectURL(blob);
-				link.download = 'cal.ics';
-				link.click();
-			} catch(err) {
-				if (err.response)
-					alert(err.response);
-			}
-		},
-		setArrays() {
-			// methods splits the events in current and past events
-			this.currentEvents = this.events.filter(event => {
-				return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
-			});
-			this.pastEvents = this.events.filter(event => {
-				return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD'));
-			});
-
-			if (this.showCurrentEvents === true)
-				this.pageCount = Math.ceil(this.currentEvents.length / this.itemsPerPage);
-			else
-				this.pageCount = Math.ceil(this.pastEvents.length / this.itemsPerPage);
-
-			this.showPagination = this.pageCount > 1;
-		}
+		// createEventSession(event) {
+		// 	this.activeEvent = event;
+		// 	this.mode = 'create';
+		// 	this.showSessionDialog = !this.showSessionDialog;
+		// },
+		// updateEvent(event) {
+		// 	this.activeEvent = event;
+		// 	this.mode = 'update';
+		// 	this.showEventDialog = !this.showEventDialog;
+		// },
+		// updateEventSession(event, session) {
+		// 	this.activeEvent = event;
+		// 	this.activeEventSession = session;
+		// 	this.mode = 'update';
+		// 	this.showSessionDialog = !this.showSessionDialog;
+		// },
+		// deleteEvent(event) {
+		// 	this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
+		// },
+		// deleteSession(session) {
+		// 	this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
+		// },
+		// toggleSessions(id) {
+		// 	if (this.shownSessions.includes(id)) {
+		// 		let index = this.shownSessions.findIndex(e => e == id);
+		// 		this.shownSessions.splice(index, 1);
+		// 	} else {
+		// 		this.shownSessions.push(id);
+		// 	}
+		// },
+		// sessionStart(session, event) {
+		// 	return moment(session.starttime).tz(event.Track.timezone).format('ddd Do HH:mm')+'h';
+		// },
+		// async getIcal(eventid) {
+		// 	try {
+		// 		const res = await this.$axios.$get('/api/calendar/ical/event/' + eventid);
+		// 		let blob = new Blob([res.toString()], { type: 'text/calendar' });
+		// 		let link = document.createElement('a');
+		// 		link.href = window.URL.createObjectURL(blob);
+		// 		link.download = 'cal.ics';
+		// 		link.click();
+		// 	} catch(err) {
+		// 		if (err.response)
+		// 			alert(err.response);
+		// 	}
+		// },
+		// setArrays() {
+		// 	// methods splits the events in current and past events
+		// 	this.currentEvents = this.events.filter(event => {
+		// 		return moment(event.enddate).isSameOrAfter(moment().format('YYYY-MM-DD'));
+		// 	});
+		// 	this.pastEvents = this.events.filter(event => {
+		// 		return moment(event.enddate).isBefore(moment().format('YYYY-MM-DD'));
+		// 	});
+		//
+		// 	if (this.showCurrentEvents === true)
+		// 		this.pageCount = Math.ceil(this.currentEvents.length / this.itemsPerPage);
+		// 	else
+		// 		this.pageCount = Math.ceil(this.pastEvents.length / this.itemsPerPage);
+		//
+		// 	this.showPagination = this.pageCount > 1;
+		// }
 	}
 };
 </script>
@@ -270,7 +282,7 @@ export default {
 .headline {
 	margin-bottom: 1em;
 }
-.sessions {
+/*.sessions {
 	padding-left: 2em
 }
 .md-list {
@@ -283,5 +295,5 @@ export default {
 }
 .invisible {
 	visibility: hidden;
-}
+}*/
 </style>

@@ -14,6 +14,7 @@ export const strings = {
 	CONFIRM_DELETE_EVENTSESSION: 'confirmDeleteEventSession',
 	CONFIRM_DELETE_SERIES: 'confirmDeleteSeries',
 	CONFIRM_DELETE_TRACK: 'confirmDeleteTrack',
+	CLOSED_CRUD_EVENT: 'closedCrudEvent',
 	CLOSED_CRUD_SERIES: 'closedCrudSeries',
 	CLOSED_CRUD_TRACK: 'closedCrudTrack',
 	EVENT_CREATED: 'eventCreated',
