@@ -2,51 +2,6 @@
 <!--<div>
 	<md-dialog :md-active.sync="showEventDialog">
 		<md-dialog-content>
-
-			<md-autocomplete v-model="event.track" md-dense :md-options="tracks.map(x=>({
-				'id':x.id,
-				'name':x.name,
-				'toLowerCase':()=>x.name.toLowerCase(),
-				'toString':()=>x.name
-			}))" :class="requiredTrack"
-			>
-				<label>Track</label>
-				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-					<span class="color" :style="`background-color: ${item.color}`" />
-					<md-highlight-text :md-term="term.name ? term.name : term">
-						{{ item.name }}
-					</md-highlight-text>
-				</template>
-
-				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					"{{ term }}" not found!
-				</template>
-
-				<span class="md-error">Please choose a track</span>
-			</md-autocomplete>
-
-			<md-autocomplete v-model="event.mainseries" md-dense :md-options="series.map(x=>({
-				'id':x.id,
-				'name':x.name,
-				'toLowerCase':()=>x.name.toLowerCase(),
-				'toString':()=>x.name
-			}))" :class="requiredSeries"
-			>
-				<label>Main Series</label>
-				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-					<span class="color" :style="`background-color: ${item.color}`" />
-					<md-highlight-text :md-term="term.name ? term.name : term">
-						{{ item.name }}
-					</md-highlight-text>
-				</template>
-
-				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					"{{ term }}" not found!
-				</template>
-
-				<span class="md-error">Please choose a main series</span>
-			</md-autocomplete>
-
 			<div v-if="event.mainseries !== undefined && event.mainseries.id && supportseries.length">
 				<md-chip v-for="(ss, index) in supportseries" :key="ss.id" class="md-primary" md-deletable @md-delete="removeSupportSeries(ss, index)">
 					{{ ss.name }}
@@ -134,7 +89,19 @@
 	<br />
 
 	<div>
-		<AutoComplete v-model="event.mainseries" :suggestions="availableMainSeries" :dropdown="true" placeholder="Main Series" class="full-width" field="name" @complete="searchMainSeries($event)">
+		<AutoComplete v-model="chosenTrack" :suggestions="availableTracks" :dropdown="true" placeholder="Track" class="full-width" field="name" @complete="searchTrack($event)">
+			<template #item="slotProps" class="full-width">
+				<div class="p-clearfix">
+					{{ slotProps.item.name }}
+				</div>
+			</template>
+		</AutoComplete>
+	</div>
+
+	<br />
+
+	<div>
+		<AutoComplete v-model="chosenMainSeries" :suggestions="availableMainSeries" :dropdown="true" placeholder="Main Series" class="full-width" field="name" @complete="searchMainSeries($event)">
 			<template #item="slotProps" class="full-width">
 				<div class="p-clearfix">
 					{{ slotProps.item.name }}
@@ -211,11 +178,9 @@ export default {
 				logo: '',
 				priority: ''
 			},
-			// chosenSupportSeries: '',
-			// supportseries: [],
-			// tmpSupportSeries: [],
-			// validss: false,
-			// initMainSet: false,
+			chosenTrack: '',
+			availableTracks: [],
+			chosenMainSeries: '',
 			availableMainSeries: [],
 			chosenPriority: '',
 			availablePriorities: [],
@@ -233,11 +198,6 @@ export default {
 		// 		'md-invalid': this.event.startdate === null || this.event.startdate === ''
 		// 	};
 		// },
-		// requiredTrack() {
-		// 	return {
-		// 		'md-invalid': this.event.track === undefined || !this.event.track.id
-		// 	};
-		// },
 	},
 	watch: {
 		showDialog(newValue) {
@@ -247,6 +207,8 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_EVENT);
 
+			this.chosenTrack = '';
+			this.chosenMainSeries = '';
 			this.chosenPriority = '';
 		},
 		activeEvent(newValue) {
@@ -300,9 +262,8 @@ export default {
 		// 		});
 		// 	}
 		// },
-		'event.mainseries'(newValue) {
-			if (typeof newValue !== 'object')
-				return;
+		chosenMainSeries(newValue) {
+			if (typeof newValue !== 'object') return;
 
 			this.chosenPriority =
 				{
@@ -370,6 +331,7 @@ export default {
 		},
 		validInput() {
 			return this.validName() &&
+				this.validTrack() &&
 				this.validMainSeries() &&
 				this.validPriority() &&
 				this.validLogo();
@@ -377,14 +339,25 @@ export default {
 		validName() {
 			return this.event !== undefined && this.event.name.length > 0;
 		},
+		validTrack() {
+			return this.chosenTrack !== '' && this.chosenTrack.name;
+		},
 		validMainSeries() {
-			return this.event.mainseries !== undefined && this.event.mainseries.name;
+			return this.chosenMainSeries !== '' && this.chosenMainSeries.name;
 		},
 		validPriority() {
 			return !isNaN(Number(this.chosenPriority.value)) && Number(this.chosenPriority.value) >= 1 && Number(this.chosenPriority.value) <= this.PRIORITY_MAX;
 		},
 		validLogo() {
 			return this.event.logo.trim() === '' || this.event.logo.startsWith('https://') || this.event.logo.startsWith('http://');
+		},
+		searchTrack(event) {
+			if (event.query.trim() === '')
+				this.availableTracks = [...this.tracks];
+			else
+				this.availableTracks = this.tracks.filter(track => {
+					return track.name.toLowerCase().includes(event.query.toLowerCase());
+				});
 		},
 		searchMainSeries(event) {
 			if (event.query.trim() === '')
@@ -428,13 +401,6 @@ export default {
 		// removeSupportSeries(series, index) {
 		// 	this.supportseries.splice(index, 1);
 		// 	this.tmpSupportSeries.push(series);
-		// },
-		// validInput() {
-		// 	return this.event.name.length > 0 &&
-		// 	this.event.track !== undefined && this.event.track.id &&
-		// 	this.event.mainseries !== undefined && this.event.mainseries.id &&
-		// 	!this.isInvalidDate() &&
-		// 	this.event.priority >= 1;
 		// },
 		// isInvalidDate() {
 		// 	if (this.event.startdate === null ||
