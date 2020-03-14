@@ -119,25 +119,6 @@
 					/>
 				</div>
 			</div>
-
-			<md-field :class="requiredPriority">
-				<label for="priority">Priority</label>
-				<md-select id="priority" v-model="event.priority" name="priority" placeholder="Priority" required>
-					<md-option v-for="i in PRIORITY_MAX" :key="i" :value="i">
-						{{ i }}
-					</md-option>
-				</md-select>
-				<span class="md-error">Please choose a priority</span>
-			</md-field>
-
-			<md-dialog-actions>
-				<md-button class="md-primary md-accent" @click="showEventDialog = false">
-					Cancel
-				</md-button>
-				<md-button class="md-raised md-primary" :disabled="!validInput()" @click="sendRequest()">
-					{{ action }}
-				</md-button>
-			</md-dialog-actions>
 		</md-dialog-content>
 	</md-dialog>
 </div>-->
@@ -148,6 +129,17 @@
 			<InputText id="name" v-model="event.name" type="text" class="full-width" />
 			<label for="name">Name of the Event</label>
 		</span>
+	</div>
+
+	<br />
+
+	<div class="p-grid p-align-center">
+		<div class="p-col-4">
+			Priority:
+		</div>
+		<div class="p-col-8">
+			<Dropdown v-model="chosenPriority" :options="availablePriorities" option-label="name" placeholder="Select a priority" />
+		</div>
 	</div>
 
 	<br />
@@ -170,7 +162,6 @@
 <script>
 //import moment from 'moment';
 import { constants, strings } from '~/plugins/constants';
-//import { constants } from '~/plugins/constants';
 
 export default {
 	props: {
@@ -224,11 +215,6 @@ export default {
 		// 		'md-invalid': this.event.enddate === null || this.event.enddate === ''
 		// 	};
 		// },
-		// requiredPriority() {
-		// 	return {
-		// 		'md-invalid': this.event.priority === undefined || this.event.priority === ''
-		// 	};
-		// },
 		// requiredSeries() {
 		// 	return {
 		// 		'md-invalid': this.event.mainseries === undefined || !this.event.mainseries.id
@@ -253,6 +239,11 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_EVENT);
 
+		},
+		activeEvent(newValue) {
+			if (newValue === undefined) return;
+
+			this.event = newValue;
 		}
 		// showEventDialog(newValue, oldValue) {
 		// 	if (oldValue === true)
@@ -347,16 +338,28 @@ export default {
 		// 	}
 		// }
 	},
+	created() {
+		for (let i = 1; i <= this.PRIORITY_MAX; i++)
+			this.availablePriorities.push(
+				{
+					'value': i,
+					'name': 'Priority ' + i
+				});
+	},
 	methods: {
 		close() {
 			this.showEventDialog = false;
 		},
 		validInput() {
 			return this.validName() &&
+				this.validPriority() &&
 				this.validLogo();
 		},
 		validName() {
 			return this.event !== undefined && this.event.name.length > 0;
+		},
+		validPriority() {
+			return !isNaN(Number(this.chosenPriority.value)) && Number(this.chosenPriority.value) >= 1 && Number(this.chosenPriority.value) <= this.PRIORITY_MAX;
 		},
 		validLogo() {
 			return this.event.logo.trim() === '' || this.event.logo.startsWith('https://') || this.event.logo.startsWith('http://');
@@ -393,16 +396,6 @@ export default {
 		// 	}
 		// 	this.showEventDialog = false;
 		// },
-		// headline() {
-		// 	switch(this.mode) {
-		// 		case 'create':
-		// 			return 'Create an Event';
-		// 		case 'update':
-		// 			return 'Update ' + this.event.name;
-		// 		default:
-		// 			return '';
-		// 	}
-		// },
 		// removeSupportSeries(series, index) {
 		// 	this.supportseries.splice(index, 1);
 		// 	this.tmpSupportSeries.push(series);
@@ -434,10 +427,10 @@ export default {
 </script>
 
 <style lang="scss">
-/*.md-dialog {
-	min-width: 50%;
+.p-dropdown, .p-multiselect {
+	min-width: 100%;
 }
-.md-menu-content {
-	z-index: 100;
-}*/
+.p-dropdown-item, .p-multiselect-item {
+	min-width: 100%;
+}
 </style>
