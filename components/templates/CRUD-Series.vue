@@ -132,6 +132,9 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_SERIES);
 
+			this.chosenPriority = '';
+			this.chosenVC = [];
+
 			if (newValue === true && this.updateMode === true && this.activeSeries !== undefined) {
 				// Might need to reset the object
 				this.resetActiveSeries();
