@@ -5,7 +5,7 @@
 	:headline="'Create an event'"
 	:action="'Create'"
 	:update-mode="false"
-	:series:="series"
+	:series="series"
 	:tracks="tracks"
 />
 </template>

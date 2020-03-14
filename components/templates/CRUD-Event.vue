@@ -133,6 +133,18 @@
 
 	<br />
 
+	<div>
+		<AutoComplete v-model="event.mainseries" :suggestions="availableMainSeries" :dropdown="true" placeholder="Main Series" class="full-width" field="name" @complete="searchMainSeries($event)">
+			<template #item="slotProps" class="full-width">
+				<div class="p-clearfix">
+					{{ slotProps.item.name }}
+				</div>
+			</template>
+		</AutoComplete>
+	</div>
+
+	<br />
+
 	<div class="p-grid p-align-center">
 		<div class="p-col-4">
 			Priority:
@@ -204,6 +216,7 @@ export default {
 			// tmpSupportSeries: [],
 			// validss: false,
 			// initMainSet: false,
+			availableMainSeries: [],
 			chosenPriority: '',
 			availablePriorities: [],
 			PRIORITY_MAX: constants.PRIORITY_MAX
@@ -213,11 +226,6 @@ export default {
 		// requiredEnddate() {
 		// 	return {
 		// 		'md-invalid': this.event.enddate === null || this.event.enddate === ''
-		// 	};
-		// },
-		// requiredSeries() {
-		// 	return {
-		// 		'md-invalid': this.event.mainseries === undefined || !this.event.mainseries.id
 		// 	};
 		// },
 		// requiredStartdate() {
@@ -239,12 +247,13 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_EVENT);
 
+			this.chosenPriority = '';
 		},
 		activeEvent(newValue) {
 			if (newValue === undefined) return;
 
 			this.event = newValue;
-		}
+		},
 		// showEventDialog(newValue, oldValue) {
 		// 	if (oldValue === true)
 		// 		this.$root.$emit(strings.TOGGLE_CRUD_EVENT);
@@ -291,14 +300,23 @@ export default {
 		// 		});
 		// 	}
 		// },
-		// 'event.mainseries'(newValue, oldValue) {
-		// 	// if a main series is removed as main series, add it to the list of possible support series
-		// 	if (typeof newValue !== 'object') {
-		// 		if (oldValue.id && this.tmpSupportSeries.findIndex(ss => ss.id == oldValue.id) < 0)
-		// 			this.tmpSupportSeries.push(oldValue);
-		// 		this.event.priority = '';
-		// 		return;
-		// 	}
+		'event.mainseries'(newValue) {
+			if (typeof newValue !== 'object')
+				return;
+
+			this.chosenPriority =
+				{
+					'value': newValue.priority,
+					'name': 'Priority ' + newValue.priority
+				};
+		}
+			// // if a main series is removed as main series, add it to the list of possible support series
+			// if (typeof newValue !== 'object') {
+			// 	if (oldValue.id && this.tmpSupportSeries.findIndex(ss => ss.id == oldValue.id) < 0)
+			// 		this.tmpSupportSeries.push(oldValue);
+			// 	this.event.priority = '';
+			// 	return;
+			// }
 		// 	// if a series is now the main series, remove it as an option for a support series
 		// 	let index = this.tmpSupportSeries.findIndex(ss => ss.id == newValue.id);
 		// 	if (index >= 0) {
@@ -352,18 +370,29 @@ export default {
 		},
 		validInput() {
 			return this.validName() &&
+				this.validMainSeries() &&
 				this.validPriority() &&
 				this.validLogo();
 		},
 		validName() {
 			return this.event !== undefined && this.event.name.length > 0;
 		},
+		validMainSeries() {
+			return this.event.mainseries !== undefined && this.event.mainseries.name;
+		},
 		validPriority() {
 			return !isNaN(Number(this.chosenPriority.value)) && Number(this.chosenPriority.value) >= 1 && Number(this.chosenPriority.value) <= this.PRIORITY_MAX;
 		},
 		validLogo() {
 			return this.event.logo.trim() === '' || this.event.logo.startsWith('https://') || this.event.logo.startsWith('http://');
-
+		},
+		searchMainSeries(event) {
+			if (event.query.trim() === '')
+				this.availableMainSeries = [...this.series];
+			else
+				this.availableMainSeries = this.series.filter(s => {
+					return s.name.toLowerCase().includes(event.query.toLowerCase());
+				});
 		}
 		// async sendRequest() {
 		// 	const event = JSON.parse(JSON.stringify(this.event));
@@ -432,5 +461,11 @@ export default {
 }
 .p-dropdown-item, .p-multiselect-item {
 	min-width: 100%;
+}
+.p-autocomplete-input {
+	min-width: 90% !important;
+}
+.p-autocomplete {
+	width: 100% !important;
 }
 </style>

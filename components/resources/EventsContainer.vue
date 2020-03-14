@@ -148,7 +148,7 @@ import CreateEvent from '~/components/resources/event/Create-Event.vue';
 
 export default {
 	components: {
-		CreateEvent,
+		CreateEvent
 	},
 	props: {
 		events: {
