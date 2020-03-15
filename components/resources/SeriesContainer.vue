@@ -92,11 +92,10 @@ export default {
 		});
 
 		// handle requests to create/update a series
-		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, priority, vehicleClasses) => {
+		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, vehicleClasses) => {
 			//console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
 
 			const series = JSON.parse(JSON.stringify(tmpseries));
-			series.priority = priority.value;
 			series.vehicleClasses = vehicleClasses;
 
 			// create a series

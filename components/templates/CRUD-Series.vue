@@ -54,7 +54,13 @@
 			Priority:
 		</div>
 		<div class="p-col-8">
-			<Dropdown v-model="chosenPriority" :options="availablePriorities" option-label="name" placeholder="Select a priority" />
+			<Dropdown
+				v-model="series.priority"
+				:options="availablePriorities"
+				option-label="name"
+				option-value="value"
+				placeholder="Select a priority"
+			/>
 		</div>
 	</div>
 
@@ -119,7 +125,6 @@ export default {
 				priority: ''
 			},
 			chosenVC: [],
-			chosenPriority: '',
 			availablePriorities: [],
 			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
@@ -132,7 +137,6 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_SERIES);
 
-			this.chosenPriority = '';
 			this.chosenVC = [];
 
 			if (newValue === true && this.updateMode === true && this.activeSeries !== undefined) {
@@ -162,7 +166,7 @@ export default {
 			this.showSeriesDialog = false;
 		},
 		sendRequest() {
-			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series, this.chosenPriority, this.chosenVC);
+			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series, this.chosenVC);
 		},
 		validInput() {
 			return this.validFullName() &&
@@ -185,19 +189,14 @@ export default {
 			return this.series.homepage.trim() === '' || this.series.homepage.startsWith('https://') || this.series.homepage.startsWith('http://');
 		},
 		validPriority() {
-			return !isNaN(Number(this.chosenPriority.value)) && Number(this.chosenPriority.value) >= 1 && Number(this.chosenPriority.value) <= this.PRIORITY_MAX;
+			return !isNaN(Number(this.series.priority)) && Number(this.series.priority) >= 1 && Number(this.series.priority) <= this.PRIORITY_MAX;
 		},
 		validVehicleClasses() {
 			return this.chosenVC && this.chosenVC.length && this.chosenVC.length > 0;
 		},
 		resetActiveSeries() {
 			this.series = JSON.parse(JSON.stringify(this.activeSeries));
-            // set the priority
-            this.chosenPriority =
-				{
-					'value': this.activeSeries.priority,
-					'name': 'Priority ' + this.activeSeries.priority
-				};
+
             // set the vehicle classes
 			this.chosenVC = [];
 			this.activeSeries.SeriesTypes.forEach(t => this.chosenVC.push(t.VehicleClass));
