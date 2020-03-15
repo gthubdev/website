@@ -228,9 +228,9 @@ export default {
 		// 	this.mode = 'update';
 		// 	this.showSessionDialog = !this.showSessionDialog;
 		// },
-		// deleteEvent(event) {
-		// 	this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
-		// },
+		deleteEvent(event) {
+			this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
+		},
 		// deleteSession(session) {
 		// 	this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
 		// },
@@ -282,18 +282,4 @@ export default {
 .headline {
 	margin-bottom: 1em;
 }
-/*.sessions {
-	padding-left: 2em
-}
-.md-list {
-	background-color: rgba(0, 0, 0, 0.3);
-	margin-top: 0.5em;
-	border-radius: 20px;
-}
-.icon {
-	margin-right: .5em;
-}
-.invisible {
-	visibility: hidden;
-}*/
 </style>
