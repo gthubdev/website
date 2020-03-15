@@ -10,6 +10,9 @@ Vue.component('AutoComplete', AutoComplete);
 // Button
 import Button from 'primevue/button';
 Vue.component('Button', Button);
+// Calendar
+import Calendar from 'primevue/calendar';
+Vue.component('Calendar', Calendar);
 // Card
 import Card from 'primevue/card';
 Vue.component('Card', Card);

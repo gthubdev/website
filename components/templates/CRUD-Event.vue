@@ -30,49 +30,6 @@
 				<span class="md-error">Please choose a main series</span>
 			</md-autocomplete>
 
-			<div class="md-layout">
-				<div class="md-layout-item md-size-45">
-					<label>Startdate</label>
-					<VueCtkDateTimePicker
-						v-model="event.startdate"
-						:label="dateLabel()"
-						format="YYYY-MM-DD"
-						formatted="ddd, Do MMMM YYYY"
-						:hint="dateHint()"
-						:error="isInvalidDate()"
-						color="#ed6400"
-						button-color="#ed6400"
-						:only-date="true"
-						:auto-close="true"
-						locale="en"
-						:first-day-of-week="1"
-						:dark="true"
-					/>
-				</div>
-
-				<div class="md-layout-item">
-					&nbsp;
-				</div>
-
-				<div class="md-layout-item md-size-45">
-					<label>Enddate</label>
-					<VueCtkDateTimePicker
-						v-model="event.enddate"
-						:label="dateLabel()"
-						format="YYYY-MM-DD"
-						formatted="ddd, Do MMMM YYYY"
-						:hint="dateHint()"
-						:error="isInvalidDate()"
-						color="#ed6400"
-						button-color="#ed6400"
-						:min-date="event.startdate"
-						:only-date="true"
-						:auto-close="true"
-						locale="en"
-						:first-day-of-week="1"
-						:dark="true"
-					/>
-				</div>
 			</div>
 		</md-dialog-content>
 	</md-dialog>
@@ -123,6 +80,21 @@
 
 	<br />
 
+	<div class="p-fluid">
+		<Calendar
+			v-model="chosenDates"
+			selection-mode="range"
+			:manual-input="false"
+			:show-button-bar="false"
+			:month-navigator="true"
+			:year-navigator="true"
+			year-range="2020:2021"
+			:inline="true"
+		/>
+	</div>
+
+	<br />
+
 	<div>
 		<span class="p-float-label">
 			<InputText id="logo" v-model="event.logo" type="text" class="full-width" />
@@ -139,7 +111,7 @@
 </template>
 
 <script>
-//import moment from 'moment';
+import moment from 'moment';
 import { constants, strings } from '~/plugins/constants';
 
 export default {
@@ -184,20 +156,9 @@ export default {
 			availableMainSeries: [],
 			chosenPriority: '',
 			availablePriorities: [],
+			chosenDates: [],
 			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
-	},
-	computed: {
-		// requiredEnddate() {
-		// 	return {
-		// 		'md-invalid': this.event.enddate === null || this.event.enddate === ''
-		// 	};
-		// },
-		// requiredStartdate() {
-		// 	return {
-		// 		'md-invalid': this.event.startdate === null || this.event.startdate === ''
-		// 	};
-		// },
 	},
 	watch: {
 		showDialog(newValue) {
@@ -210,6 +171,7 @@ export default {
 			this.chosenTrack = '';
 			this.chosenMainSeries = '';
 			this.chosenPriority = '';
+			this.chosenDates = [];
 		},
 		activeEvent(newValue) {
 			if (newValue === undefined) return;
@@ -334,6 +296,7 @@ export default {
 				this.validTrack() &&
 				this.validMainSeries() &&
 				this.validPriority() &&
+				this.validDates() &&
 				this.validLogo();
 		},
 		validName() {
@@ -347,6 +310,12 @@ export default {
 		},
 		validPriority() {
 			return !isNaN(Number(this.chosenPriority.value)) && Number(this.chosenPriority.value) >= 1 && Number(this.chosenPriority.value) <= this.PRIORITY_MAX;
+		},
+		validDates() {
+			return this.chosenDates !== undefined &&
+				this.chosenDates.length > 1 &&
+				moment(this.chosenDates[0]).isValid() &&
+				moment(this.chosenDates[1]).isValid();
 		},
 		validLogo() {
 			return this.event.logo.trim() === '' || this.event.logo.startsWith('https://') || this.event.logo.startsWith('http://');
@@ -402,21 +371,6 @@ export default {
 		// 	this.supportseries.splice(index, 1);
 		// 	this.tmpSupportSeries.push(series);
 		// },
-		// isInvalidDate() {
-		// 	if (this.event.startdate === null ||
-		// 		this.event.startdate === '' ||
-		// 		this.event.enddate === null ||
-		// 		this.event.enddate === '')
-		// 		return true;
-		//
-		// 	return moment(this.event.enddate).isBefore(moment(this.event.startdate).format('YYYY-MM-DD'));
-		// },
-		// dateLabel() {
-		// 	return this.isInvalidDate() ? 'Select date' : '';
-		// },
-		// dateHint() {
-		// 	return this.isInvalidDate() ? 'Please select valid dates' : '';
-		// }
 	}
 };
 </script>
