@@ -1,41 +1,5 @@
 <template>
-<!--<div>
-	<md-dialog :md-active.sync="showEventDialog">
-		<md-dialog-content>
-			<div v-if="event.mainseries !== undefined && event.mainseries.id && supportseries.length">
-				<md-chip v-for="(ss, index) in supportseries" :key="ss.id" class="md-primary" md-deletable @md-delete="removeSupportSeries(ss, index)">
-					{{ ss.name }}
-				</md-chip>
-			</div>
-
-			<md-autocomplete v-if="event.mainseries !== undefined && event.mainseries.id" v-model="chosenSupportSeries" :md-options="tmpSupportSeries.map(x=>({
-				'id':x.id,
-				'name':x.name,
-				'toLowerCase':()=>x.name.toLowerCase(),
-				'toString':()=>x.name
-			}))" :class="requiredSeries" :md-fuzzy-search="false"
-			>
-				<label>Support Series</label>
-				<template slot="md-autocomplete-item" slot-scope="{ item, term }">
-					<span class="color" :style="`background-color: ${item.color}`" />
-					<md-highlight-text :md-term="typeof term === 'object' && term.name ? term.name : term.toString()">
-						{{ item.name }}
-					</md-highlight-text>
-				</template>
-
-				<template slot="md-autocomplete-empty" slot-scope="{ term }">
-					"{{ term }}" not found!
-				</template>
-
-				<span class="md-error">Please choose a main series</span>
-			</md-autocomplete>
-
-			</div>
-		</md-dialog-content>
-	</md-dialog>
-</div>-->
 <Dialog :header="headline" :visible.sync="showEventDialog" :modal="true">
-	<!-- name, track, main series, support series, start, end, priority, logo -->
 	<div>
 		<span class="p-float-label">
 			<InputText id="name" v-model="event.name" type="text" class="full-width" />
@@ -79,6 +43,7 @@
 				:options="availableSupportSeries"
 				option-label="name"
 				option-value="id"
+				option-disabled="disabled"
 				placeholder="Select support series"
 				:filter="true"
 			>
@@ -260,28 +225,32 @@ export default {
 		// 		});
 		// 	}
 		// },
-		chosenMainSeries(newValue) {
-			if (typeof newValue !== 'object') return;
+		chosenMainSeries(newValue, oldValue) {
+			if (typeof newValue !== 'object') {
+				this.event.priority = '';
+				return;
+			}
 
 			this.event.priority = newValue.priority;
+			// disable new main series as support series
+			let obj = this.availableSupportSeries.find(s => s.id === newValue.id);
+			// eslint-disable-next-line no-undef
+			obj['disabled'] = true;
+			// enable old main series
+			if (typeof oldValue === 'object') {
+				obj = this.availableSupportSeries.find(s => s.id === oldValue.id);
+				obj['disabled'] = false;
+			}
+
+			// remove new main series as support series, if it was one
+			if (this.event.supportseries === undefined) return;
+
+			if (this.event.supportseries.includes(newValue.id)) {
+				let index = this.event.supportseries.indexOf(newValue.id);
+				this.event.supportseries.splice(index, 1);
+			}
+
 		}
-			// // if a main series is removed as main series, add it to the list of possible support series
-			// if (typeof newValue !== 'object') {
-			// 	if (oldValue.id && this.tmpSupportSeries.findIndex(ss => ss.id == oldValue.id) < 0)
-			// 		this.tmpSupportSeries.push(oldValue);
-			// 	this.event.priority = '';
-			// 	return;
-			// }
-		// 	// if a series is now the main series, remove it as an option for a support series
-		// 	let index = this.tmpSupportSeries.findIndex(ss => ss.id == newValue.id);
-		// 	if (index >= 0) {
-		// 		this.tmpSupportSeries.splice(index, 1);
-		// 	}
-		// 	// if a series is now the main series, remove it as support series if it had been one
-		// 	index = this.supportseries.findIndex(ss => ss.id == newValue.id);
-		// 	if (index >= 0) {
-		// 		this.supportseries.splice(index, 1);
-		// 	}
 		// 	// set priority for event
 		// 	// somewhat dirty hack, because this function will override the initial value set when editing an event
 		// 	// cannot guarantee the order since this is a watch-function
