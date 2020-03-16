@@ -18,7 +18,7 @@
     "insert_testdata": "node ./database/insert_testdata.js"
   },
   "dependencies": {
-    "@nuxtjs/auth": "^4.8.5",
+    "@nuxtjs/auth": "^4.9.0",
     "@nuxtjs/axios": "^5.9.5",
     "@types/async": "^3.0.8",
     "@types/bcryptjs": "^2.4.2",
@@ -30,7 +30,7 @@
     "async": "^3.2.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.5",
     "country-code-emoji": "^1.0.0",
     "country-list": "^2.2.0",
     "cross-env": "^7.0.2",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.2",
-    "@types/chai": "^4.2.10",
+    "@types/chai": "^4.2.11",
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "eslint": "^6.8.0",
