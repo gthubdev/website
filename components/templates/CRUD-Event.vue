@@ -71,14 +71,44 @@
 
 	<div class="p-grid p-align-center">
 		<div class="p-col-4">
+			Support series:
+		</div>
+		<div class="p-col-8">
+			<MultiSelect
+				v-model="chosenSupportSeries"
+				:options="availableSupportSeries"
+				option-label="name"
+				option-value="id"
+				placeholder="Select support series"
+				:filter="true"
+			>
+				<template #value="slotProps">
+					<div v-for="option of slotProps.value" :key="option.id" class="p-multiselect-ss-token">
+						<span>{{ findSeries(option) }}</span>
+					</div>
+					<div v-if="!slotProps.value || slotProps.value.length === 0">
+						Select Support Series
+					</div>
+				</template>
+				<template #option="slotProps">
+					<div class="p-multiselect-ss-option">
+						<span>
+							{{ slotProps.option.name }}
+						</span>
+					</div>
+				</template>
+			</MultiSelect>
+		</div>
+	</div>
+
+	<div class="p-grid p-align-center">
+		<div class="p-col-4">
 			Priority:
 		</div>
 		<div class="p-col-8">
 			<Dropdown v-model="chosenPriority" :options="availablePriorities" option-label="name" placeholder="Select a priority" />
 		</div>
 	</div>
-
-	<br />
 
 	<div class="p-fluid">
 		<Calendar
@@ -154,6 +184,8 @@ export default {
 			availableTracks: [],
 			chosenMainSeries: '',
 			availableMainSeries: [],
+			chosenSupportSeries: [],
+			availableSupportSeries: [],
 			chosenPriority: '',
 			availablePriorities: [],
 			chosenDates: [],
@@ -170,6 +202,7 @@ export default {
 
 			this.chosenTrack = '';
 			this.chosenMainSeries = '';
+			this.chosenSupportSeries = [];
 			this.chosenPriority = '';
 			this.chosenDates = [];
 		},
@@ -280,6 +313,7 @@ export default {
 		// }
 	},
 	created() {
+		this.availableSupportSeries = this.series;
 		for (let i = 1; i <= this.PRIORITY_MAX; i++)
 			this.availablePriorities.push(
 				{
@@ -319,6 +353,10 @@ export default {
 		},
 		validLogo() {
 			return this.event.logo.trim() === '' || this.event.logo.startsWith('https://') || this.event.logo.startsWith('http://');
+		},
+		findSeries(id) {
+			let obj = this.series.find(s => s.id === id);
+			return obj.shortname;
 		},
 		searchTrack(event) {
 			if (event.query.trim() === '')
@@ -387,5 +425,19 @@ export default {
 }
 .p-autocomplete {
 	width: 100% !important;
+}
+.p-multiselect-ss-option {
+	display: inline-block;
+	vertical-align: middle;
+}
+.p-multiselect-ss-token {
+	background: #FFB300;
+	color: #000;
+	padding: 2px 5px;
+	margin: 0 0.5em 0.4em 0;
+	display: inline-block;
+	vertical-align: middle;
+	height: 1.8em;
+	border-radius: 5px;
 }
 </style>
