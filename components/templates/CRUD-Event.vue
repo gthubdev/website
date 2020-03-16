@@ -327,6 +327,8 @@ export default {
 		sendRequest() {
 			this.event.track = this.chosenTrack.id;
 			this.event.mainseries = this.chosenMainSeries.id;
+			this.event.startdate = moment(this.chosenDates[0]).format('YYYY-MM-DD');
+			this.event.enddate = moment(this.chosenDates[1]).format('YYYY-MM-DD');
 			console.log('Event:', JSON.stringify(this.event));
 		},
 		validInput() {
