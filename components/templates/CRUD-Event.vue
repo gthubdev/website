@@ -75,7 +75,7 @@
 		</div>
 		<div class="p-col-8">
 			<MultiSelect
-				v-model="chosenSupportSeries"
+				v-model="event.supportseries"
 				:options="availableSupportSeries"
 				option-label="name"
 				option-value="id"
@@ -141,7 +141,7 @@
 	<template #footer>
 		<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
 		<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />
-		<Button v-if="validInput()" :label="action" icon="pi pi-check" />
+		<Button v-if="validInput()" :label="action" icon="pi pi-check" @click="sendRequest" />
 	</template>
 </Dialog>
 </template>
@@ -181,6 +181,7 @@ export default {
 				name: '',
 				track: '',
 				mainseries: '',
+				supportseries: [],
 				startdate: '',
 				enddate: '',
 				logo: '',
@@ -190,7 +191,6 @@ export default {
 			availableTracks: [],
 			chosenMainSeries: '',
 			availableMainSeries: [],
-			chosenSupportSeries: [],
 			availableSupportSeries: [],
 			availablePriorities: [],
 			chosenDates: [],
@@ -207,7 +207,6 @@ export default {
 
 			this.chosenTrack = '';
 			this.chosenMainSeries = '';
-			this.chosenSupportSeries = [];
 			this.chosenDates = [];
 		},
 		activeEvent(newValue) {
@@ -324,6 +323,11 @@ export default {
 	methods: {
 		close() {
 			this.showEventDialog = false;
+		},
+		sendRequest() {
+			this.event.track = this.chosenTrack.id;
+			this.event.mainseries = this.chosenMainSeries.id;
+			console.log('Event:', JSON.stringify(this.event));
 		},
 		validInput() {
 			return this.validName() &&
