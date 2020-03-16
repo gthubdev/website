@@ -106,7 +106,13 @@
 			Priority:
 		</div>
 		<div class="p-col-8">
-			<Dropdown v-model="chosenPriority" :options="availablePriorities" option-label="name" placeholder="Select a priority" />
+			<Dropdown
+				v-model="event.priority"
+				:options="availablePriorities"
+				option-label="name"
+				option-value="value"
+				placeholder="Select a priority"
+			/>
 		</div>
 	</div>
 
@@ -186,7 +192,6 @@ export default {
 			availableMainSeries: [],
 			chosenSupportSeries: [],
 			availableSupportSeries: [],
-			chosenPriority: '',
 			availablePriorities: [],
 			chosenDates: [],
 			PRIORITY_MAX: constants.PRIORITY_MAX
@@ -203,7 +208,6 @@ export default {
 			this.chosenTrack = '';
 			this.chosenMainSeries = '';
 			this.chosenSupportSeries = [];
-			this.chosenPriority = '';
 			this.chosenDates = [];
 		},
 		activeEvent(newValue) {
@@ -260,11 +264,7 @@ export default {
 		chosenMainSeries(newValue) {
 			if (typeof newValue !== 'object') return;
 
-			this.chosenPriority =
-				{
-					'value': newValue.priority,
-					'name': 'Priority ' + newValue.priority
-				};
+			this.event.priority = newValue.priority;
 		}
 			// // if a main series is removed as main series, add it to the list of possible support series
 			// if (typeof newValue !== 'object') {
@@ -343,7 +343,7 @@ export default {
 			return this.chosenMainSeries !== '' && this.chosenMainSeries.name;
 		},
 		validPriority() {
-			return !isNaN(Number(this.chosenPriority.value)) && Number(this.chosenPriority.value) >= 1 && Number(this.chosenPriority.value) <= this.PRIORITY_MAX;
+			return !isNaN(Number(this.event.priority)) && Number(this.event.priority) >= 1 && Number(this.event.priority) <= this.PRIORITY_MAX;
 		},
 		validDates() {
 			return this.chosenDates !== undefined &&
