@@ -1,20 +1,20 @@
-const db = require('../models');
+const { Event, EventSession, Series, Track } = require('../models');
 const ical = require('ical-generator');
 const moment = require('moment');
 const util = require('../util/util');
 
 module.exports.createIcal = async (req, res) => {
 	try {
-		const event = await db.Event.findOne({
+		const event = await Event.findOne({
 			where: { id: req.params.id },
 			include: [
 				{
-					model: db.EventSession,
+					model: EventSession,
 					include: [
-						{ model: db.Series }
+						{ model: Series }
 					]
 				},
-				{ model: db.Track }
+				{ model: Track }
 			]
 		});
 		const cal = ical({

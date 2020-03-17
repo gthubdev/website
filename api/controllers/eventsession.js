@@ -1,4 +1,4 @@
-const db = require('../models');
+const { Event, EventSession, Series } = require('../models');
 const util = require('../util/util.js');
 const moment = require('moment-timezone');
 
@@ -21,7 +21,7 @@ module.exports.createEventSession = async (req, res) => {
 
 	try {
 		// check for a start/end outside the event's dates
-		const event = await db.Event.findOne({
+		const event = await Event.findOne({
 			where: {id: req.body.session.event}
 		});
 		let ev_startdate = event.startdate;
@@ -38,12 +38,12 @@ module.exports.createEventSession = async (req, res) => {
 		}
 
 		// create
-		const newsession = await db.EventSession.create(req.body.session);
+		const newsession = await EventSession.create(req.body.session);
 		// query the newly created session to include series-info
-		const eventsession = await db.EventSession.findOne({
+		const eventsession = await EventSession.findOne({
 			where: {id: newsession.id},
 			include : [
-				{ model: db.Series }
+				{ model: Series }
 			]
 		});
 		util.print('EventSession \'' + eventsession.name + '\' created');
@@ -83,13 +83,13 @@ module.exports.updateEventSession = async (req, res) => {
 
 	try {
 		// check for a start/end outside the event's dates
-		const tmpsession = await db.EventSession.findOne({
+		const tmpsession = await EventSession.findOne({
 			where: {id: req.body.session.id},
 			include: [
-				{ model: db.Event }
+				{ model: Event }
 			]
 		});
-		const event = await db.Event.findOne({
+		const event = await Event.findOne({
 			where: {id: tmpsession.Event.id}
 		});
 		let ev_startdate = event.startdate;
@@ -106,18 +106,18 @@ module.exports.updateEventSession = async (req, res) => {
 		}
 
 		// update
-		const response = await db.EventSession.update(req.body.session,
+		const response = await EventSession.update(req.body.session,
 			{ where: { id: req.params.id } }
 		);
-		if (response[0] == 0)
+		if (response[0] === 0)
 			return;
 
 		util.print(response[0] + ' EventSession updated');
 
-		const session = await db.EventSession.findOne({
+		const session = await EventSession.findOne({
 			where: { id: req.params.id },
 			include: [
-				{ model: db.Series }
+				{ model: Series }
 			]
 		});
 		res.json(session.get({plain:true}));
@@ -128,7 +128,7 @@ module.exports.updateEventSession = async (req, res) => {
 
 module.exports.deleteEventSession = async (req, res) => {
 	try {
-		const response = await db.EventSession.destroy({
+		const response = await EventSession.destroy({
 			where: { id: req.params.id }
 		});
 		if (response >= 1)

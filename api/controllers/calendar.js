@@ -1,4 +1,4 @@
-const db = require('../models/');
+const { Event, EventSession, Track, Series, SupportSeries, SeriesType, VehicleClass, VehicleClassCategory} = require('../models/');
 const Sequelize = require('sequelize');
 const dateutil = require('../util/dateutil');
 const util = require('../util/util');
@@ -19,38 +19,38 @@ module.exports.getCalendarWithTimezone = (req, res) => {
 async function buildCalendar(req, res, timezone) {
 	try {
 		const [ events, series, tracks, vehicleclasscategories, vehicleclasses ] = await Sequelize.Promise.all([
-			db.Event.findAll({
+			Event.findAll({
 				include: [
-					{ model: db.Track },
-					{ model: db.Series },
+					{ model: Track },
+					{ model: Series },
 					{
-						model: db.SupportSeries,
+						model: SupportSeries,
 						include: [
-							{ model: db.Series }
+							{ model: Series }
 						]
 					},
 					{
-						model: db.EventSession,
+						model: EventSession,
 						include: [
-							{ model: db.Series }
+							{ model: Series }
 						]
 					}
 				],
 				order: [
 					['priority', 'ASC'],
 					['startdate', 'ASC'],
-					[db.EventSession, 'starttime', 'ASC']
+					[EventSession, 'starttime', 'ASC']
 				]
 			}),
-			db.Series.findAll({
+			Series.findAll({
 				include: [
 					{
-						model: db.SeriesType,
+						model: SeriesType,
 						include: [
 							{
-								model: db.VehicleClass,
+								model: VehicleClass,
 								include: [
-									{ model: db.VehicleClassCategory }
+									{ model: VehicleClassCategory }
 								]
 							}
 						]
@@ -61,22 +61,22 @@ async function buildCalendar(req, res, timezone) {
 					['name', 'ASC']
 				]
 			}),
-			db.Track.findAll({
+			Track.findAll({
 				order: [
 					['name', 'ASC']
 				]
 			}),
-			db.VehicleClassCategory.findAll({
+			VehicleClassCategory.findAll({
 				include: [
-					{ model: db.VehicleClass }
+					{ model: VehicleClass }
 				],
 				order: [
 					['name', 'ASC'],
 				]
 			}),
-			db.VehicleClass.findAll({
+			VehicleClass.findAll({
 				include: [
-					{ model: db.VehicleClassCategory }
+					{ model: VehicleClassCategory }
 				],
 				order: [
 					['name', 'ASC']

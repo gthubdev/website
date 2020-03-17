@@ -1,4 +1,4 @@
-const db = require('../models');
+const { Event, SupportSeries, Track, Series, EventSession } = require('../models');
 const Sequelize = require('sequelize');
 const util = require('../util/util.js');
 const moment = require('moment');
@@ -25,7 +25,7 @@ module.exports.createEvent = async (req, res) => {
 	}
 
 	try {
-		const newevent = await db.Event.create(req.body.event);
+		const newevent = await Event.create(req.body.event);
 
 		// build the array with the event.id for the support series
 		let supportarray = [];
@@ -35,30 +35,30 @@ module.exports.createEvent = async (req, res) => {
 				series: s.id
 			});
 		});
-		await db.SupportSeries.bulkCreate(supportarray);
+		await SupportSeries.bulkCreate(supportarray);
 
-		const event = await db.Event.findOne({
+		const event = await Event.findOne({
 			where: {id: newevent.id},
 			include: [
-				{ model: db.Track },
-				{ model: db.Series},
+				{ model: Track },
+				{ model: Series},
 				{
-					model: db.SupportSeries,
+					model: SupportSeries,
 					include: [
-						{ model: db.Series }
+						{ model: Series }
 					]
 				},
 				{
-					model: db.EventSession,
+					model: EventSession,
 					include: [
-						{ model: db.Series }
+						{ model: Series }
 					]
 				}
 			],
 			order: [
 				['priority', 'ASC'],
 				['startdate', 'ASC'],
-				[db.EventSession, 'starttime', 'ASC']
+				[EventSession, 'starttime', 'ASC']
 			]
 		});
 		util.print('Event \'' + event.name + '\' created');
@@ -98,10 +98,10 @@ module.exports.updateEvent = async (req, res) => {
 
 	try {
 		const [ updated, deleted ] = await Sequelize.Promise.all([
-			db.Event.update(req.body.event,
+			Event.update(req.body.event,
 				{ where: { id: req.params.id } }
 			),
-			db.SupportSeries.destroy({
+			SupportSeries.destroy({
 				where: { event: req.params.id }
 			})
 		]);
@@ -118,30 +118,30 @@ module.exports.updateEvent = async (req, res) => {
 				series: s.id
 			});
 		});
-		await db.SupportSeries.bulkCreate(supportarray);
+		await SupportSeries.bulkCreate(supportarray);
 
-		const event = await db.Event.findOne({
+		const event = await Event.findOne({
 			where: {id: req.params.id},
 			include: [
-				{ model: db.Track },
-				{ model: db.Series},
+				{ model: Track },
+				{ model: Series},
 				{
-					model: db.SupportSeries,
+					model: SupportSeries,
 					include: [
-						{ model: db.Series }
+						{ model: Series }
 					]
 				},
 				{
-					model: db.EventSession,
+					model: EventSession,
 					include: [
-						{ model: db.Series }
+						{ model: Series }
 					]
 				}
 			],
 			order: [
 				['priority', 'ASC'],
 				['startdate', 'ASC'],
-				[db.EventSession, 'starttime', 'ASC']
+				[EventSession, 'starttime', 'ASC']
 			]
 		});
 		res.json(event.get({plain:true}));
@@ -152,7 +152,7 @@ module.exports.updateEvent = async (req, res) => {
 
 module.exports.deleteEvent = async (req, res) => {
 	try {
-		const response = await db.Event.destroy({
+		const response = await Event.destroy({
 			where: { id: req.params.id }
 		});
 		if (response === 1)

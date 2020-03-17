@@ -1,4 +1,4 @@
-const db = require('../models/');
+const { User, Usertype, Auth } = require('../models/');
 const util = require('../util/util.js');
 const bCrypt = require('bcryptjs');
 const env = require('dotenv');
@@ -6,10 +6,10 @@ const jwt = require('jsonwebtoken');
 
 module.exports.login = async (req, res) => {
 	try {
-		const user = await db.User.findOne({
+		const user = await User.findOne({
 			where: { username: req.body.username },
 			include: [
-				{ model: db.Usertype }
+				{ model: Usertype }
 			]
 		});
 		if (!user) {
@@ -44,7 +44,7 @@ module.exports.logout = async (req, res) => {
 	try {
 		const token = req.header('Authorization').replace('Bearer ', '');
 		const data = jwt.verify(token, process.env.JWT_KEY);
-		const response = await db.Auth.destroy({
+		const response = await Auth.destroy({
 			where: { token: token }
 		});
 
@@ -63,7 +63,7 @@ module.exports.logout = async (req, res) => {
 
 module.exports.changepassword = async (req, res) => {
 	try {
-		const user = await db.User.findOne({
+		const user = await User.findOne({
 			where: { username: req.body.username }
 		});
 		if (user) {
@@ -109,7 +109,7 @@ module.exports.me = async (req, res) => {
 
 		const token = req.header('Authorization').replace('Bearer ', '');
 		const data = jwt.verify(token, process.env.JWT_KEY);
-		const user = await db.User.findOne({
+		const user = await User.findOne({
 			where: { id: data.id },
 			attributes: ['id', 'username', 'name', 'usertype']
 		});
@@ -137,7 +137,7 @@ async function generateToken(user) {
 	const gentoken = jwt.sign(info, process.env.JWT_KEY);
 
 	try {
-		await db.Auth.create({
+		await Auth.create({
 			user: user.id,
 			token: gentoken
 		});

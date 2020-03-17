@@ -1,4 +1,4 @@
-const db = require('../models');
+const { Track } = require('../models');
 const util = require('../util/util.js');
 const countryList = require('country-list');
 const moment = require('moment-timezone');
@@ -15,7 +15,7 @@ module.exports.createTrack = async (req, res) => {
 	}
 
 	try {
-		const track = await db.Track.create(req.body.track);
+		const track = await Track.create(req.body.track);
 		util.print('Track \'' + track.name + '\' created');
 		res.json(track.get({plain:true}));
 	} catch(err) {
@@ -35,7 +35,7 @@ module.exports.updateTrack = async (req, res) => {
 	}
 
 	try {
-		const response = await db.Track.update(req.body.track,
+		const response = await Track.update(req.body.track,
 			{ where: { id: req.params.id }
 		});
 		if (response[0] >= 1)
@@ -49,7 +49,7 @@ module.exports.updateTrack = async (req, res) => {
 module.exports.deleteTrack = async (req, res) => {
 	// A track cannot be deleted, if it is used in an event
 	try {
-		const response = await db.Track.destroy({
+		const response = await Track.destroy({
 			where: { id: req.params.id }
 		});
 		if (response >= 1)
