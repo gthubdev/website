@@ -78,9 +78,7 @@ describe('Series', () => {
 		];
 		each(series, async (s) => {
 			// Need this, because the controller is parsing req.body.series
-			let vehicleClasses = [];
-			vehicleClasses.push({id: vcl_id});
-			s.vehicleClasses = vehicleClasses;
+			s.vehicleClasses = [ vcl_id ];
 			let tmp = {
 				series : s
 			};
@@ -147,9 +145,7 @@ describe('Series', () => {
 		let series = { name: 'Test Series 1', shortname: 'TS1', priority: -2};
 		let tmp = {
 			series: series,
-			vehicleClasses: [
-				{ id: vcl_id }
-			]
+			vehicleClasses: [ vcl_id ]
 		};
 		try {
 			await supertest(server)
@@ -171,8 +167,7 @@ describe('Series', () => {
 					['id', 'DESC']
 				]
 			});
-			let vehicleClasses = [];
-			vehicleClasses.push({id: vcl_id});
+			let vehicleClasses = [ vcl_id ];
 			let tmp = {
 				series: {
 					id: series[0].id,
@@ -211,8 +206,7 @@ describe('Series', () => {
 					['id', 'DESC']
 				]
 			});
-			let vehicleClasses = [];
-			vehicleClasses.push({id: vcl_id});
+			let vehicleClasses = [ vcl_id ];
 			let tmp = {
 				series: {
 					id: series[0].id,
@@ -237,9 +231,7 @@ describe('Series', () => {
 			name: 'Test Series 6',
 			shortname: 'TS6',
 			priority: 1,
-			vehicleClasses: [
-				{ id: vcl_id }
-			]
+			vehicleClasses: [ vcl_id ]
 		};
 
 		try {
