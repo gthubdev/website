@@ -82,7 +82,7 @@ export default {
 				});
 		}
 	},
-	mounted() {
+	created() {
 		// set the tracks
 		this.shownTracks = this.tracks;
 
@@ -97,6 +97,7 @@ export default {
 
 			let track = JSON.parse(JSON.stringify(obj));
 			track.timezone = obj.timezone.name;
+
 			// create a track
 			if (this.showCreateDialog === true) {
 				try {
@@ -105,9 +106,8 @@ export default {
 					});
 					this.$root.$emit(strings.TRACK_CREATED, res);
 				} catch(err) {
-					console.log(JSON.stringify(err.response));
 					if (err.response)
-						alert(err.response);
+						alert(err.response.data);
 				}
 				this.showCreateDialog = false;
 			}
@@ -122,9 +122,8 @@ export default {
 					if (res.updated >= 1)
 						this.$root.$emit(strings.TRACK_UPDATED, track);
 				} catch(err) {
-					console.log(JSON.stringify(err.response));
 					if (err.response)
-						alert(err.response);
+						alert(err.response.data);
 				}
 				this.showUpdateDialog = false;
 			}

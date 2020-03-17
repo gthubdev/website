@@ -184,7 +184,7 @@ export default {
 				});
 		}
 	},
-	mounted() {
+	created() {
 		// set the events
 		this.shownEvents = this.events;
 

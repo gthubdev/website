@@ -82,7 +82,7 @@ export default {
 				});
 		}
 	},
-	mounted() {
+	created() {
 		// set the series
 		this.shownSeries = this.series;
 
@@ -92,11 +92,10 @@ export default {
 		});
 
 		// handle requests to create/update a series
-		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async (tmpseries, vehicleClasses) => {
+		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async obj => {
 			//console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
 
-			const series = JSON.parse(JSON.stringify(tmpseries));
-			series.vehicleClasses = vehicleClasses;
+			const series = JSON.parse(JSON.stringify(obj));
 
 			// create a series
 			if (this.showCreateDialog === true) {
@@ -122,7 +121,7 @@ export default {
 						series
 					});
 					if (res.id && res.id >= 1)
-					this.$root.$emit(strings.SERIES_UPDATED, res);
+						this.$root.$emit(strings.SERIES_UPDATED, res);
 				} catch(err) {
 					if (err.response)
 						alert(err.response.data);

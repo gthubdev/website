@@ -23,15 +23,16 @@
 		</div>
 		<div class="p-col-8">
 			<MultiSelect
-				v-model="chosenVC"
+				v-model="series.vehicleClasses"
 				:options="vc"
 				option-label="name"
+				option-value="id"
 				placeholder="Select vehicle classes"
 				:filter="true"
 			>
 				<template #value="slotProps">
 					<div v-for="option of slotProps.value" :key="option.id" class="p-multiselect-vc-token">
-						<span>{{ option.name }}</span>
+						<span>{{ findVehicleClass(option) }}</span>
 					</div>
 					<div v-if="!slotProps.value || slotProps.value.length === 0">
 						Select Vehicle Classes
@@ -122,9 +123,9 @@ export default {
 				shortname: '',
 				logo: '',
 				homepage: '',
+				vehicleClasses: [],
 				priority: ''
 			},
-			chosenVC: [],
 			availablePriorities: [],
 			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
@@ -137,8 +138,6 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_SERIES);
 
-			this.chosenVC = [];
-
 			if (newValue === true && this.updateMode === true && this.activeSeries !== undefined) {
 				// Might need to reset the object
 				this.resetActiveSeries();
@@ -149,7 +148,7 @@ export default {
 
 			this.series = newValue;
 
-			if (newValue === true && this.updateMode === true)
+			if (typeof newValue === 'object' && this.updateMode === true)
 				this.resetActiveSeries();
 		}
 	},
@@ -159,14 +158,15 @@ export default {
 				{
 					'value': i,
 					'name': 'Priority ' + i
-				});
+				}
+			);
 	},
 	methods: {
 		close() {
 			this.showSeriesDialog = false;
 		},
 		sendRequest() {
-			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series, this.chosenVC);
+			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series);
 		},
 		validInput() {
 			return this.validFullName() &&
@@ -192,14 +192,18 @@ export default {
 			return !isNaN(Number(this.series.priority)) && Number(this.series.priority) >= 1 && Number(this.series.priority) <= this.PRIORITY_MAX;
 		},
 		validVehicleClasses() {
-			return this.chosenVC && this.chosenVC.length && this.chosenVC.length > 0;
+			return this.series.vehicleClasses && this.series.vehicleClasses.length && this.series.vehicleClasses.length > 0;
+		},
+		findVehicleClass(id) {
+			let obj = this.vc.find(cl => cl.id === id);
+			return obj.name;
 		},
 		resetActiveSeries() {
 			this.series = JSON.parse(JSON.stringify(this.activeSeries));
 
             // set the vehicle classes
-			this.chosenVC = [];
-			this.activeSeries.SeriesTypes.forEach(t => this.chosenVC.push(t.VehicleClass));
+			this.series.vehicleClasses = [];
+			this.activeSeries.SeriesTypes.forEach(t => this.series.vehicleClasses.push(t.VehicleClass.id));
 		}
 	}
 };

@@ -114,7 +114,7 @@ export default {
 
 			this.track = newValue;
 
-			if (this.updateMode === true)
+			if (typeof newValue === 'object' && this.updateMode === true)
 				this.resetActiveTrack();
 		}
 	},

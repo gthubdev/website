@@ -1,4 +1,4 @@
-const db = require('../models/');
+const { Series, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
 const Sequelize = require('sequelize');
 const util = require('../util/util.js');
 
@@ -10,25 +10,25 @@ module.exports.createSeries = async (req, res) => {
 	}
 
 	try {
-		const newseries = await db.Series.create(req.body.series);
+		const newseries = await Series.create(req.body.series);
 		let vclarray = [];
 		req.body.series.vehicleClasses.forEach(vcl => {
 			vclarray.push({
 				series: newseries.id,
-				class: vcl.id
+				class: vcl
 			});
 		});
-		await db.SeriesType.bulkCreate(vclarray);
-		const series = await db.Series.findOne({
+		await SeriesType.bulkCreate(vclarray);
+		const series = await Series.findOne({
 				where: { id: newseries.id },
 				include: [
 					{
-						model: db.SeriesType,
+						model: SeriesType,
 						include: [
 							{
-								model: db.VehicleClass,
+								model: VehicleClass,
 								include: [
-									{ model: db.VehicleClassCategory }
+									{ model: VehicleClassCategory }
 								]
 							}
 						]
@@ -53,10 +53,10 @@ module.exports.updateSeries = async (req, res) => {
 
 	try {
 		const [ updated, deleted ] = await Sequelize.Promise.all([
-			db.Series.update(req.body.series,
+			Series.update(req.body.series,
 				{ where: { id: req.params.id } }
 			),
-			db.SeriesType.destroy({
+			SeriesType.destroy({
 				where: { series: req.params.id }
 			})
 		]);
@@ -71,20 +71,20 @@ module.exports.updateSeries = async (req, res) => {
 		req.body.series.vehicleClasses.forEach(vcl => {
 			vclarray.push({
 				series: req.params.id,
-				class: vcl.id
+				class: vcl
 			});
 		});
-		await db.SeriesType.bulkCreate(vclarray);
-		const series = await db.Series.findOne({
+		await SeriesType.bulkCreate(vclarray);
+		const series = await Series.findOne({
 			where: { id: req.params.id },
 			include: [
 				{
-					model: db.SeriesType,
+					model: SeriesType,
 					include: [
 						{
-							model: db.VehicleClass,
+							model: VehicleClass,
 							include: [
-								{ model: db.VehicleClassCategory }
+								{ model: VehicleClassCategory }
 							]
 						}
 					]
@@ -102,7 +102,7 @@ module.exports.deleteSeries = async (req, res) => {
 	// A series cannot be deleted, if it is the main series of an event,
 	// used as a support series in an event or used in an event session
 	try {
-		const response = await db.Series.destroy({
+		const response = await Series.destroy({
 			where: { id: req.params.id }
 		});
 		if (response >= 1)
