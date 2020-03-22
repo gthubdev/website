@@ -26,10 +26,6 @@ module.exports = {
 				rel: 'icon',
 				type: 'image/x-icon',
 				href: '/favicon.ico'
-			},
-			{
-				rel: 'stylesheet',
-				href: '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
 			}
 		]
 	},
@@ -68,8 +64,7 @@ module.exports = {
 	modules: [
 		// Doc: https://axios.nuxtjs.org/usage
 		'@nuxtjs/axios',
-		'@nuxtjs/auth',
-		'nuxt-vue-material'
+		'@nuxtjs/auth'
 	],
 	/*
 	** Axios module configuration
@@ -110,12 +105,6 @@ module.exports = {
 			home: '/',
 			callback: '/'
 		}
-	},
-	/*
-	 ** Vue Material config
-	*/
-	vueMaterial: {
-		theme: 'default-dark'
 	},
 
 	/*

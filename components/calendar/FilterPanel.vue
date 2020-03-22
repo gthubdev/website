@@ -1,13 +1,17 @@
 <template>
-<div class="filter">
-	<div style="margin-bottom: 1em">
-		FILTER-BOX
+<div class="p-grid">
+	<div class="p-col-12 filter">
+		<div class="filter-headline">
+			Filter
+		</div>
+		<div class="headline-sep-line" />
 	</div>
-	<Button
+
+<!--	<Button
 		:label="showCurrentEventsLabel"
 		class="p-button-raised p-button-info"
 		@click="toggleCurrentEvents()"
-	/>
+	/>-->
 </div>
 </template>
 
@@ -35,10 +39,13 @@ export default {
 
 <style lang="scss" scoped>
 .filter {
-	font-family: Roboto, sans-serif;
-	font-size: 24px;
-	margin: 1em;
-	padding: 1em;
-	border: 2px solid blue;
+	padding: 0 2em 0 2em;
+}
+.filter-headline {
+	padding: 1em 0 .25em 0;
+	font-size: 2em;
+	font-variant: small-caps;
+	font-weight: bold;
+	color: #F7F7F7;
 }
 </style>
