@@ -1,17 +1,17 @@
 <template>
 <div class="p-grid">
-	<div class="p-col-3">
+	<!--<div class="p-col-12">
 		<FilterPanel
 			:show-current-events="showCurrentEvents"
 		/>
-	</div>
+	</div>-->
 
-	<div class="p-col-9">
+	<div class="p-col-12">
 		<div class="headline">
 			{{ headline }}<br />
 		</div>
 
-		<div style="margin-bottom: 1em;">
+		<!--<div style="margin-bottom: 1em;">
 			<AutoComplete v-model="selectedTimezone" :suggestions="timeZones" :dropdown="true" placeholder="Timezone" class="full-width" field="display" @complete="searchTimezone($event)">
 				<template #item="slotProps" class="full-width">
 					<div class="p-clearfix width-50">
@@ -19,7 +19,7 @@
 					</div>
 				</template>
 			</AutoComplete>
-		</div>
+		</div>-->
 
 		<div class="p-grid">
 			<Event
@@ -41,14 +41,14 @@
 
 <script>
 import Event from '~/components/calendar/Event.vue';
-import FilterPanel from '~/components/calendar/FilterPanel.vue';
+//import FilterPanel from '~/components/calendar/FilterPanel.vue';
 import { strings } from '~/plugins/constants';
 
 import moment from 'moment-timezone';
 
 export default {
 	components: {
-		Event, FilterPanel
+		Event//, FilterPanel
 	},
 	async asyncData({
 		$axios
@@ -158,9 +158,11 @@ export default {
 <style lang="scss">
 .headline {
 	padding: 1em 0;
-	font-size: 2.5em;
+	font-size: 2em;
 	font-variant: small-caps;
 	font-weight: bold;
+	color: #F7F7F7;
+	text-align: center;
 }
 .p-autocomplete-input {
 	min-width: 50% !important;

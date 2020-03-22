@@ -1,10 +1,10 @@
 <template>
-<div class="p-col-4">
+<div class="p-col-12 p-lg-6 p-xl-4">
 	<Card class="card">
 		<template slot="content">
 			<div class="p-grid p-align-center">
 				<div class="p-col-3">
-					<img :src="eventLogo" alt="Logo" />
+					<img :src="eventLogo" alt="Logo" style="width:100%;height:100%;object-fit:cover;" />
 				</div>
 				<div class="p-col-9" style="word-wrap: break-spaces">
 					<span class="event-headline">{{ event.name }}</span>
@@ -79,10 +79,10 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-	background: rgba(32, 32, 32, 0.3);
+	background: rgba(32, 32, 32, .5);
 	margin: 1em;
 	padding: 1em;
-	border: 3px solid rgba(255, 255, 255, .3);
+	border: 3px solid rgba(255, 255, 255, .4);
 	border-radius: 25px;
 }
 .event-headline {
