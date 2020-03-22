@@ -7,10 +7,10 @@
 					<img :src="eventLogo" alt="Logo" />
 				</div>
 				<div class="p-col-9" style="word-wrap: break-spaces">
-					<span style="font-size: 1.5em; font-weight: bold; word-wrap: break-word">{{ event.Series.name }}</span>
+					<span class="event-headline">{{ event.name }}</span>
 					<br />
 					<div class="headline-sep-line" />
-					{{ event.name }}
+					{{ event.Series.name }}
 					<br />
 					{{ event.Track.name }}, {{ event.Track.country }}
 				</div>
@@ -18,16 +18,19 @@
 			<div class="dates">
 				{{ startdate }} - {{ enddate }}
 			</div>
+			<div class="sessions">
+				Click to show sessions
+			</div>
 			<div v-if="!event.SupportSeries.length" class="no-supportseries">
 				No Support Series.
 			</div>
 			<div v-if="event.SupportSeries.length" class="supportseries">
-				Support Series:
-				<ul>
-					<li v-for="item in event.SupportSeries" :key="item.id">
-						{{ item.Series.name }}
-					</li>
-				</ul>
+				Support Series: <br />
+				<div style="height: .4em" />
+				<div v-for="(key, val, index) in event.SupportSeries" :key="key.id" class="supportseries-item">
+					<i class="pi pi-arrow-circle-right" style="vertical-align: middle;" /> {{ key.Series.name }}
+					<br v-if="index !== event.SupportSeries.length - 1" />
+				</div>
 			</div>
 		</template>
 	</Card>
@@ -49,10 +52,10 @@ export default {
     },
     computed: {
         startdate() {
-            return moment(this.event.startdate).format('ddd Do MMM YYYY');
+            return moment(this.event.startdate).format('ddd Do MMM');
         },
         enddate() {
-            return moment(this.event.enddate).format('ddd Do MMM YYYY');
+            return moment(this.event.enddate).format('ddd Do MMM');
         },
         eventLogo() {
             if (this.event.logo.length)
@@ -79,8 +82,13 @@ export default {
 	background: rgba(32, 32, 32, 0.3);
 	margin: 1em;
 	padding: 1em;
-	border: white 1px solid;
+	border: 3px solid rgba(255, 255, 255, .3);
 	border-radius: 25px;
+}
+.event-headline {
+	font-size: 1.5em;
+	font-weight: bold;
+	word-wrap: break-word;
 }
 .dates {
 	border-top: white 1px solid;
@@ -88,8 +96,17 @@ export default {
 	margin: .75em 0;
 	padding: .75em 0;
 	text-align: center;
-	font-size: 1.3em;
+	font-size: 1.2em;
 	font-weight: bold;
+}
+.sessions {
+	border-bottom: white 1px solid;
+	margin: 0 0 .75em 0;
+	padding: 0 0 .75em 0;
+	text-align: center;
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #ed6400;
 }
 .no-supportseries {
 	font-size: 1.1em;
@@ -98,5 +115,13 @@ export default {
 .supportseries {
 	font-size: 1.1em;
 	font-weight: bold;
+}
+.supportseries-item {
+	margin-left: 2em;
+	line-height: 1.5em;
+	vertical-align: middle;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 </style>
