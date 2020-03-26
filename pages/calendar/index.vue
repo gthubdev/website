@@ -7,9 +7,9 @@
 	</div>-->
 
 	<div class="p-col-12">
-		<div class="headline">
+		<h1 class="headline">
 			{{ headline }}<br />
-		</div>
+		</h1>
 
 		<!--<div style="margin-bottom: 1em;">
 			<AutoComplete v-model="selectedTimezone" :suggestions="timeZones" :dropdown="true" placeholder="Timezone" class="full-width" field="display" @complete="searchTimezone($event)">
@@ -157,7 +157,6 @@ export default {
 
 <style lang="scss">
 .headline {
-	padding: 1em 0;
 	font-size: 2em;
 	font-variant: small-caps;
 	font-weight: bold;

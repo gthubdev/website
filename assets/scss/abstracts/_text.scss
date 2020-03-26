@@ -1,3 +1,9 @@
+@import '../abstracts/fonts';
+
+h1 {
+  	font-family: $default-family;
+}
+
 h2 {
 	font-size: 2em;
 	color: #F7F7F7;
