@@ -4,7 +4,7 @@
 		<template slot="content">
 			<div class="p-grid p-align-center">
 				<div class="p-col-3">
-					<img :src="eventLogo" alt="Logo" style="width:100%;height:100%;object-fit:cover;" />
+					<img :src="eventLogo" alt="Logo" style="width:100%; height:100%; object-fit:cover;" />
 				</div>
 				<div class="p-col-9" style="word-wrap: break-spaces">
 					<span class="event-headline">{{ event.name }}</span>
@@ -84,6 +84,7 @@ export default {
 	padding: 1em;
 	border: 3px solid rgba(255, 255, 255, .4);
 	border-radius: 25px;
+	max-width: 500px;
 }
 .event-headline {
 	font-size: 1.5em;
