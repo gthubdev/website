@@ -1,25 +1,42 @@
-
 <template>
 <div>
 	<nav class="topnav">
 		<a href="/" class="logoref">
 			<img class="logo" src="~/assets/img/GTHubNoBackground.svg" alt="GTHub's logo" />
 		</a>
-		<div class="buttonContainer">
-			<Button v-if="loggedIn" :label="displayUsername()" class="p-button-raised p-button-rounded p-button-secondary" />
-			<Button label="Home" class="p-button-raised p-button-rounded p-button-secondary" onclick="window.location.href = '/home';" />
-			<Button label="Calendar" class="p-button-raised p-button-rounded p-button-secondary" onclick="window.location.href = '/calendar';" />
-			<Button label="Gallery" class="p-button-raised p-button-rounded p-button-secondary" @click="testClick()" />
-			<Button label="About" class="p-button-raised p-button-rounded p-button-secondary" @click="testClick()" />
-			<Button v-if="loggedIn" label="Resources" class="p-button-raised p-button-rounded p-button-secondary" onclick="window.location.href = '/resources';" />
-			<Button v-if="!loggedIn" label="LOGIN" class="p-button-raised p-button-rounded" @click="login()" />
-			<Button v-if="loggedIn" label="LOGOUT" class="p-button-raised p-button-rounded" @click="logout()" />
-
+		<div class="p-grid buttonContainer">
+			<div class="p-col">
+				<span class="nav-btn nav-btn-secondary">
+					<nuxt-link to="/">HOME</nuxt-link>
+				</span>
+			</div>
+			<div class="p-col">
+				<span class="nav-btn nav-btn-secondary">
+					<nuxt-link to="/calendar">CALENDAR</nuxt-link>
+				</span>
+			</div>
+			<!--<div class="p-col">
+				<span class="nav-btn nav-btn-secondary">
+					<nuxt-link to="/about">ABOUT</nuxt-link>
+				</span>
+			</div>-->
+			<div v-if="loggedIn" class="p-col">
+				<span class="nav-btn nav-btn-secondary">
+					<nuxt-link to="/resources">RESOURCES</nuxt-link>
+				</span>
+			</div>
+			<div v-if="!loggedIn" class="p-col">
+				<span class="nav-btn nav-btn-primary" @click="login">LOGIN</span>
+			</div>
+			<div v-if="loggedIn" class="p-col">
+				<span class="nav-btn nav-btn-primary" @click="logout">LOGOUT</span>
+			</div>
+			<!--
 			<md-button class="icon md-primary" @click="responsive()">
 				<md-icon style="color:white;">
 					menu
 				</md-icon>
-			</md-button>
+			</md-button>-->
 		</div>
 	</nav>
 </div>
