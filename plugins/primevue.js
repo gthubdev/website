@@ -31,6 +31,9 @@ Vue.component('InputText', InputText);
 // MultiSelect
 import MultiSelect from 'primevue/multiselect';
 Vue.component('MultiSelect', MultiSelect);
+// Overlay Panel
+import OverlayPanel from 'primevue/overlaypanel';
+Vue.component('OverlayPanel', OverlayPanel);
 // Tabs
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
