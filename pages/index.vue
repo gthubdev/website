@@ -1,21 +1,24 @@
 <template>
 <section>
-	<div class="container">
-		<div class="first">
-			<div class="line" />
-			<h1 class="title">
+	<div class="p-grid p-justify-center index-container">
+		<div class="p-col-4">
+			<div class="headline-sep-line" />
+			<div class="index-headline">
 				GTHub
-			</h1>
-			<div class="line mobile" />
-			<p class="subtitle">
-				The motorsports Discord you need.<br /> Join <span class="bold">more than 1000</span> car and motorsports enthusiasts <br /> with the click of a button!
+			</div>
+			<p class="index-subhead">
+				The motorsports Discord you need.<br />
+				Join <span class="bold">more than 1500</span> car and motorsports enthusiasts<br />
+				with the click of a button!
 			</p>
-			<md-button id="join" class="md-raised md-primary btn-primary" href="http://discord.gg/jeHEW8X">
-				JOIN US
-			</md-button>
+			<p>
+				<span id="join" class="join-btn btn-primary">
+					<a href="http://discord.gg/jeHEW8X">JOIN US</a>
+				</span>
+			</p>
 		</div>
-		<div class="second">
-			<img src="~/assets/img/LamboSplash.png" alt="Picture of a Lamborghini race car" />
+		<div class="p-col-6">
+			<img src="~/assets/img/LamboSplash.png" alt="Picture of a Lamborghini race car" class="index-img" />
 		</div>
 	</div>
 </section>
@@ -27,3 +30,17 @@ export default {
 	components: {}
 };
 </script>
+
+<style lang="scss" scoped>
+.index-img {
+	width: 100%;
+}
+.bold {
+	color: #df1652;
+	font-weight: 800;
+}
+.join-btn {
+	padding: .75em 3em .75em 3em;
+	border-radius: 20px;
+}
+</style>
