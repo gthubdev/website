@@ -1,119 +1,119 @@
 .topnav {
-    .logoref {
-        height: inherit;
-    }
+	.logoref {
+		height: inherit;
+	}
 
-    .logo {
-        height: 100%;
-        min-width: 5em;
-        padding-bottom: 5px;
-        padding-top: 5px;
-        width: auto;
-    }
+	.logo {
+		height: 100%;
+		min-width: 5em;
+		padding-bottom: 5px;
+		padding-top: 5px;
+		width: auto;
+	}
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-image: $default-gradient;
-    border-image-slice: 1;
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 4px solid;
-    margin-right: 10em;
-    margin-left: 10em;
-    padding-right: 2.5em;
-    padding-left: 2.5em;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    height: 4em;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-image: $default-gradient;
+	border-image-slice: 1;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 4px solid;
+	margin-right: 10em;
+	margin-left: 10em;
+	padding-right: 2.5em;
+	padding-left: 2.5em;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	height: 4em;
 
-    .md-button-content {
-        color: white;
-    }
+	.md-button-content {
+		color: white;
+	}
 
-    .icon {
-        display: none;
-    }
+	.icon {
+		display: none;
+	}
 }
 
 @media screen and (max-width: 600px) {
-    .topnav {
-        margin-left: 5em;
-        margin-right: 5em;
+	.topnav {
+		margin-left: 5em;
+		margin-right: 5em;
 
-        .icon {
-            display: inline-block;
-        }
+		.icon {
+			display: inline-block;
+		}
 
-        button {
-            &:not(:last-child) {
-                display: none;
-            }
-        }
+		button {
+			&:not(:last-child) {
+				display: none;
+			}
+		}
 
-        a.md-button {
-            display: none;
-        }
-    }
+		a.md-button {
+			display: none;
+		}
+	}
 }
 
 @media screen and (max-width: 1100px) {
-    .topnav.responsive {
-        padding-left: 0;
-        padding-right: 0;
-        position: relative;
+	.topnav.responsive {
+		padding-left: 0;
+		padding-right: 0;
+		position: relative;
 
-        .logo {
-            padding-bottom: 13px;
-        }
+		.logo {
+			padding-bottom: 13px;
+		}
 
-        button {
-            margin-left: 8px;
+		button {
+			margin-left: 8px;
 
-            &:not(:last-child) {
-                display: inline-block;
-            }
-        }
+			&:not(:last-child) {
+				display: inline-block;
+			}
+		}
 
-        a.md-button {
-            display: inline-block;
-            margin-left: 8px;
-        }
+		a.md-button {
+			display: inline-block;
+			margin-left: 8px;
+		}
 
-        .md-raised {
-            width: 10em;
-        }
+		.md-raised {
+			width: 10em;
+		}
 
-        .buttonContainer {
-            background-color: #262d34;
-            border-bottom: 4px solid;
-            border-image: $default-gradient;
-            border-image-slice: 1;
-            border-left: 0;
-            border-right: 0;
-            border-top: 0;
-            display: flex;
-            width: 100%;
-        }
-    }
+		.buttonContainer {
+			background-color: #262d34;
+			border-bottom: 4px solid;
+			border-image: $default-gradient;
+			border-image-slice: 1;
+			border-left: 0;
+			border-right: 0;
+			border-top: 0;
+			display: flex;
+			width: 100%;
+		}
+	}
 
-    .topnav {
-        margin-left: 5em;
-        margin-right: 5em;
+	.topnav {
+		margin-left: 5em;
+		margin-right: 5em;
 
-        .icon {
-            display: inline-block;
-        }
+		.icon {
+			display: inline-block;
+		}
 
-        button {
-            &:not(:last-child) {
-                display: none;
-            }
-        }
+		button {
+			&:not(:last-child) {
+				display: none;
+			}
+		}
 
-        a.md-button {
-            display: none;
-        }
-    }
+		a.md-button {
+			display: none;
+		}
+	}
 }

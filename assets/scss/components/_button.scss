@@ -1,33 +1,33 @@
 @import '../abstracts/variables';
 
 .nav-btn {
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: .8em;
-  font-family: "Open Sans", sans-serif;
-  margin: 1em 0 1em 0;
-  color: #F7F7F7;
-  cursor: pointer;
+	border-radius: 10px;
+	font-weight: bold;
+	font-size: .8em;
+	font-family: "Open Sans", sans-serif;
+	margin: 1em 0 1em 0;
+	color: #F7F7F7;
+	cursor: pointer;
 }
 
 .nav-btn-primary {
-  background-image: $default-gradient;
-  padding: .5em 1.3em .5em 1.3em;
+	background-image: $default-gradient;
+	padding: .5em 1.3em .5em 1.3em;
 }
 
 .nav-btn-secondary {
-  padding: .5em .5em .5em .5em;
+	padding: .5em .5em .5em .5em;
 }
 
 
 .btn-primary {
-  background-image: $default-gradient;
-  border-radius: 10px;
-  font-weight: bold;
+	background-image: $default-gradient;
+	border-radius: 10px;
+	font-weight: bold;
 }
 
 .btn-secondary {
-  background-color: white !important;
-  color: black !important;
-  border-radius: 10px;
+	background-color: white !important;
+	color: black !important;
+	border-radius: 10px;
 }
