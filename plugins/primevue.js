@@ -34,6 +34,9 @@ Vue.component('MultiSelect', MultiSelect);
 // Overlay Panel
 import OverlayPanel from 'primevue/overlaypanel';
 Vue.component('OverlayPanel', OverlayPanel);
+// Password
+import Password from 'primevue/password';
+Vue.component('Password', Password);
 // Tabs
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
