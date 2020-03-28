@@ -128,7 +128,7 @@ export default {
 		},
 		sendRequest() {
 			//console.log(JSON.stringify(this.track));
-			this.$root.$emit(strings.SEND_REQUEST_CRUD_TRACK, this.track);
+			this.$parent.$emit(strings.SEND_REQUEST_CRUD_TRACK, this.track);
 		},
 		validInput() {
 			return this.validTrackName() &&

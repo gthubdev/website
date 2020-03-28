@@ -35,12 +35,14 @@
 	<CreateTrack
 		:show-dialog="showCreateDialog"
 		:tz="tz"
+		@send-request-crud-track="sendCreateRequest"
 	/>
 
 	<UpdateTrack
 		:show-dialog="showUpdateDialog"
 		:active-track="activeTrack"
 		:tz="tz"
+		@send-request-crud-track="sendUpdateRequest"
 	/>
 </div>
 </template>
@@ -90,44 +92,6 @@ export default {
 			this.showCreateDialog = false;
 			this.showUpdateDialog = false;
 		});
-
-		// handle requests to create/update a track
-		this.$root.$on(strings.SEND_REQUEST_CRUD_TRACK, async obj => {
-			// console.log('RECEIVED CREATE/UPDATE TRACK REQUEST');
-
-			let track = JSON.parse(JSON.stringify(obj));
-			track.timezone = obj.timezone.name;
-
-			// create a track
-			if (this.showCreateDialog === true) {
-				try {
-					const res = await this.$axios.$post('/api/calendar/track/create', {
-						track
-					});
-					this.$root.$emit(strings.TRACK_CREATED, res);
-				} catch(err) {
-					if (err.response)
-						alert(err.response.data);
-				}
-				this.showCreateDialog = false;
-			}
-			// update a track
-			if (this.showUpdateDialog === true) {
-				// no need to update that
-				delete track.createdAt;
-				try {
-					const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
-						track
-					});
-					if (res.updated >= 1)
-						this.$root.$emit(strings.TRACK_UPDATED, track);
-				} catch(err) {
-					if (err.response)
-						alert(err.response.data);
-				}
-				this.showUpdateDialog = false;
-			}
-		});
 	},
 	methods: {
 		createTrack() {
@@ -139,6 +103,41 @@ export default {
 		},
 		deleteTrack(track) {
 			this.$root.$emit(strings.CONFIRM_DELETE_TRACK, track);
+		},
+		async sendCreateRequest(obj) {
+			let track = JSON.parse(JSON.stringify(obj));
+			track.timezone = obj.timezone.name;
+			// console.log('Creating a track: ', track);
+
+			try {
+				const res = await this.$axios.$post('/api/calendar/track/create', {
+					track
+				});
+				this.$root.$emit(strings.TRACK_CREATED, res);
+			} catch(err) {
+				if (err.response)
+					alert(err.response.data);
+			}
+			this.showCreateDialog = false;
+		},
+		async sendUpdateRequest(obj) {
+			let track = JSON.parse(JSON.stringify(obj));
+			track.timezone = obj.timezone.name;
+			// console.log('Updating a track: ', track);
+
+			// no need to update that
+			delete track.createdAt;
+			try {
+				const res = await this.$axios.$post('/api/calendar/track/update/' + track.id, {
+					track
+				});
+				if (res.updated >= 1)
+					this.$root.$emit(strings.TRACK_UPDATED, track);
+			} catch(err) {
+				if (err.response)
+					alert(err.response.data);
+			}
+			this.showUpdateDialog = false;
 		}
 	}
 };
