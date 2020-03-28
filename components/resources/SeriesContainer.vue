@@ -8,8 +8,8 @@
 		</div>
 		<div class="p-col-4">
 			<span class="p-float-label">
-				<InputText id="searchTerm" v-model="searchTerm" type="text" class="full-width" />
-				<label for="searchTerm">Search term</label>
+				<InputText id="seriesSearchTerm" v-model="searchTerm" type="text" class="full-width" />
+				<label for="seriesSearchTerm">Search term</label>
 			</span>
 		</div>
 		<div class="p-col-4 align-right">
