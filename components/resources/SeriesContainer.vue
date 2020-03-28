@@ -35,12 +35,14 @@
 	<CreateSeries
 		:show-dialog="showCreateDialog"
 		:vc="vehicleclasses"
+		@send-request-crud-series="sendCreateRequest"
 	/>
 
 	<UpdateSeries
 		:show-dialog="showUpdateDialog"
 		:active-series="activeSeries"
 		:vc="vehicleclasses"
+		@send-request-crud-series="sendUpdateRequest"
 	/>
 </div>
 </template>
@@ -90,45 +92,6 @@ export default {
 			this.showCreateDialog = false;
 			this.showUpdateDialog = false;
 		});
-
-		// handle requests to create/update a series
-		this.$root.$on(strings.SEND_REQUEST_CRUD_SERIES, async obj => {
-			//console.log('RECEIVED CREATE/UPDATE SERIES REQUEST');
-
-			const series = JSON.parse(JSON.stringify(obj));
-
-			// create a series
-			if (this.showCreateDialog === true) {
-				//console.log('Creating a series.');
-				try {
-					const res = await this.$axios.$post('/api/calendar/series/create', {
-						series
-					});
-					this.$root.$emit(strings.SERIES_CREATED, res);
-				} catch(err) {
-					if (err.response)
-						alert(err.response.data);
-				}
-				this.showCreateDialog = false;
-			}
-			// update a series
-			if (this.showUpdateDialog === true) {
-				//console.log('Updating a series.');
-				// no need to update that
-				delete series.createdAt;
-				try {
-					const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
-						series
-					});
-					if (res.id && res.id >= 1)
-						this.$root.$emit(strings.SERIES_UPDATED, res);
-				} catch(err) {
-					if (err.response)
-						alert(err.response.data);
-				}
-				this.showUpdateDialog = false;
-			}
-		});
 	},
 	methods: {
 		createSeries() {
@@ -142,8 +105,41 @@ export default {
 		},
 		deleteSeries(series) {
 			this.$root.$emit(strings.CONFIRM_DELETE_SERIES, series);
+		},
+		async sendCreateRequest(obj) {
+			const series = JSON.parse(JSON.stringify(obj));
+			// console.log('Creating a series: ', series);
+
+			try {
+				const res = await this.$axios.$post('/api/calendar/series/create', {
+					series
+				});
+				this.$root.$emit(strings.SERIES_CREATED, res);
+			} catch(err) {
+				if (err.response)
+					alert(err.response.data);
+			}
+			this.showCreateDialog = false;
+		},
+		async sendUpdateRequest(obj) {
+			const series = JSON.parse(JSON.stringify(obj));
+			// console.log('Updating a series: ', series);
+
+			// no need to update that
+			delete series.createdAt;
+			try {
+				const res = await this.$axios.$post('/api/calendar/series/update/' + series.id, {
+					series
+				});
+				if (res.id && res.id >= 1)
+					this.$root.$emit(strings.SERIES_UPDATED, res);
+			} catch(err) {
+				if (err.response)
+					alert(err.response.data);
+			}
+			this.showUpdateDialog = false;
 		}
-	}
+	},
 };
 </script>
 

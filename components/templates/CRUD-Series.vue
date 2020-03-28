@@ -166,7 +166,7 @@ export default {
 			this.showSeriesDialog = false;
 		},
 		sendRequest() {
-			this.$root.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series);
+			this.$parent.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series);
 		},
 		validInput() {
 			return this.validFullName() &&
