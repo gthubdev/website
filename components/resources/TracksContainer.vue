@@ -19,14 +19,15 @@
 
 	<DataView :value="shownTracks" paginator-position="bottom" :paginator="true" :rows="itemsPerPage" :always-show-paginator="false">
 		<template #list="slotProps">
-			<div class="p-grid p-align-center">
-				<div class="p-col-9">
-					<b>{{ slotProps.data.name }}</b>
-				</div>
-				<div class="p-col-3 align-right">
-					<Button icon="pi pi-pencil" @click="updateTrack(slotProps.data)" />
-					&nbsp; &nbsp;
-					<Button icon="pi pi-trash" @click="deleteTrack(slotProps.data)" />
+			<div class="p-col-12">
+				<div class="resource-list-item">
+					<div>
+						<b>{{ slotProps.data.name }}</b>
+					</div>
+					<div>
+						<Button icon="pi pi-pencil" @click="updateTrack(slotProps.data)" />
+						<Button icon="pi pi-trash" @click="deleteTrack(slotProps.data)" />
+					</div>
 				</div>
 			</div>
 		</template>

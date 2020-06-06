@@ -46,5 +46,5 @@ Vue.component('TabPanel', TabPanel);
 import Toast from 'primevue/toast';
 Vue.component('Toast', Toast);
 // ValidationMessage
-import ValidationMessage from 'primevue/validationmessage';
-Vue.component('ValidationMessage', ValidationMessage);
+//import ValidationMessage from 'primevue/validationmessage';
+//Vue.component('ValidationMessage', ValidationMessage);
