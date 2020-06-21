@@ -37,6 +37,9 @@ Vue.component('OverlayPanel', OverlayPanel);
 // Password
 import Password from 'primevue/password';
 Vue.component('Password', Password);
+// Picklist
+import PickList from 'primevue/picklist';
+Vue.component('PickList', PickList);
 // Tabs
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';

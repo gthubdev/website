@@ -191,10 +191,5 @@ export default {
 </script>
 
 <style lang="scss">
-.p-autocomplete-input {
-	min-width: 90% !important;
-}
-.p-autocomplete {
-	width: 100% !important;
-}
+
 </style>

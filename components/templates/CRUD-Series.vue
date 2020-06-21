@@ -18,43 +18,41 @@
 
 	<br />
 	<div class="p-grid p-align-center">
-		<div class="p-col-4">
+		<div class="p-col-2">
 			Vehicle classes:
 		</div>
-		<div class="p-col-8">
-			<MultiSelect
-				v-model="series.vehicleClasses"
-				:options="vc"
-				option-label="name"
-				option-value="id"
-				placeholder="Select vehicle classes"
-				:filter="true"
+		<div class="p-col-10">
+			<PickList
+				v-model="pickListData"
+				data-key="id"
+				@move-to-source="sourceListChanged()"
+				@move-all-to-source="sourceListChanged()"
+				@move-to-target="targetListChanged()"
+				@move-all-to-target="targetListChanged()"
 			>
-				<template #value="slotProps">
-					<div v-for="option of slotProps.value" :key="option.id" class="p-multiselect-vc-token">
-						<span>{{ findVehicleClass(option) }}</span>
-					</div>
-					<div v-if="!slotProps.value || slotProps.value.length === 0">
-						Select Vehicle Classes
-					</div>
+				<template #sourceHeader>
+					Available
 				</template>
-				<template #option="slotProps">
+				<template #targetHeader>
+					Selected
+				</template>
+				<template #item="slotProps">
 					<div class="p-multiselect-vc-option">
 						<span>
-							{{ slotProps.option.name }} ({{ slotProps.option.VehicleClassCategory.name }})
+							{{ slotProps.item.name }} ({{ slotProps.item.VehicleClassCategory.name }})
 						</span>
 					</div>
 				</template>
-			</MultiSelect>
+			</PickList>
 		</div>
 	</div>
 
 	<br />
 	<div class="p-grid p-align-center">
-		<div class="p-col-4">
+		<div class="p-col-2">
 			Priority:
 		</div>
-		<div class="p-col-8">
+		<div class="p-col-10">
 			<Dropdown
 				v-model="series.priority"
 				:options="availablePriorities"
@@ -127,6 +125,8 @@ export default {
 				priority: ''
 			},
 			availablePriorities: [],
+			// must be a 2-dimensional array
+			pickListData:[[], []],
 			PRIORITY_MAX: constants.PRIORITY_MAX
 		};
 	},
@@ -138,10 +138,17 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_SERIES);
 
+			if (newValue === true && this.updateMode === false) {
+				this.pickListData = [this.vc, []];
+			}
+
 			if (newValue === true && this.updateMode === true && this.activeSeries !== undefined) {
 				// Might need to reset the object
 				this.resetActiveSeries();
 			}
+		},
+		series(newValue) {
+			console.log('NEW VALUE SERIES:', newValue);
 		},
 		activeSeries(newValue) {
 			if (newValue === undefined) return;
@@ -166,6 +173,10 @@ export default {
 			this.showSeriesDialog = false;
 		},
 		sendRequest() {
+			// set the vehicle classes
+			this.series.vehicleClasses = [];
+			this.pickListData[1].forEach(vc => this.series.vehicleClasses.push(vc.id));
+
 			this.$parent.$emit(strings.SEND_REQUEST_CRUD_SERIES, this.series);
 		},
 		validInput() {
@@ -192,24 +203,49 @@ export default {
 			return !isNaN(Number(this.series.priority)) && Number(this.series.priority) >= 1 && Number(this.series.priority) <= this.PRIORITY_MAX;
 		},
 		validVehicleClasses() {
-			return this.series.vehicleClasses && this.series.vehicleClasses.length && this.series.vehicleClasses.length > 0;
+			return this.pickListData[1].length > 0;
 		},
 		findVehicleClass(id) {
 			let obj = this.vc.find(cl => cl.id === id);
 			return obj.name;
+		},
+		sourceListChanged() {
+			this.pickListData[0].sort((a,b) => {
+				return a.name.localeCompare(b.name);
+			});
+		},
+		targetListChanged() {
+			this.pickListData[1].sort((a,b) => {
+				return a.name.localeCompare(b.name);
+			});
 		},
 		resetActiveSeries() {
 			this.series = JSON.parse(JSON.stringify(this.activeSeries));
 
             // set the vehicle classes
 			this.series.vehicleClasses = [];
-			this.activeSeries.SeriesTypes.forEach(t => this.series.vehicleClasses.push(t.VehicleClass.id));
+
+			// create tmp array, easier for comparison
+			let series_vc = [];
+			this.activeSeries.SeriesTypes.forEach(t => series_vc.push(t.VehicleClass.id));
+
+			this.pickListData = [[], []];
+			this.vc.forEach(vc => {
+				if (series_vc.includes(vc.id))
+					this.pickListData[1].push(vc);
+				else
+					this.pickListData[0].push(vc);
+			});
 		}
 	}
 };
 </script>
 
 <style lang="scss">
+.p-dialog {
+	min-width: 60% !important;
+	max-width: 90% !important;
+}
 .p-dropdown, .p-multiselect {
 	min-width: 100%;
 }
@@ -229,5 +265,8 @@ export default {
 	vertical-align: middle;
 	height: 1.8em;
 	border-radius: 5px;
+}
+.p-picklist-source-controls , .p-picklist-target-controls {
+	display: none;
 }
 </style>
