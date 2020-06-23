@@ -15,6 +15,20 @@
 					{{ event.Track.name }}, {{ event.Track.country }}
 				</div>
 			</div>
+			<!--<div style="word-wrap: break-spaces; margin-bottom: 0.5em;">
+				<span class="event-headline">{{ event.name }}</span>
+			</div>
+			<div class="headline-sep-line" />
+			<div class="p-grid p-align-center" style="margin-top: 0.5em;">
+				<div class="p-col-3">
+					<img :src="eventLogo" alt="Logo" style="width:100%; height:100%; object-fit:cover;" />
+				</div>
+				<div class="p-col-9" style="word-wrap: break-spaces">
+					{{ event.Series.name }}
+					<br />
+					{{ event.Track.name }}, {{ event.Track.country }}
+				</div>
+			</div>-->
 			<div class="dates">
 				{{ startdate }} - {{ enddate }}
 			</div>
@@ -85,6 +99,9 @@ export default {
 	border: 3px solid rgba(255, 255, 255, .4);
 	border-radius: 25px;
 	max-width: 500px;
+}
+.p-card, .p-card-content {
+	padding: 0.5rem 0.5rem !important;
 }
 .event-headline {
 	font-size: 1.5em;
