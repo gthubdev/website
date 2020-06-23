@@ -1,22 +1,54 @@
 <template>
 <Dialog :header="headline" :visible.sync="showSeriesDialog" :modal="true">
-	<div>
-		<span class="p-float-label">
-			<InputText id="name" v-model="series.name" type="text" class="full-width" />
-			<label for="name">Full Name of the Series</label>
-		</span>
+	<div class="p-grid">
+		<div class="p-col-12">
+			<span class="p-float-label">
+				<InputText id="name" v-model="series.name" type="text" class="full-width" />
+				<label for="name">Full Name of the Series</label>
+			</span>
+		</div>
+
+		<div class="p-col-6">
+			<span class="p-float-label">
+				<InputText id="shortname" v-model="series.shortname" type="text" class="full-width" />
+				<label for="name">Short Name of the Series</label>
+			</span>
+		</div>
+
+		<div class="p-col-6">
+			<div class="p-grid p-align-center">
+				<div class="p-col-2">
+					Priority:
+				</div>
+				<div class="p-col-10">
+					<Dropdown
+						v-model="series.priority"
+						:options="availablePriorities"
+						option-label="name"
+						option-value="value"
+						placeholder="Select a priority"
+					/>
+				</div>
+			</div>
+		</div>
+
+		<div class="p-col-6">
+			<span class="p-float-label">
+				<InputText id="logo" v-model="series.logo" type="text" class="full-width" />
+				<label for="name">Logo of the Series</label>
+			</span>
+		</div>
+
+		<div class="p-col-6">
+			<span class="p-float-label">
+				<InputText id="homepage" v-model="series.homepage" type="text" class="full-width" />
+				<label for="name">Homepage of the Series</label>
+			</span>
+		</div>
 	</div>
 
 	<br />
 
-	<div>
-		<span class="p-float-label">
-			<InputText id="shortname" v-model="series.shortname" type="text" class="full-width" />
-			<label for="name">Short Name of the Series</label>
-		</span>
-	</div>
-
-	<br />
 	<div class="p-grid p-align-center">
 		<div class="p-col-2">
 			Vehicle classes:
@@ -43,40 +75,6 @@
 				</template>
 			</PickList>
 		</div>
-	</div>
-
-	<br />
-	<div class="p-grid p-align-center">
-		<div class="p-col-2">
-			Priority:
-		</div>
-		<div class="p-col-10">
-			<Dropdown
-				v-model="series.priority"
-				:options="availablePriorities"
-				option-label="name"
-				option-value="value"
-				placeholder="Select a priority"
-			/>
-		</div>
-	</div>
-
-	<br />
-
-	<div>
-		<span class="p-float-label">
-			<InputText id="logo" v-model="series.logo" type="text" class="full-width" />
-			<label for="name">Logo of the Series</label>
-		</span>
-	</div>
-
-	<br />
-
-	<div>
-		<span class="p-float-label">
-			<InputText id="homepage" v-model="series.homepage" type="text" class="full-width" />
-			<label for="name">Homepage of the Series</label>
-		</span>
 	</div>
 
 	<template #footer>
