@@ -21,27 +21,7 @@
 			/>
 		</TabPanel>
 	</TabView>
-	<!--	<md-tabs md-alignment="fixed" :md-dynamic-height="true" class="md-transparent">
-		<md-tab id="tab-events" md-label="Events">
-			<EventsContainer
-				:events="data.events"
-				:series="data.series"
-				:tracks="data.tracks"
-			/>
-		</md-tab>
-		<md-tab id="tab-series" md-label="Series">
-			<SeriesContainer
-				:series="data.series"
-				:vehicleclasses="data.vehicleclasses"
-			/>
-		</md-tab>
-		<md-tab id="tab-tracks" md-label="Tracks">
-			<TracksContainer
-				:tracks="data.tracks"
-				:tz="data.tz"
-			/>
-		</md-tab>
-	</md-tabs>-->
+
 	<Dialog header="Are you sure ?" :visible.sync="confirmDelete.showDialog" :style="{width: '30vw'}">
 		{{ confirmDelete.content }}
 		<template #footer>
@@ -74,7 +54,7 @@ export default {
 			};
 		} catch(err) {
 			if (err.response)
-			alert(err.response);
+				alert(err.response);
 			return {
 				data: []
 			};

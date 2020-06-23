@@ -21,6 +21,7 @@ export const strings = {
 	EVENT_UPDATED: 'eventUpdated',
 	EVENTSESSION_CREATED: 'eventSessionCreated',
 	EVENTSESSION_UPDATED: 'eventSessionUpdated',
+	SEND_REQUEST_CRUD_EVENT: 'send-request-crud-event',
 	SEND_REQUEST_CRUD_SERIES: 'send-request-crud-series',
 	SEND_REQUEST_CRUD_TRACK: 'send-request-crud-track',
 	SERIES_CREATED: 'seriesCreated',

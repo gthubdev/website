@@ -61,44 +61,9 @@
 			<md-icon @click.native="createEventSession(e)">
 				add_circle
 			</md-icon>
-			<md-icon @click.native="updateEvent(e)">
-				edit
-			</md-icon>
-			<md-icon @click.native="getIcal(e.id)">
-				calendar_today
-			</md-icon>
-			<md-icon @click.native="deleteEvent(e)">
-				delete
-			</md-icon>
-		</md-list-item>
-	</md-list>
 
-	<div v-if="showPagination">
-		<paginate
-			v-model="pageNumber"
-			:page-count="pageCount"
-			:click-handler="pageClicked"
-			:no-li-surround="true"
-			:container-class="'pag-container'"
-			:active-class="'pag-active'"
-			:page-link-class="'pag-page-link'"
-			:hide-prev-next="true"
-		/>
-	</div>
 
-	<CRUDEvent
-		:show-dialog="showEventDialog"
-		:active-event="activeEvent"
-		:series="series"
-		:tracks="tracks"
-		:mode="mode"
-	/>
-	<CRUDEventSession
-		:show-dialog="showSessionDialog"
-		:event="activeEvent"
-		:active-session="activeEventSession"
-		:mode="mode"
-	/>
+
 </div>-->
 <div>
 	<div class="p-grid p-align-center">
@@ -109,8 +74,8 @@
 		</div>
 		<div class="p-col-4">
 			<span class="p-float-label">
-				<InputText id="searchTerm" v-model="searchTerm" type="text" class="full-width" />
-				<label for="searchTerm">Search term</label>
+				<InputText id="eventSearchTerm" v-model="searchTerm" type="text" class="full-width" />
+				<label for="eventSearchTerm">Search term</label>
 			</span>
 		</div>
 		<div class="p-col-4 align-right">
@@ -120,14 +85,15 @@
 
 	<DataView :value="shownEvents" paginator-position="bottom" :paginator="true" :rows="itemsPerPage" :always-show-paginator="false">
 		<template #list="slotProps">
-			<div class="p-grid p-align-center">
-				<div class="p-col-9">
-					<b>{{ slotProps.data.name }}</b>
-				</div>
-				<div class="p-col-3 align-right">
-					<Button icon="pi pi-pencil" disabled="true" @click="updateEvent(slotProps.data)" />
-					&nbsp; &nbsp;
-					<Button icon="pi pi-trash" @click="deleteEvent(slotProps.data)" />
+			<div class="p-col-12">
+				<div class="resource-list-item">
+					<div>
+						<b>{{ slotProps.data.name }}</b>
+					</div>
+					<div>
+						<Button icon="pi pi-pencil" @click="updateEvent(slotProps.data)" />
+						<Button icon="pi pi-trash" @click="deleteEvent(slotProps.data)" />
+					</div>
 				</div>
 			</div>
 		</template>
@@ -137,6 +103,15 @@
 		:show-dialog="showCreateEventDialog"
 		:series="series"
 		:tracks="tracks"
+		@send-request-crud-event="sendCreateRequest"
+	/>
+
+	<UpdateEvent
+		:show-dialog="showUpdateEventDialog"
+		:active-event="activeEvent"
+		:series="series"
+		:tracks="tracks"
+		@send-request-crud-event="sendUpdateRequest"
 	/>
 </div>
 </template>
@@ -145,10 +120,11 @@
 //import moment from 'moment';
 import { constants, strings } from '~/plugins/constants';
 import CreateEvent from '~/components/resources/event/Create-Event.vue';
+import UpdateEvent from '~/components/resources/event/Update-Event.vue';
 
 export default {
 	components: {
-		CreateEvent
+		CreateEvent, UpdateEvent
 	},
 	props: {
 		events: {
@@ -212,15 +188,15 @@ export default {
 			this.showUpdateEventDialog = false;
 			this.showCreateEventDialog = true;
 		},
+		updateEvent(event) {
+			this.showCreateEventDialog = false;
+			this.activeEvent = JSON.parse(JSON.stringify(event));
+			this.showUpdateEventDialog = true;
+		},
 		// createEventSession(event) {
 		// 	this.activeEvent = event;
 		// 	this.mode = 'create';
 		// 	this.showSessionDialog = !this.showSessionDialog;
-		// },
-		// updateEvent(event) {
-		// 	this.activeEvent = event;
-		// 	this.mode = 'update';
-		// 	this.showEventDialog = !this.showEventDialog;
 		// },
 		// updateEventSession(event, session) {
 		// 	this.activeEvent = event;
@@ -231,6 +207,40 @@ export default {
 		deleteEvent(event) {
 			this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
 		},
+		async sendCreateRequest(obj) {
+			const event = JSON.parse(JSON.stringify(obj));
+			// console.log('Creating an event:', event);
+
+			try {
+				const res = await this.$axios.post('/api/calendar/event/create', {
+					event
+				});
+				// console.log('EVENT CREATED:', res.data);
+				this.$root.$emit(strings.EVENT_CREATED, res.data);
+			} catch(err) {
+				if (err.response)
+					alert(err.response.data);
+			}
+			this.showCreateEventDialog = false;
+		},
+		async sendUpdateRequest(obj) {
+			const event = JSON.parse(JSON.stringify(obj));
+			//console.log('Updating an event:', event);
+
+			delete event.createdAt;
+			try {
+				const res = await this.$axios.$post('/api/calendar/event/update/' + event.id, {
+					event
+				});
+				// console.log('EVENT UPDATED:', res);
+				if (res.id && res.id >= 1)
+					this.$root.$emit(strings.EVENT_UPDATED, res);
+			} catch(err) {
+				if (err.response)
+					alert(err.response);
+			}
+			this.showUpdateEventDialog = false;
+		}
 		// deleteSession(session) {
 		// 	this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
 		// },

@@ -5,7 +5,7 @@
 	:headline="headline()"
 	:action="'Update'"
 	:update-mode="true"
-	:series:="series"
+	:series="series"
 	:tracks="tracks"
 />
 </template>
@@ -38,6 +38,7 @@ export default {
 				name: '',
 				track: '',
 				mainseries: '',
+				supportseries: [],
 				startdate: '',
 				enddate: '',
 				logo: '',

@@ -37,11 +37,9 @@
 					Selected
 				</template>
 				<template #item="slotProps">
-					<div class="p-multiselect-vc-option">
-						<span>
-							{{ slotProps.item.name }} ({{ slotProps.item.VehicleClassCategory.name }})
-						</span>
-					</div>
+					<span>
+						{{ slotProps.item.name }} ({{ slotProps.item.VehicleClassCategory.name }})
+					</span>
 				</template>
 			</PickList>
 		</div>
@@ -138,9 +136,8 @@ export default {
 			if (newValue === false)
 				this.$root.$emit(strings.CLOSED_CRUD_SERIES);
 
-			if (newValue === true && this.updateMode === false) {
+			if (newValue === true && this.updateMode === false)
 				this.pickListData = [this.vc, []];
-			}
 
 			if (newValue === true && this.updateMode === true && this.activeSeries !== undefined) {
 				// Might need to reset the object
@@ -253,8 +250,8 @@ export default {
 	min-width: 100%;
 }
 .p-multiselect-vc-option {
-	display: inline-block;
-	vertical-align: middle;
+	//display: inline-block;
+	//vertical-align: middle;
 }
 .p-multiselect-vc-token {
 	background: #FFB300;
