@@ -129,5 +129,9 @@ module.exports = {
 	serverMiddleware: [
 		// API middleware
 		'~/api/index.js'
-	]
+	],
+	/*
+	 ** Do not send telemetry data
+	 */
+	telemetry: false
 };
