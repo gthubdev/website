@@ -1,33 +1,37 @@
 <template>
 <Dialog :header="headline" :visible.sync="showEventDialog" :modal="true">
-	<div class="p-grid">
-		<div class="p-col-6 p-align-baseline">
+	<!--<div class="p-grid">-->
+	<div class="p-grid p-align-baseline">
+		<div class="p-col-6">
 			<span class="p-float-label">
 				<InputText id="name" v-model="event.name" type="text" class="full-width" />
 				<label for="name">Name of the Event</label>
 			</span>
+		</div>
 
-			<div class="field-separator" />
 
-			<div class="p-field">
-				<Calendar
-					v-model="chosenDates"
-					:locale="locale_en"
-					date-format="dd M yy"
-					selection-mode="range"
-					:show-icon="true"
-					:select-other-months="true"
-					:manual-input="false"
-					:show-button-bar="false"
-					:month-navigator="false"
-					:year-navigator="false"
-					year-range="2020:2021"
-					:inline="false"
-				/>
-			</div>
+		<!--<div class="field-separator" />-->
 
-			<br />
+		<div class="p-col-6 p-field">
+			<Calendar
+				v-model="chosenDates"
+				:locale="locale_en"
+				date-format="dd M yy"
+				selection-mode="range"
+				:show-icon="true"
+				:select-other-months="true"
+				:manual-input="false"
+				:show-button-bar="false"
+				:month-navigator="false"
+				:year-navigator="false"
+				year-range="2020:2021"
+				:inline="false"
+			/>
+		</div>
 
+		<!--<br />-->
+
+		<div class="p-col-6 p-field">
 			<AutoComplete v-model="chosenTrack" :suggestions="availableTracks" :dropdown="true" placeholder="Track" class="full-width" field="name" @complete="searchTrack($event)">
 				<template #item="slotProps" class="full-width">
 					<div class="p-clearfix">
@@ -35,9 +39,12 @@
 					</div>
 				</template>
 			</AutoComplete>
+		</div>
 
-			<div class="field-separator" />
 
+		<!--<div class="field-separator" />-->
+
+		<div class="p-col-6 p-field">
 			<AutoComplete v-model="chosenMainSeries" :suggestions="availableMainSeries" :dropdown="true" placeholder="Main Series" class="full-width" field="name" @complete="searchMainSeries($event)">
 				<template #item="slotProps" class="full-width">
 					<div class="p-clearfix">
@@ -45,9 +52,12 @@
 					</div>
 				</template>
 			</AutoComplete>
+		</div>
 
-			<div class="field-separator" />
 
+		<!--<div class="field-separator" />-->
+
+		<div class="p-col-6 p-field">
 			<Dropdown
 				v-model="event.priority"
 				:options="availablePriorities"
@@ -55,15 +65,26 @@
 				option-value="value"
 				placeholder="Select a priority"
 			/>
+		</div>
 
-			<div class="field-separator" />
+		<!--<div class="field-separator" />-->
 
+		<div class="p-col-6 p-field">
 			<span class="p-float-label">
 				<InputText id="logo" v-model="event.logo" type="text" class="full-width" />
 				<label for="name">Logo of the Event</label>
 			</span>
 		</div>
 	</div>
+	<!--<div class="p-col-6 p-align-baseline">
+			<span class="sessions-headline">Sessions</span>
+			<ul v-if="event.EventSessions && event.EventSessions.length">
+				<li v-for="key in event.EventSessions" :key="key.id">
+					{{ key.name }} ({{ key.Series.shortname }})
+				</li>
+			</ul>
+		</div>-->
+	<!--</div>-->
 
 	<br />
 
@@ -148,7 +169,6 @@ export default {
 			availableTracks: [],
 			chosenMainSeries: '',
 			availableMainSeries: [],
-			//availableSupportSeries: [],
 			availablePriorities: [],
 			// must be a 2-dimensional array
 			pickListData:[[], []],
@@ -344,6 +364,9 @@ export default {
 </script>
 
 <style lang="scss">
+.p-dialog-content {
+	padding: 2em 2em !important;
+}
 .p-dropdown, .p-multiselect {
 	min-width: 100%;
 }
@@ -355,5 +378,17 @@ export default {
 }
 .p-calendar {
 	width: 100%;
+}
+.sessions-headline {
+	font-size: 1.2em;
+	font-weight: bold;
+	padding-left: 0.5em;
+}
+ul {
+	margin-block-start: 0.5em;
+	margin-block-end: 0.5em;
+}
+li {
+	line-height: 1.5em;
 }
 </style>
