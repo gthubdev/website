@@ -1,14 +1,14 @@
 <template>
-<div>
+<!--<div>
 	<md-dialog :md-active.sync="showEventSessionDialog">
 		<md-dialog-content>
 			<md-dialog-title>{{ headline() }}</md-dialog-title>
 
 			<md-list v-if="event !== null" class="md-dense">
 				<md-list-item v-for="es in getSessions()" :key="es.id">
-					<!-- <md-avatar>
+					&lt;!&ndash; <md-avatar>
 						<img :src="es.Series.logo" alt="Logo" />
-					</md-avatar> -->
+					</md-avatar> &ndash;&gt;
 					<div class="md-list-item-text">
 						<div class="md-layout">
 							<div class="md-layout-item">
@@ -111,7 +111,16 @@
 			</md-dialog-actions>
 		</md-dialog-content>
 	</md-dialog>
-</div>
+</div>-->
+<Dialog :header="headline" :visible.sync="showEventSessionDialog" :modal="true">
+	test dialog
+
+	<template #footer>
+		<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
+		<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />
+		<Button v-if="validInput()" :label="action" icon="pi pi-check" @click="sendRequest" />
+	</template>
+</Dialog>
 </template>
 
 <script>
@@ -126,12 +135,21 @@ export default {
 		event: {
 			type: Object, default() { return ''; }
 		},
-		activeSession: {
-			type: Object, default() { return ''; }
-		},
-		mode: {
+		headline: {
 			type: String, default: ''
-		}
+		},
+		action: {
+			type: String, default: ''
+		},
+		updateMode: {
+			type: Boolean, default: false
+		},
+		// activeSession: {
+		// 	type: Object, default() { return ''; }
+		// },
+		// mode: {
+		// 	type: String, default: ''
+		// }
 	},
 	data: function() {
 		return {
@@ -148,16 +166,6 @@ export default {
 		};
 	},
 	computed: {
-		action() {
-			switch(this.mode) {
-				case 'create':
-					return 'Create';
-				case 'update':
-					return 'Update';
-				default:
-					return '';
-			}
-		},
 		requiredDate() {
 			return {
 				'md-invalid': this.eventtime.date === null || this.eventtime.date === ''
@@ -180,6 +188,9 @@ export default {
 		}
 	},
 	watch: {
+		close() {
+			this.showEventSessionDialog = false;
+		},
 		showDialog(newValue) {
 			this.showEventSessionDialog = newValue;
 		},
@@ -270,41 +281,25 @@ export default {
 		deleteSession(session) {
 			this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
 		},
-		headline() {
-			switch(this.mode) {
-				case 'create': {
-					let name;
-					if (this.event !== null)
-						name = this.event.name;
-					else
-						name = '';
-					// let name = this.event !== undefined ? this.event.name : '';
-					return 'Create an EventSession for ' + name;
-				}
-				case 'update':
-					return 'Update Session ' + this.eventsession.name + ' for ' + this.event.name;
-				default:
-					return '';
-			}
-		},
 		getSessions() {
+			return [];
 			// don't show the active session in the list
-			return this.event.EventSessions.filter(es => {
-				if (this.mode === 'create')
-					return true;
-				else if (this.activeSession && this.activeSession.id)
-					return es.id !== this.activeSession.id;
-			});
+			// return this.event.EventSessions.filter(es => {
+			// 	if (this.mode === 'create')
+			// 		return true;
+			// 	else if (this.activeSession && this.activeSession.id)
+			// 		return es.id !== this.activeSession.id;
+			// });
 		},
 		getAllSeries() {
 			let arr = [];
-			if (this.event === null) {
-				return arr;
-			}
-			arr.push(this.event.Series);
-			this.event.SupportSeries.forEach(series => {
-				arr.push(series.Series);
-			});
+			// if (this.event === null) {
+			// 	return arr;
+			// }
+			// arr.push(this.event.Series);
+			// this.event.SupportSeries.forEach(series => {
+			// 	arr.push(series.Series);
+			// });
 			return arr;
 		},
 		getLocalTime(session) {

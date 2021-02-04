@@ -1,5 +1,5 @@
 const { Event, EventSession, Series } = require('../models');
-const util = require('../util/util.js');
+const util = require('../util/util');
 const moment = require('moment-timezone');
 
 module.exports.createEventSession = async (req, res) => {
@@ -24,8 +24,8 @@ module.exports.createEventSession = async (req, res) => {
 		const event = await Event.findOne({
 			where: {id: req.body.session.event}
 		});
-		let ev_startdate = event.startdate;
-		let ev_enddate = event.enddate;
+		const ev_startdate = event.startdate;
+		const ev_enddate = event.enddate;
 
 		if (moment(ev_startdate).isAfter(starttime.format('YYYY-MM-DD'))) {
 			res.status(400).send('Session is outside event-dates');

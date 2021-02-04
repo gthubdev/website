@@ -25,6 +25,9 @@ Vue.component('Dialog', Dialog);
 // Dropdown
 import Dropdown from 'primevue/dropdown';
 Vue.component('Dropdown', Dropdown);
+// InputNumber
+import InputNumber from 'primevue/inputnumber';
+Vue.component('InputNumber', InputNumber);
 // InputText
 import InputText from 'primevue/inputtext';
 Vue.component('InputText', InputText);

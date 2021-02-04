@@ -4,7 +4,7 @@ const moment = require('moment');
 // console.log clutters the test-output otherwise
 function print(s) {
 	if (process.env.NODE_ENV !== 'test')
-		console.log(moment().format() + ' - ' + s);
+		console.log(moment().format(), s);
 }
 module.exports.print = print;
 

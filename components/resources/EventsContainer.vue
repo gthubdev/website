@@ -91,6 +91,7 @@
 						<b>{{ slotProps.data.name }}</b>
 					</div>
 					<div>
+						<Button icon="pi pi-plus-circle" @click="createEventSession(slotProps.data)" />
 						<Button icon="pi pi-pencil" @click="updateEvent(slotProps.data)" />
 						<Button icon="pi pi-trash" @click="deleteEvent(slotProps.data)" />
 					</div>
@@ -103,7 +104,7 @@
 		:show-dialog="showCreateEventDialog"
 		:series="series"
 		:tracks="tracks"
-		@send-request-crud-event="sendCreateRequest"
+		@send-request-crud-event="sendCreateEventRequest"
 	/>
 
 	<UpdateEvent
@@ -111,7 +112,13 @@
 		:active-event="activeEvent"
 		:series="series"
 		:tracks="tracks"
-		@send-request-crud-event="sendUpdateRequest"
+		@send-request-crud-event="sendUpdateEventRequest"
+	/>
+
+	<CreateEventSession
+		:show-dialog="showCreateEventSessionDialog"
+		:active-event="activeEvent"
+		@send-request-crud-eventsession="sendCreateEventSessionRequest"
 	/>
 </div>
 </template>
@@ -121,10 +128,11 @@
 import { constants, strings } from '~/plugins/constants';
 import CreateEvent from '~/components/resources/event/Create-Event.vue';
 import UpdateEvent from '~/components/resources/event/Update-Event.vue';
+import CreateEventSession from '~/components/resources/event/Create-EventSession.vue';
 
 export default {
 	components: {
-		CreateEvent, UpdateEvent
+		CreateEvent, UpdateEvent, CreateEventSession
 	},
 	props: {
 		events: {
@@ -140,9 +148,10 @@ export default {
 	data: function() {
 		return {
 			showDialog: false,
-			showSessionDialog: false,
 			showCreateEventDialog: false,
 			showUpdateEventDialog: false,
+			showCreateEventSessionDialog: false,
+			showUpdateEventSessionDialog: false,
 			activeEvent: null,
 			activeEventSession: null,
 			searchTerm: '',
@@ -168,13 +177,10 @@ export default {
 			this.showCreateEventDialog = false;
 			this.showUpdateEventDialog = false;
 		});
-		//
-		// this.$root.$on(strings.TOGGLE_CRUD_EVENT, () => {
-		// 	this.showEventDialog = !this.showEventDialog;
-		// });
-		// this.$root.$on(strings.TOGGLE_CRUD_EVENTSESSION, () => {
-		// 	this.showSessionDialog = !this.showSessionDialog;
-		// });
+		this.$root.$on(strings.CLOSED_CRUD_EVENTSESSION, () => {
+			this.showCreateEventSessionDialog = false;
+		});
+
 		// this.$root.$on(strings.EVENT_CREATED, event => {
 		// 	this.activeEvent = event;
 		// 	this.showSessionDialog = !this.showSessionDialog;
@@ -193,11 +199,15 @@ export default {
 			this.activeEvent = JSON.parse(JSON.stringify(event));
 			this.showUpdateEventDialog = true;
 		},
-		// createEventSession(event) {
-		// 	this.activeEvent = event;
-		// 	this.mode = 'create';
-		// 	this.showSessionDialog = !this.showSessionDialog;
-		// },
+		createEventSession(event) {
+			this.activeEvent = JSON.parse(JSON.stringify(event));
+			console.log('CREATE SESSION FOR:', this.activeEvent);
+
+			this.showCreateEventSessionDialog = true;
+			// this.activeEvent = event;
+			// this.mode = 'create';
+			// this.showSessionDialog = !this.showSessionDialog;
+		},
 		// updateEventSession(event, session) {
 		// 	this.activeEvent = event;
 		// 	this.activeEventSession = session;
@@ -207,7 +217,7 @@ export default {
 		deleteEvent(event) {
 			this.$root.$emit(strings.CONFIRM_DELETE_EVENT, event);
 		},
-		async sendCreateRequest(obj) {
+		async sendCreateEventRequest(obj) {
 			const event = JSON.parse(JSON.stringify(obj));
 			// console.log('Creating an event:', event);
 
@@ -223,7 +233,7 @@ export default {
 			}
 			this.showCreateEventDialog = false;
 		},
-		async sendUpdateRequest(obj) {
+		async sendUpdateEventRequest(obj) {
 			const event = JSON.parse(JSON.stringify(obj));
 			//console.log('Updating an event:', event);
 
@@ -240,6 +250,24 @@ export default {
 					alert(err.response);
 			}
 			this.showUpdateEventDialog = false;
+		},
+		async sendCreateEventSessionRequest(obj, event) {
+			let session = JSON.parse(JSON.stringify(obj));
+			session.event = event.id;
+			session.timezone = event.Track.timezone;
+			console.log('Creating a session:', session);
+
+			try {
+				const res = await this.$axios.$post('/api/calendar/eventsession/create', {
+					session
+				});
+				console.log('SESSION CREATED:', res);
+				this.$root.$emit(strings.EVENTSESSION_CREATED, res);
+			} catch(err) {
+				if (err.response)
+					alert(err.response.data);
+			}
+			this.showCreateEventSessionDialog = false;
 		}
 		// deleteSession(session) {
 		// 	this.$root.$emit(strings.CONFIRM_DELETE_EVENTSESSION, session);
@@ -289,7 +317,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.headline {
-	margin-bottom: 1em;
-}
+
 </style>

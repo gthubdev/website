@@ -126,7 +126,7 @@
 
 <script>
 import moment from 'moment';
-import { constants, strings } from '~/plugins/constants';
+import { constants, strings, locale } from '~/plugins/constants';
 
 export default {
 	props: {
@@ -174,18 +174,7 @@ export default {
 			pickListData:[[], []],
 			chosenDates: [],
 			PRIORITY_MAX: constants.PRIORITY_MAX,
-			locale_en: {
-				firstDayOfWeek: 1,
-				dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-				dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-				dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
-				monthNames: [ 'January','February','March','April','May','June','July','August','September','October','November','December' ],
-				monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-				today: 'Today',
-				clear: 'Clear',
-				dateFormat: 'dd M yy',
-				weekHeader: 'Wk'
-			}
+			locale_en: locale.en
 		};
 	},
 	watch: {
@@ -272,10 +261,7 @@ export default {
 			// set the support series
 			this.event.supportseries = this.pickListData[1];
 
-			// console.log('SENDING REQUEST CRUD EVENT');
-			// console.log('Event:', JSON.stringify(this.event));
 			this.$parent.$emit(strings.SEND_REQUEST_CRUD_EVENT, this.event);
-
 		},
 		validInput() {
 			return this.validName() &&

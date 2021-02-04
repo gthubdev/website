@@ -45,6 +45,7 @@ module.exports = {
 		{ src: 'primevue/resources/themes/luna-amber/theme.css' },
 		{ src: 'primeicons/primeicons.css' },
 		{ src: 'primeflex/primeflex.css' },
+		{ src: 'vue2-timepicker/dist/VueTimepicker.css'},
 		'@/assets/scss/main.scss'
 	],
 
