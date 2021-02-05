@@ -1,138 +1,53 @@
-const pkg = require('./package');
-
+// eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = {
-	mode: 'universal',
-
-	/*
-	 ** Headers of the page
-	 */
+	// Global page headers (https://go.nuxtjs.dev/config-head)
 	head: {
-		title: 'GTHub',
-		meta: [{
-				charset: 'utf-8'
-			},
-			{
-				name: 'viewport',
-				content: 'width=device-width, initial-scale=1'
-			},
-			{
-				hid: 'description',
-				name: 'description',
-				content: pkg.description
-			}
+		title: 'gthubweb',
+		meta: [
+			{ charset: 'utf-8' },
+			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+			{ hid: 'description', name: 'description', content: '' }
 		],
 		link: [
-			{
-				rel: 'icon',
-				type: 'image/x-icon',
-				href: '/favicon.ico'
-			},
-			{
-				rel: 'stylesheet',
-				href: '//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons'
-			}
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
 		]
 	},
 
-	/*
-	 ** Customize the progress-bar color
-	 */
-	loading: {
-		color: '#fff'
-	},
-
-	/*
-	 ** Global CSS
-	 */
+	// Global CSS (https://go.nuxtjs.dev/config-css)
 	css: [
-		'@/assets/scss/main.scss'
 	],
 
-	/*
-	 ** Plugins to load before mounting the App
-	 */
+	// Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
 	plugins: [
-		// initialize external libraries here
-		{ src: '~/plugins/init', mode: 'client' }
 	],
 
-	/*
-	 ** Nuxt.js modules
-	 */
+	// Auto import components (https://go.nuxtjs.dev/config-components)
+	components: true,
+
+	// Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
+	buildModules: [
+		// https://go.nuxtjs.dev/eslint
+		'@nuxtjs/eslint-module',
+		// https://go.nuxtjs.dev/stylelint
+		'@nuxtjs/stylelint-module'
+	],
+
+	// Modules (https://go.nuxtjs.dev/config-modules)
 	modules: [
-		// Doc: https://axios.nuxtjs.org/usage
-		'@nuxtjs/axios',
-		'@nuxtjs/auth',
-		'nuxt-vue-material'
+		// https://go.nuxtjs.dev/axios
+		'@nuxtjs/axios'
 	],
-	/*
-	** Axios module configuration
-	*/
+
+	// Axios module configuration (https://go.nuxtjs.dev/config-axios)
 	axios: {
-		// See https://github.com/nuxt-community/axios-module#options
-		credentials: true
-	},
-	/*
-	** Auth module configuration
-	*/
-	auth: {
-		strategies: {
-			local: {
-				endpoints: {
-					login: {
-						url: '/api/auth/login',
-						method: 'post',
-						propertyName: 'token'
-					},
-					logout: {
-						url: '/api/auth/logout',
-						method: 'post'
-					},
-					user: {
-						url: '/api/auth/me',
-						method: 'get',
-						propertyName: false
-					}
-				},
-				tokenRequired: true,
-				tokenType: 'Bearer'
-			}
-		},
-		redirect: {
-			login: '/',
-			logout: '/',
-			home: '/',
-			callback: '/'
-		}
-	},
-	/*
-	 ** Vue Material config
-	*/
-	vueMaterial: {
-		theme: 'default-dark'
 	},
 
-	/*
-	 ** Build configuration
-	 */
+	// Build Configuration (https://go.nuxtjs.dev/config-build)
 	build: {
-		/*
-		 ** You can extend webpack config here
-		 */
-		extend(config, ctx) {
-			// Run ESLint on save
-			if (ctx.isDev && ctx.isClient) {
-				config.module.rules.push({
-					enforce: 'pre',
-					test: /\.(js|vue)$/,
-					loader: 'eslint-loader',
-					exclude: /(node_modules)/
-				});
-			}
-		}
 	},
-	serverMiddleware: [
-		// API middleware
-		'~/api/index.js'
-	]
+
+	//  Server Middleware
+	serverMiddleware: {
+		'/api': '~/api'
+	}
 };

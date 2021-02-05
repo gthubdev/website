@@ -19,7 +19,7 @@ INSERT INTO VehicleClass (id, name, category) VALUES (6, 'Cup Series', 1);
 INSERT INTO VehicleClass (id, name, category) VALUES (7, 'Other Sportscar', 1);
 
 INSERT INTO VehicleClassCategory (id, name) VALUES (2, 'Prototype');
-INSERT INTO VehicleClass (id, name, category) VALUES (8, 'LMHC', 2);
+INSERT INTO VehicleClass (id, name, category) VALUES (8, 'LMDh', 2);
 INSERT INTO VehicleClass (id, name, category) VALUES (9, 'LMP1', 2);
 INSERT INTO VehicleClass (id, name, category) VALUES (10, 'DPi', 2);
 INSERT INTO VehicleClass (id, name, category) VALUES (11, 'LMP2', 2);

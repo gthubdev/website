@@ -1,15 +1,15 @@
-const db = require('../models/');
-const util = require('../util/util.js');
 const bCrypt = require('bcryptjs');
 const env = require('dotenv');
 const jwt = require('jsonwebtoken');
+const util = require('../util/util.js');
+const { User, Usertype, Auth } = require('../models/');
 
 module.exports.login = async (req, res) => {
 	try {
-		const user = await db.User.findOne({
+		const user = await User.findOne({
 			where: { username: req.body.username },
 			include: [
-				{ model: db.Usertype }
+				{ model: Usertype }
 			]
 		});
 		if (!user) {
@@ -29,8 +29,8 @@ module.exports.login = async (req, res) => {
 		const token = await generateToken(user);
 
 		util.print('User ' + req.body.username + ' logged in successfully.');
-		res.json({token});
-	} catch(err) {
+		res.json({ token });
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };
@@ -44,8 +44,8 @@ module.exports.logout = async (req, res) => {
 	try {
 		const token = req.header('Authorization').replace('Bearer ', '');
 		const data = jwt.verify(token, process.env.JWT_KEY);
-		const response = await db.Auth.destroy({
-			where: { token: token }
+		const response = await Auth.destroy({
+			where: { token }
 		});
 
 		if (response === 1) {
@@ -54,16 +54,14 @@ module.exports.logout = async (req, res) => {
 		} else {
 			res.status(401).send();
 		}
-
-	} catch(err) {
+	} catch (err) {
 		util.error(req, res, err);
 	}
-
 };
 
 module.exports.changepassword = async (req, res) => {
 	try {
-		const user = await db.User.findOne({
+		const user = await User.findOne({
 			where: { username: req.body.username }
 		});
 		if (user) {
@@ -79,7 +77,7 @@ module.exports.changepassword = async (req, res) => {
 						});
 						util.print('Password for user \'' + result.get('username') + '\' successfully changed.');
 						res.status(200).send();
-					} catch(error) {
+					} catch (error) {
 						util.error(req, res, err);
 					}
 				} else {
@@ -92,7 +90,7 @@ module.exports.changepassword = async (req, res) => {
 			util.print('User ' + req.body.username + ' does not exist');
 			res.status(401).send('Wrong user/password combination.');
 		}
-	} catch(err) {
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };
@@ -109,12 +107,12 @@ module.exports.me = async (req, res) => {
 
 		const token = req.header('Authorization').replace('Bearer ', '');
 		const data = jwt.verify(token, process.env.JWT_KEY);
-		const user = await db.User.findOne({
+		const user = await User.findOne({
 			where: { id: data.id },
 			attributes: ['id', 'username', 'name', 'usertype']
 		});
 		res.json(user);
-	} catch(err) {
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };
@@ -137,13 +135,13 @@ async function generateToken(user) {
 	const gentoken = jwt.sign(info, process.env.JWT_KEY);
 
 	try {
-		await db.Auth.create({
+		await Auth.create({
 			user: user.id,
 			token: gentoken
 		});
 
 		return gentoken;
-	} catch(err) {
+	} catch (err) {
 		console.error('Could not generate JWT-token.');
 		throw new Error(err);
 	}

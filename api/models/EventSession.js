@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	let EventSession = sequelize.define('EventSession', {
+	const EventSession = sequelize.define('EventSession', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,

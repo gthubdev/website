@@ -1,4 +1,11 @@
-const moment = require('moment-timezone');
+/* eslint-disable camelcase */
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+// eslint-disable-next-line no-undef
+dayjs.extend(utc);
+// eslint-disable-next-line no-undef
+dayjs.extend(timezone);
 
 const tz_strings = {
 	'Etc/GMT+12': 'International Date Line West',
@@ -26,7 +33,7 @@ const tz_strings = {
 	'Etc/GMT+2': 'Mid-Atlantic',
 	'Atlantic/Azores': 'Azores',
 	'Atlantic/Cape_Verde': 'Cape Verde Islands',
-	'UTC': 'UTC',
+	UTC: 'UTC',
 	'Europe/London': 'Dublin, Edinburgh, Lisbon, London',
 	'Africa/Casablanca': 'Casablanca, Monrovia',
 	'Atlantic/Canary': 'Canary Islands',
@@ -79,38 +86,20 @@ const tz_strings = {
 	'Pacific/Auckland': 'Auckland, Wellington',
 	'Pacific/Tongatapu': 'Nuku\'alofa'
 };
-module.exports.tz_strings = tz_strings;
 
-let tz_array = [];
+const timezones = [];
 Object.entries(tz_strings).forEach(
 	([key, value]) => {
 		const tmp = {
 			name: key,
-			desc: value
+			desc: value,
+			display: '(UTC' + dayjs().tz(key).format('Z') + ') ' + value,
+			offset: dayjs().tz(key).utcOffset()
 		};
-		tz_array.push(tmp);
+		timezones.push(tmp);
 	}
 );
-module.exports.tz_array = tz_array;
-
-
-// filter the timezones we want
-const tmp_strings = moment.tz.names()
-	.filter(tz => {
-		return Object.prototype.hasOwnProperty.call(tz_strings, tz);
-	});
-
-// map the timezones to the UTC offset
-let tz_offsets = [];
-tmp_strings.forEach(tz => {
-	tz_offsets.push({
-		name: tz,
-		offset: moment.tz(tz).utcOffset()
-	});
-});
-
-// sort the list by UTC offset
-tz_offsets.sort((a,b) => {
+timezones.sort((a, b) => {
 	return a.offset - b.offset;
 });
-module.exports.tz_offsets = tz_offsets;
+module.exports.timezones = timezones;

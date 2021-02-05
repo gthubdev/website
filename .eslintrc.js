@@ -1,59 +1,36 @@
 module.exports = {
-	'env': {
-		'browser': true,
-		'commonjs': true,
-		'es6': true,
-		'node': true,
-		'mocha': true
+	root: true,
+	env: {
+		browser: true,
+		node: true,
+		commonjs: true,
+		mocha: true,
+		es6: true
 	},
-	'plugins': ['vue'],
-	'extends': [
-		'eslint:recommended',
-		'plugin:vue/recommended'
+	parserOptions: {
+		parser: 'babel-eslint'
+	},
+	extends: [
+		'@nuxtjs',
+		'plugin:nuxt/recommended'
 	],
-	'globals': {
-		'Atomics': 'readonly',
-		'SharedArrayBuffer': 'readonly'
-	},
-	'parserOptions': {
-		'parser': 'babel-eslint',
-		'ecmaVersion': 2018,
-		'sourceType': 'module'
-	},
-	'rules': {
-		'indent': 'off',
-		// 'linebreak-style': [
-		// 	'error',
-		// 	'unix'
-		// ],
-		'linebreak-style': 'off',
-		'quotes': [
-			'error',
-			'single'
-		],
-		'semi': [
-			'error',
-			'always'
-		],
-		'vue/html-indent': ['error', 'tab', {
-			'attribute': 1,
-			'baseIndent': 0,
-			'closeBracket': 0,
-			'alignAttributesVertically': true,
-			'ignores': []
-		}],
+	plugins: [
+	],
+	// add your custom rules here
+	rules: {
+		indent: [2, 'tab'],
+		'no-tabs': 0,
+		semi: ['error', 'always'],
+		quotes: ['error', 'single'],
+		curly: ['error', 'multi', 'consistent'],
+		'arrow-parens': ['error', 'as-needed'],
 		'no-console': 'off',
-		'no-undef': 'warn',
-		'vue/html-self-closing': ['error', {
-			'html': {
-				'void': 'always',
-				'normal': 'always',
-				'component': 'always'
-			},
-			'svg': 'always',
-			'math': 'always'
-		}],
-		'vue/max-attributes-per-line': 'off',
-		'no-useless-escape': 'off'
+		camelcase: 'off',
+		'object-shorthand': 'off',
+		'space-before-function-paren': ['error', {
+			anonymous: 'always',
+			named: 'never',
+			asyncArrow: 'always'
+		}]
 	}
 };

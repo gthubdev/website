@@ -11,7 +11,6 @@ const TrackCtrl = require('../controllers/track');
 const iCalCtrl = require('../controllers/ical');
 const auth = require('../middleware/auth');
 
-
 // routes ==================================================
 
 // Authentication
@@ -45,7 +44,6 @@ router.post('/calendar/track/delete/:id', auth.tvcrew_auth, TrackCtrl.deleteTrac
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
-
 
 // Catch-all, will return 404
 router.get('*', (req, res) => {

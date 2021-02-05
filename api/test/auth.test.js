@@ -1,14 +1,14 @@
 const supertest = require('supertest');
-const server = require('../index');
-const db = require('../models/');
 const should = require('chai').should();
+const server = require('../index');
+const { User } = require('../models/');
 
 describe('Authentication', () => {
 	let userid, token;
 
 	// Create user testuser/admin
 	beforeEach(async () => {
-		let newuser = {
+		const newuser = {
 			username: 'testadmin',
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testadmin',
@@ -17,24 +17,23 @@ describe('Authentication', () => {
 		};
 
 		try {
-			const user = await db.User.create(newuser);
+			const user = await User.create(newuser);
 			userid = user.id;
-		} catch(err) {
+		} catch (err) {
 			should.not.exist(err);
 		}
 	});
 
 	afterEach(async () => {
 		try {
-			const response = await db.User.destroy({
+			const response = await User.destroy({
 				where: { id: userid }
 			});
 			response.should.equal(1);
-		} catch(err) {
+		} catch (err) {
 			should.not.exist(err);
 		}
 	});
-
 
 	it('Valid login for an admin', async () => {
 		try {
@@ -42,7 +41,7 @@ describe('Authentication', () => {
 				.post('/api/auth/login')
 				.send({ username: 'testadmin', password: 'admin' })
 				.expect(200);
-		} catch(err) {
+		} catch (err) {
 			should.not.exist(err);
 		}
 	});
@@ -60,12 +59,12 @@ describe('Authentication', () => {
 				.get('/api/auth/me')
 				.set('Authorization', 'Bearer ' + token)
 				.send();
-			let user = res2.body;
+			const user = res2.body;
 
 			user.username.should.have.string('testadmin');
 			user.name.should.have.string('Testadmin');
 			user.usertype.should.equal(1);
-		} catch(err) {
+		} catch (err) {
 			should.not.exist(err);
 		}
 	});
@@ -91,7 +90,7 @@ describe('Authentication', () => {
 				.set('Authorization', 'Bearer ' + token)
 				.send()
 				.expect(200);
-		} catch(err) {
+		} catch (err) {
 			should.not.exist(err);
 		}
 	});
@@ -105,7 +104,7 @@ describe('Authentication', () => {
 	});
 
 	it('Changing password successfully', async () => {
-		let newpw =  {
+		const newpw = {
 			username: 'testadmin',
 			oldpassword: 'admin',
 			newpassword: 'newpw'
@@ -118,7 +117,7 @@ describe('Authentication', () => {
 				.send(newpw)
 				.expect(200);
 
-			let newpw2 = {
+			const newpw2 = {
 				username: 'testadmin',
 				oldpassword: 'newpw',
 				newpassword: 'newerpw'
@@ -129,13 +128,13 @@ describe('Authentication', () => {
 				.set('Authorization', 'Bearer ' + token)
 				.send(newpw2)
 				.expect(200);
-		} catch(err) {
+		} catch (err) {
 			should.not.exist(err);
 		}
 	});
 
 	it('Changing password unsuccessfully', done => {
-		let newpw =  {
+		const newpw = {
 			username: 'testadmin',
 			oldpassword: 'aCSDFAVVSTRBebst',
 			newpassword: 'newpw'
@@ -147,7 +146,7 @@ describe('Authentication', () => {
 	});
 
 	it('Changing password for non-existent user', done => {
-		let newpw =  {
+		const newpw = {
 			username: 'testadmin34525624643636325626',
 			oldpassword: 'aCSDFAVVSTRBebst',
 			newpassword: 'newpw'

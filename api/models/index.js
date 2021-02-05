@@ -2,20 +2,18 @@
 	Using Sequelize as ORM framework
 */
 
-/*jslint node: true */
-'use strict';
-const env 		= require('dotenv');
-const fs        = require('fs');
-const path      = require('path');
+const fs = require('fs');
+const path = require('path');
+const env = require('dotenv');
 const Sequelize = require('sequelize');
-const basename  = path.basename(module.filename);
-const db        = {};
+const basename = path.basename(module.filename);
+const db = {};
 
 // loads .env variables
 env.config();
 
 let dbconfig;
-if (process.env.DBHost) {
+if (process.env.NODE_ENV !== 'test' && process.env.DBHost) { // production/dev + config found
 	dbconfig = {
 		host: process.env.DBHost,
 		databasename: process.env.DBName,
@@ -23,7 +21,18 @@ if (process.env.DBHost) {
 		password: process.env.DBPass,
 		port: process.env.DBPort
 	};
-} else {
+} else if (process.env.NODE_ENV === 'test' && process.env.TestDBHost) { // test + config found
+	dbconfig = {
+		host: process.env.TestDBHost,
+		databasename: process.env.TestDBName,
+		user: process.env.TestDBUser,
+		password: process.env.TestDBPass,
+		port: process.env.TestDBPort
+	};
+} else if (process.env.NODE_ENV !== 'test') { // production/dev but no config found
+	console.error('No database credentials found in .env');
+	process.exit(1);
+} else { // test but no config (used for CircleCI
 	dbconfig = require('../../database/circleci.js');
 }
 
@@ -44,22 +53,24 @@ const sequelize = new Sequelize(dbconfig.databasename, dbconfig.user, dbconfig.p
 	}
 });
 
-//Load all the models
+// Test the connection
+testConnection();
+
+// Load all the models
 fs
 	.readdirSync(__dirname)
 	.filter(file => {
 		return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
 	})
 	.forEach(file => {
-		let model = sequelize['import'](path.join(__dirname, file));
+		const model = sequelize.import(path.join(__dirname, file));
 		db[model.name] = model;
 	});
 
 // Create the foreign keys
 Object.keys(db).forEach(model => {
-	if (db[model].associate) {
+	if (db[model].associate)
 		db[model].associate(db);
-	}
 });
 
 // Create tables, if necessary
@@ -78,4 +89,13 @@ async function deleteTokens() {
 	await db.Auth.destroy({
 		where: {}
 	});
+}
+
+async function testConnection() {
+	try {
+		await sequelize.authenticate();
+	} catch (err) {
+		console.error('Unable to connect to the database');
+		process.exit(1);
+	}
 }

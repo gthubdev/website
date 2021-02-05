@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	let Series = sequelize.define('Series', {
+	const Series = sequelize.define('Series', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'series',
 			onDelete: 'RESTRICT'
 		});
-		models.Series.hasMany(models.SeriesType, {foreignKey: 'series'});
+		models.Series.hasMany(models.SeriesType, { foreignKey: 'series' });
 	};
 
 	return Series;

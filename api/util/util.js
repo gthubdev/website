@@ -1,13 +1,12 @@
-const moment = require('moment');
+const dayjs = require('dayjs');
 
 // prints something to the console
 // console.log clutters the test-output otherwise
 function print(s) {
 	if (process.env.NODE_ENV !== 'test')
-		console.log(moment().format() + ' - ' + s);
+		console.log(dayjs().format(), s);
 }
 module.exports.print = print;
-
 
 // print error & redirect
 function error(req, res, err) {

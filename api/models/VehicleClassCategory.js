@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	let VehicleClassCategory = sequelize.define('VehicleClassCategory', {
+	const VehicleClassCategory = sequelize.define('VehicleClassCategory', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	VehicleClassCategory.associate = models => {
-		models.VehicleClassCategory.hasMany(models.VehicleClass, {foreignKey: 'category'});
+		models.VehicleClassCategory.hasMany(models.VehicleClass, { foreignKey: 'category' });
 	};
 
 	return VehicleClassCategory;

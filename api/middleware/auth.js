@@ -1,7 +1,7 @@
-const db = require('../models/');
-const util = require('../util/util.js');
 const env = require('dotenv');
 const jwt = require('jsonwebtoken');
+const { Auth } = require('../models');
+const util = require('../util/util');
 
 module.exports.tvcrew_auth = async (req, res, next) => {
 	if (!req.header('Authorization')) {
@@ -16,8 +16,8 @@ module.exports.tvcrew_auth = async (req, res, next) => {
 		const token = req.header('Authorization').replace('Bearer ', '');
 		const data = jwt.verify(token, process.env.JWT_KEY);
 
-		const user = await db.Auth.findOne({
-			where: { token: token },
+		const user = await Auth.findOne({
+			where: { token: token }
 		});
 
 		if (!user) {
@@ -31,7 +31,7 @@ module.exports.tvcrew_auth = async (req, res, next) => {
 		}
 
 		next();
-	} catch(err) {
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };

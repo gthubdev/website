@@ -10,19 +10,19 @@ describe('Routes', () => {
 	});
 
 	describe('Valid routes', () => {
-		let routes = ['/api/calendar'];
+		const routes = ['/api/calendar'];
 
 		routes.forEach(route => {
 			it('GET ' + route, done => {
 				supertest(server)
-				.get(route)
-				.expect(200, done);
+					.get(route)
+					.expect(200, done);
 			});
 		});
 	});
 
 	describe('Invalid routes', () => {
-		let routes = ['/api/test', '/api/foo', '/api/package.json'];
+		const routes = ['/api/test', '/api/foo', '/api/package.json'];
 
 		routes.forEach(route => {
 			it('GET ' + route + ' => 404', done => {
