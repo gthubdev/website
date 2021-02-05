@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const { Series, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
 const util = require('../util/util.js');
 
@@ -52,7 +51,7 @@ module.exports.updateSeries = async (req, res) => {
 	}
 
 	try {
-		const [updated, deleted] = await Sequelize.Promise.all([
+		const [updated, deleted] = await Promise.all([
 			Series.update(req.body.series,
 				{ where: { id: req.params.id } }
 			),

@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const { Event, EventSession, Track, Series, SupportSeries, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
 const dateutil = require('../util/dateutil');
 const util = require('../util/util');
@@ -18,7 +17,7 @@ module.exports.getCalendarWithTimezone = (req, res) => {
 
 async function buildCalendar(req, res, timezone) {
 	try {
-		const [events, series, tracks, vehicleclasscategories, vehicleclasses] = await Sequelize.Promise.all([
+		const [events, series, tracks, vehicleclasscategories, vehicleclasses] = await Promise.all([
 			Event.findAll({
 				include: [
 					{ model: Track },

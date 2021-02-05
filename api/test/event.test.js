@@ -49,7 +49,7 @@ describe('Events', () => {
 			const tmpseries = {
 				series: { name: 'Test Series 1', shortname: 'TS1', priority: 1, vehicleClasses }
 			};
-			const [track, series] = await Sequelize.Promise.all([
+			const [track, series] = await Promise.all([
 				Track.create(tmptrack),
 				Series.create(tmpseries)
 			]);
@@ -72,7 +72,7 @@ describe('Events', () => {
 			});
 			res1.should.equal(1);
 
-			const [res3, res4, res5] = await Sequelize.Promise.all([
+			const [res3, res4, res5] = await Promise.all([
 				Series.destroy({
 					where: { id: seriesID }
 				}),
@@ -487,7 +487,7 @@ describe('EventSessions', () => {
 				series: { name: 'Test Series 1', shortname: 'TS1', priority: 1, vehicleClasses }
 			};
 
-			const [event, series] = await Sequelize.Promise.all([
+			const [event, series] = await Promise.all([
 				Event.create(tmpevent.event),
 				Series.create(tmpseries)
 			]);
@@ -505,7 +505,7 @@ describe('EventSessions', () => {
 			});
 			response.should.equal(1);
 
-			const [res1, res2] = await Sequelize.Promise.all([
+			const [res1, res2] = await Promise.all([
 				Event.destroy({
 					where: { id: eventID }
 				}),
@@ -516,7 +516,7 @@ describe('EventSessions', () => {
 			res1.should.equal(1);
 			res2.should.equal(1);
 
-			const [res3, res4] = await Sequelize.Promise.all([
+			const [res3, res4] = await Promise.all([
 				Series.destroy({
 					where: { id: seriesID }
 				}),

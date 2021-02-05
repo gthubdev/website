@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const dayjs = require('dayjs');
 const { Event, SupportSeries, Track, Series, EventSession } = require('../models');
 const util = require('../util/util.js');
@@ -106,7 +105,7 @@ module.exports.updateEvent = async (req, res) => {
 	}
 
 	try {
-		const [updated, deleted] = await Sequelize.Promise.all([
+		const [updated, deleted] = await Promise.all([
 			Event.update(req.body.event,
 				{ where: { id: req.params.id } }
 			),
