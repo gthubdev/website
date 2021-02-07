@@ -12,7 +12,8 @@ module.exports = {
 	},
 	extends: [
 		'@nuxtjs',
-		'plugin:nuxt/recommended'
+		'plugin:nuxt/recommended',
+		'plugin:vue/recommended'
 	],
 	plugins: [
 	],
@@ -31,6 +32,9 @@ module.exports = {
 			anonymous: 'always',
 			named: 'never',
 			asyncArrow: 'always'
+		}],
+		'vue/html-indent': ['error', 'tab', {
+			baseIndent: 0
 		}]
 	}
 };
