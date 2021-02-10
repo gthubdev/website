@@ -1,0 +1,23 @@
+@import '../abstracts/fonts';
+
+.index-container {
+	margin-top: 5em;
+}
+
+.index-headline {
+	padding: 0.5em 0;
+	color: #f7f7f7;
+	font-family: $default-family;
+	font-size: 8em;
+	font-weight: 900;
+	font-style: italic;
+}
+
+.index-subhead {
+	margin-bottom: 3em;
+	line-height: 2;
+	color: #f7f7f7;
+	font-family: $default-family;
+	font-size: 1.3em;
+	font-weight: 400;
+}

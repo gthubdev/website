@@ -4,3 +4,15 @@
 @import 'abstracts/variables';
 @import 'abstracts/fonts';
 @import 'abstracts/text';
+
+// Components
+@import 'components/button';
+@import 'components/images';
+@import 'components/nav';
+
+// Layout
+@import 'layout/body';
+@import 'layout/misc';
+
+// Pages
+@import 'pages/index';

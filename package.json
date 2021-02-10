@@ -41,8 +41,12 @@
     "mariadb": "^2.5.1",
     "method-override": "^3.0.0",
     "nuxt": "^2.14.6",
+    "primeflex": "^2.0.0",
+    "primeicons": "^4.1.0",
+    "primevue": "^2.3.0",
     "sequelize": "^6.5.0",
-    "supertest": "^6.0.1"
+    "supertest": "^6.0.1",
+    "vue": "^2.6.12"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.12.13",
@@ -58,7 +62,10 @@
     "nodemon": "^2.0.6",
     "sass": "^1.32.6",
     "sass-loader": "^10.1.1",
-    "stylelint": "^13.7.2",
+    "stylelint": "^13.9.0",
+    "stylelint-config-concentric-order": "^4.0.1",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-sass-guidelines": "^7.1.0",
     "stylelint-config-standard": "^20.0.0"
   },
   "repository": {

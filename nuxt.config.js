@@ -15,6 +15,9 @@ module.exports = {
 
 	// Global CSS (https://go.nuxtjs.dev/config-css)
 	css: [
+		{ src: 'primevue/resources/primevue.min.css' },
+		{ src: 'primeicons/primeicons.css' },
+		{ src: 'primeflex/primeflex.css' },
 		// main SCSS file in the project
 		'~/assets/scss/main.scss'
 	],
@@ -37,11 +40,20 @@ module.exports = {
 	// Modules (https://go.nuxtjs.dev/config-modules)
 	modules: [
 		// https://go.nuxtjs.dev/axios
-		'@nuxtjs/axios'
+		'@nuxtjs/axios',
+		'primevue/nuxt'
 	],
 
 	// Axios module configuration (https://go.nuxtjs.dev/config-axios)
 	axios: {
+	},
+
+	// Primevue config
+	primevue: {
+		theme: 'md-dark-indigo',
+		ripple: true,
+		components: [],
+		directives: []
 	},
 
 	// Build Configuration (https://go.nuxtjs.dev/config-build)

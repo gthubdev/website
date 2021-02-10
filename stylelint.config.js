@@ -1,6 +1,8 @@
 module.exports = {
 	extends: [
-		'stylelint-config-standard'
+		'stylelint-config-recommended',
+		'stylelint-config-concentric-order',
+		'stylelint-config-sass-guidelines'
 	],
 	// add your custom config here
 	// https://stylelint.io/user-guide/configuration
@@ -11,6 +13,7 @@ module.exports = {
 	],
 	rules: {
 		indentation: 'tab',
-		'selector-list-comma-newline-after': 'always-multi-line'
+		'selector-list-comma-newline-after': 'always-multi-line',
+		'order/properties-alphabetical-order': null
 	}
 };
