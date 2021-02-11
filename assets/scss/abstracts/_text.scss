@@ -4,6 +4,14 @@ h1 {
 	font-family: $default-family;
 }
 
+.page-headline {
+	text-align: center;
+	color: #f7f7f7;
+	font-size: 3em;
+	font-weight: bold;
+	font-variant: small-caps;
+}
+
 .p-component, body {
 	font-family: $default-family;
 }
