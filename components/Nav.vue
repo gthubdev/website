@@ -20,6 +20,11 @@
 			</div>
 			<div class="p-col">
 				<span class="nav-btn nav-btn-secondary">
+					<nuxt-link to="/sessions">SESSIONS</nuxt-link>
+				</span>
+			</div>
+			<div class="p-col">
+				<span class="nav-btn nav-btn-secondary">
 					<nuxt-link to="/about">ABOUT</nuxt-link>
 				</span>
 			</div>

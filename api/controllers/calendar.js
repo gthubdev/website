@@ -103,3 +103,23 @@ async function buildCalendar(req, res, timezone) {
 		util.error(req, res, err);
 	}
 }
+
+module.exports.getAllSessions = async (req, res) => {
+	try {
+		const sessions = await EventSession.findAll({
+			include: [
+				{ model: Event },
+				{ model: Series }
+			],
+			order: [
+				['starttime', 'ASC']
+			]
+		});
+
+		const data = { sessions };
+
+		res.json(data);
+	} catch (err) {
+		util.error(req, res, err);
+	}
+};

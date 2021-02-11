@@ -21,6 +21,7 @@ router.get('/auth/me', AuthCtrl.me);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
+router.get('/allsessions', CalendarCtrl.getAllSessions);
 
 // Event
 router.post('/calendar/event/create', auth.tvcrew_auth, EventCtrl.createEvent);
