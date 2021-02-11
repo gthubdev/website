@@ -1,9 +1,10 @@
 // main SCSS file
 
 // Abstracts
-@import 'abstracts/variables';
+@import 'abstracts/borders';
 @import 'abstracts/fonts';
 @import 'abstracts/text';
+@import 'abstracts/variables';
 
 // Components
 @import 'components/button';

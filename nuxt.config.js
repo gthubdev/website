@@ -1,5 +1,7 @@
 // eslint-disable-next-line nuxt/no-cjs-in-config
 module.exports = {
+	ssr: false,
+
 	// Global page headers (https://go.nuxtjs.dev/config-head)
 	head: {
 		title: 'GTHub',
@@ -41,7 +43,8 @@ module.exports = {
 	modules: [
 		// https://go.nuxtjs.dev/axios
 		'@nuxtjs/axios',
-		'primevue/nuxt'
+		'primevue/nuxt',
+		'@nuxtjs/dayjs'
 	],
 
 	// Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -52,8 +55,19 @@ module.exports = {
 	primevue: {
 		theme: 'md-dark-indigo',
 		ripple: true,
-		components: [],
+		components: ['Card'],
 		directives: []
+	},
+
+	dayjs: {
+		locales: ['en'],
+		defaultLocale: 'en',
+		defaultTimeZone: 'Europe/Stockholm',
+		plugins: [
+			'utc', // import 'dayjs/plugin/utc'
+			'timezone', // import 'dayjs/plugin/timezone'
+			'advancedFormat'
+		]
 	},
 
 	// Build Configuration (https://go.nuxtjs.dev/config-build)

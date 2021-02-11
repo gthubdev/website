@@ -13,5 +13,6 @@ h1 {
 }
 
 .p-component, body {
-	font-family: $default-family;
+	color: #f7f7f7;
+	font-family: $default-family !important;
 }
