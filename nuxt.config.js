@@ -55,7 +55,7 @@ module.exports = {
 	primevue: {
 		theme: 'md-dark-indigo',
 		ripple: true,
-		components: ['Card'],
+		components: ['Card', 'Chip'],
 		directives: []
 	},
 

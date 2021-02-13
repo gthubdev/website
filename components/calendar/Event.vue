@@ -1,33 +1,25 @@
 <template>
 <div>
-	<Card class="card">
+	<Card class="event-card">
 		<template #content>
+			<Chip :label="event.Series.shortname" />
 			<div class="p-grid p-align-center">
 				<div class="p-col-3">
 					<img :src="eventLogo" alt="Logo" class="eventlogo">
 				</div>
-				<div class="p-col-9">
+				<div class="p-col-1" />
+				<div class="p-col-8">
 					<span class="event-headline">{{ event.name }}</span>
 					<div class="headline-sep-line" />
-					<div class="text-overflow series">
-						{{ event.Series.name }}
-					</div>
 					<div class="text-overflow">
 						{{ getCountryFlag }} {{ event.Track.name }}
 					</div>
-				</div>
-			</div>
-			<div class="dates">
-				<i class="pi pi-calendar-plus" style="font-size: 1.2rem" />
-				&nbsp;
-				{{ startdate }} - {{ enddate }}
-			</div>
-			<div class="p-grid">
-				<div class="p-col sessions">
-					Show sessions
-				</div>
-				<div class="p-col sessions">
-					Show series
+					<div class="dates">
+						{{ eventDate }}
+					</div>
+					<div class="moreinfo">
+						More info &rarr;
+					</div>
 				</div>
 			</div>
 		</template>
@@ -37,13 +29,14 @@
 
 <script>
 import Card from 'primevue/card';
+import Chip from 'primevue/chip';
 import cl from 'country-list';
 import flag from 'country-code-emoji';
 
 export default {
 	name: 'Event',
 	components: {
-		Card
+		Card, Chip
 	},
 	props: {
 		event: {
@@ -54,11 +47,11 @@ export default {
 		}
 	},
 	computed: {
-		startdate() {
-			return this.$dayjs(this.event.startdate).format('ddd Do MMM');
-		},
-		enddate() {
-			return this.$dayjs(this.event.enddate).format('ddd Do MMM');
+		eventDate() {
+			if (this.event.startdate === this.event.enddate)
+				return this.startdate();
+			else
+				return this.startdate() + ' - ' + this.enddate();
 		},
 		eventLogo() {
 			if (this.event.logo.length)
@@ -71,17 +64,36 @@ export default {
 		getCountryFlag() {
 			return flag(cl.getCode(this.event.Track.country));
 		}
+	},
+	methods: {
+		startdate() {
+			return this.$dayjs(this.event.startdate).format('ddd Do MMM');
+		},
+		enddate() {
+			return this.$dayjs(this.event.enddate).format('ddd Do MMM');
+		}
 	}
 };
 </script>
 
 <style scoped>
-.card {
-	background: rgba(32, 32, 32, .8);
+.p-card > .p-card-body {
+	padding: 0 1rem !important;
+}
+.p-chip {
+	border-radius: 10px !important;
+	background-color: goldenrod !important;
+	padding: 0 0.5rem !important;
+	color: #000 !important;
+	font-weight: bold !important;
+}
+.p-chip-text {
+	line-height: 1em !important;
+}
+.event-card {
+	background: rgba(32, 32, 32, .6);
 	margin: 1em;
-	padding: 0 1em;
-	/*border: 3px solid rgba(255, 255, 255, .2);*/
-	/*border: 3px solid;*/
+	padding: 0;
 	border-radius: 16px;
 	max-width: 550px;
 }
@@ -106,26 +118,12 @@ export default {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.series {
-	font-weight: bold;
-	margin-bottom: 0.25em;
-}
 .dates {
-	border-top: white 1px solid;
-	border-bottom: white 1px solid;
-	margin: .75em 0;
-	padding: .75em 0;
-	text-align: center;
-	font-size: 1.2em;
+	margin-top: 1em;
 	font-weight: bold;
 }
-.sessions {
-	/*border-bottom: white 1px solid;*/
-	/*margin: 0 0 0.75em 0;*/
-	/*padding: 0 0 0.75em 0;*/
-	text-align: center;
-	font-size: 1.2em;
-	font-weight: bold;
-	color: #ed6400;
+.moreinfo {
+	margin-top: 1em;
+	color: goldenrod;
 }
 </style>
