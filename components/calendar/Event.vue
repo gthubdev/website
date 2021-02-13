@@ -3,21 +3,21 @@
 	<Card class="event-card">
 		<template #content>
 			<Chip :label="event.Series.shortname" />
-			<div class="p-grid p-align-center">
-				<div class="p-col-3">
-					<img :src="eventLogo" alt="Logo" class="eventlogo">
+			<div class="grid grid-cols-12">
+				<div class="col-span-3 flex items-center">
+					<img :src="eventLogo" alt="Logo" class="object-contain">
 				</div>
-				<div class="p-col-1" />
-				<div class="p-col-8">
+				<div class="" />
+				<div class="col-span-8">
 					<span class="event-headline">{{ event.name }}</span>
 					<div class="headline-sep-line" />
-					<div class="text-overflow">
+					<div class="whitespace-nowrap overflow-hidden overflow-ellipsis">
 						{{ getCountryFlag }} {{ event.Track.name }}
 					</div>
-					<div class="dates">
+					<div class="font-bold mt-4">
 						{{ eventDate }}
 					</div>
-					<div class="moreinfo">
+					<div class="color-goldenrod mt-4">
 						More info &rarr;
 					</div>
 				</div>
@@ -91,39 +91,14 @@ export default {
 	line-height: 1em !important;
 }
 .event-card {
+	@apply m-4 p-0 rounded-xl max-w-lg;
 	background: rgba(32, 32, 32, .6);
-	margin: 1em;
-	padding: 0;
-	border-radius: 16px;
-	max-width: 550px;
-}
-.eventlogo {
-	width:100%;
-	height:100%;
-	object-fit:cover;
 }
 .event-headline {
-	font-size: 1.5em;
-	font-weight: bold;
-	display: flex;
+	@apply font-bold flex overflow-hidden overflow-ellipsis items-center text-2xl h-14;
 	word-wrap: break-word;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	line-height: 1.2em;
-	height: 2.4em;
-	align-items: center;
 }
-.text-overflow {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-.dates {
-	margin-top: 1em;
-	font-weight: bold;
-}
-.moreinfo {
-	margin-top: 1em;
+.color-goldenrod {
 	color: goldenrod;
 }
 </style>
