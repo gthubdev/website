@@ -10,7 +10,7 @@
 				<div class="" />
 				<div class="col-span-8">
 					<span class="event-headline">{{ event.name }}</span>
-					<div class="headline-sep-line" />
+					<div class="gradient-line" />
 					<div class="whitespace-nowrap overflow-hidden overflow-ellipsis">
 						{{ getCountryFlag }} {{ event.Track.name }}
 					</div>
@@ -76,29 +76,32 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "assets/scss/abstracts/variables";
+
 .p-card > .p-card-body {
 	padding: 0 1rem !important;
 }
+.p-card-content {
+	padding: 0.25rem 0 !important;
+}
 .p-chip {
-	border-radius: 10px !important;
-	background-color: goldenrod !important;
+	margin: 0 0 !important;
+	border-radius: 16px !important;
+	background-color: $goldenrod !important;
 	padding: 0 0.5rem !important;
 	color: #000 !important;
 	font-weight: bold !important;
-}
-.p-chip-text {
-	line-height: 1em !important;
 }
 .event-card {
 	@apply m-4 p-0 rounded-xl max-w-lg;
 	background: rgba(32, 32, 32, .6);
 }
 .event-headline {
-	@apply font-bold flex overflow-hidden overflow-ellipsis items-center text-2xl h-14;
+	@apply font-bold flex overflow-hidden overflow-ellipsis items-center text-2xl h-16;
 	word-wrap: break-word;
 }
 .color-goldenrod {
-	color: goldenrod;
+	color: $goldenrod;
 }
 </style>

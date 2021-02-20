@@ -1,8 +1,6 @@
 @import '../abstracts/variables';
 
-.headline-sep-line {
-	margin: 5px 0;
+.gradient-line {
+	@apply my-2 w-3/4 h-0.5;
 	background-image: $default-gradient;
-	width: 75%;
-	height: 3px;
 }

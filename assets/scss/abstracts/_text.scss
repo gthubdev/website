@@ -1,18 +1,18 @@
-@import 'fonts';
+@import 'variables';
 
 h1 {
-	font-family: $default-family;
+	font-family: $default-font;
 }
 
 .page-headline {
 	text-align: center;
-	color: #f7f7f7;
+	color: $white;
 	font-size: 3em;
 	font-weight: bold;
 	font-variant: small-caps;
 }
 
 .p-component, body {
-	color: #f7f7f7;
-	font-family: $default-family !important;
+	color: $white;
+	font-family: $default-font !important;
 }

@@ -1,7 +1,7 @@
 <template>
 <section>
-	<div class="p-grid p-justify-center index-container">
-		<div class="p-col-4">
+	<div class="grid grid-cols-10 w-3/4 justify-center m-auto mt-20">
+		<div class="col-span-4">
 			<!--<div class="headline-sep-line" />-->
 			<div class="index-headline">
 				GTHub
@@ -17,8 +17,8 @@
 				</span>
 			</p>
 		</div>
-		<div class="p-col-6">
-			<img src="~/assets/img/LamboSplash.png" alt="Picture of a Lamborghini race car" class="index-img">
+		<div class="col-span-6">
+			<img src="~/assets/img/LamboSplash.png" alt="Picture of a Lamborghini race car">
 		</div>
 	</div>
 </section>
@@ -29,6 +29,12 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+.index-headline {
+	@apply px-4 py-0 text-gray-200 text-9xl font-black italic;
+}
+.index-subhead {
+	@apply mb-12 leading-loose text-gray-200 text-xl font-bold;
+}
 .index-img {
 	width: 100%;
 }

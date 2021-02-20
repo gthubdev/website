@@ -17,7 +17,8 @@
     "create_database": "npm run create_tables && npm run init_data && npm run insert_testdata",
     "create_tables": "node ./database/create_tables.js",
     "init_data": "node ./database/init.js",
-    "insert_testdata": "node ./database/insert_testdata.js"
+    "insert_testdata": "node ./database/insert_testdata.js",
+    "tailwind-config-viewer": "tailwind-config-viewer -o -p 3006"
   },
   "dependencies": {
     "@nuxt/types": "^2.14.7",
@@ -72,6 +73,7 @@
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-sass-guidelines": "^8.0.0",
     "stylelint-config-standard": "^20.0.0",
+    "tailwind-config-viewer": "^1.5.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "repository": {
