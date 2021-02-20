@@ -4,8 +4,9 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 
 ## Requirements
 
-* [Node.js](https://nodejs.org) - (Need Node.js >= 8)
+* [Node.js](https://nodejs.org) (>= 12.13.0)
 * [MariaDB](https://mariadb.org/)
+* [Yarn](https://yarnpkg.com/)
 
 ## Installation
 
@@ -13,7 +14,7 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 `git clone https://github.com/gthubdev/website`
 
 * Install dependencies:
-`npm install`
+`yarn install`
 
 * Create the file `.env` and enter your configuration:
 ```
@@ -23,11 +24,18 @@ PORT=3000
 # Defaults to 127.0.0.1 if not set
 IP=localhost
 
-# MariaDB
+# MariaDB config for production/dev
 DBHost=DATABASE_HOST
 DBName=DATABASE_NAME
 DBUser=DATABASE_USER
 DBPass=DATABASE_PASSWORD
+
+# MariaDB config for testing
+TestDBHost=TESTDATABASE_HOST
+TestDBName=TESTDATABASE_NAME
+TestDBUser=TESTDATABASE_USER
+TestDBPass=TESTDATABASE_PASSWORD
+
 # Defaults to 3306 if not set (MariaDB default)
 DBPort=3306
 
@@ -55,5 +63,4 @@ You can now login with `admin / admin`.
 * To run in production mode: `npm run build` to generate all files followed by `npm start` to start the server
 
 ## Testing
-* Run:
-`npm test`
+* Run: `npm test`
