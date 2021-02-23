@@ -30,7 +30,7 @@ INSERT INTO SeriesType (series, class) VALUES (7, 3);
 INSERT INTO Series (id, name, shortname, priority, logo) VALUES (8, 'C1 Racing Club', 'C1', 4, 'https://i.imgur.com/FCHlD04.jpg');
 INSERT INTO SeriesType (series, class) VALUES (8, 30);
 
-INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, 'Liqui-Moly Bathurst 12 Hour', 'https://i.imgur.com/DcOb8V2.png', '2021-02-07', '2021-02-08', 2, 2, 2);
+INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, 'Liqui-Moly Bathurst 12 Hour', 'https://i.imgur.com/DcOb8V2.png', '2021-02-06', '2021-02-07', 2, 2, 2);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, 'ADAC TOTAL Nürburgring 24 Hours', 'https://i.imgur.com/5IjaExI.jpg','2021-06-03', '2021-06-06', 1, 1, 1);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (3, 'TOTAL Spa 24 Hours', 'https://i.imgur.com/63tKMPN.png', '2021-07-29', '2021-08-01', 3, 2, 3);
 INSERT INTO Event (id, name, startdate, enddate, track, priority, mainseries) VALUES (4, 'Supercheap Auto Bathurst 1000', '2021-10-07', '2021-10-10', 2, 3, 6);
@@ -42,9 +42,9 @@ INSERT INTO Event (id, name, startdate, enddate, track, priority, mainseries) VA
 # Bathurst 12 Hours
 INSERT INTO SupportSeries (event, series) VALUES (1, 6);
 INSERT INTO SupportSeries (event, series) VALUES (1, 4);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('GT2 Support Race', '2021-02-07 02:00', 1, 4, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Top 10 Shootout', '2021-02-07 06:00', 1, 6, 30);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race', '2021-02-07 18:45', 1, 2, 720);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Support Race', '2021-02-06 02:00', 1, 4, 60);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Top 10 Shootout', '2021-02-06 06:00', 1, 6, 30);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race', '2021-02-06 18:45', 1, 2, 720);
 
 # N24
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Qualifying', '2021-06-04 16:00', 2, 1, 120);
@@ -69,4 +69,4 @@ INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Qua
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Qualifying 2', '2021-07-31 07:00', 3, 8, 30);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Top 30 Qualifying', '2021-07-31 08:00', 3, 3, 45);
 INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race 2', '2021-07-31 11:00', 3, 8, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race', '2021-07-31 14:00', 3, 3, 1440);
+INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Main Race', '2021-07-31 14:00', 3, 3, 1440);

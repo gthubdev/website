@@ -17,26 +17,58 @@
 					<div class="font-bold mt-4">
 						{{ eventDate }}
 					</div>
-					<div class="color-goldenrod mt-4">
+					<div class="color-goldenrod mt-4" @click="toggleOverlay">
 						More info &rarr;
 					</div>
 				</div>
 			</div>
 		</template>
 	</Card>
+	<OverlayPanel ref="op" :show-close-icon="true">
+		<div class="grid grid-cols-3 gap-4">
+			<div v-for="es in event.EventSessions" :key="es.id" class="session" :class="borderColor(es)">
+				<div class="space-y-2 my-0.5">
+					<div class="block">
+						<div class="flex items-center">
+							<img :src="seriesLogo(es)" alt="Logo" class="series-logo">
+
+							<span v-tooltip.top="es.Series.name" class="session-series" :class="seriesText(es)">
+								{{ es.Series.shortname }}
+							</span>
+							{{ es.name }}
+						</div>
+					</div>
+					<div class="block">
+						<span class="session-start">
+							{{ sessionStart(es) }}
+						</span>
+						<br>
+						<span class="session-start-local">
+							{{ sessionStartLocal(es) }} (local)
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</OverlayPanel>
 </div>
 </template>
 
 <script>
 import Card from 'primevue/card';
 import Chip from 'primevue/chip';
+import OverlayPanel from 'primevue/overlaypanel';
+import Tooltip from 'primevue/tooltip';
 import cl from 'country-list';
 import flag from 'country-code-emoji';
 
 export default {
 	name: 'Event',
 	components: {
-		Card, Chip
+		Card, Chip, OverlayPanel
+	},
+	directives: {
+		tooltip: Tooltip
 	},
 	props: {
 		event: {
@@ -71,6 +103,35 @@ export default {
 		},
 		enddate() {
 			return this.$dayjs(this.event.enddate).format('ddd Do MMM');
+		},
+		toggleOverlay(event) {
+			this.$refs.op.toggle(event);
+		},
+		sessionStart(session) {
+			return this.$dayjs(session.starttime).tz('UTC').format('ddd Do MMM HH:mm') + 'h';
+		},
+		sessionStartLocal(session) {
+			return this.$dayjs(session.starttime).tz(this.event.Track.timezone).format('ddd Do MMM HH:mm') + 'h';
+		},
+		borderColor(es) {
+			return {
+				'main-series-border': this.event.mainseries === es.series,
+				'support-series-border': this.event.mainseries !== es.series
+			};
+		},
+		seriesText(es) {
+			return {
+				'main-series-text-color': this.event.mainseries === es.series,
+				'main-series-tooltip': this.event.mainseries === es.series,
+				'support-series-text-color': this.event.mainseries !== es.series,
+				'support-series-tooltip': this.event.mainseries !== es.series
+			};
+		},
+		seriesLogo(es) {
+			if (es.Series.logo.length)
+				return es.Series.logo;
+			else
+				return '';
 		}
 	}
 };
@@ -103,5 +164,39 @@ export default {
 }
 .color-goldenrod {
 	color: $goldenrod;
+}
+.series-logo {
+	height: 1.5rem;
+}
+.session {
+	@apply w-full m-auto flex leading-4 px-2 my-2;
+}
+.session-series {
+	@apply font-black mx-2;
+	border-bottom: 2px dotted red;
+}
+.session-start {
+	@apply px-2 text-sm;
+}
+.session-start-local {
+	@apply px-2 text-xs text-gray-400;
+}
+.main-series-border {
+	border-left: 4px solid rgba(96, 165, 250);
+}
+.main-series-text-color {
+	@apply text-blue-400;
+}
+.main-series-tooltip {
+	border-bottom: 2px dotted rgba(96, 165, 250);
+}
+.support-series-border {
+	border-left: 4px solid $orange;
+}
+.support-series-text-color {
+	@apply text-yellow-500;
+}
+.support-series-tooltip {
+	border-bottom: 2px dotted $orange;
 }
 </style>

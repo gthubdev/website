@@ -56,8 +56,8 @@ module.exports = {
 	primevue: {
 		theme: 'md-dark-indigo',
 		ripple: true,
-		components: ['Card', 'Chip'],
-		directives: []
+		components: ['Card', 'Chip', 'OverlayPanel'],
+		directives: ['Tooltip']
 	},
 
 	dayjs: {
