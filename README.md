@@ -46,21 +46,21 @@ JWT_KEY=ChooseSomeRandomKeyHere
 You can use the supplied `.env.sample` as a base.
 
 * Test your database connection with:
-`npm run test_connection`
+`yarn run test_connection`
 
 * Create the tables with:
-`npm run create_tables`
+`yarn run create_tables`
 
 * Initialize data with:
-`npm run init_data`<br>
+`yarn run init_data`<br>
 You can now login with `admin / admin`.
 
 * [Optional] Insert testdata with:
-`npm run insert_testdata`
+`yarn run insert_testdata`
 
 ## Run
-* To run in development mode: `npm run dev`
-* To run in production mode: `npm run build` to generate all files followed by `npm start` to start the server
+* To run in development mode: `yarn run dev`
+* To run in production mode: `yarn run build` to generate all files followed by `yarn start` to start the server
 
 ## Testing
-* Run: `npm test`
+* Run: `yarn test`
