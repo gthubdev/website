@@ -61,6 +61,7 @@ import OverlayPanel from 'primevue/overlaypanel';
 import Tooltip from 'primevue/tooltip';
 import cl from 'country-list';
 import flag from 'country-code-emoji';
+import { mapGetters } from 'vuex';
 
 export default {
 	name: 'Event',
@@ -73,12 +74,12 @@ export default {
 	props: {
 		event: {
 			type: Object, default: null
-		},
-		tz: {
-			type: Object, default: null
 		}
 	},
 	computed: {
+		...mapGetters({
+			usertz: 'usertz/get'
+		}),
 		eventDate() {
 			if (this.event.startdate === this.event.enddate)
 				return this.startdate();
@@ -108,7 +109,7 @@ export default {
 			this.$refs.op.toggle(event);
 		},
 		sessionStart(session) {
-			return this.$dayjs(session.starttime).tz('UTC').format('ddd Do MMM HH:mm') + 'h';
+			return this.$dayjs(session.starttime).tz(this.usertz).format('ddd Do MMM HH:mm') + 'h';
 		},
 		sessionStartLocal(session) {
 			return this.$dayjs(session.starttime).tz(this.event.Track.timezone).format('ddd Do MMM HH:mm') + 'h';

@@ -60,7 +60,7 @@ module.exports = {
 	primevue: {
 		theme: 'md-dark-indigo',
 		ripple: true,
-		components: ['Card', 'Chip', 'OverlayPanel'],
+		components: ['Card', 'Chip', 'Dropdown', 'OverlayPanel'],
 		directives: ['Tooltip']
 	},
 
