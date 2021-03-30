@@ -8,7 +8,7 @@ INSERT INTO Track (id, name, country, length, map, timezone) VALUES (6, 'Surfers
 INSERT INTO Track (id, name, country, length, map, timezone) VALUES (7, 'Phillip Island Grand Prix Circuit', 'Australia', 4.445, '', 'Australia/Sydney');
 
 # Events
-INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, 'Liqui-Moly Bathurst 12 Hour', 'https://i.imgur.com/DcOb8V2.png', '2021-02-06', '2021-02-07', 2, 2, 2);
+INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (1, 'Liqui-Moly Bathurst 12 Hour', 'https://i.imgur.com/DcOb8V2.png', '2021-02-06', '2021-02-07', 2, 2, 5);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (2, 'ADAC TOTAL Nürburgring 24 Hours', 'https://i.imgur.com/5IjaExI.jpg','2021-06-03', '2021-06-06', 1, 1, 4);
 INSERT INTO Event (id, name, logo, startdate, enddate, track, priority, mainseries) VALUES (3, 'TOTAL Spa 24 Hours', 'https://i.imgur.com/63tKMPN.png', '2021-07-29', '2021-08-01', 3, 2, 17);
 INSERT INTO Event (id, name, startdate, enddate, track, priority, mainseries) VALUES (4, 'Supercheap Auto Bathurst 1000', '2021-10-07', '2021-10-10', 2, 3, 9);
