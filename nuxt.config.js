@@ -21,7 +21,7 @@ module.exports = {
 		{ src: 'primeicons/primeicons.css' },
 		{ src: 'primeflex/primeflex.css' },
 		// main SCSS file in the project
-		'~/assets/scss/main.scss'
+		'@/assets/scss/main.scss'
 	],
 
 	// Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
@@ -58,9 +58,9 @@ module.exports = {
 
 	// Primevue config
 	primevue: {
-		theme: 'md-dark-indigo',
+		theme: 'mdc-dark-indigo',
 		ripple: true,
-		components: ['Card', 'Chip', 'Dropdown', 'OverlayPanel'],
+		components: ['Card', 'Chip', 'Dropdown', 'MultiSelect', 'OverlayPanel'],
 		directives: ['Tooltip']
 	},
 
