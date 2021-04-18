@@ -25,6 +25,11 @@
 			</div>
 			<div class="link-container">
 				<span class="nav-btn nav-btn-secondary">
+					<nuxt-link to="/resources">RESOURCES</nuxt-link>
+				</span>
+			</div>
+			<div class="link-container">
+				<span class="nav-btn nav-btn-secondary">
 					<nuxt-link to="/about">ABOUT</nuxt-link>
 				</span>
 			</div>
