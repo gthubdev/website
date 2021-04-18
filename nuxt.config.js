@@ -60,7 +60,16 @@ module.exports = {
 	primevue: {
 		theme: 'mdc-dark-indigo',
 		ripple: true,
-		components: ['Card', 'Chip', 'Dropdown', 'MultiSelect', 'OverlayPanel', 'TabPanel', 'TabView'],
+		components: [
+			'Card',
+			'Chip',
+			'DataTable',
+			'Dropdown',
+			'MultiSelect',
+			'OverlayPanel',
+			'TabPanel',
+			'TabView'
+		],
 		directives: ['Tooltip']
 	},
 
