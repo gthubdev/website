@@ -11,7 +11,7 @@
 			Series...
 		</TabPanel>
 		<TabPanel header="Tracks">
-			Tracks...
+			<ResourcesTrackContainer />
 		</TabPanel>
 	</TabView>
 </div>
@@ -20,10 +20,11 @@
 <script>
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import ResourcesTrackContainer from '@/components/resources/ResourcesTrackContainer';
 
 export default {
 	components: {
-		TabPanel, TabView
+		ResourcesTrackContainer, TabPanel, TabView
 	},
 	async asyncData({ $axios }) {
 		try {
