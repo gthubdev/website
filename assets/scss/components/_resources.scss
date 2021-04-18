@@ -1,0 +1,14 @@
+.resources .p-dataview-content {
+	background-color: rgba(32, 32, 32, 0.5) !important;
+}
+
+.resources .p-paginator {
+	background-color: rgba(25, 25, 25, 0.6);
+}
+
+.resource-list-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.5em 1em;
+}

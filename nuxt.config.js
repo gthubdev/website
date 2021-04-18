@@ -63,7 +63,7 @@ module.exports = {
 		components: [
 			'Card',
 			'Chip',
-			'DataTable',
+			'DataView',
 			'Dropdown',
 			'MultiSelect',
 			'OverlayPanel',

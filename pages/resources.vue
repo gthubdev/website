@@ -21,6 +21,7 @@
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import ResourcesTrackContainer from '@/components/resources/ResourcesTrackContainer';
+import { mapMutations } from 'vuex';
 
 export default {
 	components: {
@@ -42,6 +43,14 @@ export default {
 		return {
 			data: []
 		};
+	},
+	created() {
+		this.setTracks(this.data.tracks);
+	},
+	methods: {
+		...mapMutations({
+			setTracks: 'resources/tracks/set'
+		})
 	}
 };
 </script>
