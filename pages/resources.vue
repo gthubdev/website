@@ -5,7 +5,7 @@
 	</h1>
 	<TabView>
 		<TabPanel header="Events">
-			Events...
+			<ResourcesEventContainer />
 		</TabPanel>
 		<TabPanel header="Series">
 			<ResourcesSeriesContainer />
@@ -20,13 +20,14 @@
 <script>
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import ResourcesEventContainer from '@/components/resources/ResourcesEventContainer';
 import ResourcesSeriesContainer from '@/components/resources/ResourcesSeriesContainer';
 import ResourcesTrackContainer from '@/components/resources/ResourcesTrackContainer';
 import { mapMutations } from 'vuex';
 
 export default {
 	components: {
-		ResourcesSeriesContainer, ResourcesTrackContainer, TabPanel, TabView
+		ResourcesEventContainer, ResourcesSeriesContainer, ResourcesTrackContainer, TabPanel, TabView
 	},
 	async asyncData({ $axios }) {
 		try {
@@ -46,11 +47,13 @@ export default {
 		};
 	},
 	created() {
+		this.setEvents(this.data.events);
 		this.setSeries(this.data.series);
 		this.setTracks(this.data.tracks);
 	},
 	methods: {
 		...mapMutations({
+			setEvents: 'resources/events/set',
 			setSeries: 'resources/series/set',
 			setTracks: 'resources/tracks/set'
 		})
