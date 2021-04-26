@@ -20,11 +20,6 @@
 			</div>
 			<div class="link-container">
 				<span class="nav-btn nav-btn-secondary">
-					<nuxt-link to="/sessions">SESSIONS</nuxt-link>
-				</span>
-			</div>
-			<div class="link-container">
-				<span class="nav-btn nav-btn-secondary">
 					<nuxt-link to="/resources">RESOURCES</nuxt-link>
 				</span>
 			</div>
