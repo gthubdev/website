@@ -31,7 +31,7 @@ export default {
 	},
 	async asyncData({ $axios }) {
 		try {
-			const res = await $axios.$get('/api/calendar');
+			const res = await $axios.$get('/api/resources');
 			return {
 				data: res
 			};

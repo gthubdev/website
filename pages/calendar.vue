@@ -135,7 +135,7 @@ export default {
 		})
 	},
 	created() {
-		this.setTimezones(this.data.tz.timezones);
+		this.setTimezones(this.data.timezones);
 		this.selectedTimezone = this.defaultTimezone;
 		this.displayedEvents = [...this.data.events];
 
