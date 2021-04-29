@@ -17,10 +17,13 @@
 			:always-show-paginator="false"
 		>
 			<template #list="slotProps">
-				<div class="p-col-12">
+				<div class="w-screen flex justify-between py-2 items-center">
 					<div class="resource-list-item">
 						{{ getCountryFlag(slotProps.data.country) }}
 						{{ slotProps.data.name }}
+					</div>
+					<div>
+						<Button icon="pi pi-trash" @click="deleteTrack(slotProps.data)" />
 					</div>
 				</div>
 			</template>
@@ -67,6 +70,9 @@ export default {
 		},
 		createTrack() {
 			this.showDialog = true;
+		},
+		deleteTrack(track) {
+			console.log('Delete track', track);
 		},
 		trackCrudClosed() {
 			this.showDialog = false;
