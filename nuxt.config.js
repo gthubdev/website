@@ -61,10 +61,13 @@ module.exports = {
 		theme: 'mdc-dark-indigo',
 		ripple: true,
 		components: [
+			'AutoComplete',
+			'Button',
 			'Card',
 			'Chip',
 			'DataView',
 			'Dropdown',
+			'InputText',
 			'MultiSelect',
 			'OverlayPanel',
 			'TabPanel',

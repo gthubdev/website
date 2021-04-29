@@ -13,6 +13,12 @@
 		<TabPanel header="Tracks">
 			<ResourcesTrackContainer />
 		</TabPanel>
+		<TabPanel header="Class Categories">
+			<ResourcesClassCategoryContainer />
+		</TabPanel>
+		<TabPanel header="Classes">
+			<ResourcesClassContainer />
+		</TabPanel>
 	</TabView>
 </div>
 </template>
@@ -20,14 +26,22 @@
 <script>
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
-import ResourcesEventContainer from '@/components/resources/ResourcesEventContainer';
-import ResourcesSeriesContainer from '@/components/resources/ResourcesSeriesContainer';
-import ResourcesTrackContainer from '@/components/resources/ResourcesTrackContainer';
 import { mapMutations } from 'vuex';
+import ResourcesClassCategoryContainer from '~/components/resources/ResourcesClassCategoryContainer';
+import ResourcesClassContainer from '~/components/resources/ResourcesClassContainer';
+import ResourcesEventContainer from '~/components/resources/ResourcesEventContainer';
+import ResourcesSeriesContainer from '~/components/resources/ResourcesSeriesContainer';
+import ResourcesTrackContainer from '~/components/resources/ResourcesTrackContainer';
 
 export default {
 	components: {
-		ResourcesEventContainer, ResourcesSeriesContainer, ResourcesTrackContainer, TabPanel, TabView
+		ResourcesClassCategoryContainer,
+		ResourcesClassContainer,
+		ResourcesEventContainer,
+		ResourcesSeriesContainer,
+		ResourcesTrackContainer,
+		TabPanel,
+		TabView
 	},
 	async asyncData({ $axios }) {
 		try {
@@ -47,14 +61,20 @@ export default {
 		};
 	},
 	created() {
+		this.setCategories(this.data.vehicleclasscategories);
+		this.setClasses(this.data.vehicleclasses);
 		this.setEvents(this.data.events);
 		this.setSeries(this.data.series);
+		this.setTimezones(this.data.timezones);
 		this.setTracks(this.data.tracks);
 	},
 	methods: {
 		...mapMutations({
+			setCategories: 'resources/classcategories/set',
+			setClasses: 'resources/classes/set',
 			setEvents: 'resources/events/set',
 			setSeries: 'resources/series/set',
+			setTimezones: 'usertz/setTimezones',
 			setTracks: 'resources/tracks/set'
 		})
 	}

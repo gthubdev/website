@@ -11,5 +11,11 @@ export const getters = {
 export const mutations = {
 	set(state, newvalue) {
 		state.tracks = newvalue;
+	},
+	add(state, newtrack) {
+		state.tracks.push(newtrack);
+		state.tracks.sort((a, b) => {
+			return a.name.localeCompare(b.name);
+		});
 	}
 };
