@@ -23,7 +23,7 @@
 						{{ slotProps.data.name }}
 					</div>
 					<div>
-						<Button icon="pi pi-trash" @click="deleteTrack(slotProps.data)" />
+						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
 					</div>
 				</div>
 			</template>
@@ -63,7 +63,8 @@ export default {
 	},
 	methods: {
 		...mapMutations({
-			addTrack: 'resources/tracks/add'
+			addTrack: 'resources/tracks/add',
+			deleteTrack: 'resources/tracks/delete'
 		}),
 		getCountryFlag(country) {
 			return flag(cl.getCode(country));
@@ -71,8 +72,17 @@ export default {
 		createTrack() {
 			this.showDialog = true;
 		},
-		deleteTrack(track) {
-			console.log('Delete track', track);
+		async sendDeleteRequest(track) {
+			try {
+				const res = await this.$axios.post('/api/calendar/track/delete/' + track.id);
+				if (res.data.deleted >= 1)
+					this.deleteTrack(track.id);
+			} catch (err) {
+				if (err.response && err.response.status === 409)
+					alert(err.response.data);
+				else if (err.response)
+					alert(err.response);
+			}
 		},
 		trackCrudClosed() {
 			this.showDialog = false;
