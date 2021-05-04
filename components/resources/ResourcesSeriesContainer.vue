@@ -8,7 +8,7 @@
 		:always-show-paginator="false"
 	>
 		<template #list="slotProps">
-			<div class="p-col-12">
+			<div class="w-screen flex justify-between py-2 items-center">
 				<div class="resource-list-item">
 					{{ slotProps.data.name }}
 				</div>

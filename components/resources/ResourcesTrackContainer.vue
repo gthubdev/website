@@ -5,7 +5,7 @@
 			<InputText id="trackSearchTerm" v-model="searchTerm" type="text" />
 		</div>
 		<div>
-			<Button label="CREATE TRACK" class="p-button-raised" @click="createTrack()" />
+			<Button label="CREATE TRACK" class="p-button-raised" @click="openTrackCrud()" />
 		</div>
 	</div>
 	<div>
@@ -23,6 +23,7 @@
 						{{ slotProps.data.name }}
 					</div>
 					<div>
+						<Button icon="pi pi-pencil" @click="editTrack(slotProps.data)" />
 						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
 					</div>
 				</div>
@@ -32,7 +33,9 @@
 
 	<TrackCRUD
 		:show-dialog="showDialog"
-		@track-crud-closed="trackCrudClosed"
+		:is-editing="isEditing"
+		:editing-track="editingTrack"
+		@track-crud-closed="closeTrackCrud"
 		@send-request="sendRequest"
 	/>
 </div>
@@ -53,7 +56,9 @@ export default {
 	data: function() {
 		return {
 			searchTerm: '',
-			showDialog: false
+			showDialog: false,
+			isEditing: false,
+			editingTrack: null
 		};
 	},
 	computed: {
@@ -64,12 +69,23 @@ export default {
 	methods: {
 		...mapMutations({
 			addTrack: 'resources/tracks/add',
-			deleteTrack: 'resources/tracks/delete'
+			deleteTrack: 'resources/tracks/delete',
+			updateTrack: 'resources/tracks/update'
 		}),
 		getCountryFlag(country) {
 			return flag(cl.getCode(country));
 		},
-		createTrack() {
+		openTrackCrud() {
+			this.showDialog = true;
+		},
+		closeTrackCrud() {
+			this.isEditing = false;
+			this.showDialog = false;
+			this.editingTrack = null;
+		},
+		editTrack(track) {
+			this.isEditing = true;
+			this.editingTrack = JSON.parse(JSON.stringify(track));
 			this.showDialog = true;
 		},
 		async sendDeleteRequest(track) {
@@ -84,25 +100,33 @@ export default {
 					alert(err.response);
 			}
 		},
-		trackCrudClosed() {
-			this.showDialog = false;
-		},
 		async sendRequest(obj) {
 			const track = JSON.parse(JSON.stringify(obj));
 			track.timezone = obj.timezone.name;
-			const url = '/api/calendar/track/create';
+			delete track.createdAt;
+			let url;
+			if (this.isEditing === false)
+				url = '/api/calendar/track/create';
+			else if (this.isEditing === true && this.editingTrack !== null)
+				url = '/api/calendar/track/update/' + this.editingTrack.id;
+			else
+				console.error('Sending request for null-track.');
 
 			try {
 				const res = await this.$axios.$post(url, {
 					track
 				});
-				console.log('Track created', res);
-				this.addTrack(res);
+				if (this.isEditing === false)
+					this.addTrack(res);
+				else if (res.updated >= 1)
+					this.updateTrack(track);
 			} catch (err) {
 				if (err.response)
 					alert(err.response.data);
 			}
 			this.showDialog = false;
+			this.isEditing = false;
+			this.editingTrack = null;
 		}
 	}
 };

@@ -18,6 +18,13 @@ export const mutations = {
 			return a.name.localeCompare(b.name);
 		});
 	},
+	update(state, updatedTrack) {
+		const index = state.tracks.findIndex(t => t.id === updatedTrack.id);
+		state.tracks.splice(index, 1, updatedTrack);
+		state.tracks.sort((a, b) => {
+			return a.name.localeCompare(b.name);
+		});
+	},
 	delete(state, trackid) {
 		const index = state.tracks.findIndex(t => t.id === trackid);
 		state.tracks.splice(index, 1);

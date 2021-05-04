@@ -1,5 +1,5 @@
 <template>
-<Dialog header="Create a track" :visible.sync="showTrackDialog" :modal="true">
+<Dialog :header="headline" :visible.sync="showTrackDialog" :modal="true">
 	<div class="pt-2">
 		<span class="p-float-label">
 			<InputText id="name" v-model="track.name" type="text" class="full-width" />
@@ -25,7 +25,7 @@
 		</AutoComplete>
 	</div>
 
-	<br />
+	<br>
 
 	<div>
 		<AutoComplete
@@ -43,7 +43,7 @@
 		</AutoComplete>
 	</div>
 
-	<br />
+	<br>
 
 	<div>
 		<span class="p-float-label">
@@ -52,7 +52,7 @@
 		</span>
 	</div>
 
-	<br />
+	<br>
 
 	<div>
 		<span class="p-float-label">
@@ -63,8 +63,8 @@
 
 	<template #footer>
 		<Button label="Cancel" icon="pi pi-times" class="p-button-secondary" @click="close" />
-		<Button v-if="!validInput()" label="Create" icon="pi pi-check" disabled />
-		<Button v-else label="Create" icon="pi pi-check" @click="sendRequest" />
+		<Button v-if="!validInput()" :label="action" icon="pi pi-check" disabled />
+		<Button v-else :label="action" icon="pi pi-check" @click="sendRequest" />
 	</template>
 </Dialog>
 </template>
@@ -84,12 +84,21 @@ export default {
 	props: {
 		showDialog: {
 			type: Boolean, default: false
+		},
+		isEditing: {
+			type: Boolean, default: false
+		},
+		editingTrack: {
+			type: Object, default: null
 		}
 	},
 	data: function() {
 		return {
 			showTrackDialog: false,
+			action: '',
+			headline: '',
 			track: {
+				id: '',
 				name: '',
 				country: '',
 				timezone: '',
@@ -102,7 +111,8 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-			allTimezones: 'usertz/getTimezones'
+			allTimezones: 'usertz/getTimezones',
+			getTimezoneByName: 'usertz/getTimezoneByName'
 		})
 	},
 	watch: {
@@ -113,7 +123,9 @@ export default {
 			if (newValue === false)
 				this.$emit('track-crud-closed');
 
-			if (newValue === true)
+			if (newValue === true && this.isEditing === false) {
+				this.action = 'Create';
+				this.headline = 'Create a track';
 				this.track = {
 					name: '',
 					country: '',
@@ -121,6 +133,20 @@ export default {
 					length: '',
 					map: ''
 				};
+			}
+
+			if (newValue === true && this.isEditing === true) {
+				this.action = 'Update';
+				this.headline = 'Update ' + this.editingTrack.name;
+				this.track = {
+					id: this.editingTrack.id,
+					name: this.editingTrack.name,
+					country: this.editingTrack.country,
+					timezone: this.getTimezoneByName(this.editingTrack.timezone),
+					length: this.editingTrack.length,
+					map: this.editingTrack.map
+				};
+			}
 		}
 	},
 	created() {

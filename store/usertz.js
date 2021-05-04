@@ -18,6 +18,13 @@ export const getters = {
 	},
 	getTimezones(state) {
 		return state.timezones;
+	},
+	getTimezoneByName: state => name => {
+		const index = state.timezones.findIndex(tz => tz.name === name);
+		if (index >= 0)
+			return state.timezones[index];
+		else
+			return null;
 	}
 };
 
