@@ -91,8 +91,10 @@ export default {
 		async sendDeleteRequest(track) {
 			try {
 				const res = await this.$axios.post('/api/calendar/track/delete/' + track.id);
-				if (res.data.deleted >= 1)
+				if (res.data.deleted >= 1) {
 					this.deleteTrack(track.id);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + track.name + ' deleted.', life: 5000 });
+				}
 			} catch (err) {
 				if (err.response && err.response.status === 409)
 					alert(err.response.data);
@@ -116,10 +118,13 @@ export default {
 				const res = await this.$axios.$post(url, {
 					track
 				});
-				if (this.isEditing === false)
+				if (this.isEditing === false) {
 					this.addTrack(res);
-				else if (res.updated >= 1)
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + track.name + ' created.', life: 5000 });
+				} else if (res.updated >= 1) {
 					this.updateTrack(track);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + track.name + ' updated.', life: 5000 });
+				}
 			} catch (err) {
 				if (err.response)
 					alert(err.response.data);

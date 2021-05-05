@@ -71,7 +71,8 @@ module.exports = {
 			'MultiSelect',
 			'OverlayPanel',
 			'TabPanel',
-			'TabView'
+			'TabView',
+			'Toast'
 		],
 		directives: ['Tooltip']
 	},
