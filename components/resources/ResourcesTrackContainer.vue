@@ -2,7 +2,10 @@
 <div class="resources">
 	<div class="flex justify-between my-4">
 		<div>
-			<InputText id="trackSearchTerm" v-model="searchTerm" type="text" />
+			<span class="p-input-icon-left">
+				<i class="pi pi-search" />
+				<InputText id="trackSearchTerm" v-model="searchTerm" type="text" />
+			</span>
 		</div>
 		<div>
 			<Button label="CREATE TRACK" class="p-button-raised" @click="openTrackCrud()" />
@@ -10,7 +13,7 @@
 	</div>
 	<div>
 		<DataView
-			:value="tracks"
+			:value="displayedTracks"
 			paginator-position="bottom"
 			:paginator="true"
 			:rows="5"
@@ -56,6 +59,7 @@ export default {
 	data: function() {
 		return {
 			searchTerm: '',
+			displayedTracks: [],
 			showDialog: false,
 			isEditing: false,
 			editingTrack: null
@@ -65,6 +69,19 @@ export default {
 		...mapGetters({
 			tracks: 'resources/tracks/get'
 		})
+	},
+	watch: {
+		searchTerm(newvalue) {
+			if (newvalue.trim() === '')
+				this.displayedTracks = [...this.tracks];
+			else
+				this.displayedTracks = this.tracks.filter(t => {
+					return t.name.toLowerCase().includes(newvalue.toLowerCase());
+				});
+		}
+	},
+	created() {
+		this.displayedTracks = this.tracks;
 	},
 	methods: {
 		...mapMutations({
