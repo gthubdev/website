@@ -70,6 +70,7 @@ module.exports = {
 			'InputText',
 			'MultiSelect',
 			'OverlayPanel',
+			'PickList',
 			'TabPanel',
 			'TabView',
 			'Toast'

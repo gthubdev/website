@@ -6,6 +6,14 @@
 	background-color: rgba(25, 25, 25, 0.6);
 }
 
+.resources-top-bar {
+	@apply flex justify-between my-4;
+}
+
+.resource-list-item-container {
+	@apply w-screen flex justify-between py-2 items-center;
+}
+
 .resource-list-item {
 	display: flex;
 	align-items: center;

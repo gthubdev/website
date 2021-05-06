@@ -1,6 +1,6 @@
 <template>
 <div class="resources">
-	<div class="flex justify-between my-4">
+	<div class="resources-top-bar">
 		<div>
 			<span class="p-input-icon-left">
 				<i class="pi pi-search" />
@@ -20,7 +20,7 @@
 			:always-show-paginator="false"
 		>
 			<template #list="slotProps">
-				<div class="w-screen flex justify-between py-2 items-center">
+				<div class="resource-list-item-container">
 					<div class="resource-list-item">
 						{{ getCountryFlag(slotProps.data.country) }}
 						{{ slotProps.data.name }}
@@ -56,7 +56,7 @@ export default {
 	components: {
 		DataView, InputText, TrackCRUD
 	},
-	data: function() {
+	data() {
 		return {
 			searchTerm: '',
 			displayedTracks: [],

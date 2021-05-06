@@ -1,10 +1,10 @@
 <template>
 <div class="resources">
-	<div class="flex justify-between my-4">
+	<div class="resources-top-bar">
 		<div>
 			<span class="p-input-icon-left">
 				<i class="pi pi-search" />
-				<InputText id="trackSearchTerm" v-model="searchTerm" type="text" />
+				<InputText id="eventSearchTerm" v-model="searchTerm" type="text" />
 			</span>
 		</div>
 		<div>
@@ -20,7 +20,7 @@
 			:always-show-paginator="false"
 		>
 			<template #list="slotProps">
-				<div class="w-screen flex justify-between py-2 items-center">
+				<div class="resource-list-item-container">
 					<div class="resource-list-item">
 						{{ slotProps.data.name }}
 					</div>

@@ -9,7 +9,16 @@ export const getters = {
 };
 
 export const mutations = {
-	set(state, newvalue) {
-		state.series = newvalue;
+	set(state, newValue) {
+		state.series = newValue;
+	},
+	add(state, newValue) {
+		state.series.push(newValue);
+		state.series.sort((a, b) => {
+			if (a.priority === b.priority)
+				return a.name.localeCompare(b.name);
+			else
+				return a.priority - b.priority;
+		});
 	}
 };
