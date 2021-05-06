@@ -20,5 +20,9 @@ export const mutations = {
 			else
 				return a.priority - b.priority;
 		});
+	},
+	delete(state, seriesid) {
+		const index = state.series.findIndex(s => s.id === seriesid);
+		state.series.splice(index, 1);
 	}
 };

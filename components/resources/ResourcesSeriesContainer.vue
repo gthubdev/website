@@ -24,6 +24,9 @@
 					<div class="resource-list-item">
 						{{ slotProps.data.name }}
 					</div>
+					<div>
+						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
+					</div>
 				</div>
 			</template>
 		</DataView>
@@ -74,13 +77,28 @@ export default {
 	},
 	methods: {
 		...mapMutations({
-			addSeries: 'resources/series/add'
+			addSeries: 'resources/series/add',
+			deleteSeries: 'resources/series/delete'
 		}),
 		openSeriesCrud() {
 			this.showDialog = true;
 		},
 		closeSeriesCrud() {
 			this.showDialog = false;
+		},
+		async sendDeleteRequest(series) {
+			try {
+				const res = await this.$axios.post('/api/calendar/series/delete/' + series.id);
+				if (res.data.deleted >= 1) {
+					this.deleteSeries(series.id);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' deleted.', life: 5000 });
+				}
+			} catch (err) {
+				if (err.response && err.response.status === 409)
+					alert(err.response.data);
+				else if (err.response)
+					alert(err.response);
+			}
 		},
 		async sendRequest(obj) {
 			const series = JSON.parse(JSON.stringify(obj));
