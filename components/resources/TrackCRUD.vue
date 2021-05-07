@@ -47,7 +47,13 @@
 
 	<div>
 		<span class="p-float-label">
-			<InputText id="length" v-model="track.length" type="text" />
+			<InputNumber
+				id="length"
+				v-model="track.length"
+				mode="decimal"
+				:min-fraction-digits="3"
+				:max-fraction-digits="3"
+			/>
 			<label for="name">Length (km)</label>
 		</span>
 	</div>
@@ -72,6 +78,7 @@
 <script>
 import AutoComplete from 'primevue/autocomplete';
 import Dialog from 'primevue/dialog';
+import InputNumber from 'primevue/inputnumber';
 import InputText from 'primevue/inputtext';
 import cl from 'country-list';
 import flag from 'country-code-emoji';
@@ -79,7 +86,7 @@ import { mapGetters } from 'vuex';
 
 export default {
 	components: {
-		AutoComplete, Dialog, InputText
+		AutoComplete, Dialog, InputNumber, InputText
 	},
 	props: {
 		showDialog: {
@@ -102,7 +109,7 @@ export default {
 				name: '',
 				country: '',
 				timezone: '',
-				length: '',
+				length: 0,
 				map: ''
 			},
 			countryNames: null,
@@ -130,7 +137,7 @@ export default {
 					name: '',
 					country: '',
 					timezone: '',
-					length: '',
+					length: 0,
 					map: ''
 				};
 			}
