@@ -25,6 +25,7 @@
 						{{ slotProps.data.name }}
 					</div>
 					<div>
+						<Button icon="pi pi-pencil" @click="editSeries(slotProps.data)" />
 						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
 					</div>
 				</div>
@@ -34,6 +35,8 @@
 
 	<SeriesCRUD
 		:show-dialog="showDialog"
+		:is-editing="isEditing"
+		:editing-series="editingSeries"
 		@series-crud-closed="closeSeriesCrud"
 		@send-request="sendRequest"
 	/>
@@ -54,7 +57,9 @@ export default {
 		return {
 			searchTerm: '',
 			displayedSeries: [],
-			showDialog: false
+			showDialog: false,
+			isEditing: false,
+			editingSeries: null
 		};
 	},
 	computed: {
@@ -78,13 +83,21 @@ export default {
 	methods: {
 		...mapMutations({
 			addSeries: 'resources/series/add',
-			deleteSeries: 'resources/series/delete'
+			deleteSeries: 'resources/series/delete',
+			updateSeries: 'resources/series/update'
 		}),
 		openSeriesCrud() {
 			this.showDialog = true;
 		},
 		closeSeriesCrud() {
+			this.isEditing = false;
 			this.showDialog = false;
+			this.editingSeries = null;
+		},
+		editSeries(series) {
+			this.isEditing = true;
+			this.editingSeries = JSON.parse(JSON.stringify(series));
+			this.showDialog = true;
 		},
 		async sendDeleteRequest(series) {
 			try {
@@ -102,19 +115,33 @@ export default {
 		},
 		async sendRequest(obj) {
 			const series = JSON.parse(JSON.stringify(obj));
-			const url = '/api/calendar/series/create';
+			delete series.createdAt;
+			let url;
+			if (this.isEditing === false)
+				url = '/api/calendar/series/create';
+			else if (this.isEditing === true && this.editingSeries !== null)
+				url = '/api/calendar/series/update/' + this.editingSeries.id;
+			else
+				console.error('Sending request for null-series');
 
 			try {
 				const res = await this.$axios.$post(url, {
 					series
 				});
-				this.addSeries(res);
-				this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' created.', life: 5000 });
+				if (this.isEditing === false) {
+					this.addSeries(res);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' created.', life: 5000 });
+				} else {
+					this.updateSeries(res);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' updated.', life: 5000 });
+				}
 			} catch (err) {
 				if (err.response)
 					alert(err.response.data);
 			}
 			this.showDialog = false;
+			this.isEditing = false;
+			this.editingSeries = null;
 		}
 	}
 };

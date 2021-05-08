@@ -102,6 +102,12 @@ export default {
 	props: {
 		showDialog: {
 			type: Boolean, default: false
+		},
+		isEditing: {
+			type: Boolean, default: false
+		},
+		editingSeries: {
+			type: Object, default: null
 		}
 	},
 	data() {
@@ -110,12 +116,14 @@ export default {
 			action: '',
 			headline: '',
 			series: {
+				id: '',
 				name: '',
 				shortname: '',
 				priority: '',
 				logo: '',
 				thumbnail: '',
-				homepage: ''
+				homepage: '',
+				vehicleClasses: []
 			},
 			availablePriorities: [],
 			pickListData: [[], []]
@@ -143,9 +151,34 @@ export default {
 					priority: '',
 					logo: '',
 					thumbnail: '',
-					homepage: ''
+					homepage: '',
+					vehicleClasses: []
 				};
 				this.pickListData = [this.vehicleClasses, []];
+			}
+
+			if (newValue === true && this.isEditing === true) {
+				this.action = 'Update';
+				this.headline = 'Update ' + this.editingSeries.name;
+				this.series = {
+					id: this.editingSeries.id,
+					name: this.editingSeries.name,
+					shortname: this.editingSeries.shortname,
+					priority: this.editingSeries.priority,
+					logo: this.editingSeries.logo,
+					thumbnail: this.editingSeries.thumbnail,
+					homepage: this.editingSeries.homepage,
+					vehicleClasses: []
+				};
+				const series_vc = [];
+				this.editingSeries.SeriesTypes.forEach(t => series_vc.push(t.VehicleClass.id));
+				this.pickListData = [[], []];
+				this.vehicleClasses.forEach(vc => {
+					if (series_vc.includes(vc.id))
+						this.pickListData[1].push(vc);
+					else
+						this.pickListData[0].push(vc);
+				});
 			}
 		}
 	},
