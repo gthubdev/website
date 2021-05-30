@@ -15,8 +15,5 @@
 }
 
 .resource-list-item {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 0.5em 1em;
+	@apply flex items-center justify-between px-2 py-2;
 }

@@ -11,5 +11,11 @@ export const getters = {
 export const mutations = {
 	set(state, newvalue) {
 		state.events = newvalue;
+	},
+	add(state, newValue) {
+		state.events.push(newValue);
+		state.events.sort((a, b) => {
+			return a.startdate.localeCompare(b.startdate);
+		});
 	}
 };

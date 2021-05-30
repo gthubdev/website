@@ -23,7 +23,6 @@ module.exports.getResources = async (req, res) => {
 					}
 				],
 				order: [
-					['priority', 'ASC'],
 					['startdate', 'ASC'],
 					[EventSession, 'starttime', 'ASC']
 				]
@@ -43,7 +42,6 @@ module.exports.getResources = async (req, res) => {
 					}
 				],
 				order: [
-					['priority', 'ASC'],
 					['name', 'ASC']
 				]
 			}),
