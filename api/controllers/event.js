@@ -163,8 +163,8 @@ module.exports.deleteEvent = async (req, res) => {
 		const response = await Event.destroy({
 			where: { id: req.params.id }
 		});
-		if (response === 1)
-			util.print('Deleted Event with id ' + req.params.id);
+		if (response >= 1)
+			util.print('Events deleted: ' + response);
 		res.json({ deleted: response });
 	} catch (err) {
 		util.error(req, res, err);

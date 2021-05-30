@@ -29,6 +29,10 @@
 							{{ eventDate(slotProps.data) }}
 						</div>
 					</div>
+					<div>
+						<!--<Button icon="pi pi-pencil" @click="editTrack(slotProps.data)" />-->
+						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
+					</div>
 				</div>
 			</template>
 		</DataView>
@@ -79,7 +83,8 @@ export default {
 	},
 	methods: {
 		...mapMutations({
-			addEvent: 'resources/events/add'
+			addEvent: 'resources/events/add',
+			deleteEvent: 'resources/events/delete'
 		}),
 		openEventCrud() {
 			this.showEventDialog = true;
@@ -98,6 +103,20 @@ export default {
 				return this.startdate(event);
 			else
 				return this.startdate(event) + ' - ' + this.enddate(event);
+		},
+		async sendDeleteRequest(event) {
+			try {
+				const res = await this.$axios.$post('api/calendar/event/delete/' + event.id);
+				if (res.deleted >= 1) {
+					this.deleteEvent(event.id);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' deleted.', life: 5000 });
+				}
+			} catch (err) {
+				if (err.response && err.response.status === 409)
+					alert(err.response.data);
+				else if (err.response)
+					alert(err.response);
+			}
 		},
 		async sendRequest(obj) {
 			const event = JSON.parse(JSON.stringify(obj));
