@@ -83,7 +83,7 @@
 		<!--<span style="margin-left: 2rem">{{ usertz }}</span>-->
 	</div>
 	<div class="p-grid">
-		<Event
+		<CalendarEvent
 			v-for="event in displayedEvents"
 			:key="event.id"
 			:event="event"
@@ -98,11 +98,10 @@ import MultiSelect from 'primevue/multiselect';
 import { mapGetters, mapMutations } from 'vuex';
 import cl from 'country-list';
 import flag from 'country-code-emoji';
-import Event from '~/components/calendar/Event';
 
 export default {
 	components: {
-		Dropdown, Event, MultiSelect
+		Dropdown, MultiSelect
 	},
 	async asyncData({ $axios }) {
 		try {

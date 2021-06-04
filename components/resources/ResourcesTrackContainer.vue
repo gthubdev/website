@@ -34,7 +34,7 @@
 		</DataView>
 	</div>
 
-	<TrackCRUD
+	<ResourcesTrackCRUD
 		:show-dialog="showDialog"
 		:is-editing="isEditing"
 		:editing-track="editingTrack"
@@ -47,14 +47,13 @@
 <script>
 import DataView from 'primevue/dataview';
 import InputText from 'primevue/inputtext';
-import TrackCRUD from '@/components/resources/TrackCRUD';
 import { mapGetters, mapMutations } from 'vuex';
 import cl from 'country-list';
 import flag from 'country-code-emoji';
 
 export default {
 	components: {
-		DataView, InputText, TrackCRUD
+		DataView, InputText
 	},
 	data() {
 		return {

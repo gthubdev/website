@@ -38,7 +38,7 @@
 		</DataView>
 	</div>
 
-	<EventCRUD
+	<ResourcesEventCRUD
 		:show-dialog="showEventDialog"
 		@event-crud-closed="closeEventCrud"
 		@send-request="sendRequest"
@@ -50,11 +50,10 @@
 import DataView from 'primevue/dataview';
 import InputText from 'primevue/inputtext';
 import { mapGetters, mapMutations } from 'vuex';
-import EventCRUD from '~/components/resources/EventCRUD';
 
 export default {
 	components: {
-		DataView, InputText, EventCRUD
+		DataView, InputText
 	},
 	data: function() {
 		return {

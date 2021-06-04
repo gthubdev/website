@@ -33,7 +33,7 @@
 		</DataView>
 	</div>
 
-	<SeriesCRUD
+	<ResourcesSeriesCRUD
 		:show-dialog="showDialog"
 		:is-editing="isEditing"
 		:editing-series="editingSeries"
@@ -46,12 +46,11 @@
 <script>
 import DataView from 'primevue/dataview';
 import InputText from 'primevue/inputtext';
-import SeriesCRUD from '@/components/resources/SeriesCRUD';
 import { mapGetters, mapMutations } from 'vuex';
 
 export default {
 	components: {
-		DataView, InputText, SeriesCRUD
+		DataView, InputText
 	},
 	data() {
 		return {
