@@ -147,3 +147,9 @@ INSERT INTO Series (id, name, shortname, logo, thumbnail, priority) VALUES (30, 
 INSERT INTO SeriesType (series, class) VALUES (30, 33);
 INSERT INTO Series (id, name, shortname, logo, thumbnail, priority) VALUES (31, 'Fanatec GT World Challenge Australia Powered by AWS', 'GTWCAu', 'https://cdn.discordapp.com/attachments/813887392171294740/818641252361699328/AGT.png', 'https://cdn.discordapp.com/attachments/814318055294631996/814318152171126794/AGT.png', 4);
 INSERT INTO SeriesType (series, class) VALUES (31, 3);
+
+# EventSessionType
+INSERT INTO EventSessionType (id, name) VALUES (1, 'Race');
+INSERT INTO EventSessionType (id, name) VALUES (2, 'Qualifying');
+INSERT INTO EventSessionType (id, name) VALUES (3, 'Practice');
+INSERT INTO EventSessionType (id, name) VALUES (4, 'Warm-up');

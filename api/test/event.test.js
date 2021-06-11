@@ -533,11 +533,11 @@ describe('EventSessions', () => {
 
 	beforeEach(done => {
 		const sessions = [
-			{ name: 'Test Session 1', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm' },
-			{ name: 'Test Session 2', starttime: '2019-07-01 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'America/New_York' },
-			{ name: 'Test Session 3', starttime: '2019-07-02 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm' },
-			{ name: 'Test Session 4', starttime: '2019-07-03 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm' },
-			{ name: 'Test Session 5', starttime: '2019-07-02 18:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm' }
+			{ name: 'Test Session 1', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 1 },
+			{ name: 'Test Session 2', starttime: '2019-07-01 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'America/New_York', sessiontype: 1 },
+			{ name: 'Test Session 3', starttime: '2019-07-02 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 2 },
+			{ name: 'Test Session 4', starttime: '2019-07-03 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 3 },
+			{ name: 'Test Session 5', starttime: '2019-07-02 18:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 4 }
 		];
 		each(sessions, async es => {
 			const tmp = {
@@ -654,6 +654,22 @@ describe('EventSessions', () => {
 	it('Creating an event session with an invalid duration', async () => {
 		const tmpsession = {
 			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC' }
+		};
+
+		try {
+			await supertest(server)
+				.post('/api/calendar/eventsession/create')
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmpsession)
+				.expect(400);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Creating an event session with an invalid sessiontype', async () => {
+		const tmpsession = {
+			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC', sessiontype: 5 }
 		};
 
 		try {
@@ -810,6 +826,37 @@ describe('EventSessions', () => {
 					starttime: '2019-07-02 12:00',
 					timezone: 'UTC',
 					duration: -2
+				}
+			};
+
+			await supertest(server)
+				.post('/api/calendar/eventsession/update/' + sessions[0].id)
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmp)
+				.expect(400);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Updating an event session with invalid sessiontype', async () => {
+		try {
+			const sessions = await EventSession.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const tmp = {
+				session: {
+					id: sessions[0].id,
+					name: 'UPDATED_NAME',
+					starttime: '2019-07-02 12:00',
+					timezone: 'UTC',
+					duration: 20,
+					sessiontype: -2
 				}
 			};
 

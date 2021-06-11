@@ -19,6 +19,12 @@ module.exports.createEventSession = async (req, res) => {
 		return;
 	}
 
+	const sessiontype = req.body.session.sessiontype || 0;
+	if (sessiontype < 1 || sessiontype > 4) {
+		res.status(400).send('Invalid sessiontype');
+		return;
+	}
+
 	// need to convert the local starttime into UTC
 	req.body.session.starttime = convertLocalTimeToUTC(req.body.session).format();
 
@@ -77,6 +83,12 @@ module.exports.updateEventSession = async (req, res) => {
 			res.status(400).send('Invalid duration');
 			return;
 		}
+	}
+
+	const sessiontype = req.body.session.sessiontype;
+	if (sessiontype < 1 || sessiontype > 4) {
+		res.status(400).send('Invalid sessiontype');
+		return;
 	}
 
 	// need to convert the local starttime into UTC

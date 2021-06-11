@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'series',
 			onDelete: 'RESTRICT'
 		});
+		models.EventSession.belongsTo(models.EventSessionType, {
+			foreignKey: 'sessiontype',
+			allowNull: false
+		});
 	};
 
 	return EventSession;

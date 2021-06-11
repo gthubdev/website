@@ -20,31 +20,31 @@ INSERT INTO Event (id, name, startdate, enddate, track, priority, mainseries) VA
 # Bathurst 12 Hours
 INSERT INTO SupportSeries (event, series) VALUES (1, 9);
 INSERT INTO SupportSeries (event, series) VALUES (1, 14);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Support Race', '2021-02-06 02:00', 1, 14, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Top 10 Shootout', '2021-02-06 06:00', 1, 9, 30);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race', '2021-02-06 18:45', 1, 5, 720);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Support Race', '2021-02-06 02:00', 1, 14, 60, 1);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Top 10 Shootout', '2021-02-06 06:00', 1, 9, 30, 2);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Race', '2021-02-06 18:45', 1, 5, 720, 1);
 
 # N24
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Qualifying', '2021-06-04 16:00', 2, 4, 120);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race', '2021-06-05 13:00', 2, 4, 1440);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Qualifying', '2021-06-04 16:00', 2, 4, 120, 2);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Race', '2021-06-05 13:00', 2, 4, 1440, 1);
 
 # Spa 24
 INSERT INTO SupportSeries (event, series) VALUES (3, 7);
 INSERT INTO SupportSeries (event, series) VALUES (3, 14);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 1', '2021-07-29 10:00', 3, 7, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 1', '2021-07-29 12:00', 3, 17, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 2', '2021-07-29 15:00', 3, 7, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 2', '2021-07-29 16:30', 3, 17, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 1', '2021-07-29 19:00', 3, 14, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 3 (Night practice)', '2021-07-29 22:00', 3, 17, 90);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Qualifying 1', '2021-07-30 08:00', 3, 14, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Pointless Top 3 SST shootout', '2021-07-30 10:00', 3, 7, 30);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 4', '2021-07-30 11:30', 3, 17, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race 1', '2021-07-30 13:00', 3, 14, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Mega-awesome SST race', '2021-07-30 15:00', 3, 7, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Practice 5', '2021-07-30 17:00', 3, 17, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Qualifying', '2021-07-30 19:45', 3, 17, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Qualifying 2', '2021-07-31 07:00', 3, 14, 30);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Top 30 Qualifying', '2021-07-31 08:00', 3, 17, 45);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Race 2', '2021-07-31 11:00', 3, 14, 60);
-INSERT INTO EventSession (name, starttime, event, series, duration) VALUES ('Main Race', '2021-07-31 14:00', 3, 17, 1440);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 1', '2021-07-29 10:00', 3, 7, 60, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 1', '2021-07-29 12:00', 3, 17, 60, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 2', '2021-07-29 15:00', 3, 7, 60, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 2', '2021-07-29 16:30', 3, 17, 60, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 1', '2021-07-29 19:00', 3, 14, 60, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 3 (Night practice)', '2021-07-29 22:00', 3, 17, 90, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Qualifying 1', '2021-07-30 08:00', 3, 14, 60, 2);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Pointless Top 3 SST shootout', '2021-07-30 10:00', 3, 7, 30, 2);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 4', '2021-07-30 11:30', 3, 17, 60, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Race 1', '2021-07-30 13:00', 3, 14, 60, 1);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Mega-awesome SST race', '2021-07-30 15:00', 3, 7, 60, 1);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Practice 5', '2021-07-30 17:00', 3, 17, 60, 3);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Qualifying', '2021-07-30 19:45', 3, 17, 60, 2);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Qualifying 2', '2021-07-31 07:00', 3, 14, 30, 2);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Top 30 Qualifying', '2021-07-31 08:00', 3, 17, 45, 2);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Race 2', '2021-07-31 11:00', 3, 14, 60, 1);
+INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Main Race', '2021-07-31 14:00', 3, 17, 1440, 1);
