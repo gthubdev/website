@@ -25,8 +25,28 @@
 						<div class="text-lg font-bold">
 							{{ slotProps.data.name }}
 						</div>
-						<div class="pl-6 pt-1">
-							{{ eventDate(slotProps.data) }}
+						<div class="pl-6 pt-1 grid grid-cols-3 gap-4">
+							<div>
+								<span v-if="displayedSessions.includes(slotProps.data.id) && slotProps.data.EventSessions.length">
+									<i class="pi pi-angle-down" style="fontSize: 1.5rem" @click="toggleDisplayedSession(slotProps.data.id)" />
+								</span>
+								<span v-else>
+									<i class="pi pi-angle-right" style="fontSize: 1.5rem" @click="toggleDisplayedSession(slotProps.data.id)" />
+								</span>
+							</div>
+							<div class="grid grid-flow-row auto-rows-max">
+								<div>
+									{{ eventDate(slotProps.data) }}
+								</div>
+								<div v-if="displayedSessions.includes(slotProps.data.id) && slotProps.data.EventSessions.length" class="pl-10">
+									<div
+										v-for="es in slotProps.data.EventSessions"
+										:key="es.id"
+									>
+										{{ es.name }} ({{ sessionStart(es, slotProps.data.Track.timezone) }})
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div>
@@ -61,6 +81,7 @@ export default {
 		return {
 			searchTerm: '',
 			displayedEvents: [],
+			displayedSessions: [],
 			showEventDialog: false,
 			isEditing: false,
 			editingEvent: null
@@ -104,11 +125,22 @@ export default {
 		enddate(event) {
 			return this.$dayjs(event.enddate).format('ddd Do MMM');
 		},
+		sessionStart(session, timezone) {
+			return this.$dayjs(session.starttime).tz(timezone).format('ddd Do MMM - HH:mm') + 'h';
+		},
 		eventDate(event) {
 			if (event.startdate === event.enddate)
 				return this.startdate(event);
 			else
 				return this.startdate(event) + ' - ' + this.enddate(event);
+		},
+		toggleDisplayedSession(eventid) {
+			if (this.displayedSessions.includes(eventid)) {
+				const index = this.displayedSessions.findIndex(e => e.id === eventid);
+				this.displayedSessions.splice(index, 1);
+			} else {
+				this.displayedSessions.push(eventid);
+			}
 		},
 		editEvent(event) {
 			this.isEditing = true;
