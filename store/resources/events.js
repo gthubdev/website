@@ -28,5 +28,10 @@ export const mutations = {
 	delete(state, eventid) {
 		const index = state.events.findIndex(e => e.id === eventid);
 		state.events.splice(index, 1);
+	},
+	deleteSession(state, data) {
+		const index_e = state.events.findIndex(e => e.id === data.eventid);
+		const index_s = state.events[index_e].EventSessions.findIndex(s => s.id === data.sessionid);
+		state.events[index_e].EventSessions.splice(index_s, 1);
 	}
 };

@@ -43,6 +43,7 @@
 										v-for="es in slotProps.data.EventSessions"
 										:key="es.id"
 									>
+										<i class="pi pi-trash mr-1" style="fontSize: 1.0rem" @click="sendDeleteEventSessionRequest(slotProps.data.id, es)" />
 										{{ es.name }} ({{ sessionStart(es, slotProps.data.Track.timezone) }})
 									</div>
 								</div>
@@ -51,7 +52,7 @@
 					</div>
 					<div>
 						<Button icon="pi pi-pencil" @click="editEvent(slotProps.data)" />
-						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
+						<Button icon="pi pi-trash" @click="sendDeleteEventRequest(slotProps.data)" />
 					</div>
 				</div>
 			</template>
@@ -109,6 +110,7 @@ export default {
 		...mapMutations({
 			addEvent: 'resources/events/add',
 			deleteEvent: 'resources/events/delete',
+			deleteEventSession: 'resources/events/deleteSession',
 			updateEvent: 'resources/events/update'
 		}),
 		openEventCrud() {
@@ -147,12 +149,26 @@ export default {
 			this.editingEvent = JSON.parse(JSON.stringify(event));
 			this.showEventDialog = true;
 		},
-		async sendDeleteRequest(event) {
+		async sendDeleteEventRequest(event) {
 			try {
 				const res = await this.$axios.$post('api/calendar/event/delete/' + event.id);
 				if (res.deleted >= 1) {
 					this.deleteEvent(event.id);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' deleted.', life: 5000 });
+				}
+			} catch (err) {
+				if (err.response && err.response.status === 409)
+					alert(err.response.data);
+				else if (err.response)
+					alert(err.response);
+			}
+		},
+		async sendDeleteEventSessionRequest(eventid, session) {
+			try {
+				const res = await this.$axios.$post('api/calendar/eventsession/delete/' + session.id);
+				if (res.deleted >= 1) {
+					this.deleteEventSession({ eventid: eventid, sessionid: session.id });
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Session ' + session.name + ' deleted.', life: 5000 });
 				}
 			} catch (err) {
 				if (err.response && err.response.status === 409)
