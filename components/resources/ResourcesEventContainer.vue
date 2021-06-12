@@ -30,7 +30,7 @@
 						</div>
 					</div>
 					<div>
-						<!--<Button icon="pi pi-pencil" @click="editTrack(slotProps.data)" />-->
+						<Button icon="pi pi-pencil" @click="editEvent(slotProps.data)" />
 						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
 					</div>
 				</div>
@@ -40,6 +40,8 @@
 
 	<ResourcesEventCRUD
 		:show-dialog="showEventDialog"
+		:is-editing="isEditing"
+		:editing-event="editingEvent"
 		@event-crud-closed="closeEventCrud"
 		@send-request="sendRequest"
 	/>
@@ -59,7 +61,9 @@ export default {
 		return {
 			searchTerm: '',
 			displayedEvents: [],
-			showEventDialog: false
+			showEventDialog: false,
+			isEditing: false,
+			editingEvent: null
 		};
 	},
 	computed: {
@@ -83,13 +87,16 @@ export default {
 	methods: {
 		...mapMutations({
 			addEvent: 'resources/events/add',
-			deleteEvent: 'resources/events/delete'
+			deleteEvent: 'resources/events/delete',
+			updateEvent: 'resources/events/update'
 		}),
 		openEventCrud() {
 			this.showEventDialog = true;
 		},
 		closeEventCrud() {
+			this.isEditing = false;
 			this.showEventDialog = false;
+			this.editingEvent = null;
 		},
 		startdate(event) {
 			return this.$dayjs(event.startdate).format('ddd Do MMM');
@@ -102,6 +109,11 @@ export default {
 				return this.startdate(event);
 			else
 				return this.startdate(event) + ' - ' + this.enddate(event);
+		},
+		editEvent(event) {
+			this.isEditing = true;
+			this.editingEvent = JSON.parse(JSON.stringify(event));
+			this.showEventDialog = true;
 		},
 		async sendDeleteRequest(event) {
 			try {
@@ -120,19 +132,32 @@ export default {
 		async sendRequest(obj) {
 			const event = JSON.parse(JSON.stringify(obj));
 			delete event.createdAt;
-			const url = '/api/calendar/event/create';
+			let url;
+			if (this.isEditing === false)
+				url = '/api/calendar/event/create';
+			else if (this.isEditing === true && this.editingEvent !== null)
+				url = '/api/calendar/event/update/' + this.editingEvent.id;
+			else
+				console.error('Sending request for null-event');
 
 			try {
 				const res = await this.$axios.$post(url, {
 					event
 				});
-				this.addEvent(res);
-				this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' created.', life: 5000 });
+				if (this.isEditing === false) {
+					this.addEvent(res);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' created.', life: 5000 });
+				} else {
+					this.updateEvent(res);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' updated.', life: 5000 });
+				}
 			} catch (err) {
 				if (err.response)
 					alert(err.response.data);
 			}
 			this.showEventDialog = false;
+			this.isEditing = false;
+			this.editingEvent = null;
 		}
 	}
 };

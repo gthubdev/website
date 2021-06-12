@@ -124,6 +124,12 @@ export default {
 	props: {
 		showDialog: {
 			type: Boolean, default: false
+		},
+		isEditing: {
+			type: Boolean, default: false
+		},
+		editingEvent: {
+			type: Object, default: null
 		}
 	},
 	data() {
@@ -164,7 +170,7 @@ export default {
 			if (newValue === false)
 				this.$emit('event-crud-closed');
 
-			if (newValue === true) {
+			if (newValue === true && this.isEditing === false) {
 				this.action = 'Create';
 				this.headline = 'Create an event';
 				this.event = {
@@ -181,6 +187,46 @@ export default {
 				this.chosenMainSeries = '';
 				this.chosenDates = [];
 				this.pickListData = [[...this.allSeries], []];
+			}
+
+			if (newValue === true && this.isEditing === true) {
+				this.action = 'Update';
+				this.headline = 'Update ' + this.editingEvent.name;
+				this.event = {
+					name: this.editingEvent.name,
+					priority: this.editingEvent.priority,
+					logo: this.editingEvent.logo,
+					track: '',
+					startdate: '',
+					enddate: '',
+					mainseries: '',
+					supportseries: []
+				};
+				this.chosenTrack = this.editingEvent.Track;
+				this.chosenMainSeries = this.editingEvent.Series;
+				this.chosenDates[0] = new Date(this.editingEvent.startdate);
+				this.chosenDates[1] = new Date(this.editingEvent.enddate);
+
+				// set the picklist for the support series
+				const support_arr = [];
+				this.editingEvent.SupportSeries.forEach(s => support_arr.push(s.Series.id));
+
+				const available = [];
+				const selected = [];
+				this.allSeries.forEach(s => {
+					if (s.id === this.editingEvent.id)
+						return;
+
+					if (support_arr.includes(s.id))
+						selected.push(s);
+					else
+						available.push(s);
+				});
+				this.pickListData[0].length = 0;
+				this.pickListData[1].length = 0;
+				this.pickListData = [[...available], [...selected]];
+				this.sourceListChanged();
+				this.targetListChanged();
 			}
 		},
 		chosenMainSeries(newValue, oldValue) {
@@ -217,7 +263,7 @@ export default {
 
 		this.availableTracks = this.allTracks;
 		this.availableMainSeries = this.allSeries;
-		this.pickListData = [this.allSeries, []];
+		this.pickListData = [[...this.allSeries], []];
 		this.showEventDialog = this.showDialog;
 	},
 	methods: {
