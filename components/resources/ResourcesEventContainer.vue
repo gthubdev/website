@@ -51,6 +51,7 @@
 						</div>
 					</div>
 					<div>
+						<Button icon="pi pi-plus-circle" @click="addSession(slotProps.data)" />
 						<Button icon="pi pi-pencil" @click="editEvent(slotProps.data)" />
 						<Button icon="pi pi-trash" @click="sendDeleteEventRequest(slotProps.data)" />
 					</div>
@@ -61,10 +62,16 @@
 
 	<ResourcesEventCRUD
 		:show-dialog="showEventDialog"
-		:is-editing="isEditing"
+		:is-editing="isEditingEvent"
 		:editing-event="editingEvent"
 		@event-crud-closed="closeEventCrud"
-		@send-request="sendRequest"
+		@send-request="sendEventRequest"
+	/>
+	<ResourcesEventSessionCRUD
+		:show-dialog="showSessionDialog"
+		:editing-event="editingEvent"
+		@session-crud-closed="closeSessionCrud"
+		@send-request="sendSessionRequest"
 	/>
 </div>
 </template>
@@ -84,8 +91,11 @@ export default {
 			displayedEvents: [],
 			displayedSessions: [],
 			showEventDialog: false,
-			isEditing: false,
-			editingEvent: null
+			isEditingEvent: false,
+			editingEvent: null,
+			showSessionDialog: false,
+			isEditingSession: false,
+			editingSession: null
 		};
 	},
 	computed: {
@@ -109,6 +119,7 @@ export default {
 	methods: {
 		...mapMutations({
 			addEvent: 'resources/events/add',
+			addEventSession: 'resources/events/addSession',
 			deleteEvent: 'resources/events/delete',
 			deleteEventSession: 'resources/events/deleteSession',
 			updateEvent: 'resources/events/update'
@@ -117,9 +128,22 @@ export default {
 			this.showEventDialog = true;
 		},
 		closeEventCrud() {
-			this.isEditing = false;
+			this.isEditingEvent = false;
 			this.showEventDialog = false;
 			this.editingEvent = null;
+		},
+		openSessionCrud() {
+			this.showSessionDialog = true;
+		},
+		closeSessionCrud() {
+			this.isEditingSession = false;
+			this.showSessionDialog = false;
+			this.editingSession = null;
+			this.editingEvent = null;
+		},
+		addSession(event) {
+			this.editingEvent = JSON.parse(JSON.stringify(event));
+			this.openSessionCrud();
 		},
 		startdate(event) {
 			return this.$dayjs(event.startdate).format('ddd Do MMM');
@@ -145,7 +169,7 @@ export default {
 			}
 		},
 		editEvent(event) {
-			this.isEditing = true;
+			this.isEditingEvent = true;
 			this.editingEvent = JSON.parse(JSON.stringify(event));
 			this.showEventDialog = true;
 		},
@@ -177,13 +201,13 @@ export default {
 					alert(err.response);
 			}
 		},
-		async sendRequest(obj) {
+		async sendEventRequest(obj) {
 			const event = JSON.parse(JSON.stringify(obj));
 			delete event.createdAt;
 			let url;
-			if (this.isEditing === false)
+			if (this.isEditingEvent === false)
 				url = '/api/calendar/event/create';
-			else if (this.isEditing === true && this.editingEvent !== null)
+			else if (this.isEditingEvent === true && this.editingEvent !== null)
 				url = '/api/calendar/event/update/' + this.editingEvent.id;
 			else
 				console.error('Sending request for null-event');
@@ -192,7 +216,7 @@ export default {
 				const res = await this.$axios.$post(url, {
 					event
 				});
-				if (this.isEditing === false) {
+				if (this.isEditingEvent === false) {
 					this.addEvent(res);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' created.', life: 5000 });
 				} else {
@@ -204,7 +228,26 @@ export default {
 					alert(err.response.data);
 			}
 			this.showEventDialog = false;
-			this.isEditing = false;
+			this.isEditingEvent = false;
+			this.editingEvent = null;
+		},
+		async sendSessionRequest(obj) {
+			const session = JSON.parse(JSON.stringify(obj));
+			delete session.createdAt;
+
+			const url = '/api/calendar/eventsession/create';
+
+			try {
+				const res = await this.$axios.$post(url, {
+					session
+				});
+				this.addEventSession({ eventid: session.event, session: res });
+				this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Eventsession ' + session.name + ' created.', life: 5000 });
+			} catch (err) {
+				if (err.response)
+					alert(err.response.data);
+			}
+			this.showSessionDialog = false;
 			this.editingEvent = null;
 		}
 	}

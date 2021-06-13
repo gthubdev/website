@@ -1,10 +1,10 @@
-const { Event, EventSession, Track, Series, SupportSeries, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
+const { Event, EventSession, Track, Series, SupportSeries, SeriesType, VehicleClass, VehicleClassCategory, EventSessionType } = require('../models/');
 const dateutil = require('../util/dateutil');
 const util = require('../util/util');
 
 module.exports.getResources = async (req, res) => {
 	try {
-		const [events, series, tracks, vehicleclasscategories, vehicleclasses] = await Promise.all([
+		const [events, series, tracks, vehicleclasscategories, vehicleclasses, sessiontypes] = await Promise.all([
 			Event.findAll({
 				include: [
 					{ model: Track },
@@ -65,6 +65,11 @@ module.exports.getResources = async (req, res) => {
 				order: [
 					['name', 'ASC']
 				]
+			}),
+			EventSessionType.findAll({
+				order: [
+					['id', 'ASC']
+				]
 			})
 		]);
 
@@ -74,6 +79,7 @@ module.exports.getResources = async (req, res) => {
 			tracks,
 			vehicleclasscategories,
 			vehicleclasses,
+			sessiontypes,
 			timezones: dateutil.timezones
 		};
 

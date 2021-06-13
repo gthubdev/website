@@ -65,6 +65,7 @@ export default {
 		this.setClasses(this.data.vehicleclasses);
 		this.setEvents(this.data.events);
 		this.setSeries(this.data.series);
+		this.setSessionTypes(this.data.sessiontypes);
 		this.setTimezones(this.data.timezones);
 		this.setTracks(this.data.tracks);
 	},
@@ -74,6 +75,7 @@ export default {
 			setClasses: 'resources/classes/set',
 			setEvents: 'resources/events/set',
 			setSeries: 'resources/series/set',
+			setSessionTypes: 'resources/sessiontypes/set',
 			setTimezones: 'usertz/setTimezones',
 			setTracks: 'resources/tracks/set'
 		})

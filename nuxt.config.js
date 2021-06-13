@@ -20,6 +20,7 @@ module.exports = {
 		{ src: 'primevue/resources/primevue.min.css' },
 		{ src: 'primeicons/primeicons.css' },
 		{ src: 'primeflex/primeflex.css' },
+		{ src: 'vue2-timepicker/dist/VueTimepicker.css' },
 		// main SCSS file in the project
 		'@/assets/scss/main.scss'
 	],

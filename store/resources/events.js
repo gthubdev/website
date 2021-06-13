@@ -9,8 +9,8 @@ export const getters = {
 };
 
 export const mutations = {
-	set(state, newvalue) {
-		state.events = newvalue;
+	set(state, newValue) {
+		state.events = newValue;
 	},
 	add(state, newValue) {
 		state.events.push(newValue);
@@ -28,6 +28,13 @@ export const mutations = {
 	delete(state, eventid) {
 		const index = state.events.findIndex(e => e.id === eventid);
 		state.events.splice(index, 1);
+	},
+	addSession(state, data) {
+		const index_e = state.events.findIndex(e => e.id === data.eventid);
+		state.events[index_e].EventSessions.push(data.session);
+		state.events[index_e].EventSessions.sort((a, b) => {
+			return a.starttime.localeCompare(b.starttime);
+		});
 	},
 	deleteSession(state, data) {
 		const index_e = state.events.findIndex(e => e.id === data.eventid);
