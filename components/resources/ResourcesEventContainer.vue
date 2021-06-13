@@ -43,6 +43,7 @@
 										v-for="es in slotProps.data.EventSessions"
 										:key="es.id"
 									>
+										<i class="pi pi-pencil mr-1" style="fontSize: 1.0rem" @click="editSession(slotProps.data, es)" />
 										<i class="pi pi-trash mr-1" style="fontSize: 1.0rem" @click="sendDeleteEventSessionRequest(slotProps.data.id, es)" />
 										{{ es.name }} ({{ sessionStart(es, slotProps.data.Track.timezone) }})
 									</div>
@@ -69,7 +70,9 @@
 	/>
 	<ResourcesEventSessionCRUD
 		:show-dialog="showSessionDialog"
+		:is-editing="isEditingSession"
 		:editing-event="editingEvent"
+		:editing-session="editingSession"
 		@session-crud-closed="closeSessionCrud"
 		@send-request="sendSessionRequest"
 	/>
@@ -122,7 +125,8 @@ export default {
 			addEventSession: 'resources/events/addSession',
 			deleteEvent: 'resources/events/delete',
 			deleteEventSession: 'resources/events/deleteSession',
-			updateEvent: 'resources/events/update'
+			updateEvent: 'resources/events/update',
+			updateEventSession: 'resources/events/updateSession'
 		}),
 		openEventCrud() {
 			this.showEventDialog = true;
@@ -141,9 +145,20 @@ export default {
 			this.editingSession = null;
 			this.editingEvent = null;
 		},
+		editEvent(event) {
+			this.isEditingEvent = true;
+			this.editingEvent = JSON.parse(JSON.stringify(event));
+			this.showEventDialog = true;
+		},
 		addSession(event) {
 			this.editingEvent = JSON.parse(JSON.stringify(event));
 			this.openSessionCrud();
+		},
+		editSession(event, session) {
+			this.editingEvent = JSON.parse(JSON.stringify(event));
+			this.editingSession = JSON.parse(JSON.stringify(session));
+			this.isEditingSession = true;
+			this.showSessionDialog = true;
 		},
 		startdate(event) {
 			return this.$dayjs(event.startdate).format('ddd Do MMM');
@@ -167,11 +182,6 @@ export default {
 			} else {
 				this.displayedSessions.push(eventid);
 			}
-		},
-		editEvent(event) {
-			this.isEditingEvent = true;
-			this.editingEvent = JSON.parse(JSON.stringify(event));
-			this.showEventDialog = true;
 		},
 		async sendDeleteEventRequest(event) {
 			try {
@@ -234,15 +244,23 @@ export default {
 		async sendSessionRequest(obj) {
 			const session = JSON.parse(JSON.stringify(obj));
 			delete session.createdAt;
-
-			const url = '/api/calendar/eventsession/create';
+			let url;
+			if (this.isEditingSession === false)
+				url = '/api/calendar/eventsession/create';
+			else
+				url = '/api/calendar/eventsession/update/' + this.editingSession.id;
 
 			try {
 				const res = await this.$axios.$post(url, {
 					session
 				});
-				this.addEventSession({ eventid: session.event, session: res });
-				this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Eventsession ' + session.name + ' created.', life: 5000 });
+				if (this.editingSession === false) {
+					this.addEventSession({ eventid: session.event, session: res });
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Eventsession ' + session.name + ' created.', life: 5000 });
+				} else {
+					this.updateEventSession({ eventid: session.event, session: res });
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Eventsession ' + session.name + ' updated.', life: 5000 });
+				}
 			} catch (err) {
 				if (err.response)
 					alert(err.response.data);

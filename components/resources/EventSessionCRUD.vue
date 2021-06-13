@@ -9,7 +9,7 @@
 		</div>
 		<div class="pt-2">
 			<Dropdown
-				v-model="session.sessiontype"
+				v-model="chosenType"
 				:options="sessionTypes"
 				option-label="name"
 				option-value="id"
@@ -118,7 +118,13 @@ export default {
 		showDialog: {
 			type: Boolean, default: false
 		},
+		isEditing: {
+			type: Boolean, default: false
+		},
 		editingEvent: {
+			type: Object, default: null
+		},
+		editingSession: {
 			type: Object, default: null
 		}
 	},
@@ -132,6 +138,7 @@ export default {
 				starttime: '',
 				sessiontype: ''
 			},
+			chosenType: '',
 			chosenDate: '',
 			chosenTime: {
 				HH: '',
@@ -167,6 +174,7 @@ export default {
 					starttime: '',
 					sessiontype: ''
 				};
+				this.chosenType = '';
 				this.chosenDate = '';
 				this.chosenTime = {
 					HH: '',
@@ -184,6 +192,43 @@ export default {
 						this.allSeries.push(s.Series);
 					});
 			}
+
+			if (newValue === true && this.isEditing === true) {
+				this.action = 'Update';
+				this.headline = 'Update ' + this.editingSession.name +
+					' [' + this.editingEvent.name + ']';
+				this.session = {
+					name: this.editingSession.name,
+					starttime: '',
+					sessiontype: this.editingSession.sessiontype
+				};
+				this.chosenType = this.editingSession.sessiontype;
+				this.chosenDate = new Date(this.$dayjs(this.editingSession.starttime).tz(this.editingEvent.Track.timezone).format('YYYY-MM-DD'));
+
+				const hour = this.$dayjs(this.editingSession.starttime).hour();
+				if (hour < 10)
+					this.chosenTime.HH = '0' + hour.toString();
+				else
+					this.chosenTime.HH = hour.toString();
+				const min = this.$dayjs(this.editingSession.starttime).minute();
+				if (min < 10)
+					this.chosenTime.mm = '0' + min.toString();
+				else
+					this.chosenTime.mm = min.toString();
+
+				this.duration = {
+					hours: Math.floor(this.editingSession.duration / 60),
+					minutes: this.editingSession.duration % 60
+				};
+
+				this.allSeries = [];
+				this.allSeries.push(this.editingEvent.Series);
+				if (this.editingEvent.SupportSeries !== undefined)
+					this.editingEvent.SupportSeries.forEach(s => {
+						this.allSeries.push(s.Series);
+					});
+				this.chosenSeries = this.allSeries.find(s => s.id === this.editingSession.series);
+			}
 		}
 	},
 	methods: {
@@ -191,6 +236,7 @@ export default {
 			this.showSessionDialog = false;
 		},
 		sendRequest() {
+			this.session.sessiontype = this.chosenType;
 			this.session.duration = this.duration.hours * 60 + this.duration.minutes;
 			this.session.starttime = this.$dayjs(this.chosenDate)
 				.hour(this.chosenTime.HH)
@@ -198,6 +244,7 @@ export default {
 				.format('YYYY-MM-DD HH:mm');
 			this.session.series = this.chosenSeries.id;
 			this.session.event = this.editingEvent.id;
+			this.session.timezone = this.editingEvent.Track.timezone;
 			this.$emit('send-request', this.session);
 		},
 		validInput() {
@@ -212,7 +259,7 @@ export default {
 			return this.session !== undefined && this.session.name.length > 0;
 		},
 		validSessionType() {
-			return this.session.sessiontype !== '';
+			return this.chosenType !== '';
 		},
 		validDate() {
 			return this.chosenDate !== undefined && this.$dayjs(this.chosenDate).isValid();

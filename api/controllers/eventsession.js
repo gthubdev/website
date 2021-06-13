@@ -97,7 +97,7 @@ module.exports.updateEventSession = async (req, res) => {
 	try {
 		// check for a start/end outside the event's dates
 		const tmpsession = await EventSession.findOne({
-			where: { id: req.body.session.id },
+			where: { id: req.params.id },
 			include: [
 				{ model: Event }
 			]
