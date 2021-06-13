@@ -35,6 +35,8 @@ module.exports = {
 		}],
 		'vue/html-indent': ['error', 'tab', {
 			baseIndent: 0
-		}]
+		}],
+		'no-trailing-spaces': 'off',
+		'padded-blocks': ['warn', 'never']
 	}
 };
