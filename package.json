@@ -8,7 +8,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "test": "yarn run lint && cross-env NODE_ENV=test mocha -R spec api/test --exit",
+    "test": "yarn run lint && NODE_ENV=test mocha -R spec api/test --exit",
     "test_connection": "node ./database/test_connection.js",
     "test_api": "cross-env NODE_ENV=test mocha -R spec api/test --exit",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
