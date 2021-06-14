@@ -1,36 +1,23 @@
 <template>
 <div>
-	<!-- Navigation bar -->
+	<!-- Navigation Bar -->
 	<Nav />
-	<!-- Content -->
-	<nuxt />
 
-	<!-- General toast -->
-	<md-snackbar :md-active.sync="showToast" md-persistent>
-		<span>{{ toastMsg }}</span>
-	</md-snackbar>
+	<!-- Content -->
+	<Nuxt />
+
+	<!-- Toast -->
+	<Toast />
 </div>
 </template>
 
 <script>
-import Nav from '~/components/Nav.vue';
-import { strings } from '~/plugins/constants';
+import Toast from 'primevue/toast';
+import Nav from '~/components/Nav';
 
 export default {
 	components: {
-		Nav
-	},
-	data: function() {
-		return {
-			showToast: false,
-			toastMsg: ''
-		};
-	},
-	mounted() {
-		this.$root.$on(strings.SHOW_TOAST, msg => {
-			this.toastMsg = msg;
-			this.showToast = !this.showToast;
-		});
+		Nav, Toast
 	}
 };
 </script>

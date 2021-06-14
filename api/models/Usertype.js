@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	let Usertype = sequelize.define('Usertype', {
+	const Usertype = sequelize.define('Usertype', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	Usertype.associate = models => {
-		models.Usertype.hasMany(models.User, {foreignKey: 'usertype'});
+		models.Usertype.hasMany(models.User, { foreignKey: 'usertype' });
 	};
 
 	return Usertype;

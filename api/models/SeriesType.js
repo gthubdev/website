@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	let SeriesType = sequelize.define('SeriesType', {
+	const SeriesType = sequelize.define('SeriesType', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,

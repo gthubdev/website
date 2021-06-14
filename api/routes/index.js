@@ -6,11 +6,11 @@ const AuthCtrl = require('../controllers/auth');
 const CalendarCtrl = require('../controllers/calendar');
 const EventCtrl = require('../controllers/event');
 const EventSessionCtrl = require('../controllers/eventsession');
+const ResourcesCtrl = require('../controllers/resources');
 const SeriesCtrl = require('../controllers/series');
 const TrackCtrl = require('../controllers/track');
 const iCalCtrl = require('../controllers/ical');
 const auth = require('../middleware/auth');
-
 
 // routes ==================================================
 
@@ -22,6 +22,9 @@ router.get('/auth/me', AuthCtrl.me);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
+
+// Resources
+router.get('/resources', auth.tvcrew_auth, ResourcesCtrl.getResources);
 
 // Event
 router.post('/calendar/event/create', auth.tvcrew_auth, EventCtrl.createEvent);
@@ -45,7 +48,6 @@ router.post('/calendar/track/delete/:id', auth.tvcrew_auth, TrackCtrl.deleteTrac
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
-
 
 // Catch-all, will return 404
 router.get('*', (req, res) => {

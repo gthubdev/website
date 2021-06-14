@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	let Event = sequelize.define('Event', {
+	const Event = sequelize.define('Event', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'event',
 			onDelete: 'CASCADE'
 		});
-		models.Event.hasMany(models.SupportSeries, {foreignKey: 'event'});
+		models.Event.hasMany(models.SupportSeries, { foreignKey: 'event' });
 	};
 
 	return Event;

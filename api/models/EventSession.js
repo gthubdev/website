@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	let EventSession = sequelize.define('EventSession', {
+	const EventSession = sequelize.define('EventSession', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
 		models.EventSession.belongsTo(models.Series, {
 			foreignKey: 'series',
 			onDelete: 'RESTRICT'
+		});
+		models.EventSession.belongsTo(models.EventSessionType, {
+			foreignKey: 'sessiontype',
+			allowNull: false
 		});
 	};
 

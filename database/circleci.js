@@ -1,6 +1,3 @@
-/*jslint node: true */
-'use strict';
-
 // TODO: adjust
 const db = {
 	host: 'localhost',

@@ -1,0 +1,18 @@
+@import 'variables';
+
+h1 {
+	font-family: $default-font;
+}
+
+.page-headline {
+	text-align: center;
+	color: $white;
+	font-size: 3em;
+	font-weight: bold;
+	font-variant: small-caps;
+}
+
+.p-component, body {
+	color: $white;
+	font-family: $default-font !important;
+}

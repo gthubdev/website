@@ -1,38 +1,38 @@
-const db = require('../models');
 const ical = require('ical-generator');
-const moment = require('moment');
+const dayjs = require('dayjs');
+const { Event, EventSession, Series, Track } = require('../models');
 const util = require('../util/util');
 
 module.exports.createIcal = async (req, res) => {
 	try {
-		const event = await db.Event.findOne({
+		const event = await Event.findOne({
 			where: { id: req.params.id },
 			include: [
 				{
-					model: db.EventSession,
+					model: EventSession,
 					include: [
-						{ model: db.Series }
+						{ model: Series }
 					]
 				},
-				{ model: db.Track }
+				{ model: Track }
 			]
 		});
 		const cal = ical({
 			domain: 'gthub.eu',
-			prodId: {company: 'GTHub Inc.', product: 'ical-generator'},
+			prodId: { company: 'GTHub Inc.', product: 'ical-generator' },
 			name: event.name,
 			timezone: 'UTC'
 		});
 		event.EventSessions.forEach(s => {
 			cal.createEvent({
-				start: moment(s.starttime),
-				end: moment(s.starttime).add(s.duration, 'minute'),
+				start: dayjs(s.starttime),
+				end: dayjs(s.starttime).add(s.duration, 'minute'),
 				summary: s.Series.shortname + ' (' + s.name + ')',
 				location: event.Track.name
 			});
 		});
 		res.json(cal.toString());
-	} catch(err) {
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };

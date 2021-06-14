@@ -1,1 +1,18 @@
-$default-gradient: linear-gradient(to right, #ed6400 0%, #df1652 100%);
+@import 'fonts';
+
+// colours
+$orange: #ed6400;
+$red: #df1652;
+$white: #f7f7f7;
+$goldenrod: #daa520;
+
+// gradients
+$default-gradient: linear-gradient(to right, $orange, $red);
+$nav-gradient: linear-gradient(to right,
+rgba(237, 64, 0, 0),
+rgba(237, 64, 0, 1),
+rgba(230, 42, 41, 1),
+rgba(223, 22, 82, 1));
+
+// fonts
+$default-font: 'Montserrat', sans-serif;

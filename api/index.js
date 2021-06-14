@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
-const moment = require('moment-timezone');
 const cookieParser = require('cookie-parser');
 const util = require('./util/util.js');
 
@@ -25,7 +24,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 
 // NOTE: use the static-directory instead
 // set the static files location /public/img will be /img for users
-//app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
 
 // enable cookie-handling
 app.use(cookieParser());
@@ -37,9 +36,6 @@ if (process.env.NODE_ENV !== 'test')
 	app.use('/', index);
 else
 	app.use('/api', index);
-
-// allow Moment.js to be accessible from within EJS templates
-app.locals.moment = moment;
 
 // integrate with Nuxt, but run it without in test-env
 if (process.env.NODE_ENV !== 'test') {

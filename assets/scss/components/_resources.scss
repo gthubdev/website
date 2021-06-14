@@ -1,0 +1,19 @@
+.resources .p-dataview-content {
+	background-color: rgba(32, 32, 32, 0.5) !important;
+}
+
+.resources .p-paginator {
+	background-color: rgba(25, 25, 25, 0.6);
+}
+
+.resources-top-bar {
+	@apply flex justify-between my-4;
+}
+
+.resource-list-item-container {
+	@apply w-screen flex justify-between py-2 items-center;
+}
+
+.resource-list-item {
+	@apply flex items-center justify-between px-2 py-2;
+}

@@ -1,61 +1,68 @@
-const db = require('../models');
-const util = require('../util/util.js');
-const moment = require('moment-timezone');
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+const { Event, EventSession, Series } = require('../models');
+const util = require('../util/util');
+const datetimeformat = 'YYYY-MM-DD HH:mm';
 
 module.exports.createEventSession = async (req, res) => {
-	moment.suppressDeprecationWarnings = true;
-	let starttime = moment(req.body.session.starttime);
-	if (!starttime.isValid()) {
+	const starttime = dayjs(req.body.session.starttime);
+
+	if (starttime.format(datetimeformat) !== req.body.session.starttime) {
 		res.status(400).send('Invalid starttime');
 		return;
 	}
 
-	let duration = req.body.session.duration;
+	const duration = req.body.session.duration;
 	if (duration <= 0) {
 		res.status(400).send('Invalid duration');
 		return;
 	}
 
+	const sessiontype = req.body.session.sessiontype || 0;
+	if (sessiontype < 1 || sessiontype > 4) {
+		res.status(400).send('Invalid sessiontype');
+		return;
+	}
+
 	// need to convert the local starttime into UTC
-	req.body.session.starttime = getLocalTime(req.body.session);
+	req.body.session.starttime = convertLocalTimeToUTC(req.body.session).format();
 
 	try {
 		// check for a start/end outside the event's dates
-		const event = await db.Event.findOne({
-			where: {id: req.body.session.event}
+		const event = await Event.findOne({
+			where: { id: req.body.session.event }
 		});
-		let ev_startdate = event.startdate;
-		let ev_enddate = event.enddate;
+		const ev_startdate = event.startdate;
+		const ev_enddate = event.enddate;
 
-		if (moment(ev_startdate).isAfter(starttime.format('YYYY-MM-DD'))) {
+		if (dayjs(ev_startdate).isAfter(starttime, 'day')) {
 			res.status(400).send('Session is outside event-dates');
 			return;
 		}
 
-		if (moment(ev_enddate).isBefore(starttime.format('YYYY-MM-DD'))) {
+		if (dayjs(ev_enddate).isBefore(starttime, 'day')) {
 			res.status(400).send('Session is outside event-dates');
 			return;
 		}
 
 		// create
-		const newsession = await db.EventSession.create(req.body.session);
+		const newsession = await EventSession.create(req.body.session);
 		// query the newly created session to include series-info
-		const eventsession = await db.EventSession.findOne({
-			where: {id: newsession.id},
-			include : [
-				{ model: db.Series }
+		const eventsession = await EventSession.findOne({
+			where: { id: newsession.id },
+			include: [
+				{ model: Series }
 			]
 		});
 		util.print('EventSession \'' + eventsession.name + '\' created');
-		res.json(eventsession.get({plain:true}));
-	} catch(err) {
+		res.json(eventsession.get({ plain: true }));
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };
 
 module.exports.updateEventSession = async (req, res) => {
-	moment.suppressDeprecationWarnings = true;
-
 	if (!req.body.session || !req.body.session.timezone) {
 		res.status(400).send('Bad request');
 		return;
@@ -63,94 +70,93 @@ module.exports.updateEventSession = async (req, res) => {
 
 	let starttime;
 	if (req.body.session.starttime) {
-		starttime = moment(req.body.session.starttime);
-		if (starttime && !starttime.isValid()) {
+		starttime = dayjs(req.body.session.starttime);
+		if (starttime && starttime.format(datetimeformat) !== req.body.session.starttime) {
 			res.status(400).send('Invalid starttime');
 			return;
 		}
 	}
 
 	if (req.body.session.duration) {
-		let duration = req.body.session.duration;
+		const duration = req.body.session.duration;
 		if (duration <= 0) {
 			res.status(400).send('Invalid duration');
 			return;
 		}
 	}
 
+	const sessiontype = req.body.session.sessiontype;
+	if (sessiontype < 1 || sessiontype > 4) {
+		res.status(400).send('Invalid sessiontype');
+		return;
+	}
+
 	// need to convert the local starttime into UTC
-	req.body.session.starttime = getLocalTime(req.body.session);
+	req.body.session.starttime = convertLocalTimeToUTC(req.body.session).format();
 
 	try {
 		// check for a start/end outside the event's dates
-		const tmpsession = await db.EventSession.findOne({
-			where: {id: req.body.session.id},
+		const tmpsession = await EventSession.findOne({
+			where: { id: req.params.id },
 			include: [
-				{ model: db.Event }
+				{ model: Event }
 			]
 		});
-		const event = await db.Event.findOne({
-			where: {id: tmpsession.Event.id}
+		const event = await Event.findOne({
+			where: { id: tmpsession.Event.id }
 		});
-		let ev_startdate = event.startdate;
-		let ev_enddate = event.enddate;
+		const ev_startdate = event.startdate;
+		const ev_enddate = event.enddate;
 
-		if (moment(ev_startdate).isAfter(starttime.format('YYYY-MM-DD'))) {
+		if (dayjs(ev_startdate).isAfter(starttime, 'day')) {
 			res.status(400).send('Session is outside event-dates');
 			return;
 		}
 
-		if (moment(ev_enddate).isBefore(starttime.format('YYYY-MM-DD'))) {
+		if (dayjs(ev_enddate).isBefore(starttime, 'day')) {
 			res.status(400).send('Session is outside event-dates');
 			return;
 		}
 
 		// update
-		const response = await db.EventSession.update(req.body.session,
+		const response = await EventSession.update(req.body.session,
 			{ where: { id: req.params.id } }
 		);
-		if (response[0] == 0)
+		if (response[0] === 0)
 			return;
 
 		util.print(response[0] + ' EventSession updated');
 
-		const session = await db.EventSession.findOne({
+		const session = await EventSession.findOne({
 			where: { id: req.params.id },
 			include: [
-				{ model: db.Series }
+				{ model: Series }
 			]
 		});
-		res.json(session.get({plain:true}));
-	} catch(err) {
+		res.json(session.get({ plain: true }));
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };
 
 module.exports.deleteEventSession = async (req, res) => {
 	try {
-		const response = await db.EventSession.destroy({
+		const response = await EventSession.destroy({
 			where: { id: req.params.id }
 		});
 		if (response >= 1)
 			util.print('EventSessions deleted: ' + response);
 		res.json({ deleted: response });
-	} catch(err) {
+	} catch (err) {
 		util.error(req, res, err);
 	}
 };
 
-function getLocalTime(session) {
-	let oldstart = moment.utc(session.starttime);
+function convertLocalTimeToUTC(session) {
+	// eslint-disable-next-line no-undef
+	dayjs.extend(utc);
+	// eslint-disable-next-line no-undef
+	dayjs.extend(timezone);
 
-	let zone = moment.tz.zone(session.timezone);
-	let offset = zone.parse(Date.UTC(
-		oldstart.get('year'),
-		oldstart.get('month'),
-		oldstart.get('date'),
-		oldstart.get('hour'),
-		oldstart.get('minute')));
-
-	let newstart = moment(oldstart).add(offset, 'm');
-
-	return newstart.format();
+	return dayjs.tz(session.starttime, session.timezone).utc();
 }
