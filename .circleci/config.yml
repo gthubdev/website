@@ -7,13 +7,13 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:10
+      - image: circleci/node:12
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
-      - image: circleci/mariadb:10.3
+      - image: circleci/mariadb:10.5
         environment:
             - MYSQL_DATABASE: gthub-testdb
             - MYSQL_USER: testuser
@@ -31,7 +31,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: npm install
+      - run: yarn install
 
       - save_cache:
           paths:
@@ -45,13 +45,13 @@ jobs:
             echo 'export JWT_KEY=MySecretJWTKey' >> $BASH_ENV
 
       # create the database
-      - run: npm run create_tables
+      - run: yarn run create_tables
 
       # initialize data
-      - run: npm run init_data
+      - run: yarn run init_data
 
       # insert the testdata
-      - run: npm run insert_testdata
+      - run: yarn run insert_testdata
 
       # run tests!
-      - run: npm test
+      - run: yarn test
