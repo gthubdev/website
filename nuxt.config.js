@@ -45,12 +45,46 @@ module.exports = {
 	modules: [
 		// https://go.nuxtjs.dev/axios
 		'@nuxtjs/axios',
+		'@nuxtjs/auth',
 		'primevue/nuxt',
 		'@nuxtjs/dayjs'
 	],
 
 	// Axios module configuration (https://go.nuxtjs.dev/config-axios)
 	axios: {
+		credentials: true
+	},
+
+	// Auth module configuration
+	auth: {
+		strategies: {
+			local: {
+				endpoints: {
+					login: {
+						url: '/api/auth/login',
+						method: 'post',
+						propertyName: 'token'
+					},
+					logout: {
+						url: '/api/auth/logout',
+						method: 'post'
+					},
+					user: {
+						url: '/api/auth/me',
+						method: 'get',
+						propertyName: false
+					}
+				},
+				tokenRequired: true,
+				tokenType: 'Bearer'
+			}
+		},
+		redirect: {
+			login: '/',
+			logout: '/',
+			home: '/',
+			callback: '/'
+		}
 	},
 
 	// Primevue config
