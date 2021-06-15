@@ -43,6 +43,7 @@ export default {
 		TabPanel,
 		TabView
 	},
+	middleware: 'auth',
 	async asyncData({ $axios }) {
 		try {
 			const res = await $axios.$get('/api/resources');
