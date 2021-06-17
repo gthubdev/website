@@ -69,7 +69,6 @@ describe('Blog', () => {
 	afterEach(async () => {
 		try {
 			const blogposts = await BlogPost.findAll({
-				limit: 5,
 				order: [
 					['createdAt', 'DESC'],
 					['id', 'DESC']
@@ -111,6 +110,19 @@ describe('Blog', () => {
 		}
 	});
 
+	it('Creating a blogpost without authorisation', async () => {
+		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+
+		try {
+			await supertest(server)
+				.post('/api/blog/create')
+				.send(tmp)
+				.expect(400);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
 	it('Updating a blogpost', async () => {
 		try {
 			const blogposts = await BlogPost.findAll({
@@ -144,6 +156,32 @@ describe('Blog', () => {
 		}
 	});
 
+	it('Updating a blogpost without authorisation', async () => {
+		try {
+			const blogposts = await BlogPost.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const tmp = {
+				blogpost: {
+					headline: 'NEW_HEADLINE',
+					content: '<p>new</p>'
+				}
+			};
+
+			await supertest(server)
+				.post('/api/blog/update/' + blogposts[0].id)
+				.send(tmp)
+				.expect(400);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
 	it('Deleting a blogpost', async () => {
 		let nrOfPostsBefore, postID;
 		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
@@ -162,6 +200,19 @@ describe('Blog', () => {
 			response.forEach(p => {
 				p.id.should.not.equal(postID);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Deleting a blogpost without authorisation', async () => {
+		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+
+		try {
+			const post = await BlogPost.create(tmp);
+			await supertest(server)
+				.post('/api/blog/delete/' + post.id)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}

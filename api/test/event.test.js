@@ -122,7 +122,6 @@ describe('Events', () => {
 	afterEach(async () => {
 		try {
 			const events = await Event.findAll({
-				limit: 5,
 				order: [
 					['createdAt', 'DESC'],
 					['id', 'DESC']
@@ -163,6 +162,19 @@ describe('Events', () => {
 				event.track.should.equal(trackID);
 				event.mainseries.should.equal(seriesID);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Creating an event without authorisation', async () => {
+		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries: [] };
+
+		try {
+			await supertest(server)
+				.post('/api/calendar/event/create')
+				.send(tmp)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -246,6 +258,33 @@ describe('Events', () => {
 
 			event.name.should.equal('UPDATED_EVENTNAME');
 			event.priority.should.equal(3);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Updating an event without authorisation', async () => {
+		try {
+			const events = await Event.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const tmp = {
+				event: {
+					name: 'UPDATED_EVENTNAME',
+					priority: 3,
+					supportseries: []
+				}
+			};
+
+			await supertest(server)
+				.post('/api/calendar/event/update/' + events[0].id)
+				.send(tmp)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -398,6 +437,30 @@ describe('Events', () => {
 			response.forEach(e => {
 				e.id.should.not.equal(eventID);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Deleting an event without authorisation', async () => {
+		const tmp = {
+			event: {
+				name: 'Test Event 6',
+				priority: 1,
+				logo: '...',
+				startdate: '2019-07-01',
+				enddate: '2019-07-03',
+				track: null,
+				mainseries: null,
+				supportseries: []
+			}
+		};
+
+		try {
+			const event = await Event.create(tmp);
+			await supertest(server)
+				.post('/api/calendar/event/delete/' + event.id)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -561,7 +624,6 @@ describe('EventSessions', () => {
 	afterEach(async () => {
 		try {
 			const sessions = await EventSession.findAll({
-				limit: 5,
 				order: [
 					['createdAt', 'DESC'],
 					['id', 'DESC']
@@ -598,6 +660,19 @@ describe('EventSessions', () => {
 				s.series.should.equal(seriesID);
 				s.event.should.equal(eventID);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Creating an event session without authorisation', async () => {
+		const tmp = { name: 'Test Session 1', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 1 };
+
+		try {
+			await supertest(server)
+				.post('/api/calendar/eventsession/create')
+				.send(tmp)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -714,6 +789,35 @@ describe('EventSessions', () => {
 			});
 			session.name.should.equal('UPDATED_NAME');
 			session.duration.should.equal(30);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Updating an event session without authorisation', async () => {
+		try {
+			const sessions = await EventSession.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const tmp = {
+				session: {
+					id: sessions[0].id,
+					name: 'UPDATED_NAME',
+					starttime: '2019-07-02 12:00',
+					timezone: 'UTC',
+					duration: 30
+				}
+			};
+
+			await supertest(server)
+				.post('/api/calendar/eventsession/update/' + sessions[0].id)
+				.send(tmp)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -893,6 +997,21 @@ describe('EventSessions', () => {
 			response.forEach(s => {
 				s.id.should.not.equal(sessionID);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Deleting an event session without authorisation', async () => {
+		const tmp = {
+			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
+		};
+
+		try {
+			const session = await EventSession.create(tmp);
+			await supertest(server)
+				.post('/api/calendar/eventsession/delete/' + session.id)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}

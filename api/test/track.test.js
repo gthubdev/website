@@ -68,7 +68,6 @@ describe('Tracks', () => {
 	afterEach(async () => {
 		try {
 			const tracks = await Track.findAll({
-				limit: 5,
 				order: [
 					['createdAt', 'DESC'],
 					['id', 'DESC']
@@ -105,6 +104,19 @@ describe('Tracks', () => {
 				track.timezone.should.equal('Europe/Amsterdam');
 				track.length.should.equal(5);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Creating a track without authorisation', async () => {
+		const tmp = { name: 'Test Track 1', country: 'Sweden', timezone: 'Europe/Amsterdam', length: 5, map: '' };
+
+		try {
+			await supertest(server)
+				.post('/api/calendar/track/create')
+				.send(tmp)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -170,6 +182,32 @@ describe('Tracks', () => {
 			});
 			track.name.should.equal('UPDATED_TRACKNAME');
 			track.length.should.equal(16);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Updating a track without authorisation', async () => {
+		try {
+			const tracks = await Track.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const tmp = {
+				track: {
+					name: 'UPDATED_TRACKNAME',
+					length: 16
+				}
+			};
+
+			await supertest(server)
+				.post('/api/calendar/track/update/' + tracks[0].id)
+				.send(tmp)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -257,6 +295,27 @@ describe('Tracks', () => {
 			response.forEach(t => {
 				t.id.should.not.equal(trackID);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Deleting a track without authorisation', async () => {
+		const tmp = {
+			track: {
+				name: 'Test Track 6',
+				country: 'Sweden',
+				timezone: 'Europe/Amsterdam',
+				length: 5,
+				map: ''
+			}
+		};
+
+		try {
+			const track = await Track.create(tmp);
+			await supertest(server)
+				.post('/api/calendar/track/delete/' + track.id)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}

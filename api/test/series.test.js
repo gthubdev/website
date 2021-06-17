@@ -100,7 +100,6 @@ describe('Series', () => {
 	afterEach(async () => {
 		try {
 			const series = await Series.findAll({
-				limit: 5,
 				order: [
 					['createdAt', 'DESC'],
 					['id', 'DESC']
@@ -136,6 +135,19 @@ describe('Series', () => {
 				s.shortname.should.have.string('TS');
 				s.priority.should.equal(1);
 			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Creating a series without authorisation', async () => {
+		const tmp = { name: 'Test Series 1', shortname: 'TS1', priority: 1 };
+
+		try {
+			await supertest(server)
+				.post('/api/calendar/series/create')
+				.send(tmp)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -197,6 +209,34 @@ describe('Series', () => {
 		}
 	});
 
+	it('Updating a series without authorisation', async () => {
+		try {
+			const series = await Series.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+			const vehicleClasses = [vclId];
+			const tmp = {
+				series: {
+					id: series[0].id,
+					name: 'NEW_SERIES_NAME',
+					priority: 2,
+					vehicleClasses
+				}
+			};
+
+			await supertest(server)
+				.post('/api/calendar/series/update/' + series[0].id)
+				.send(tmp)
+				.expect(400);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
 	it('Updating a series with an invalid priority', async () => {
 		try {
 			const series = await Series.findAll({
@@ -248,6 +288,24 @@ describe('Series', () => {
 			const response = await Series.findAll();
 			response.length.should.equal(nrOfSeriesBefore - 1);
 			response.forEach(s => s.id.should.not.equal(seriesID));
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Deleting a series without authorisation', async () => {
+		const tmp = {
+			name: 'Test Series 6',
+			shortname: 'TS6',
+			priority: 1,
+			vehicleClasses: [vclId]
+		};
+
+		try {
+			const newseries = await Series.create(tmp);
+			await supertest(server)
+				.post('/api/calendar/series/delete/' + newseries.id)
+				.expect(400);
 		} catch (err) {
 			should.not.exist(err);
 		}

@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
 	User.associate = models => {
 		models.User.belongsTo(models.Usertype, { foreignKey: 'usertype' });
 		models.User.hasMany(models.Auth, { foreignKey: 'user' });
-		models.User.hasMany(models.BlogPost, { foreignKey: 'author' });
+		models.User.hasMany(models.BlogPost, {
+			foreignKey: 'author',
+			onDelete: 'RESTRICT'
+		});
 	};
 
 	return User;
