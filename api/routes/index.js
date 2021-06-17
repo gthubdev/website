@@ -9,6 +9,7 @@ const EventSessionCtrl = require('../controllers/eventsession');
 const ResourcesCtrl = require('../controllers/resources');
 const SeriesCtrl = require('../controllers/series');
 const TrackCtrl = require('../controllers/track');
+const BlogCtrl = require('../controllers/blog');
 const iCalCtrl = require('../controllers/ical');
 const auth = require('../middleware/auth');
 
@@ -45,6 +46,11 @@ router.post('/calendar/series/delete/:id', auth.tvcrew_auth, SeriesCtrl.deleteSe
 router.post('/calendar/track/create', auth.tvcrew_auth, TrackCtrl.createTrack);
 router.post('/calendar/track/update/:id', auth.tvcrew_auth, TrackCtrl.updateTrack);
 router.post('/calendar/track/delete/:id', auth.tvcrew_auth, TrackCtrl.deleteTrack);
+
+// Blog
+router.post('/blog/create', auth.tvcrew_auth, BlogCtrl.createBlogPost);
+router.post('/blog/update/:id', auth.tvcrew_auth, BlogCtrl.updateBlogPost);
+router.post('/blog/delete/:id', auth.tvcrew_auth, BlogCtrl.deleteBlogPost);
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);

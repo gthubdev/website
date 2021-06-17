@@ -30,7 +30,6 @@ if (process.env.NODE_ENV !== 'test' && process.env.DBHost) { // production/dev +
 		port: process.env.TestDBPort
 	};
 } else if (process.env.NODE_ENV !== 'test') { // production/dev but no config found
-	console.log('NODE_ENV', process.env.NODE_ENV);
 	console.error('No database credentials found in .env');
 	process.exit(1);
 } else { // test but no config (used for CircleCI
