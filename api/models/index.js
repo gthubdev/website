@@ -13,7 +13,10 @@ const db = {};
 env.config();
 
 let dbconfig;
-if (process.env.NODE_ENV !== 'test' && process.env.DBHost) { // production/dev + config found
+if (sameDatabase()) {
+	console.error('Trying to use the same database for production and test.');
+	process.exit(1);
+} else if (process.env.NODE_ENV !== 'test' && prodDbVarsSet()) { // production/dev + config found
 	dbconfig = {
 		host: process.env.DBHost,
 		databasename: process.env.DBName,
@@ -21,7 +24,7 @@ if (process.env.NODE_ENV !== 'test' && process.env.DBHost) { // production/dev +
 		password: process.env.DBPass,
 		port: process.env.DBPort
 	};
-} else if (process.env.NODE_ENV === 'test' && process.env.TestDBHost) { // test + config found
+} else if (process.env.NODE_ENV === 'test' && testDbVarsSet() === true) { // test + config found
 	dbconfig = {
 		host: process.env.TestDBHost,
 		databasename: process.env.TestDBName,
@@ -33,6 +36,7 @@ if (process.env.NODE_ENV !== 'test' && process.env.DBHost) { // production/dev +
 	console.error('No database credentials found in .env');
 	process.exit(1);
 } else { // test but no config (used for CircleCI
+	console.log('CIRCLECI');
 	dbconfig = require('../../database/circleci.js');
 }
 
@@ -98,4 +102,27 @@ async function testConnection() {
 		console.error('Unable to connect to the database');
 		process.exit(1);
 	}
+}
+
+function prodDbVarsSet() {
+	return process.env.DBHost !== '' &&
+		process.env.DBName !== '' &&
+		process.env.DBUser !== '' &&
+		process.env.DBPass !== '' &&
+		!isNaN(Number.parseInt(process.env.DBPort));
+}
+
+function testDbVarsSet() {
+	return process.env.TestDBHost !== '' &&
+		process.env.TestDBName !== '' &&
+		process.env.TestDBUser !== '' &&
+		process.env.TestDBPass !== '' &&
+		!isNaN(Number.parseInt(process.env.TestDBPort));
+}
+
+function sameDatabase() {
+	return prodDbVarsSet() && testDbVarsSet() &&
+		process.env.DBHost === process.env.TestDBHost &&
+		process.env.DBName === process.env.TestDBName &&
+		process.env.DBPort === process.env.TestDBPort;
 }

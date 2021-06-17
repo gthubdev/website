@@ -21,27 +21,29 @@ This repo purpose its to host the source code for the [GTHub](https://gthub.eu) 
 # Web server
 # Defaults to 3000 if not set
 PORT=3000
+# Defaults to 3001 if not set
+TESTPORT=3001
 # Defaults to 127.0.0.1 if not set
-IP=localhost
+IP=0.0.0.0
 
-# MariaDB config for production/dev
-DBHost=DATABASE_HOST
-DBName=DATABASE_NAME
-DBUser=DATABASE_USER
-DBPass=DATABASE_PASSWORD
 
-# MariaDB config for testing
-TestDBHost=TESTDATABASE_HOST
-TestDBName=TESTDATABASE_NAME
-TestDBUser=TESTDATABASE_USER
-TestDBPass=TESTDATABASE_PASSWORD
-
-# Defaults to 3306 if not set (MariaDB default)
+# MariaDB config for production/dev #
+DBHost=localhost
+DBName=gthub
+DBUser=delta
+DBPass=delta-one
 DBPort=3306
 
-# Authentication
-# Set it to some random key
-JWT_KEY=ChooseSomeRandomKeyHere
+# MariaDB config for testing #
+TestDBHost=localhost
+TestDBName=gthubtest
+TestDBUser=delta
+TestDBPass=delta-one
+TestDBPort=3306
+
+
+# Authentication #
+JWT_KEY=TheOofCounterIsGreat
 ```
 You can use the supplied `.env.sample` as a base.
 
