@@ -26,7 +26,7 @@
 					</div>
 					<div>
 						<!--<Button icon="pi pi-pencil" @click="editTrack(slotProps.data)" />-->
-						<!--<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />-->
+						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
 					</div>
 				</div>
 			</template>
@@ -61,13 +61,28 @@ export default {
 	},
 	methods: {
 		...mapMutations({
-			addPost: 'resources/blogposts/add'
+			addPost: 'resources/blogposts/add',
+			deletePost: 'resources/blogposts/delete'
 		}),
 		openBlogCrud() {
 			this.showDialog = true;
 		},
 		closeBlogCrud() {
 			this.showDialog = false;
+		},
+		async sendDeleteRequest(post) {
+			try {
+				const res = await this.$axios.post('/api/blog/delete/' + post.id);
+				if (res.data.deleted >= 1) {
+					this.deletePost(post.id);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Blogpost deleted.', life: 5000 });
+				}
+			} catch (err) {
+				if (err.response && err.response.status === 409)
+					alert(err.response.data);
+				else if (err.response)
+					alert(err.response);
+			}
 		},
 		async sendRequest(obj) {
 			const blogpost = JSON.parse(JSON.stringify(obj));

@@ -17,5 +17,9 @@ export const mutations = {
 		state.posts.sort((a, b) => {
 			return b.createdAt.localeCompare(a.createdAt);
 		});
+	},
+	delete(state, postid) {
+		const index = state.posts.findIndex(p => p.id === postid);
+		state.posts.splice(index, 1);
 	}
 };
