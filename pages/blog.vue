@@ -19,6 +19,13 @@
 			</template>
 		</Card>
 	</div>
+
+	<Paginator
+		:first.sync="firstIndex"
+		:rows="nrOfPostsPerPage"
+		:total-records="nrOfPosts"
+		@page="pageChanged($event)"
+	/>
 </div>
 </template>
 
@@ -39,15 +46,23 @@ export default {
 	data() {
 		return {
 			data: [],
-			displayedPosts: []
+			displayedPosts: [],
+			nrOfPosts: 0,
+			nrOfPostsPerPage: 3,
+			firstIndex: 0
 		};
 	},
 	created() {
-		this.displayedPosts = this.data.blogposts;
+		this.nrOfPosts = this.data.blogposts.length;
+		this.displayedPosts = this.data.blogposts.slice(this.firstIndex, this.firstIndex + this.nrOfPostsPerPage);
 	},
 	methods: {
 		formatDate(date) {
 			return this.$dayjs(date).format('YYYY-MM-DD HH:mm');
+		},
+		pageChanged(event) {
+			this.firstIndex = event.first;
+			this.displayedPosts = this.data.blogposts.slice(this.firstIndex, this.firstIndex + this.nrOfPostsPerPage);
 		}
 	}
 };
