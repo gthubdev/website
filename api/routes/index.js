@@ -27,6 +27,9 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 // Resources
 router.get('/resources', auth.tvcrew_auth, ResourcesCtrl.getResources);
 
+// Blog
+router.get('/blog', BlogCtrl.getBlog);
+
 // Event
 router.post('/calendar/event/create', auth.tvcrew_auth, EventCtrl.createEvent);
 router.post('/calendar/event/update/:id', auth.tvcrew_auth, EventCtrl.updateEvent);
@@ -47,7 +50,7 @@ router.post('/calendar/track/create', auth.tvcrew_auth, TrackCtrl.createTrack);
 router.post('/calendar/track/update/:id', auth.tvcrew_auth, TrackCtrl.updateTrack);
 router.post('/calendar/track/delete/:id', auth.tvcrew_auth, TrackCtrl.deleteTrack);
 
-// Blog
+// Blogposts
 router.post('/blog/create', auth.tvcrew_auth, BlogCtrl.createBlogPost);
 router.post('/blog/update/:id', auth.tvcrew_auth, BlogCtrl.updateBlogPost);
 router.post('/blog/delete/:id', auth.tvcrew_auth, BlogCtrl.deleteBlogPost);

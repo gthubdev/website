@@ -48,3 +48,6 @@ INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype)
 INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Top 30 Qualifying', '2021-07-31 08:00', 3, 17, 45, 2);
 INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Race 2', '2021-07-31 11:00', 3, 14, 60, 1);
 INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Main Race', '2021-07-31 14:00', 3, 17, 1440, 1);
+
+# Blogposts
+INSERT INTO BlogPost (headline, content, author, image) VALUES ('Blogpost 1', '<div>this is some text</div>', 2, '');
