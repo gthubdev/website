@@ -1,10 +1,18 @@
-const { Event, EventSession, Track, Series, SupportSeries, SeriesType, VehicleClass, VehicleClassCategory, EventSessionType } = require('../models/');
+const { BlogPost, Event, EventSession, Track, Series, SupportSeries, SeriesType, User, VehicleClass, VehicleClassCategory, EventSessionType } = require('../models/');
 const dateutil = require('../util/dateutil');
 const util = require('../util/util');
 
 module.exports.getResources = async (req, res) => {
 	try {
-		const [events, series, tracks, vehicleclasscategories, vehicleclasses, sessiontypes] = await Promise.all([
+		const [blogposts, events, series, tracks, vehicleclasscategories, vehicleclasses, sessiontypes] = await Promise.all([
+			BlogPost.findAll({
+				include: [
+					{ model: User }
+				],
+				order: [
+					['createdAt', 'DESC']
+				]
+			}),
 			Event.findAll({
 				include: [
 					{ model: Track },
@@ -74,6 +82,7 @@ module.exports.getResources = async (req, res) => {
 		]);
 
 		const data = {
+			blogposts,
 			events,
 			series,
 			tracks,

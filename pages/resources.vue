@@ -13,6 +13,9 @@
 		<TabPanel header="Tracks">
 			<ResourcesTrackContainer />
 		</TabPanel>
+		<TabPanel header="Blogposts">
+			<ResourcesBlogContainer />
+		</TabPanel>
 		<TabPanel header="Class Categories">
 			<ResourcesClassCategoryContainer />
 		</TabPanel>
@@ -27,19 +30,9 @@
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
 import { mapMutations } from 'vuex';
-import ResourcesClassCategoryContainer from '~/components/resources/ResourcesClassCategoryContainer';
-import ResourcesClassContainer from '~/components/resources/ResourcesClassContainer';
-import ResourcesEventContainer from '~/components/resources/ResourcesEventContainer';
-import ResourcesSeriesContainer from '~/components/resources/ResourcesSeriesContainer';
-import ResourcesTrackContainer from '~/components/resources/ResourcesTrackContainer';
 
 export default {
 	components: {
-		ResourcesClassCategoryContainer,
-		ResourcesClassContainer,
-		ResourcesEventContainer,
-		ResourcesSeriesContainer,
-		ResourcesTrackContainer,
 		TabPanel,
 		TabView
 	},
@@ -62,6 +55,7 @@ export default {
 		};
 	},
 	created() {
+		this.setBlogposts(this.data.blogposts);
 		this.setCategories(this.data.vehicleclasscategories);
 		this.setClasses(this.data.vehicleclasses);
 		this.setEvents(this.data.events);
@@ -72,6 +66,7 @@ export default {
 	},
 	methods: {
 		...mapMutations({
+			setBlogposts: 'resources/blogposts/set',
 			setCategories: 'resources/classcategories/set',
 			setClasses: 'resources/classes/set',
 			setEvents: 'resources/events/set',

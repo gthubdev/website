@@ -37,6 +37,7 @@ module.exports = {
 			baseIndent: 0
 		}],
 		'no-trailing-spaces': 'off',
-		'padded-blocks': ['warn', 'never']
+		'padded-blocks': ['warn', 'never'],
+		'vue/no-v-html': 'off'
 	}
 };

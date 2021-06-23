@@ -99,7 +99,7 @@ export default {
 			type: Object, default: null
 		}
 	},
-	data: function() {
+	data() {
 		return {
 			showTrackDialog: false,
 			action: '',
