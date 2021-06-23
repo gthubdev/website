@@ -38,6 +38,12 @@ export default {
 	props: {
 		showDialog: {
 			type: Boolean, default: false
+		},
+		isEditing: {
+			type: Boolean, default: false
+		},
+		editingPost: {
+			type: Object, default: null
 		}
 	},
 	data() {
@@ -46,6 +52,7 @@ export default {
 			action: '',
 			headline: '',
 			blogpost: {
+				id: '',
 				headline: '',
 				content: '',
 				image: ''
@@ -64,15 +71,28 @@ export default {
 			if (newValue === false)
 				this.$emit('blog-crud-closed');
 
-			if (newValue === true) {
+			if (newValue === true && this.isEditing === false) {
 				this.action = 'Create';
 				this.headline = 'Create a blogpost';
 				this.blogpost = {
+					id: '',
 					headline: '',
 					content: '',
 					image: ''
 				};
 				this.editorContent = '';
+			}
+
+			if (newValue === true && this.isEditing === true) {
+				this.action = 'Update';
+				this.headline = 'Update ' + this.editingPost.headline;
+				this.blogpost = {
+					id: this.editingPost.id,
+					headline: this.editingPost.headline,
+					content: '',
+					image: this.editingPost.image
+				};
+				this.editorContent = this.editingPost.content;
 			}
 		}
 	},
@@ -85,10 +105,11 @@ export default {
 		},
 		sendRequest() {
 			this.blogpost.author = this.user.id;
-			this.blogpost.content = this.editorContent
-				.replace('[quote]', '<div class="quote">')
-				.replace('[/quote]', '</div>');
+			this.blogpost.content = this.editorContent;
+			// 	.replace('[quote]', '<div class="quote">')
+			// 	.replace('[/quote]', '</div>');
 			this.$emit('send-request', this.blogpost);
+			console.log('sending request');
 		},
 		validInput() {
 			return this.validHeadline() &&

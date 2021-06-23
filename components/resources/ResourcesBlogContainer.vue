@@ -25,7 +25,7 @@
 						{{ slotProps.data.headline }} (by {{ slotProps.data.User.name }})
 					</div>
 					<div>
-						<!--<Button icon="pi pi-pencil" @click="editTrack(slotProps.data)" />-->
+						<Button icon="pi pi-pencil" @click="editPost(slotProps.data)" />
 						<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
 					</div>
 				</div>
@@ -35,6 +35,8 @@
 
 	<ResourcesBlogCRUD
 		:show-dialog="showDialog"
+		:is-editing="isEditing"
+		:editing-post="editingPost"
 		@blog-crud-closed="closeBlogCrud"
 		@send-request="sendRequest"
 	/>
@@ -48,7 +50,9 @@ export default {
 	data() {
 		return {
 			displayedPosts: [],
-			showDialog: false
+			showDialog: false,
+			isEditing: false,
+			editingPost: null
 		};
 	},
 	computed: {
@@ -62,13 +66,21 @@ export default {
 	methods: {
 		...mapMutations({
 			addPost: 'resources/blogposts/add',
-			deletePost: 'resources/blogposts/delete'
+			deletePost: 'resources/blogposts/delete',
+			updatePost: 'resources/blogposts/update'
 		}),
 		openBlogCrud() {
 			this.showDialog = true;
 		},
 		closeBlogCrud() {
 			this.showDialog = false;
+			this.isEditing = false;
+			this.editingPost = null;
+		},
+		editPost(post) {
+			this.isEditing = true;
+			this.editingPost = JSON.parse(JSON.stringify(post));
+			this.showDialog = true;
 		},
 		async sendDeleteRequest(post) {
 			try {
@@ -86,20 +98,33 @@ export default {
 		},
 		async sendRequest(obj) {
 			const blogpost = JSON.parse(JSON.stringify(obj));
-			const url = '/api/blog/create';
+			let url;
+			if (this.isEditing === false)
+				url = '/api/blog/create';
+			else if (this.isEditing === true && this.editingPost !== null)
+				url = '/api/blog/update/' + blogpost.id;
+			else
+				console.error('Sending request for null-post.');
 
 			try {
 				const res = await this.$axios.$post(url, {
 					blogpost: blogpost
 				});
-				this.addPost(res);
-				this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Blogpost created.', life: 5000 });
+				if (this.isEditing === false) {
+					this.addPost(res);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Blogpost created.', life: 5000 });
+				} else {
+					this.updatePost(res);
+					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Blogpost updated.', life: 5000 });
+				}
 			} catch (err) {
 				if (err.response)
 					alert(err.response.data);
 			}
 
 			this.showDialog = false;
+			this.isEditing = false;
+			this.editingPost = null;
 		}
 	}
 };
