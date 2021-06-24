@@ -16,6 +16,8 @@
 		</div>
 	</div>
 
+	<br>
+
 	<Editor v-model="editorContent" editor-style="height: 320px" />
 
 	<template #footer>

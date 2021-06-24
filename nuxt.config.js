@@ -89,7 +89,7 @@ module.exports = {
 
 	// Primevue config
 	primevue: {
-		theme: 'mdc-dark-indigo',
+		theme: 'saga-blue',
 		ripple: true,
 		components: [
 			'AutoComplete',
