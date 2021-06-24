@@ -57,7 +57,8 @@ export default {
 				id: '',
 				headline: '',
 				content: '',
-				image: ''
+				image: '',
+				author: ''
 			},
 			editorContent: ''
 		};
@@ -80,7 +81,8 @@ export default {
 					id: '',
 					headline: '',
 					content: '',
-					image: ''
+					image: '',
+					author: ''
 				};
 				this.editorContent = '';
 			}
@@ -92,7 +94,8 @@ export default {
 					id: this.editingPost.id,
 					headline: this.editingPost.headline,
 					content: '',
-					image: this.editingPost.image
+					image: this.editingPost.image,
+					author: this.editingPost.author
 				};
 				this.editorContent = this.editingPost.content;
 			}
@@ -106,7 +109,8 @@ export default {
 			this.showBlogDialog = false;
 		},
 		sendRequest() {
-			this.blogpost.author = this.user.id;
+			if (this.isEditing === false)
+				this.blogpost.author = this.user.id;
 			this.blogpost.content = this.editorContent;
 			// 	.replace('[quote]', '<div class="quote">')
 			// 	.replace('[/quote]', '</div>');
