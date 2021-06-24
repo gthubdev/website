@@ -25,35 +25,35 @@ router.get('/auth/me', AuthCtrl.me);
 router.get('/calendar', CalendarCtrl.getCalendar);
 
 // Resources
-router.get('/resources', auth.tvcrew_auth, ResourcesCtrl.getResources);
+router.get('/resources', auth.staff_auth, ResourcesCtrl.getResources);
 
 // Blog
 router.get('/blog', BlogCtrl.getBlog);
 
 // Event
-router.post('/calendar/event/create', auth.tvcrew_auth, EventCtrl.createEvent);
-router.post('/calendar/event/update/:id', auth.tvcrew_auth, EventCtrl.updateEvent);
-router.post('/calendar/event/delete/:id', auth.tvcrew_auth, EventCtrl.deleteEvent);
+router.post('/calendar/event/create', auth.staff_auth, EventCtrl.createEvent);
+router.post('/calendar/event/update/:id', auth.staff_auth, EventCtrl.updateEvent);
+router.post('/calendar/event/delete/:id', auth.staff_auth, EventCtrl.deleteEvent);
 
 // EventSession
-router.post('/calendar/eventsession/create', auth.tvcrew_auth, EventSessionCtrl.createEventSession);
-router.post('/calendar/eventsession/update/:id', auth.tvcrew_auth, EventSessionCtrl.updateEventSession);
-router.post('/calendar/eventsession/delete/:id', auth.tvcrew_auth, EventSessionCtrl.deleteEventSession);
+router.post('/calendar/eventsession/create', auth.staff_auth, EventSessionCtrl.createEventSession);
+router.post('/calendar/eventsession/update/:id', auth.staff_auth, EventSessionCtrl.updateEventSession);
+router.post('/calendar/eventsession/delete/:id', auth.staff_auth, EventSessionCtrl.deleteEventSession);
 
 // Series
-router.post('/calendar/series/create', auth.tvcrew_auth, SeriesCtrl.createSeries);
-router.post('/calendar/series/update/:id', auth.tvcrew_auth, SeriesCtrl.updateSeries);
-router.post('/calendar/series/delete/:id', auth.tvcrew_auth, SeriesCtrl.deleteSeries);
+router.post('/calendar/series/create', auth.staff_auth, SeriesCtrl.createSeries);
+router.post('/calendar/series/update/:id', auth.staff_auth, SeriesCtrl.updateSeries);
+router.post('/calendar/series/delete/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
 
 // Track
-router.post('/calendar/track/create', auth.tvcrew_auth, TrackCtrl.createTrack);
-router.post('/calendar/track/update/:id', auth.tvcrew_auth, TrackCtrl.updateTrack);
-router.post('/calendar/track/delete/:id', auth.tvcrew_auth, TrackCtrl.deleteTrack);
+router.post('/calendar/track/create', auth.staff_auth, TrackCtrl.createTrack);
+router.post('/calendar/track/update/:id', auth.staff_auth, TrackCtrl.updateTrack);
+router.post('/calendar/track/delete/:id', auth.staff_auth, TrackCtrl.deleteTrack);
 
 // Blogposts
-router.post('/blog/create', auth.tvcrew_auth, BlogCtrl.createBlogPost);
-router.post('/blog/update/:id', auth.tvcrew_auth, BlogCtrl.updateBlogPost);
-router.post('/blog/delete/:id', auth.tvcrew_auth, BlogCtrl.deleteBlogPost);
+router.post('/blog/create', auth.staff_auth, BlogCtrl.createBlogPost);
+router.post('/blog/update/:id', auth.staff_auth, BlogCtrl.updateBlogPost);
+router.post('/blog/delete/:id', auth.staff_auth, BlogCtrl.deleteBlogPost);
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { Auth } = require('../models');
 const util = require('../util/util');
 
-module.exports.tvcrew_auth = async (req, res, next) => {
+module.exports.staff_auth = async (req, res, next) => {
 	if (!req.header('Authorization')) {
 		res.status(400).send();
 		return;
