@@ -8,7 +8,22 @@ module.exports = (sequelize, DataTypes) => {
 		username: DataTypes.STRING,
 		password: DataTypes.STRING,
 		name: DataTypes.STRING,
-		email: DataTypes.STRING,
+		email: {
+			type: DataTypes.STRING,
+			default: ''
+		},
+		image: {
+			type: DataTypes.STRING(1023),
+			default: ''
+		},
+		twitter: {
+			type: DataTypes.STRING,
+			default: ''
+		},
+		instagram: {
+			type: DataTypes.STRING,
+			default: ''
+		},
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.fn('NOW')
