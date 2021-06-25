@@ -11,6 +11,10 @@ module.exports.staff_auth = async (req, res, next) => {
 
 	const { user, data } = await getUserFromToken(req, res);
 
+	// error
+	if (data === null)
+		return;
+
 	// check that database records exist
 	if (!user || !data) {
 		res.status(401).send();

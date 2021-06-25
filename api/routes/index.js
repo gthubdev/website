@@ -3,6 +3,7 @@ const router = express.Router();
 
 // controllers
 const AuthCtrl = require('../controllers/auth');
+const UserCtrl = require('../controllers/user');
 const CalendarCtrl = require('../controllers/calendar');
 const EventCtrl = require('../controllers/event');
 const EventSessionCtrl = require('../controllers/eventsession');
@@ -22,6 +23,7 @@ router.post('/auth/changepassword', AuthCtrl.changepassword);
 router.get('/auth/me', AuthCtrl.me);
 
 // User
+router.post('/user/create', auth.admin_auth, UserCtrl.createUser);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
