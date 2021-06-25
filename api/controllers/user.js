@@ -1,3 +1,4 @@
+const bCrypt = require('bcryptjs');
 const { User } = require('../models');
 const util = require('../util/util');
 
@@ -22,8 +23,17 @@ module.exports.createUser = async (req, res) => {
 		return;
 	}
 
+	// constraints for password:
+	// TODO
+
 	try {
-		const user = await User.create(req.body.user);
+		const tmp = {
+			username: req.body.user.username,
+			password: bCrypt.hashSync(req.body.user.password, bCrypt.genSaltSync(8)),
+			name: req.body.name
+		};
+
+		const user = await User.create(tmp);
 		util.print('User \'' + user.username + '\' created');
 		res.status(200).send();
 	} catch (err) {

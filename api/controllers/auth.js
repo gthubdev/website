@@ -73,7 +73,7 @@ module.exports.changepassword = async (req, res) => {
 				if (matches) {
 					try {
 						const result = await user.update({
-							password: bCrypt.hashSync(req.body.newpassword, bCrypt.genSaltSync(8), null)
+							password: bCrypt.hashSync(req.body.newpassword, bCrypt.genSaltSync(8))
 						});
 						util.print('Password for user \'' + result.get('username') + '\' successfully changed.');
 						res.status(200).send();
