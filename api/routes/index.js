@@ -21,6 +21,8 @@ router.post('/auth/logout', AuthCtrl.logout);
 router.post('/auth/changepassword', AuthCtrl.changepassword);
 router.get('/auth/me', AuthCtrl.me);
 
+// User
+
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
 

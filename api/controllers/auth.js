@@ -14,7 +14,7 @@ module.exports.login = async (req, res) => {
 		});
 		if (!user) {
 			util.print('User ' + req.body.username + ' does not exist');
-			res.status(403).send();
+			res.status(401).send();
 			return;
 		}
 
@@ -22,7 +22,7 @@ module.exports.login = async (req, res) => {
 
 		if (!passwordMatch) {
 			util.print('User ' + req.body.username + ', password did not match');
-			res.status(403).send();
+			res.status(401).send();
 			return;
 		}
 
@@ -37,7 +37,7 @@ module.exports.login = async (req, res) => {
 
 module.exports.logout = async (req, res) => {
 	if (!req.header('Authorization')) {
-		res.status(400).send();
+		res.status(401).send();
 		return;
 	}
 
@@ -97,7 +97,7 @@ module.exports.changepassword = async (req, res) => {
 
 module.exports.me = async (req, res) => {
 	if (!req.header('Authorization')) {
-		res.status(400).send();
+		res.status(401).send();
 		return;
 	}
 

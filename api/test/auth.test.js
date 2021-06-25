@@ -73,7 +73,7 @@ describe('Authentication', () => {
 		supertest(server)
 			.post('/api/auth/login')
 			.send({ username: 'admin4353', password: 'admin5t6346' })
-			.expect(403, done);
+			.expect(401, done);
 	});
 
 	it('Valid logout', async () => {

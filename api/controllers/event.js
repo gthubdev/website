@@ -8,23 +8,23 @@ module.exports.createEvent = async (req, res) => {
 	const enddate = dayjs(req.body.event.enddate);
 
 	if (startdate.format(dateformat) !== req.body.event.startdate) {
-		res.status(400).send('Invalid startdate');
+		res.status(422).send('Invalid startdate');
 		return;
 	}
 
 	if (enddate.format(dateformat) !== req.body.event.enddate) {
-		res.status(400).send('Invalid enddate');
+		res.status(422).send('Invalid enddate');
 		return;
 	}
 
 	if (startdate.isAfter(enddate.format('YYYY-MM-DD'))) {
-		res.status(400).send('Enddate cannot be before startdate');
+		res.status(422).send('Enddate cannot be before startdate');
 		return;
 	}
 
 	const prio = req.body.event.priority;
 	if (prio < 1 || prio > 4) {
-		res.status(400).send('Invalid priority');
+		res.status(422).send('Invalid priority');
 		return;
 	}
 
@@ -78,28 +78,28 @@ module.exports.updateEvent = async (req, res) => {
 		const enddate = dayjs(req.body.event.enddate);
 
 		if (startdate.format(dateformat) !== req.body.event.startdate) {
-			res.status(400).send('Invalid startdate');
+			res.status(422).send('Invalid startdate');
 			return;
 		}
 
 		if (enddate.format(dateformat) !== req.body.event.enddate) {
-			res.status(400).send('Invalid enddate');
+			res.status(422).send('Invalid enddate');
 			return;
 		}
 
 		if (startdate.isAfter(enddate.format('YYYY-MM-DD'))) {
-			res.status(400).send('Enddate cannot be before startdate');
+			res.status(422).send('Enddate cannot be before startdate');
 			return;
 		}
 	} else if (req.body.event.startdate || req.body.event.enddate) {
-		res.status(400).send('Must supply both startdate and enddate');
+		res.status(422).send('Must supply both startdate and enddate');
 		return;
 	}
 
 	if (req.body.event.priority) {
 		const prio = req.body.event.priority;
 		if (prio < 1 || prio > 4) {
-			res.status(400).send('Invalid priority');
+			res.status(422).send('Invalid priority');
 			return;
 		}
 	}

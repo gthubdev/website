@@ -9,19 +9,19 @@ module.exports.createEventSession = async (req, res) => {
 	const starttime = dayjs(req.body.session.starttime);
 
 	if (starttime.format(datetimeformat) !== req.body.session.starttime) {
-		res.status(400).send('Invalid starttime');
+		res.status(422).send('Invalid starttime');
 		return;
 	}
 
 	const duration = req.body.session.duration;
 	if (duration <= 0) {
-		res.status(400).send('Invalid duration');
+		res.status(422).send('Invalid duration');
 		return;
 	}
 
 	const sessiontype = req.body.session.sessiontype || 0;
 	if (sessiontype < 1 || sessiontype > 4) {
-		res.status(400).send('Invalid sessiontype');
+		res.status(422).send('Invalid sessiontype');
 		return;
 	}
 
@@ -37,12 +37,12 @@ module.exports.createEventSession = async (req, res) => {
 		const ev_enddate = event.enddate;
 
 		if (dayjs(ev_startdate).isAfter(starttime, 'day')) {
-			res.status(400).send('Session is outside event-dates');
+			res.status(422).send('Session is outside event-dates');
 			return;
 		}
 
 		if (dayjs(ev_enddate).isBefore(starttime, 'day')) {
-			res.status(400).send('Session is outside event-dates');
+			res.status(422).send('Session is outside event-dates');
 			return;
 		}
 
@@ -64,7 +64,7 @@ module.exports.createEventSession = async (req, res) => {
 
 module.exports.updateEventSession = async (req, res) => {
 	if (!req.body.session || !req.body.session.timezone) {
-		res.status(400).send('Bad request');
+		res.status(422).send('Bad request');
 		return;
 	}
 
@@ -72,7 +72,7 @@ module.exports.updateEventSession = async (req, res) => {
 	if (req.body.session.starttime) {
 		starttime = dayjs(req.body.session.starttime);
 		if (starttime && starttime.format(datetimeformat) !== req.body.session.starttime) {
-			res.status(400).send('Invalid starttime');
+			res.status(422).send('Invalid starttime');
 			return;
 		}
 	}
@@ -80,14 +80,14 @@ module.exports.updateEventSession = async (req, res) => {
 	if (req.body.session.duration) {
 		const duration = req.body.session.duration;
 		if (duration <= 0) {
-			res.status(400).send('Invalid duration');
+			res.status(422).send('Invalid duration');
 			return;
 		}
 	}
 
 	const sessiontype = req.body.session.sessiontype;
 	if (sessiontype < 1 || sessiontype > 4) {
-		res.status(400).send('Invalid sessiontype');
+		res.status(422).send('Invalid sessiontype');
 		return;
 	}
 
@@ -109,12 +109,12 @@ module.exports.updateEventSession = async (req, res) => {
 		const ev_enddate = event.enddate;
 
 		if (dayjs(ev_startdate).isAfter(starttime, 'day')) {
-			res.status(400).send('Session is outside event-dates');
+			res.status(422).send('Session is outside event-dates');
 			return;
 		}
 
 		if (dayjs(ev_enddate).isBefore(starttime, 'day')) {
-			res.status(400).send('Session is outside event-dates');
+			res.status(422).send('Session is outside event-dates');
 			return;
 		}
 

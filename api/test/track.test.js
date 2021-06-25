@@ -116,7 +116,7 @@ describe('Tracks', () => {
 			await supertest(server)
 				.post('/api/calendar/track/create')
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -132,7 +132,7 @@ describe('Tracks', () => {
 				.post('/api/calendar/track/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -148,7 +148,7 @@ describe('Tracks', () => {
 				.post('/api/calendar/track/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -207,7 +207,7 @@ describe('Tracks', () => {
 			await supertest(server)
 				.post('/api/calendar/track/update/' + tracks[0].id)
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -235,7 +235,7 @@ describe('Tracks', () => {
 				.post('/api/calendar/track/update/' + tracks[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -263,7 +263,7 @@ describe('Tracks', () => {
 				.post('/api/calendar/track/update/' + tracks[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -315,7 +315,7 @@ describe('Tracks', () => {
 			const track = await Track.create(tmp);
 			await supertest(server)
 				.post('/api/calendar/track/delete/' + track.id)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}

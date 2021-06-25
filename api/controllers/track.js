@@ -5,12 +5,12 @@ const dateutil = require('../util/dateutil');
 
 module.exports.createTrack = async (req, res) => {
 	if (countryList.getCode(req.body.track.country) === undefined) {
-		res.status(400).send('Invalid country');
+		res.status(422).send('Invalid country');
 		return;
 	}
 
 	if (!isValidTimezone(req.body.track.timezone)) {
-		res.status(400).send('Invalid timezone');
+		res.status(422).send('Invalid timezone');
 		return;
 	}
 
@@ -25,12 +25,12 @@ module.exports.createTrack = async (req, res) => {
 
 module.exports.updateTrack = async (req, res) => {
 	if (req.body.track.country && countryList.getCode(req.body.track.country) === undefined) {
-		res.status(400).send('Invalid country');
+		res.status(422).send('Invalid country');
 		return;
 	}
 
 	if (req.body.track.timezone && !isValidTimezone(req.body.track.timezone)) {
-		res.status(400).send('Invalid timezone');
+		res.status(422).send('Invalid timezone');
 		return;
 	}
 
