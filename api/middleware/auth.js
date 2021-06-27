@@ -1,6 +1,6 @@
 const env = require('dotenv');
 const jwt = require('jsonwebtoken');
-const { Auth } = require('../models');
+const { Auth, User } = require('../models');
 const util = require('../util/util');
 
 module.exports.staff_auth = async (req, res, next) => {
@@ -10,10 +10,6 @@ module.exports.staff_auth = async (req, res, next) => {
 	}
 
 	const { user, data } = await getUserFromToken(req, res);
-
-	// error
-	if (data === null)
-		return;
 
 	// check that database records exist
 	if (!user || !data) {
@@ -74,7 +70,13 @@ async function getUserFromToken(req, res) {
 
 	try {
 		const user = await Auth.findOne({
-			where: { token: token }
+			where: { token: token },
+			include: [
+				{
+					model: User,
+					attributes: ['id', 'username']
+				}
+			]
 		});
 
 		return {
@@ -89,3 +91,4 @@ async function getUserFromToken(req, res) {
 		};
 	}
 }
+module.exports.getUserFromToken = getUserFromToken;

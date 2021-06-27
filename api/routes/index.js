@@ -24,6 +24,8 @@ router.get('/auth/me', AuthCtrl.me);
 
 // User
 router.post('/user/create', auth.admin_auth, UserCtrl.createUser);
+router.post('/user/update/:id', UserCtrl.updateUser);
+router.post('/user/delete/:id', auth.admin_auth, UserCtrl.deleteUser);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);

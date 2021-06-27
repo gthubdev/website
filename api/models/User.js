@@ -10,19 +10,23 @@ module.exports = (sequelize, DataTypes) => {
 		name: DataTypes.STRING,
 		email: {
 			type: DataTypes.STRING,
-			default: ''
+			defaultValue: ''
 		},
 		image: {
 			type: DataTypes.STRING(1023),
-			default: ''
+			defaultValue: ''
 		},
 		twitter: {
 			type: DataTypes.STRING,
-			default: ''
+			defaultValue: ''
 		},
 		instagram: {
 			type: DataTypes.STRING,
-			default: ''
+			defaultValue: ''
+		},
+		deleted: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: 0
 		},
 		createdAt: {
 			type: DataTypes.DATE,
