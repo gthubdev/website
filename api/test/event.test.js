@@ -174,7 +174,7 @@ describe('Events', () => {
 			await supertest(server)
 				.post('/api/calendar/event/create')
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -190,7 +190,7 @@ describe('Events', () => {
 				.post('/api/calendar/event/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -206,7 +206,7 @@ describe('Events', () => {
 				.post('/api/calendar/event/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -222,7 +222,7 @@ describe('Events', () => {
 				.post('/api/calendar/event/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -284,7 +284,7 @@ describe('Events', () => {
 			await supertest(server)
 				.post('/api/calendar/event/update/' + events[0].id)
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -313,7 +313,7 @@ describe('Events', () => {
 				.post('/api/calendar/event/update/' + events[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -342,7 +342,7 @@ describe('Events', () => {
 				.post('/api/calendar/event/update/' + events[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -372,7 +372,7 @@ describe('Events', () => {
 				.post('/api/calendar/event/update/' + events[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -400,7 +400,7 @@ describe('Events', () => {
 				.post('/api/calendar/event/update/' + events[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -460,7 +460,7 @@ describe('Events', () => {
 			const event = await Event.create(tmp);
 			await supertest(server)
 				.post('/api/calendar/event/delete/' + event.id)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -672,7 +672,7 @@ describe('EventSessions', () => {
 			await supertest(server)
 				.post('/api/calendar/eventsession/create')
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -688,7 +688,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmpsession)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -704,7 +704,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmpsession)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -720,7 +720,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmpsession)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -736,7 +736,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmpsession)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -752,7 +752,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmpsession)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -817,7 +817,7 @@ describe('EventSessions', () => {
 			await supertest(server)
 				.post('/api/calendar/eventsession/update/' + sessions[0].id)
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -847,7 +847,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/update/' + sessions[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -877,7 +877,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/update/' + sessions[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -907,7 +907,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/update/' + sessions[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -937,7 +937,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/update/' + sessions[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -968,7 +968,7 @@ describe('EventSessions', () => {
 				.post('/api/calendar/eventsession/update/' + sessions[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -1011,7 +1011,7 @@ describe('EventSessions', () => {
 			const session = await EventSession.create(tmp);
 			await supertest(server)
 				.post('/api/calendar/eventsession/delete/' + session.id)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}

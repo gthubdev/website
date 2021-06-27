@@ -147,7 +147,7 @@ describe('Series', () => {
 			await supertest(server)
 				.post('/api/calendar/series/create')
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -164,7 +164,7 @@ describe('Series', () => {
 				.post('/api/calendar/series/create')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -231,7 +231,7 @@ describe('Series', () => {
 			await supertest(server)
 				.post('/api/calendar/series/update/' + series[0].id)
 				.send(tmp)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -259,7 +259,7 @@ describe('Series', () => {
 				.post('/api/calendar/series/update/' + series[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
-				.expect(400);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -305,7 +305,7 @@ describe('Series', () => {
 			const newseries = await Series.create(tmp);
 			await supertest(server)
 				.post('/api/calendar/series/delete/' + newseries.id)
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}

@@ -62,7 +62,7 @@ describe('Resources', () => {
 			await supertest(server)
 				.get('/api/resources')
 				.send()
-				.expect(400);
+				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
 		}
