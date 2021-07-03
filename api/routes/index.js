@@ -39,7 +39,6 @@ router.get('/resources', auth.staff_auth, ResourcesCtrl.getResources);
 router.get('/blog', BlogCtrl.getBlog);
 
 // Event
-<<<<<<< HEAD
 router.post('/event', auth.staff_auth, EventCtrl.createEvent);
 router.put('/event/:id', auth.staff_auth, EventCtrl.updateEvent);
 router.delete('/event/:id', auth.staff_auth, EventCtrl.deleteEvent);
@@ -48,16 +47,6 @@ router.delete('/event/:id', auth.staff_auth, EventCtrl.deleteEvent);
 router.post('/eventsession', auth.staff_auth, EventSessionCtrl.createEventSession);
 router.put('/eventsession/:id', auth.staff_auth, EventSessionCtrl.updateEventSession);
 router.delete('/eventsession/:id', auth.staff_auth, EventSessionCtrl.deleteEventSession);
-=======
-router.post('/events', auth.staff_auth, EventCtrl.createEvent);
-router.put('/events/:id', auth.staff_auth, EventCtrl.updateEvent);
-router.delete('/events/:id', auth.staff_auth, EventCtrl.deleteEvent);
-
-// EventSession
-router.post('/eventsessions', auth.staff_auth, EventSessionCtrl.createEventSession);
-router.put('/eventsessions/:id', auth.staff_auth, EventSessionCtrl.updateEventSession);
-router.delete('/eventsessions/:id', auth.staff_auth, EventSessionCtrl.deleteEventSession);
->>>>>>> 57dbd95 (routes and admin tables)
 
 // Series
 router.get('/series', auth.staff_auth, SeriesCtrl.find);
@@ -67,16 +56,9 @@ router.put('/series/:id', auth.staff_auth, SeriesCtrl.updateSeries);
 router.delete('/series/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
 
 // Track
-<<<<<<< HEAD
 router.post('/track', auth.staff_auth, TrackCtrl.createTrack);
 router.put('/track/:id', auth.staff_auth, TrackCtrl.updateTrack);
 router.delete('/track/:id', auth.staff_auth, TrackCtrl.deleteTrack);
-=======
-router.get('/tracks', auth.staff_auth, TrackCtrl.find);
-router.post('/tracks', auth.staff_auth, TrackCtrl.createTrack);
-router.put('/tracks/:id', auth.staff_auth, TrackCtrl.updateTrack);
-router.delete('/tracks/:id', auth.staff_auth, TrackCtrl.deleteTrack);
->>>>>>> 57dbd95 (routes and admin tables)
 
 // Blogposts
 router.post('/blogs', auth.staff_auth, BlogCtrl.createBlogPost);
