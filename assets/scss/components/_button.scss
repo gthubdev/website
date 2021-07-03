@@ -1,9 +1,25 @@
 @import '../abstracts/variables';
 
-.btn-primary {
-	border-radius: 10px;
-	background-image: $default-gradient;
+.btn {
+	border-radius: 8px;
 	font-weight: bold;
+	@apply shadow-sm text-gray-800;
+
+	&-primary {
+		background: $blue;
+	}
+
+	&-light {
+		@apply bg-gray-300 text-gray-700;
+	}
+
+	&-link {
+		box-shadow: none;
+
+		&:hover {
+			@apply text-gth-blue;
+		}
+	}
 }
 
 .nav-btn {
@@ -12,7 +28,6 @@
 	cursor: pointer;
 	color: $white;
 	font-size: 0.8em;
-	font-weight: bold;
 }
 
 .nav-btn-secondary {
