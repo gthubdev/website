@@ -100,7 +100,7 @@ export default {
 		},
 		async sendDeleteRequest(series) {
 			try {
-				const res = await this.$axios.post('/api/calendar/series/delete/' + series.id);
+				const res = await this.$axios.delete('/api/series/' + series.id);
 				if (res.data.deleted >= 1) {
 					this.deleteSeries(series.id);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' deleted.', life: 5000 });
@@ -117,21 +117,27 @@ export default {
 			delete series.createdAt;
 			let url;
 			if (this.isEditing === false)
-				url = '/api/calendar/series/create';
+				url = '/api/series';
 			else if (this.isEditing === true && this.editingSeries !== null)
-				url = '/api/calendar/series/update/' + this.editingSeries.id;
+				url = '/api/series/' + this.editingSeries.id;
 			else
 				console.error('Sending request for null-series');
 
 			try {
-				const res = await this.$axios.$post(url, {
-					series
-				});
+				let res;
+				if (this.isEditing === false)
+					res = await this.$axios.post(url, {
+						series
+					});
+				else
+					res = await this.$axios.put(url, {
+						series
+					});
 				if (this.isEditing === false) {
-					this.addSeries(res);
+					this.addSeries(res.data);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' created.', life: 5000 });
 				} else {
-					this.updateSeries(res);
+					this.updateSeries(res.data);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' updated.', life: 5000 });
 				}
 			} catch (err) {

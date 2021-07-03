@@ -106,8 +106,8 @@ export default {
 		},
 		async sendDeleteRequest(track) {
 			try {
-				const res = await this.$axios.post('/api/calendar/track/delete/' + track.id);
-				if (res.data.deleted >= 1) {
+				const res = await this.$axios.$delete('/api/track/' + track.id);
+				if (res.deleted >= 1) {
 					this.deleteTrack(track.id);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + track.name + ' deleted.', life: 5000 });
 				}
@@ -122,23 +122,23 @@ export default {
 			const track = JSON.parse(JSON.stringify(obj));
 			track.timezone = obj.timezone.name;
 			delete track.createdAt;
-			let url;
-			if (this.isEditing === false)
-				url = '/api/calendar/track/create';
-			else if (this.isEditing === true && this.editingTrack !== null)
-				url = '/api/calendar/track/update/' + this.editingTrack.id;
-			else
-				console.error('Sending request for null-track.');
 
 			try {
-				const res = await this.$axios.$post(url, {
-					track
-				});
+				let res;
+				if (this.isEditing === false)
+					res = await this.$axios.$post('/api/track', {
+						track
+					});
+				else
+					res = await this.$axios.$put('/api/track/' + this.editingTrack.id, {
+						track
+					});
+
 				if (this.isEditing === false) {
 					this.addTrack(res);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + track.name + ' created.', life: 5000 });
-				} else if (res.updated >= 1) {
-					this.updateTrack(track);
+				} else {
+					this.updateTrack(res);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Track ' + track.name + ' updated.', life: 5000 });
 				}
 			} catch (err) {

@@ -84,8 +84,8 @@ export default {
 		},
 		async sendDeleteRequest(post) {
 			try {
-				const res = await this.$axios.post('/api/blog/delete/' + post.id);
-				if (res.data.deleted >= 1) {
+				const res = await this.$axios.$delete('/api/blog/' + post.id);
+				if (res.deleted >= 1) {
 					this.deletePost(post.id);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Blogpost deleted.', life: 5000 });
 				}
@@ -98,18 +98,18 @@ export default {
 		},
 		async sendRequest(obj) {
 			const blogpost = JSON.parse(JSON.stringify(obj));
-			let url;
-			if (this.isEditing === false)
-				url = '/api/blog/create';
-			else if (this.isEditing === true && this.editingPost !== null)
-				url = '/api/blog/update/' + blogpost.id;
-			else
-				console.error('Sending request for null-post.');
 
 			try {
-				const res = await this.$axios.$post(url, {
-					blogpost: blogpost
-				});
+				let res;
+				if (this.isEditing === false)
+					res = await this.$axios.$post('/api/blog', {
+						blogpost: blogpost
+					});
+				else
+					res = await this.$axios.$put('/api/blog/' + blogpost.id, {
+						blogpost: blogpost
+					});
+
 				if (this.isEditing === false) {
 					this.addPost(res);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Blogpost created.', life: 5000 });
