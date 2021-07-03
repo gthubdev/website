@@ -3,18 +3,11 @@
 .btn {
 	border-radius: 8px;
 	font-weight: bold;
-<<<<<<< HEAD
 	@apply shadow-sm;
 
 	&-primary {
 		background: $blue;
 		@apply text-white;
-=======
-	@apply shadow-sm text-gray-800;
-
-	&-primary {
-		background: $blue;
->>>>>>> 3653bc41fcb7421d87be7d1c24380e734aedaac1
 	}
 
 	&-light {
@@ -23,13 +16,6 @@
 
 	&-link {
 		box-shadow: none;
-<<<<<<< HEAD
-=======
-
-		&:hover {
-			@apply text-gth-blue;
-		}
->>>>>>> 3653bc41fcb7421d87be7d1c24380e734aedaac1
 	}
 }
 
