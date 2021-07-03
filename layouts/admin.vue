@@ -13,7 +13,7 @@
 					<i class="pi pi-file mr-2" /> Blog
 				</template>
 				<template #content>
-					<li>
+					<li class="admin-sublink">
 						<nuxt-link to="/admin/posts" class="admin-sublink">
 							Posts
 						</nuxt-link>
@@ -25,7 +25,7 @@
 					<i class="pi pi-calendar mr-2" /> Calendar
 				</template>
 				<template #content>
-					<li>
+					<li class="admin-sublink">
 						<nuxt-link to="/admin/events" class="admin-sublink">
 							Events
 						</nuxt-link>
@@ -48,12 +48,12 @@
 						</nuxt-link>
 					</li>
 					<li class="admin-sublink">
-						<nuxt-link to="/admin/classes">
+						<nuxt-link to="/admin/categories">
 							Categories
 						</nuxt-link>
 					</li>
 					<li class="admin-sublink">
-						<nuxt-link to="/admin/classes">
+						<nuxt-link to="/admin/tracks">
 							Tracks
 						</nuxt-link>
 					</li>
@@ -66,7 +66,7 @@
 			<h2 class="text-2xl text-capitalize">
 				{{ $route.name.split('-')[1] }}
 			</h2>
-			<nuxt-link :to="'/'" class="btn btn-link py-2 px-3">
+			<nuxt-link :to="'/'" class="btn btn-link py-2 px-3 hover:text-gth-blue">
 				<i class="pi pi-arrow-circle-right" /> Back to site
 			</nuxt-link>
 		</nav>
@@ -102,10 +102,11 @@ export default {
 		background: saturate(darken($blue, 35%), 5%) ;
 	}
 
-	.admin-sublink {
-		@apply pl-14 w-full pr-4 py-2 rounded-lg font-bold cursor-pointer hover:text-gray-100;
+	.admin-sublink
+		a {
+			@apply block pl-14 w-full pr-4 py-2 rounded-lg font-bold cursor-pointer hover:text-gray-100;
+		}
 	}
-}
 
 .nuxt-link-exact-active {
 	@apply text-gray-100;
