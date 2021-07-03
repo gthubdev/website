@@ -38,12 +38,12 @@ router.get('/resources', auth.staff_auth, ResourcesCtrl.getResources);
 router.get('/blog', BlogCtrl.getBlog);
 
 // Event
-router.post('/event/create', auth.staff_auth, EventCtrl.createEvent);
+router.post('/event', auth.staff_auth, EventCtrl.createEvent);
 router.put('/event/:id', auth.staff_auth, EventCtrl.updateEvent);
 router.delete('/event/:id', auth.staff_auth, EventCtrl.deleteEvent);
 
 // EventSession
-router.post('/calendar/eventsession', auth.staff_auth, EventSessionCtrl.createEventSession);
+router.post('/eventsession', auth.staff_auth, EventSessionCtrl.createEventSession);
 router.put('/eventsession/:id', auth.staff_auth, EventSessionCtrl.updateEventSession);
 router.delete('/eventsession/:id', auth.staff_auth, EventSessionCtrl.deleteEventSession);
 
@@ -55,7 +55,7 @@ router.put('/series/:id', auth.staff_auth, SeriesCtrl.updateSeries);
 router.delete('/series/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
 
 // Track
-router.post('/calendar/track', auth.staff_auth, TrackCtrl.createTrack);
+router.post('/track', auth.staff_auth, TrackCtrl.createTrack);
 router.put('/track/:id', auth.staff_auth, TrackCtrl.updateTrack);
 router.delete('/track/:id', auth.staff_auth, TrackCtrl.deleteTrack);
 

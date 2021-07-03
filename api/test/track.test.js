@@ -52,7 +52,7 @@ describe('Tracks', () => {
 			};
 			try {
 				await supertest(server)
-					.post('/api/calendar/track/create')
+					.post('/api/track')
 					.set('Authorization', 'Bearer ' + token)
 					.send(tmp)
 					.expect(200);
@@ -114,7 +114,7 @@ describe('Tracks', () => {
 
 		try {
 			await supertest(server)
-				.post('/api/calendar/track/create')
+				.post('/api/track')
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -129,7 +129,7 @@ describe('Tracks', () => {
 		};
 		try {
 			await supertest(server)
-				.post('/api/calendar/track/create')
+				.post('/api/track')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(422);
@@ -145,7 +145,7 @@ describe('Tracks', () => {
 		};
 		try {
 			await supertest(server)
-				.post('/api/calendar/track/create')
+				.post('/api/track')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(422);
@@ -172,7 +172,7 @@ describe('Tracks', () => {
 			};
 
 			await supertest(server)
-				.post('/api/calendar/track/update/' + tracks[0].id)
+				.put('/api/track/' + tracks[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
@@ -205,7 +205,7 @@ describe('Tracks', () => {
 			};
 
 			await supertest(server)
-				.post('/api/calendar/track/update/' + tracks[0].id)
+				.put('/api/track/' + tracks[0].id)
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -232,7 +232,7 @@ describe('Tracks', () => {
 			};
 
 			await supertest(server)
-				.post('/api/calendar/track/update/' + tracks[0].id)
+				.put('/api/track/' + tracks[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(422);
@@ -260,7 +260,7 @@ describe('Tracks', () => {
 			};
 
 			await supertest(server)
-				.post('/api/calendar/track/update/' + tracks[0].id)
+				.put('/api/track/' + tracks[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(422);
@@ -287,7 +287,7 @@ describe('Tracks', () => {
 			const tracks = await Track.findAll();
 			nrOfTracksBefore = tracks.length;
 			await supertest(server)
-				.post('/api/calendar/track/delete/' + trackID)
+				.delete('/api/track/' + trackID)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 			const response = await Track.findAll();
@@ -314,7 +314,7 @@ describe('Tracks', () => {
 		try {
 			const track = await Track.create(tmp);
 			await supertest(server)
-				.post('/api/calendar/track/delete/' + track.id)
+				.delete('/api/track/' + track.id)
 				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
