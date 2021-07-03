@@ -39,7 +39,10 @@ module.exports.createUser = async (req, res) => {
 		util.print('User \'' + user.username + '\' created');
 		res.status(200).send();
 	} catch (err) {
-		util.error(req, res, err);
+		if (err.parent && err.parent.errno && err.parent.errno === 1062)
+			res.status(409).send('Username already exists.');
+		else
+			util.error(req, res, err);
 	}
 };
 

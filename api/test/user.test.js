@@ -213,6 +213,26 @@ describe('User', () => {
 		});
 	});
 
+	it('Creating a user with a username already in use', async () => {
+		const tmp = {
+			user: {
+				username: 'testadmin',
+				password: 'somepass',
+				name: 'Test User'
+			}
+		};
+
+		try {
+			await supertest(server)
+				.post('/api/user')
+				.set('Authorization', 'Bearer ' + admintoken)
+				.send(tmp)
+				.expect(409);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
 	it('Updating a user', async () => {
 		const tmp = {
 			user: {
