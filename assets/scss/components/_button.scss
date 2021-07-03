@@ -6,8 +6,15 @@
 	@apply shadow-sm;
 
 	&-primary {
+		transition: all 0.2s ease-in-out;
 		background: $blue;
 		@apply text-white;
+
+		&:hover {
+			transition: all 0.2s ease-in-out;
+			background: darken($blue, 10%);
+			@apply shadow-md;
+		}
 	}
 
 	&-light {

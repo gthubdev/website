@@ -8,7 +8,7 @@
 			</h2>
 		</div>
 		<ul class="mt-2 flex flex-col text-gray-400">
-			<sidebar-item :id="1" :active="activeIndex == 1" @setActiveItem="activeIndex = 1">
+			<sidebar-item :id="1" :data-id="1" :active="activeIndex == 1" @setActiveItem="activeIndex = 1">
 				<template #title>
 					<i class="pi pi-file mr-2" /> Blog
 				</template>
@@ -20,7 +20,7 @@
 					</li>
 				</template>
 			</sidebar-item>
-			<sidebar-item :id="2" :active="activeIndex == 2" @setActiveItem="activeIndex = 2">
+			<sidebar-item :id="2" :data-id="2" :active="activeIndex == 2" @setActiveItem="activeIndex = 2">
 				<template #title>
 					<i class="pi pi-calendar mr-2" /> Calendar
 				</template>
@@ -32,7 +32,7 @@
 					</li>
 				</template>
 			</sidebar-item>
-			<sidebar-item :id="3" :active="activeIndex == 3" @setActiveItem="activeIndex = 3">
+			<sidebar-item :id="3" :data-id="3" :active="activeIndex == 3" @setActiveItem="activeIndex = 3">
 				<template #title>
 					<i class="pi pi-flag mr-2" /> Resources
 				</template>
@@ -85,6 +85,7 @@ export default {
 		Toast,
 		SidebarItem
 	},
+	middleware: 'auth',
 	data() {
 		return {
 			activeIndex: 0
@@ -102,7 +103,7 @@ export default {
 	}
 
 	.admin-sublink {
-		@apply pl-12 w-full pr-4 py-2 rounded-lg font-bold cursor-pointer hover:text-gray-100;
+		@apply pl-14 w-full pr-4 py-2 rounded-lg font-bold cursor-pointer hover:text-gray-100;
 	}
 }
 

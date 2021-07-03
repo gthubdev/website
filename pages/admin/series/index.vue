@@ -14,8 +14,8 @@
 				<button class="btn btn-link">
 					Cancel
 				</button>
-				<button class="btn py-2 px-2 bg-red-600 text-white">
-					Delete
+				<button class="btn py-2 px-2 bg-red-600 text-white" @click="deleteItem(toDelete.id)">
+					<span><i class="pi pi-trash" /> Delete</span>
 				</button>
 			</div>
 		</template>
@@ -31,6 +31,7 @@ export default {
 	name: 'Series',
 	components: { DataList, Modal },
 	layout: 'admin',
+	middleware: 'auth',
 	async asyncData({ $axios }) {
 		try {
 			const res = await $axios.$get('/api/series');
@@ -67,6 +68,15 @@ export default {
 		showDeleteModal(data) {
 			this.deleteId = data;
 			this.$refs.deleteModal.openModal();
+		},
+		async deleteItem(id) {
+			try {
+				await this.$axios.delete(`/api/series/${id}`);
+				const { data } = await this.$axios.get('/api/series');
+				this.series = data;
+			} catch (err) {
+				this.$toast.add({ severity: 'error', summary: 'Oh no!', detail: 'Something went wrong while deleting a series.', life: 5000 });
+			}
 		}
 	}
 };
