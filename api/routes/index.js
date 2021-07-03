@@ -47,6 +47,8 @@ router.post('/calendar/eventsession/update/:id', auth.staff_auth, EventSessionCt
 router.post('/calendar/eventsession/delete/:id', auth.staff_auth, EventSessionCtrl.deleteEventSession);
 
 // Series
+router.get('/series', auth.staff_auth, SeriesCtrl.find);
+router.get('/series/:id', SeriesCtrl.findOne);
 router.post('/calendar/series/create', auth.staff_auth, SeriesCtrl.createSeries);
 router.post('/calendar/series/update/:id', auth.staff_auth, SeriesCtrl.updateSeries);
 router.post('/calendar/series/delete/:id', auth.staff_auth, SeriesCtrl.deleteSeries);

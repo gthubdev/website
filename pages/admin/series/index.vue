@@ -1,56 +1,77 @@
 <template>
 <div>
-	<h2 class="text-2xl header-font">
-		Series
-	</h2>
-	<pre>{{ series }}</pre>
-	<DataView
-		:value="displayedSeries"
-		paginator-position="bottom"
-		:paginator="true"
-		:rows="10"
-		:always-show-paginator="false"
-	>
-		<template #list="slotProps">
-			<div class="resource-list-item-container">
-				<div class="resource-list-item">
-					{{ slotProps.data.name }}
-				</div>
-				<div>
-					<Button icon="pi pi-pencil" @click="editSeries(slotProps.data)" />
-					<Button icon="pi pi-trash" @click="sendDeleteRequest(slotProps.data)" />
-				</div>
+	<modal ref="deleteModal">
+		<template #header>
+			<h2>
+				Delete "{{ toDelete ? toDelete.name : '' }}"
+			</h2>
+		</template>
+		<template #body>
+			<p>Are you sure you want to delete "{{ toDelete ? toDelete.name : '' }}"</p>
+		</template>
+		<template #footer>
+			<div class="w-full flex justify-end space-x-4" @click="$refs.deleteModal.closeModal()">
+				<button class="btn btn-link">
+					Cancel
+				</button>
+				<button class="btn py-2 px-2 bg-red-600 text-white">
+					Delete
+				</button>
 			</div>
 		</template>
-	</DataView>
+	</modal>
+	<data-list :data="series" :visible-columns="visibleColumns" name="Series" @delete-item="showDeleteModal" />
 </div>
 </template>
-
 <script>
-import DataView from 'primevue/dataview';
-import { mapGetters } from 'vuex';
+import DataList from '@/components/admin/DataList';
+import Modal from '@/components/simple/Modal';
+
 export default {
-	components: { DataView },
+	name: 'Series',
+	components: { DataList, Modal },
 	layout: 'admin',
+	async asyncData({ $axios }) {
+		try {
+			const res = await $axios.$get('/api/series');
+			return {
+				series: res
+			};
+		} catch (err) {
+			return {
+				series: []
+			};
+		}
+	},
 	data() {
 		return {
-			displayedSeries: []
+			series: [],
+			visibleColumns: [
+				{
+					key: 'name',
+					sortable: true
+				}
+			],
+			deleteId: null
 		};
 	},
 	computed: {
-		...mapGetters({
-			series: 'resources/series/get'
-		})
+		toDelete() {
+			if (this.deleteId)
+				return this.series.find(entity => entity.id === this.deleteId);
+
+			return null;
+		}
 	},
-	created() {
-		this.displayedSeries = this.series;
+	methods: {
+		showDeleteModal(data) {
+			this.deleteId = data;
+			this.$refs.deleteModal.openModal();
+		}
 	}
 };
 </script>
 
 <style lang="scss" scoped>
-@import "assets/scss/abstracts/variables";
-.header-font {
-	font-family: $header-font;
-}
+
 </style>

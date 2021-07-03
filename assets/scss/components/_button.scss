@@ -3,10 +3,11 @@
 .btn {
 	border-radius: 8px;
 	font-weight: bold;
-	@apply shadow-sm text-gray-800;
+	@apply shadow-sm;
 
 	&-primary {
 		background: $blue;
+		@apply text-white;
 	}
 
 	&-light {
@@ -15,10 +16,6 @@
 
 	&-link {
 		box-shadow: none;
-
-		&:hover {
-			@apply text-gth-blue;
-		}
 	}
 }
 

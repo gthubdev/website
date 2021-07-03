@@ -20,3 +20,9 @@
 		background: darken($blue, 40%);
 	}
 }
+
+.text-capitalize {
+	&::first-letter {
+		text-transform: uppercase;
+	}
+}

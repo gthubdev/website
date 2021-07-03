@@ -1,6 +1,52 @@
 const { Series, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
 const util = require('../util/util.js');
 
+module.exports.find = async (req, res) => {
+	const series = await Series.findAll({
+		include: [
+			{
+				model: SeriesType,
+				include: [
+					{
+						model: VehicleClass,
+						include: [
+							{ model: VehicleClassCategory }
+						]
+					}
+				]
+			}
+		],
+		order: [
+			['id', 'ASC']
+		]
+	});
+
+	return res.json(series);
+};
+
+module.exports.findOne = async (req, res) => {
+	const series = await Series.findOne({
+		where: { id: req.params.id },
+		include: [
+			{
+				model: SeriesType,
+				include: [
+					{
+						model: VehicleClass,
+						include: [
+							{ model: VehicleClassCategory }
+						]
+					}
+				]
+			}
+		]
+	});
+
+	if (!series)
+		return res.status(404).send('No series found');
+
+	return res.json(series);
+};
 module.exports.createSeries = async (req, res) => {
 	const prio = req.body.series.priority;
 	if (prio < 1 || prio > 4) {
