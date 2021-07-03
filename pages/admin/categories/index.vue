@@ -20,7 +20,7 @@
 			</div>
 		</template>
 	</modal>
-	<data-list :data="series" :visible-columns="visibleColumns" name="Series" @delete-item="showDeleteModal" />
+	<data-list :data="data" :visible-columns="visibleColumns" name="Vehicle Category" @delete-item="showDeleteModal" />
 </div>
 </template>
 <script>
@@ -34,19 +34,19 @@ export default {
 	middleware: 'auth',
 	async asyncData({ $axios }) {
 		try {
-			const res = await $axios.$get('/api/series');
+			const res = await $axios.$get('/api/vehiclecategories');
 			return {
-				series: res
+				data: res
 			};
 		} catch (err) {
 			return {
-				series: []
+				data: []
 			};
 		}
 	},
 	data() {
 		return {
-			series: [],
+			data: [],
 			visibleColumns: [
 				{
 					key: 'name',
@@ -73,8 +73,8 @@ export default {
 		},
 		async deleteItem(id) {
 			try {
-				await this.$axios.delete(`/api/series/${id}`);
-				const { data } = await this.$axios.get('/api/series');
+				await this.$axios.delete(`/api/categories/${id}`);
+				const { data } = await this.$axios.get('/api/categories');
 				this.series = data;
 			} catch (err) {
 				this.$toast.add({ severity: 'error', summary: 'Oh no!', detail: 'Something went wrong while deleting a series.', life: 5000 });
@@ -83,6 +83,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

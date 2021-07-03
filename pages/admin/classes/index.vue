@@ -20,9 +20,8 @@
 			</div>
 		</template>
 	</modal>
-	<data-list :data="series" :visible-columns="visibleColumns" name="Series" @delete-item="showDeleteModal" />
+	<data-list :data="series" :visible-columns="visibleColumns" name="Vehicle Class" @delete-item="showDeleteModal" />
 </div>
-</template>
 </template>
 <script>
 import DataList from '@/components/admin/DataList';
@@ -51,10 +50,14 @@ export default {
 			visibleColumns: [
 				{
 					key: 'name',
+					name: 'name',
+					isRelation: false,
 					sortable: true
 				},
 				{
 					key: 'VehicleClassCategory',
+					name: 'vehicle class',
+					isRelation: true,
 					sortable: false
 				}
 			],

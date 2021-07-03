@@ -3,6 +3,15 @@ const { Track } = require('../models');
 const util = require('../util/util');
 const dateutil = require('../util/dateutil');
 
+module.exports.find = async (req, res) => {
+	const tracks = await Track.findAll({
+		order: [
+			['id', 'ASC']
+		]
+	});
+	return res.json(tracks);
+};
+
 module.exports.createTrack = async (req, res) => {
 	if (countryList.getCode(req.body.track.country) === undefined) {
 		res.status(422).send('Invalid country');
