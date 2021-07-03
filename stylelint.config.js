@@ -14,6 +14,7 @@ module.exports = {
 	rules: {
 		indentation: 'tab',
 		'selector-list-comma-newline-after': 'always-multi-line',
-		'order/properties-alphabetical-order': null
+		'order/properties-alphabetical-order': null,
+		'max-nesting-depth': null
 	}
 };

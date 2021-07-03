@@ -80,7 +80,7 @@ module.exports = {
 			}
 		},
 		redirect: {
-			login: '/',
+			login: '/admin/login',
 			logout: '/',
 			home: '/',
 			callback: '/'

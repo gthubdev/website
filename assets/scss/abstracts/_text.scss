@@ -1,7 +1,7 @@
 @import 'variables';
 
-h1 {
-	font-family: $default-font;
+h1, h2, h3, h4, h5, h6 {
+	font-family: $header-font;
 }
 
 .page-headline {
@@ -9,7 +9,6 @@ h1 {
 	color: $white;
 	font-size: 3em;
 	font-weight: bold;
-	font-variant: small-caps;
 }
 
 .p-component, body {

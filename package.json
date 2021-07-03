@@ -46,6 +46,7 @@
     "jsonwebtoken": "^8.5.1",
     "mariadb": "^2.5.1",
     "method-override": "^3.0.0",
+    "moment": "^2.29.1",
     "nuxt": "^2.15.3",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",

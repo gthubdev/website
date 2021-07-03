@@ -13,6 +13,7 @@ const TrackCtrl = require('../controllers/track');
 const BlogCtrl = require('../controllers/blog');
 const iCalCtrl = require('../controllers/ical');
 const auth = require('../middleware/auth');
+const VehClassCtrl = require('../controllers/classes');
 
 // routes ==================================================
 
@@ -23,9 +24,9 @@ router.post('/auth/changepassword', AuthCtrl.changepassword);
 router.get('/auth/me', AuthCtrl.me);
 
 // User
-router.post('/user/create', auth.admin_auth, UserCtrl.createUser);
-router.post('/user/update/:id', UserCtrl.updateUser);
-router.post('/user/delete/:id', auth.admin_auth, UserCtrl.deleteUser);
+router.post('/user', auth.admin_auth, UserCtrl.createUser);
+router.put('/user/:id', UserCtrl.updateUser);
+router.delete('/user/:id', auth.admin_auth, UserCtrl.deleteUser);
 
 // Calendar
 router.get('/calendar', CalendarCtrl.getCalendar);
@@ -37,29 +38,34 @@ router.get('/resources', auth.staff_auth, ResourcesCtrl.getResources);
 router.get('/blog', BlogCtrl.getBlog);
 
 // Event
-router.post('/calendar/event/create', auth.staff_auth, EventCtrl.createEvent);
-router.post('/calendar/event/update/:id', auth.staff_auth, EventCtrl.updateEvent);
-router.post('/calendar/event/delete/:id', auth.staff_auth, EventCtrl.deleteEvent);
+router.post('/event/create', auth.staff_auth, EventCtrl.createEvent);
+router.put('/event/:id', auth.staff_auth, EventCtrl.updateEvent);
+router.delete('/event/:id', auth.staff_auth, EventCtrl.deleteEvent);
 
 // EventSession
-router.post('/calendar/eventsession/create', auth.staff_auth, EventSessionCtrl.createEventSession);
-router.post('/calendar/eventsession/update/:id', auth.staff_auth, EventSessionCtrl.updateEventSession);
-router.post('/calendar/eventsession/delete/:id', auth.staff_auth, EventSessionCtrl.deleteEventSession);
+router.post('/calendar/eventsession', auth.staff_auth, EventSessionCtrl.createEventSession);
+router.put('/eventsession/:id', auth.staff_auth, EventSessionCtrl.updateEventSession);
+router.delete('/eventsession/:id', auth.staff_auth, EventSessionCtrl.deleteEventSession);
 
 // Series
-router.post('/calendar/series/create', auth.staff_auth, SeriesCtrl.createSeries);
-router.post('/calendar/series/update/:id', auth.staff_auth, SeriesCtrl.updateSeries);
-router.post('/calendar/series/delete/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
+router.get('/series', auth.staff_auth, SeriesCtrl.find);
+router.get('/series/:id', SeriesCtrl.findOne);
+router.post('/series', auth.staff_auth, SeriesCtrl.createSeries);
+router.put('/series/:id', auth.staff_auth, SeriesCtrl.updateSeries);
+router.delete('/series/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
 
 // Track
-router.post('/calendar/track/create', auth.staff_auth, TrackCtrl.createTrack);
-router.post('/calendar/track/update/:id', auth.staff_auth, TrackCtrl.updateTrack);
-router.post('/calendar/track/delete/:id', auth.staff_auth, TrackCtrl.deleteTrack);
+router.post('/calendar/track', auth.staff_auth, TrackCtrl.createTrack);
+router.put('/track/:id', auth.staff_auth, TrackCtrl.updateTrack);
+router.delete('/track/:id', auth.staff_auth, TrackCtrl.deleteTrack);
 
 // Blogposts
-router.post('/blog/create', auth.staff_auth, BlogCtrl.createBlogPost);
-router.post('/blog/update/:id', auth.staff_auth, BlogCtrl.updateBlogPost);
-router.post('/blog/delete/:id', auth.staff_auth, BlogCtrl.deleteBlogPost);
+router.post('/blog', auth.staff_auth, BlogCtrl.createBlogPost);
+router.put('/blog/:id', auth.staff_auth, BlogCtrl.updateBlogPost);
+router.delete('/blog/:id', auth.staff_auth, BlogCtrl.deleteBlogPost);
+
+// Vehicle classes
+router.get('/vehicleclasses', auth.staff_auth, VehClassCtrl.find);
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
