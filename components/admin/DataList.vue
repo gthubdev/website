@@ -13,25 +13,21 @@
 	</div>
 	<DataTable class="shadow-md" :value="displayedData" :paginator="true" :rows="10">
 		<Column :sortable="true" header-style="width:8ch" body-style="padding: 0 2rem;text-align:end; font-variant-numeric: tabular-nums" field="id" header="id" />
-		<Column v-for="(col, i) in visibleColumns" :key="i" :field="col.key" :header="col.key" :sortable="col.sortable">
+		<Column v-for="(col, i) in visibleColumns" :key="i" :field="col.key" :header="col.name" :sortable="col.sortable">
 			<template #body="slotProps">
 				<div class="flex items-center">
 					<img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" :alt="slotProps.data[col.key]" class="inline w-10 mr-2">
-					<span>{{ slotProps.data[col.key] }}</span>
+					<span v-if="col.isRelation">{{ slotProps.data[col.key].name }}</span>
+					<span v-else>
+						<span v-if="slotProps.data.country">{{ flag(cl.getCode(slotProps.data.country)) }} </span>
+						{{ slotProps.data[col.key] }}
+					</span>
 				</div>
 			</template>
 		</Column>
-		<!-- <Column :sortable="true" field="name" header="Name">
-			<template #body="slotProps">
-				<div class="flex items-center">
-					<img class="w-12 mr-2" :src="slotProps.data.thumbnail" :alt="slotProps.data.name">
-					<p>{{ slotProps.data.name }}</p>
-				</div>
-			</template>
-		</Column> -->
 		<Column field="createdAt" header="created at">
 			<template #body="slotProps">
-				<span>{{ moment(slotProps.data.createdAt).format('DD/MM/YYYY HH:mm:ss') }}</span>
+				<span>{{ $dayjs(slotProps.data.createAt).format('DD/MM/YYYY HH:mm:ss') }}</span>
 			</template>
 		</Column>
 		<Column header-style="width: 15%" header="actions">
@@ -54,7 +50,8 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
-import moment from 'moment';
+import cl from 'country-list';
+import flag from 'country-code-emoji';
 
 export default {
 	components: {
@@ -82,8 +79,9 @@ export default {
 	},
 	data() {
 		return {
-			moment: moment,
-			searchTerm: ''
+			searchTerm: '',
+			cl,
+			flag
 		};
 	},
 	computed: {
