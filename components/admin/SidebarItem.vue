@@ -1,6 +1,6 @@
 <template>
 <div class="admin-hover py-4 " :class="expanded && 'admin-active'">
-	<h4 class="text-lg px-6 cursor-pointer" @click="toggleAccordion">
+	<h4 class="text-base px-6 cursor-pointer" @click="toggleAccordion">
 		<slot name="title" />
 	</h4>
 	<accordion class="my-2" :expanded="expanded">

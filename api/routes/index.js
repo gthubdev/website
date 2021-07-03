@@ -39,6 +39,7 @@ router.get('/resources', auth.staff_auth, ResourcesCtrl.getResources);
 router.get('/blog', BlogCtrl.getBlog);
 
 // Event
+router.get('/event', auth.staff_auth, EventCtrl.find);
 router.post('/event', auth.staff_auth, EventCtrl.createEvent);
 router.put('/event/:id', auth.staff_auth, EventCtrl.updateEvent);
 router.delete('/event/:id', auth.staff_auth, EventCtrl.deleteEvent);
@@ -56,6 +57,7 @@ router.put('/series/:id', auth.staff_auth, SeriesCtrl.updateSeries);
 router.delete('/series/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
 
 // Track
+router.get('/track', auth.staff_auth, TrackCtrl.find);
 router.post('/track', auth.staff_auth, TrackCtrl.createTrack);
 router.put('/track/:id', auth.staff_auth, TrackCtrl.updateTrack);
 router.delete('/track/:id', auth.staff_auth, TrackCtrl.deleteTrack);

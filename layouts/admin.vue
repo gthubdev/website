@@ -104,7 +104,7 @@ export default {
 
 	.admin-sublink
 		a {
-			@apply block pl-14 w-full pr-4 py-2 rounded-lg font-bold cursor-pointer hover:text-gray-100;
+			@apply block text-sm pl-14 w-full pr-4 py-2 rounded-lg font-bold cursor-pointer hover:text-gray-100;
 		}
 	}
 

@@ -34,7 +34,7 @@ export default {
 	middleware: 'auth',
 	async asyncData({ $axios }) {
 		try {
-			const res = await $axios.$get('/api/events');
+			const res = await $axios.$get('/api/event');
 			return {
 				data: res
 			};
