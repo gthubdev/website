@@ -17,10 +17,16 @@
 			<template #body="slotProps">
 				<div class="flex items-center">
 					<img v-if="slotProps.data.thumbnail" :src="slotProps.data.thumbnail" :alt="slotProps.data[col.key]" class="inline w-10 mr-2">
-					<span v-if="col.isRelation">{{ slotProps.data[col.key].name }}</span>
+					<span v-if="col.isRelation">
+						<span v-if="Array.isArray(slotProps.data[col.key])"><span class="font-bold">{{ slotProps.data[col.key].length }}</span> items</span>
+						<span v-else>{{ slotProps.data[col.key].name }}</span>
+					</span>
 					<span v-else>
-						<span v-if="slotProps.data.country">{{ flag(cl.getCode(slotProps.data.country)) }} </span>
-						{{ slotProps.data[col.key] }}
+						<span v-if="col.key.includes('date')">{{ $dayjs(slotProps.data[col.key]).format('DD/MM/YYYY') }}</span>
+						<span v-else>
+							<span v-if="slotProps.data.country">{{ flag(cl.getCode(slotProps.data.country)) }} </span>
+							{{ slotProps.data[col.key] }}
+						</span>
 					</span>
 				</div>
 			</template>

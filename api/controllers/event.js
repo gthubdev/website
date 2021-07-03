@@ -3,6 +3,32 @@ const { Event, SupportSeries, Track, Series, EventSession } = require('../models
 const util = require('../util/util.js');
 const dateformat = 'YYYY-MM-DD';
 
+module.exports.find = async (req, res) => {
+	const events = await Event.findAll({
+		include: [
+			{ model: Track },
+			{ model: Series },
+			{
+				model: SupportSeries,
+				include: [
+					{ model: Series }
+				]
+			},
+			{
+				model: EventSession,
+				include: [
+					{ model: Series }
+				]
+			}
+		],
+		order: [
+			['id', 'ASC']
+		]
+	});
+
+	return res.json(events);
+};
+
 module.exports.createEvent = async (req, res) => {
 	const startdate = dayjs(req.body.event.startdate);
 	const enddate = dayjs(req.body.event.enddate);

@@ -39,6 +39,7 @@ router.get('/resources', auth.staff_auth, ResourcesCtrl.getResources);
 router.get('/blog', BlogCtrl.getBlog);
 
 // Event
+router.get('/events', auth.staff_auth, EventCtrl.find);
 router.post('/events', auth.staff_auth, EventCtrl.createEvent);
 router.put('/events/:id', auth.staff_auth, EventCtrl.updateEvent);
 router.delete('/events/:id', auth.staff_auth, EventCtrl.deleteEvent);
