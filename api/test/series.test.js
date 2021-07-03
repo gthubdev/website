@@ -84,7 +84,7 @@ describe('Series', () => {
 			};
 			try {
 				await supertest(server)
-					.post('/api/calendar/series/create')
+					.post('/api/series')
 					.set('Authorization', 'Bearer ' + token)
 					.send(tmp)
 					.expect(200);
@@ -145,7 +145,7 @@ describe('Series', () => {
 
 		try {
 			await supertest(server)
-				.post('/api/calendar/series/create')
+				.post('/api/series')
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -161,7 +161,7 @@ describe('Series', () => {
 		};
 		try {
 			await supertest(server)
-				.post('/api/calendar/series/create')
+				.post('/api/series')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(422);
@@ -190,7 +190,7 @@ describe('Series', () => {
 			};
 
 			await supertest(server)
-				.post('/api/calendar/series/update/' + series[0].id)
+				.put('/api/series/' + series[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
@@ -229,7 +229,7 @@ describe('Series', () => {
 			};
 
 			await supertest(server)
-				.post('/api/calendar/series/update/' + series[0].id)
+				.put('/api/series/' + series[0].id)
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -256,7 +256,7 @@ describe('Series', () => {
 				}
 			};
 			await supertest(server)
-				.post('/api/calendar/series/update/' + series[0].id)
+				.put('/api/series/' + series[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(422);
@@ -281,7 +281,7 @@ describe('Series', () => {
 			const series = await Series.findAll();
 			nrOfSeriesBefore = series.length;
 			await supertest(server)
-				.post('/api/calendar/series/delete/' + seriesID)
+				.delete('/api/series/' + seriesID)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 
@@ -304,7 +304,7 @@ describe('Series', () => {
 		try {
 			const newseries = await Series.create(tmp);
 			await supertest(server)
-				.post('/api/calendar/series/delete/' + newseries.id)
+				.delete('/api/series/' + newseries.id)
 				.expect(401);
 		} catch (err) {
 			should.not.exist(err);

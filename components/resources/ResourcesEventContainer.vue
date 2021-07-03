@@ -185,7 +185,7 @@ export default {
 		},
 		async sendDeleteEventRequest(event) {
 			try {
-				const res = await this.$axios.$post('api/calendar/event/delete/' + event.id);
+				const res = await this.$axios.$delete('api/event/' + event.id);
 				if (res.deleted >= 1) {
 					this.deleteEvent(event.id);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' deleted.', life: 5000 });
@@ -199,7 +199,7 @@ export default {
 		},
 		async sendDeleteEventSessionRequest(eventid, session) {
 			try {
-				const res = await this.$axios.$post('api/calendar/eventsession/delete/' + session.id);
+				const res = await this.$axios.$delete('api/eventsession/' + session.id);
 				if (res.deleted >= 1) {
 					this.deleteEventSession({ eventid: eventid, sessionid: session.id });
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Session ' + session.name + ' deleted.', life: 5000 });
@@ -214,18 +214,18 @@ export default {
 		async sendEventRequest(obj) {
 			const event = JSON.parse(JSON.stringify(obj));
 			delete event.createdAt;
-			let url;
-			if (this.isEditingEvent === false)
-				url = '/api/calendar/event/create';
-			else if (this.isEditingEvent === true && this.editingEvent !== null)
-				url = '/api/calendar/event/update/' + this.editingEvent.id;
-			else
-				console.error('Sending request for null-event');
 
 			try {
-				const res = await this.$axios.$post(url, {
-					event
-				});
+				let res;
+				if (this.isEditingEvent === false)
+					res = await this.$axios.$post('/api/event', {
+						event
+					});
+				else
+					res = await this.$axios.$put('/api/event/' + this.editingEvent.id, {
+						event
+					});
+
 				if (this.isEditingEvent === false) {
 					this.addEvent(res);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Event ' + event.name + ' created.', life: 5000 });
@@ -244,16 +244,18 @@ export default {
 		async sendSessionRequest(obj) {
 			const session = JSON.parse(JSON.stringify(obj));
 			delete session.createdAt;
-			let url;
-			if (this.isEditingSession === false)
-				url = '/api/calendar/eventsession/create';
-			else
-				url = '/api/calendar/eventsession/update/' + this.editingSession.id;
 
 			try {
-				const res = await this.$axios.$post(url, {
-					session
-				});
+				let res;
+				if (this.isEditingEvent === false)
+					res = await this.$axios.$post('/api/eventsession', {
+						session
+					});
+				else
+					res = await this.$axios.$put('/api/eventsession/' + this.editingSession.id, {
+						session
+					});
+
 				if (this.editingSession === false) {
 					this.addEventSession({ eventid: session.event, session: res });
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Eventsession ' + session.name + ' created.', life: 5000 });

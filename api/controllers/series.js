@@ -47,6 +47,7 @@ module.exports.findOne = async (req, res) => {
 
 	return res.json(series);
 };
+
 module.exports.createSeries = async (req, res) => {
 	const prio = req.body.series.priority;
 	if (prio < 1 || prio > 4) {

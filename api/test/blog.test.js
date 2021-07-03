@@ -53,7 +53,7 @@ describe('Blog', () => {
 			};
 			try {
 				await supertest(server)
-					.post('/api/blog/create')
+					.post('/api/blog')
 					.set('Authorization', 'Bearer ' + token)
 					.send(tmp)
 					.expect(200);
@@ -115,7 +115,7 @@ describe('Blog', () => {
 
 		try {
 			await supertest(server)
-				.post('/api/blog/create')
+				.post('/api/blog')
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -141,7 +141,7 @@ describe('Blog', () => {
 			};
 
 			await supertest(server)
-				.post('/api/blog/update/' + blogposts[0].id)
+				.put('/api/blog/' + blogposts[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
@@ -174,7 +174,7 @@ describe('Blog', () => {
 			};
 
 			await supertest(server)
-				.post('/api/blog/update/' + blogposts[0].id)
+				.put('/api/blog/' + blogposts[0].id)
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -192,7 +192,7 @@ describe('Blog', () => {
 			const posts = await BlogPost.findAll();
 			nrOfPostsBefore = posts.length;
 			await supertest(server)
-				.post('/api/blog/delete/' + postID)
+				.delete('/api/blog/' + postID)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 			const response = await BlogPost.findAll();
@@ -211,7 +211,7 @@ describe('Blog', () => {
 		try {
 			const post = await BlogPost.create(tmp);
 			await supertest(server)
-				.post('/api/blog/delete/' + post.id)
+				.delete('/api/blog/' + post.id)
 				.expect(401);
 		} catch (err) {
 			should.not.exist(err);

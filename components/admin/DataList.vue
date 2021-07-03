@@ -31,7 +31,7 @@
 		</Column> -->
 		<Column field="createdAt" header="created at">
 			<template #body="slotProps">
-				<span>{{ moment(slotProps.data.createdAt).format('DD/MM/YYYY HH:mm:ss') }}</span>
+				<span>{{ $dayjs(slotProps.data.createdAt).format('DD/MM/YYYY HH:mm:ss') }}</span>
 			</template>
 		</Column>
 		<Column header-style="width: 15%" header="actions">
@@ -54,7 +54,6 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
-import moment from 'moment';
 
 export default {
 	components: {
@@ -82,7 +81,6 @@ export default {
 	},
 	data() {
 		return {
-			moment: moment,
 			searchTerm: ''
 		};
 	},

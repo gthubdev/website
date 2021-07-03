@@ -38,9 +38,15 @@ module.exports.updateTrack = async (req, res) => {
 		const response = await Track.update(req.body.track,
 			{ where: { id: req.params.id } }
 		);
-		if (response[0] >= 1)
-			util.print('Tracks updated: ' + response[0]);
-		res.json({ updated: response[0] });
+		if (response[0] === 0)
+			return;
+
+		util.print('Tracks updated: ' + response[0]);
+
+		const track = await Track.findOne({
+			where: { id: req.params.id }
+		});
+		res.json(track.get({ plain: true }));
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -67,7 +73,8 @@ module.exports.deleteTrack = async (req, res) => {
 
 function isValidTimezone(timezone) {
 	for (let i = 0; i < dateutil.timezones.length; i++)
-		if (dateutil.timezones[i].name === timezone) return true;
+		if (dateutil.timezones[i].name === timezone)
+			return true;
 
 	return false;
 }
