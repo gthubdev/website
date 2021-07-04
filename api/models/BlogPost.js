@@ -30,6 +30,12 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'author',
 			onDelete: 'RESTRICT'
 		});
+		models.BlogPost.hasMany(models.BlogCatRel, {
+			foreignKey: 'post'
+		});
+		models.BlogPost.hasMany(models.BlogTagRel, {
+			foreignKey: 'post'
+		});
 	};
 
 	return BlogPost;
