@@ -33,7 +33,7 @@
 		</Column>
 		<Column field="createdAt" header="created at">
 			<template #body="slotProps">
-				<span>{{ $dayjs(slotProps.data.createAt).format('DD/MM/YYYY HH:mm:ss') }}</span>
+				<span>{{ $dayjs(slotProps.data.createdAt).format('DD/MM/YYYY HH:mm:ss') }}</span>
 			</template>
 		</Column>
 		<Column header-style="width: 15%" header="actions">

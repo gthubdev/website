@@ -68,6 +68,7 @@ import AutoComplete from 'primevue/autocomplete';
 export default {
 	components: { InputText, InputNumber, AutoComplete },
 	layout: 'admin',
+	middleware: 'auth',
 	async asyncData({ $axios, params }) {
 		const classes = await $axios.$get('/api/vehicleclasses');
 		if (typeof parseInt(params.id) === 'number')

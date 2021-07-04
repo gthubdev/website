@@ -72,6 +72,10 @@ router.get('/vehicleclasses', auth.staff_auth, VehClassCtrl.find);
 
 // Vehicle Categories
 router.get('/vehiclecategories', auth.staff_auth, VehCatCtrl.find);
+router.get('/vehiclecategories/:id', auth.staff_auth, VehCatCtrl.findOne);
+router.post('/vehiclecategories', auth.staff_auth, VehCatCtrl.create);
+router.put('/vehiclecategories/:id', auth.staff_auth, VehCatCtrl.update);
+router.delete('/vehiclecategories/:id', auth.staff_auth, VehCatCtrl.destroy);
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
