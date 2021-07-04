@@ -69,6 +69,10 @@ router.delete('/blogs/:id', auth.staff_auth, BlogCtrl.deleteBlogPost);
 
 // Vehicle classes
 router.get('/vehicleclasses', auth.staff_auth, VehClassCtrl.find);
+router.get('/vehicleclasses/:id', auth.staff_auth, VehClassCtrl.findOne);
+router.post('/vehicleclasses', auth.staff_auth, VehClassCtrl.create);
+router.put('/vehicleclasses/:id', auth.staff_auth, VehClassCtrl.update);
+router.delete('/vehicleclasses/:id', auth.staff_auth, VehClassCtrl.destroy);
 
 // Vehicle Categories
 router.get('/vehiclecategories', auth.staff_auth, VehCatCtrl.find);

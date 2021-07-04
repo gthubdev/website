@@ -79,8 +79,8 @@ export default {
 		},
 		async deleteItem(id) {
 			try {
-				await this.$axios.delete(`/api/series/${id}`);
-				const { data } = await this.$axios.get('/api/series');
+				await this.$axios.delete(`/api/vehicleclasses/${id}`);
+				const { data } = await this.$axios.get('/api/vehicleclasses');
 				this.series = data;
 			} catch (err) {
 				this.$toast.add({ severity: 'error', summary: 'Oh no!', detail: 'Something went wrong while deleting a series.', life: 5000 });
