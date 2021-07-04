@@ -40,11 +40,11 @@ describe('Blog', () => {
 
 	beforeEach(done => {
 		const blogposts = [
-			{ headline: 'Headline 1', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 2', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 3', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 4', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 5', content: '<div>test content</div>', image: '', author: userID }
+			{ title: 'Ttile 1', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Ttile 2', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Ttile 3', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Ttile 4', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Ttile 5', content: '<div>test content</div>', image: '', author: userID }
 		];
 		each(blogposts, async blogpost => {
 			// Need this, because the controller is parsing req.body.track
@@ -100,7 +100,7 @@ describe('Blog', () => {
 				]
 			});
 			blogposts.forEach(post => {
-				post.headline.should.have.string('Headline');
+				post.title.should.have.string('Ttile');
 				post.content.should.equal('<div>test content</div>');
 				post.image.should.equal('');
 				post.author.should.equal(userID);
@@ -111,7 +111,7 @@ describe('Blog', () => {
 	});
 
 	it('Creating a blogpost without authorisation', async () => {
-		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+		const tmp = { title: 'Ttile 6', content: '<div>test content</div>', image: '', author: userID };
 
 		try {
 			await supertest(server)
@@ -135,7 +135,7 @@ describe('Blog', () => {
 
 			const tmp = {
 				blogpost: {
-					headline: 'NEW_HEADLINE',
+					title: 'NEW_Ttile',
 					content: '<p>new</p>'
 				}
 			};
@@ -149,7 +149,7 @@ describe('Blog', () => {
 			const post = await BlogPost.findOne({
 				where: { id: blogposts[0].id }
 			});
-			post.headline.should.equal('NEW_HEADLINE');
+			post.title.should.equal('NEW_Ttile');
 			post.content.should.equal('<p>new</p>');
 		} catch (err) {
 			should.not.exist(err);
@@ -168,7 +168,7 @@ describe('Blog', () => {
 
 			const tmp = {
 				blogpost: {
-					headline: 'NEW_HEADLINE',
+					title: 'TITLE',
 					content: '<p>new</p>'
 				}
 			};
@@ -184,7 +184,7 @@ describe('Blog', () => {
 
 	it('Deleting a blogpost', async () => {
 		let nrOfPostsBefore, postID;
-		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+		const tmp = { title: 'Ttile 6', content: '<div>test content</div>', image: '', author: userID };
 
 		try {
 			const post = await BlogPost.create(tmp);
@@ -206,7 +206,7 @@ describe('Blog', () => {
 	});
 
 	it('Deleting a blogpost without authorisation', async () => {
-		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+		const tmp = { title: 'Ttile 6', content: '<div>test content</div>', image: '', author: userID };
 
 		try {
 			const post = await BlogPost.create(tmp);

@@ -22,7 +22,7 @@
 			<template #list="slotProps">
 				<div class="resource-list-item-container">
 					<div class="resource-list-item">
-						{{ slotProps.data.headline }} (by {{ slotProps.data.User.name }})
+						{{ slotProps.data.title }} (by {{ slotProps.data.User.name }})
 					</div>
 					<div>
 						<Button icon="pi pi-pencil" @click="editPost(slotProps.data)" />

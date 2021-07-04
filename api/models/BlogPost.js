@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true,
 			primaryKey: true
 		},
-		headline: DataTypes.STRING(1023),
+		title: DataTypes.STRING(1023),
 		content: DataTypes.TEXT('long'),
 		image: DataTypes.STRING,
 		author: {
