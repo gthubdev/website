@@ -34,6 +34,7 @@ module.exports.create = async (req, res) => {
 
 	try {
 		const vehicleclass = await VehicleClass.create(req.body);
+
 		return res.json(vehicleclass);
 	} catch (err) {
 		return util.error(req, res, err);

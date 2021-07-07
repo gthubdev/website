@@ -61,7 +61,7 @@ export default {
 	computed: {
 		toDelete() {
 			if (this.deleteId)
-				return this.series.find(entity => entity.id === this.deleteId);
+				return this.data.find(entity => entity.id === this.deleteId);
 
 			return null;
 		}
@@ -73,8 +73,8 @@ export default {
 		},
 		async deleteItem(id) {
 			try {
-				await this.$axios.delete(`/api/tracks/${id}`);
-				const { data } = await this.$axios.get('/api/tracks');
+				await this.$axios.delete(`/api/track/${id}`);
+				const { data } = await this.$axios.get('/api/track');
 				this.series = data;
 			} catch (err) {
 				this.$toast.add({ severity: 'error', summary: 'Oh no!', detail: 'Something went wrong while deleting a series.', life: 5000 });

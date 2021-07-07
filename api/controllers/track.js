@@ -12,19 +12,29 @@ module.exports.find = async (req, res) => {
 	return res.json(tracks);
 };
 
+module.exports.findOne = async (req, res) => {
+	const track = await Track.findOne({
+		where: { id: req.params.id }
+	});
+
+	if (!track) return res.status(404).send('No tracks found');
+
+	return res.json(track);
+};
+
 module.exports.createTrack = async (req, res) => {
-	if (countryList.getCode(req.body.track.country) === undefined) {
+	if (countryList.getCode(req.body.country) === undefined) {
 		res.status(422).send('Invalid country');
 		return;
 	}
 
-	if (!isValidTimezone(req.body.track.timezone)) {
+	if (!isValidTimezone(req.body.timezone)) {
 		res.status(422).send('Invalid timezone');
 		return;
 	}
 
 	try {
-		const track = await Track.create(req.body.track);
+		const track = await Track.create(req.body);
 		util.print('Track \'' + track.name + '\' created');
 		res.json(track.get({ plain: true }));
 	} catch (err) {
@@ -33,18 +43,18 @@ module.exports.createTrack = async (req, res) => {
 };
 
 module.exports.updateTrack = async (req, res) => {
-	if (req.body.track.country && countryList.getCode(req.body.track.country) === undefined) {
+	if (req.body.country && countryList.getCode(req.body.country) === undefined) {
 		res.status(422).send('Invalid country');
 		return;
 	}
 
-	if (req.body.track.timezone && !isValidTimezone(req.body.track.timezone)) {
+	if (req.body.timezone && !isValidTimezone(req.body.timezone)) {
 		res.status(422).send('Invalid timezone');
 		return;
 	}
 
 	try {
-		const response = await Track.update(req.body.track,
+		const response = await Track.update(req.body,
 			{ where: { id: req.params.id } }
 		);
 		if (response[0] === 0)

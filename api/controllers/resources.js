@@ -97,3 +97,7 @@ module.exports.getResources = async (req, res) => {
 		util.error(req, res, err);
 	}
 };
+
+module.exports.timezones = (req, res) => {
+	res.json(dateutil.timezones);
+};

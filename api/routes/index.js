@@ -34,6 +34,7 @@ router.get('/calendar', CalendarCtrl.getCalendar);
 
 // Resources
 router.get('/resources', auth.staff_auth, ResourcesCtrl.getResources);
+router.get('/resources/timezones', auth.staff_auth, ResourcesCtrl.timezones);
 
 // Blog
 router.get('/blog', BlogCtrl.getBlog);
@@ -58,6 +59,7 @@ router.delete('/series/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
 
 // Track
 router.get('/track', auth.staff_auth, TrackCtrl.find);
+router.get('/track/:id', auth.staff_auth, TrackCtrl.findOne);
 router.post('/track', auth.staff_auth, TrackCtrl.createTrack);
 router.put('/track/:id', auth.staff_auth, TrackCtrl.updateTrack);
 router.delete('/track/:id', auth.staff_auth, TrackCtrl.deleteTrack);
