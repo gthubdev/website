@@ -20,7 +20,7 @@
 			</div>
 		</template>
 	</modal>
-	<data-list :data="series" :visible-columns="visibleColumns" name="Vehicle Class" @delete-item="showDeleteModal" />
+	<data-list :data="data" :visible-columns="visibleColumns" name="Track" @delete-item="showDeleteModal" />
 </div>
 </template>
 <script>
@@ -34,31 +34,25 @@ export default {
 	middleware: 'auth',
 	async asyncData({ $axios }) {
 		try {
-			const res = await $axios.$get('/api/vehicleclasses');
+			const res = await $axios.$get('/api/track');
 			return {
-				series: res
+				data: res
 			};
 		} catch (err) {
 			return {
-				series: []
+				data: []
 			};
 		}
 	},
 	data() {
 		return {
-			series: [],
+			data: [],
 			visibleColumns: [
 				{
 					key: 'name',
 					name: 'name',
 					isRelation: false,
 					sortable: true
-				},
-				{
-					key: 'VehicleClassCategory',
-					name: 'vehicle class',
-					isRelation: true,
-					sortable: false
 				}
 			],
 			deleteId: null
@@ -67,7 +61,7 @@ export default {
 	computed: {
 		toDelete() {
 			if (this.deleteId)
-				return this.series.find(entity => entity.id === this.deleteId);
+				return this.data.find(entity => entity.id === this.deleteId);
 
 			return null;
 		}
@@ -79,8 +73,8 @@ export default {
 		},
 		async deleteItem(id) {
 			try {
-				await this.$axios.delete(`/api/vehicleclasses/${id}`);
-				const { data } = await this.$axios.get('/api/vehicleclasses');
+				await this.$axios.delete(`/api/track/${id}`);
+				const { data } = await this.$axios.get('/api/track');
 				this.series = data;
 			} catch (err) {
 				this.$toast.add({ severity: 'error', summary: 'Oh no!', detail: 'Something went wrong while deleting a series.', life: 5000 });

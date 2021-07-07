@@ -50,6 +50,8 @@ export default {
 			visibleColumns: [
 				{
 					key: 'name',
+					name: 'name',
+					isRelation: false,
 					sortable: true
 				}
 			],
