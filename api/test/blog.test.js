@@ -4,10 +4,10 @@ const should = require('chai').should();
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const server = require('../index');
-const { BlogPost, User } = require('../models/');
+const { BlogCategory, BlogCatRel, BlogPost, User } = require('../models/');
 
 describe('Blog', () => {
-	let userID, token;
+	let userID, token, cat1ID, cat2ID;
 	// Create user testuser/admin
 	before(async () => {
 		const newuser = {
@@ -17,9 +17,15 @@ describe('Blog', () => {
 			email: '',
 			usertype: 1
 		};
+		const newcat1 = { name: 'testcat1' };
+		const newcat2 = { name: 'testcat2' };
 		try {
 			const user = await User.create(newuser);
+			const cat1 = await BlogCategory.create(newcat1);
+			const cat2 = await BlogCategory.create(newcat2);
 			userID = user.id;
+			cat1ID = cat1.id;
+			cat2ID = cat2.id;
 			const res = await supertest(server)
 				.post('/api/auth/login')
 				.set('Authorization', 'Bearer ' + token)
@@ -32,19 +38,22 @@ describe('Blog', () => {
 	});
 
 	after(async () => {
-		const response = await User.destroy({
+		const res1 = await User.destroy({
 			where: { id: userID }
 		});
-		response.should.equal(1);
+		res1.should.equal(1);
+		await BlogCategory.destroy({
+			where: {}
+		});
 	});
 
 	beforeEach(done => {
 		const blogposts = [
-			{ headline: 'Headline 1', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 2', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 3', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 4', content: '<div>test content</div>', image: '', author: userID },
-			{ headline: 'Headline 5', content: '<div>test content</div>', image: '', author: userID }
+			{ title: 'Title 1', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Title 2', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Title 3', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Title 4', content: '<div>test content</div>', image: '', author: userID },
+			{ title: 'Title 5', content: '<div>test content</div>', image: '', author: userID }
 		];
 		each(blogposts, async blogpost => {
 			// Need this, because the controller is parsing req.body.track
@@ -53,7 +62,7 @@ describe('Blog', () => {
 			};
 			try {
 				await supertest(server)
-					.post('/api/blog')
+					.post('/api/blogs')
 					.set('Authorization', 'Bearer ' + token)
 					.send(tmp)
 					.expect(200);
@@ -78,6 +87,14 @@ describe('Blog', () => {
 			const ids = [];
 			blogposts.forEach(t => ids.push(t.id));
 
+			await BlogCatRel.destroy({
+				where: {
+					post: {
+						[Op.in]: ids
+					}
+				}
+			});
+
 			await BlogPost.destroy({
 				where: {
 					id: {
@@ -100,7 +117,7 @@ describe('Blog', () => {
 				]
 			});
 			blogposts.forEach(post => {
-				post.headline.should.have.string('Headline');
+				post.title.should.have.string('Title');
 				post.content.should.equal('<div>test content</div>');
 				post.image.should.equal('');
 				post.author.should.equal(userID);
@@ -110,12 +127,69 @@ describe('Blog', () => {
 		}
 	});
 
+	it('Creating a blogpost with a category', async () => {
+		const tmppost = { title: 'Title 7', content: '<div>test content</div>', image: '', author: userID };
+
+		try {
+			const cat = await BlogCategory.findOne({
+				where: { id: cat1ID }
+			});
+			tmppost.categories = [];
+			tmppost.categories.push(cat);
+			const tmp = {
+				blogpost: tmppost
+			};
+
+			const res = await supertest(server)
+				.post('/api/blogs')
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmp)
+				.expect(200);
+
+			res.body.BlogCatRels[0].BlogCategory.id.should.equal(cat1ID);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Creating a blogpost with multiple categories', async () => {
+		const tmppost = { title: 'Title 8', content: '<div>test content</div>', image: '', author: userID };
+
+		try {
+			const ids = [];
+			ids.push(cat1ID);
+			ids.push(cat2ID);
+
+			tmppost.categories = await BlogCategory.findAll({
+				where: {
+					id: {
+						[Op.in]: ids
+					}
+				}
+			});
+			const tmp = {
+				blogpost: tmppost
+			};
+
+			const res = await supertest(server)
+				.post('/api/blogs')
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmp)
+				.expect(200);
+
+			res.body.BlogCatRels[0].BlogCategory.id.should.equal(cat1ID);
+			res.body.BlogCatRels[1].BlogCategory.id.should.equal(cat2ID);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
 	it('Creating a blogpost without authorisation', async () => {
-		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+		const tmp = { title: 'Title 6', content: '<div>test content</div>', image: '', author: userID };
 
 		try {
 			await supertest(server)
-				.post('/api/blog')
+				.post('/api/blogs')
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -135,13 +209,13 @@ describe('Blog', () => {
 
 			const tmp = {
 				blogpost: {
-					headline: 'NEW_HEADLINE',
+					title: 'NEW_Title',
 					content: '<p>new</p>'
 				}
 			};
 
 			await supertest(server)
-				.put('/api/blog/' + blogposts[0].id)
+				.put('/api/blogs/' + blogposts[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
@@ -149,7 +223,7 @@ describe('Blog', () => {
 			const post = await BlogPost.findOne({
 				where: { id: blogposts[0].id }
 			});
-			post.headline.should.equal('NEW_HEADLINE');
+			post.title.should.equal('NEW_Title');
 			post.content.should.equal('<p>new</p>');
 		} catch (err) {
 			should.not.exist(err);
@@ -168,13 +242,13 @@ describe('Blog', () => {
 
 			const tmp = {
 				blogpost: {
-					headline: 'NEW_HEADLINE',
+					title: 'Title',
 					content: '<p>new</p>'
 				}
 			};
 
 			await supertest(server)
-				.put('/api/blog/' + blogposts[0].id)
+				.put('/api/blogs/' + blogposts[0].id)
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -184,7 +258,7 @@ describe('Blog', () => {
 
 	it('Deleting a blogpost', async () => {
 		let nrOfPostsBefore, postID;
-		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+		const tmp = { title: 'Title 6', content: '<div>test content</div>', image: '', author: userID };
 
 		try {
 			const post = await BlogPost.create(tmp);
@@ -192,7 +266,7 @@ describe('Blog', () => {
 			const posts = await BlogPost.findAll();
 			nrOfPostsBefore = posts.length;
 			await supertest(server)
-				.delete('/api/blog/' + postID)
+				.delete('/api/blogs/' + postID)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 			const response = await BlogPost.findAll();
@@ -206,12 +280,12 @@ describe('Blog', () => {
 	});
 
 	it('Deleting a blogpost without authorisation', async () => {
-		const tmp = { headline: 'Headline 6', content: '<div>test content</div>', image: '', author: userID };
+		const tmp = { title: 'Title 6', content: '<div>test content</div>', image: '', author: userID };
 
 		try {
 			const post = await BlogPost.create(tmp);
 			await supertest(server)
-				.delete('/api/blog/' + post.id)
+				.delete('/api/blogs/' + post.id)
 				.expect(401);
 		} catch (err) {
 			should.not.exist(err);

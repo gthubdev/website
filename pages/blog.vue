@@ -9,7 +9,7 @@
 			:key="post.id"
 		>
 			<template #title>
-				{{ post.headline }}
+				{{ post.title }}
 			</template>
 			<template #content>
 				<div>

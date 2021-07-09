@@ -1,15 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-	const SupportSeries = sequelize.define('SupportSeries', {
+	const BlogTagRel = sequelize.define('BlogTagRel', {
 		id: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true
 		},
-		event: {
+		post: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-		series: {
+		tag: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
@@ -22,23 +22,23 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: sequelize.fn('NOW')
 		}
 	}, {
-		tableName: 'SupportSeries',
+		tableName: 'BlogTagRel',
 		timestamps: true,
-		indexes: [
-			{ fields: ['event', 'series'], unique: true }
+		index: [
+			{ fields: ['post', 'tag'], unique: true }
 		]
 	});
 
-	SupportSeries.associate = models => {
-		models.SupportSeries.belongsTo(models.Event, {
-			foreignKey: 'event',
+	BlogTagRel.associate = models => {
+		models.BlogTagRel.belongsTo(models.BlogPost, {
+			foreignKey: 'post',
 			onDelete: 'RESTRICT'
 		});
-		models.SupportSeries.belongsTo(models.Series, {
-			foreignKey: 'series',
+		models.BlogTagRel.belongsTo(models.BlogTag, {
+			foreignKey: 'tag',
 			onDelete: 'RESTRICT'
 		});
 	};
 
-	return SupportSeries;
+	return BlogTagRel;
 };

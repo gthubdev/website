@@ -50,4 +50,4 @@ INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype)
 INSERT INTO EventSession (name, starttime, event, series, duration, sessiontype) VALUES ('Main Race', '2021-07-31 14:00', 3, 17, 1440, 1);
 
 # Blogposts
-INSERT INTO BlogPost (headline, content, author, image) VALUES ('Blogpost 1', '<div>this is some text</div>', 2, '');
+INSERT INTO BlogPost (title, content, author, image) VALUES ('Blogpost 1', '<div>this is some text</div>', 2, '');

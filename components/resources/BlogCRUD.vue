@@ -3,8 +3,8 @@
 	<div class="flex flex-row">
 		<div class="pt-2">
 			<span class="p-float-label">
-				<InputText id="headline" v-model="blogpost.headline" type="text" />
-				<label for="headline">Headline</label>
+				<InputText id="title" v-model="blogpost.title" type="text" />
+				<label for="title">Ttitle</label>
 			</span>
 		</div>
 
@@ -55,7 +55,7 @@ export default {
 			headline: '',
 			blogpost: {
 				id: '',
-				headline: '',
+				title: '',
 				content: '',
 				image: '',
 				author: ''
@@ -79,7 +79,7 @@ export default {
 				this.headline = 'Create a blogpost';
 				this.blogpost = {
 					id: '',
-					headline: '',
+					title: '',
 					content: '',
 					image: '',
 					author: ''
@@ -92,7 +92,7 @@ export default {
 				this.headline = 'Update ' + this.editingPost.headline;
 				this.blogpost = {
 					id: this.editingPost.id,
-					headline: this.editingPost.headline,
+					title: this.editingPost.title,
 					content: '',
 					image: this.editingPost.image,
 					author: this.editingPost.author
@@ -115,15 +115,14 @@ export default {
 			// 	.replace('[quote]', '<div class="quote">')
 			// 	.replace('[/quote]', '</div>');
 			this.$emit('send-request', this.blogpost);
-			console.log('sending request');
 		},
 		validInput() {
-			return this.validHeadline() &&
+			return this.validTitle() &&
 				this.validImage() &&
 				this.validContent();
 		},
-		validHeadline() {
-			return this.blogpost.headline !== undefined && this.blogpost.headline.length > 0;
+		validTitle() {
+			return this.blogpost.title !== undefined && this.blogpost.title.length > 0;
 		},
 		validImage() {
 			return this.blogpost.image.trim() === '' ||

@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true,
 			primaryKey: true
 		},
-		headline: DataTypes.STRING(1023),
+		title: DataTypes.STRING(1023),
 		content: DataTypes.TEXT('long'),
 		image: DataTypes.STRING,
 		author: {
@@ -29,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
 		models.BlogPost.belongsTo(models.User, {
 			foreignKey: 'author',
 			onDelete: 'RESTRICT'
+		});
+		models.BlogPost.hasMany(models.BlogCatRel, {
+			foreignKey: 'post'
+		});
+		models.BlogPost.hasMany(models.BlogTagRel, {
+			foreignKey: 'post'
 		});
 	};
 
