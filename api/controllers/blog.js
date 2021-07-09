@@ -1,14 +1,38 @@
-const { BlogPost, User } = require('../models');
+const { BlogCategory, BlogCatRel, BlogPost, User } = require('../models');
 const util = require('../util/util');
 
 module.exports.createBlogPost = async (req, res) => {
 	try {
 		const newblogpost = await BlogPost.create(req.body.blogpost);
 
+		const categories = [];
+		if (req.body.blogpost.categories) {
+			req.body.blogpost.categories.forEach(c => {
+				categories.push({
+					post: newblogpost.id,
+					category: c.id
+				});
+			});
+			await BlogCatRel.bulkCreate(categories);
+		}
+
 		const blogpost = await BlogPost.findOne({
 			where: { id: newblogpost.id },
 			include: [
-				{ model: User }
+				{
+					model: User,
+					attributes: ['name', 'image']
+				},
+				{
+					model: BlogCatRel,
+					attributes: ['id'],
+					include: [
+						{
+							model: BlogCategory,
+							attributes: ['id', 'name']
+						}
+					]
+				}
 			]
 		});
 

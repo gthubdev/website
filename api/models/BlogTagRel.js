@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'post',
 			onDelete: 'RESTRICT'
 		});
-		models.BlogCatRel.belongsTo(models.BlogTag, {
+		models.BlogTagRel.belongsTo(models.BlogTag, {
 			foreignKey: 'tag',
 			onDelete: 'RESTRICT'
 		});
