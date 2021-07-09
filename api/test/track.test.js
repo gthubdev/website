@@ -46,15 +46,11 @@ describe('Tracks', () => {
 			{ name: 'Test Track 5', country: 'Sweden', timezone: 'Europe/Amsterdam', length: 5, map: '' }
 		];
 		each(tracks, async track => {
-			// Need this, because the controller is parsing req.body.track
-			const tmp = {
-				track
-			};
 			try {
 				await supertest(server)
 					.post('/api/track')
 					.set('Authorization', 'Bearer ' + token)
-					.send(tmp)
+					.send(track)
 					.expect(200);
 			} catch (err) {
 				should.not.exist(err);
@@ -124,14 +120,11 @@ describe('Tracks', () => {
 
 	it('Creating a track with an invalid country', async () => {
 		const track = { name: 'Test Track 1', country: 'Swedennn', timezone: 'Europe/Amsterdam', length: 5, map: '' };
-		const tmp = {
-			track
-		};
 		try {
 			await supertest(server)
 				.post('/api/track')
 				.set('Authorization', 'Bearer ' + token)
-				.send(tmp)
+				.send(track)
 				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
@@ -140,14 +133,11 @@ describe('Tracks', () => {
 
 	it('Creating a track with an invalid timezone', async () => {
 		const track = { name: 'Test Track 1', country: 'Sweden', timezone: 'Europe/Amsterdammmm', length: 5, map: '' };
-		const tmp = {
-			track
-		};
 		try {
 			await supertest(server)
 				.post('/api/track')
 				.set('Authorization', 'Bearer ' + token)
-				.send(tmp)
+				.send(track)
 				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
@@ -165,10 +155,8 @@ describe('Tracks', () => {
 			});
 
 			const tmp = {
-				track: {
-					name: 'UPDATED_TRACKNAME',
-					length: 16
-				}
+				name: 'UPDATED_TRACKNAME',
+				length: 16
 			};
 
 			await supertest(server)
@@ -198,10 +186,8 @@ describe('Tracks', () => {
 			});
 
 			const tmp = {
-				track: {
-					name: 'UPDATED_TRACKNAME',
-					length: 16
-				}
+				name: 'UPDATED_TRACKNAME',
+				length: 16
 			};
 
 			await supertest(server)
@@ -224,11 +210,9 @@ describe('Tracks', () => {
 			});
 
 			const tmp = {
-				track: {
-					name: 'UPDATED_TRACKNAME',
-					country: 'Ratel Country',
-					length: 16
-				}
+				name: 'UPDATED_TRACKNAME',
+				country: 'Ratel Country',
+				length: 16
 			};
 
 			await supertest(server)
@@ -252,11 +236,9 @@ describe('Tracks', () => {
 			});
 
 			const tmp = {
-				track: {
-					name: 'UPDATED_TRACKNAME',
-					timezone: 'Europe/Ratel',
-					length: 16
-				}
+				name: 'UPDATED_TRACKNAME',
+				timezone: 'Europe/Ratel',
+				length: 16
 			};
 
 			await supertest(server)
@@ -272,13 +254,11 @@ describe('Tracks', () => {
 	it('Deleting a track', async () => {
 		let nrOfTracksBefore, trackID;
 		const tmp = {
-			track: {
-				name: 'Test Track 6',
-				country: 'Sweden',
-				timezone: 'Europe/Amsterdam',
-				length: 5,
-				map: ''
-			}
+			name: 'Test Track 6',
+			country: 'Sweden',
+			timezone: 'Europe/Amsterdam',
+			length: 5,
+			map: ''
 		};
 
 		try {
@@ -302,13 +282,11 @@ describe('Tracks', () => {
 
 	it('Deleting a track without authorisation', async () => {
 		const tmp = {
-			track: {
-				name: 'Test Track 6',
-				country: 'Sweden',
-				timezone: 'Europe/Amsterdam',
-				length: 5,
-				map: ''
-			}
+			name: 'Test Track 6',
+			country: 'Sweden',
+			timezone: 'Europe/Amsterdam',
+			length: 5,
+			map: ''
 		};
 
 		try {

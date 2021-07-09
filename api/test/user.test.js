@@ -36,7 +36,7 @@ describe('User', () => {
 		];
 
 		try {
-			let user = await User.create(users[0]);
+			await User.create(users[0]);
 			let res = await supertest(server)
 				.post('/api/auth/login')
 				.send({ username: 'testadmin', password: 'admin' })
@@ -44,7 +44,7 @@ describe('User', () => {
 
 			admintoken = res.body.token;
 
-			user = await User.create(users[1]);
+			let user = await User.create(users[1]);
 			user1id = user.id;
 			res = await supertest(server)
 				.post('/api/auth/login')
@@ -96,7 +96,7 @@ describe('User', () => {
 			};
 
 			await supertest(server)
-				.post('/api/user')
+				.post('/api/users')
 				.set('Authorization', 'Bearer ' + admintoken)
 				.send(tmp)
 				.expect(200);
@@ -116,7 +116,7 @@ describe('User', () => {
 			};
 
 			await supertest(server)
-				.post('/api/user')
+				.post('/api/users')
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -134,7 +134,7 @@ describe('User', () => {
 			};
 
 			await supertest(server)
-				.post('/api/user')
+				.post('/api/users')
 				.set('Authorization', 'Bearer ' + admintoken)
 				.send(tmp)
 				.expect(422);
@@ -153,7 +153,7 @@ describe('User', () => {
 			};
 
 			await supertest(server)
-				.post('/api/user')
+				.post('/api/users')
 				.set('Authorization', 'Bearer ' + admintoken)
 				.send(tmp)
 				.expect(422);
@@ -172,7 +172,7 @@ describe('User', () => {
 			};
 
 			await supertest(server)
-				.post('/api/user')
+				.post('/api/users')
 				.set('Authorization', 'Bearer ' + admintoken)
 				.send(tmp)
 				.expect(422);
@@ -200,7 +200,7 @@ describe('User', () => {
 			};
 			try {
 				await supertest(server)
-					.post('/api/user')
+					.post('/api/users')
 					.set('Authorization', 'Bearer ' + admintoken)
 					.send(tmp)
 					.expect(422);
@@ -224,7 +224,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.post('/api/user')
+				.post('/api/users')
 				.set('Authorization', 'Bearer ' + admintoken)
 				.send(tmp)
 				.expect(409);
@@ -243,7 +243,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.put('/api/user/' + user1id)
+				.put('/api/users/' + user1id)
 				.set('Authorization', 'Bearer ' + user1token)
 				.send(tmp)
 				.expect(200);
@@ -268,7 +268,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.put('/api/user/' + user2id)
+				.put('/api/users/' + user2id)
 				.set('Authorization', 'Bearer ' + admintoken)
 				.send(tmp)
 				.expect(200);
@@ -293,7 +293,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.put('/api/user/' + user1id)
+				.put('/api/users/' + user1id)
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -311,7 +311,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.put('/api/user/' + user1id)
+				.put('/api/users/' + user1id)
 				.set('Authorization', 'Bearer ' + user2token)
 				.send(tmp)
 				.expect(403);
@@ -329,7 +329,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.put('/api/user/' + user1id)
+				.put('/api/users/' + user1id)
 				.set('Authorization', 'Bearer ' + user1token)
 				.send(tmp)
 				.expect(422);
@@ -347,7 +347,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.put('/api/user/' + user1id)
+				.put('/api/users/' + user1id)
 				.set('Authorization', 'Bearer ' + user1token)
 				.send(tmp)
 				.expect(422);
@@ -365,7 +365,7 @@ describe('User', () => {
 
 		try {
 			await supertest(server)
-				.put('/api/user/' + user1id)
+				.put('/api/users/' + user1id)
 				.set('Authorization', 'Bearer ' + user1token)
 				.send(tmp)
 				.expect(422);
@@ -383,7 +383,7 @@ describe('User', () => {
 			users_before.should.have.a.lengthOf.at.least(2);
 
 			await supertest(server)
-				.delete('/api/user/' + users_before[1].id)
+				.delete('/api/users/' + users_before[1].id)
 				.set('Authorization', 'Bearer ' + admintoken)
 				.expect(200);
 
@@ -406,7 +406,7 @@ describe('User', () => {
 			users_before.should.have.a.lengthOf.at.least(2);
 
 			await supertest(server)
-				.delete('/api/user/' + users_before[1].id)
+				.delete('/api/users/' + users_before[1].id)
 				.set('Authorization', 'Bearer ' + user2token)
 				.expect(403);
 		} catch (err) {
@@ -428,7 +428,7 @@ describe('User', () => {
 			users_before.should.have.a.lengthOf.at.least(2);
 
 			await supertest(server)
-				.delete('/api/user/' + tmp)
+				.delete('/api/users/' + tmp)
 				.set('Authorization', 'Bearer ' + admintoken)
 				.expect(422);
 		} catch (err) {

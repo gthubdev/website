@@ -62,7 +62,7 @@ describe('Blog', () => {
 			};
 			try {
 				await supertest(server)
-					.post('/api/blog')
+					.post('/api/blogs')
 					.set('Authorization', 'Bearer ' + token)
 					.send(tmp)
 					.expect(200);
@@ -141,7 +141,7 @@ describe('Blog', () => {
 			};
 
 			const res = await supertest(server)
-				.post('/api/blog')
+				.post('/api/blogs')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
@@ -160,20 +160,19 @@ describe('Blog', () => {
 			ids.push(cat1ID);
 			ids.push(cat2ID);
 
-			const cat = await BlogCategory.findAll({
+			tmppost.categories = await BlogCategory.findAll({
 				where: {
 					id: {
 						[Op.in]: ids
 					}
 				}
 			});
-			tmppost.categories = cat;
 			const tmp = {
 				blogpost: tmppost
 			};
 
 			const res = await supertest(server)
-				.post('/api/blog')
+				.post('/api/blogs')
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
@@ -190,7 +189,7 @@ describe('Blog', () => {
 
 		try {
 			await supertest(server)
-				.post('/api/blog')
+				.post('/api/blogs')
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -216,7 +215,7 @@ describe('Blog', () => {
 			};
 
 			await supertest(server)
-				.put('/api/blog/' + blogposts[0].id)
+				.put('/api/blogs/' + blogposts[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
@@ -249,7 +248,7 @@ describe('Blog', () => {
 			};
 
 			await supertest(server)
-				.put('/api/blog/' + blogposts[0].id)
+				.put('/api/blogs/' + blogposts[0].id)
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -267,7 +266,7 @@ describe('Blog', () => {
 			const posts = await BlogPost.findAll();
 			nrOfPostsBefore = posts.length;
 			await supertest(server)
-				.delete('/api/blog/' + postID)
+				.delete('/api/blogs/' + postID)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 			const response = await BlogPost.findAll();
@@ -286,7 +285,7 @@ describe('Blog', () => {
 		try {
 			const post = await BlogPost.create(tmp);
 			await supertest(server)
-				.delete('/api/blog/' + post.id)
+				.delete('/api/blogs/' + post.id)
 				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
