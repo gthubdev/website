@@ -49,16 +49,16 @@ module.exports.findOne = async (req, res) => {
 };
 
 module.exports.createSeries = async (req, res) => {
-	const prio = req.body.series.priority;
+	const prio = req.body.priority;
 	if (prio < 1 || prio > 4) {
 		res.status(422).send('Invalid priority');
 		return;
 	}
 
 	try {
-		const newseries = await Series.create(req.body.series);
+		const newseries = await Series.create(req.body);
 		const vclarray = [];
-		req.body.series.vehicleClasses.forEach(vcl => {
+		req.body.vehicleClasses.forEach(vcl => {
 			vclarray.push({
 				series: newseries.id,
 				class: vcl
@@ -89,8 +89,8 @@ module.exports.createSeries = async (req, res) => {
 };
 
 module.exports.updateSeries = async (req, res) => {
-	if (req.body.series.priority) {
-		const prio = req.body.series.priority;
+	if (req.body.priority) {
+		const prio = req.body.priority;
 		if (prio < 1 || prio > 4) {
 			res.status(422).send('Invalid priority');
 			return;
@@ -99,7 +99,7 @@ module.exports.updateSeries = async (req, res) => {
 
 	try {
 		const [updated, deleted] = await Promise.all([
-			Series.update(req.body.series,
+			Series.update(req.body,
 				{ where: { id: req.params.id } }
 			),
 			SeriesType.destroy({
@@ -108,13 +108,13 @@ module.exports.updateSeries = async (req, res) => {
 		]);
 
 		if (updated !== 1 && deleted < 0) {
-			util.error(req, res, 'Error updating event ' + req.body.event.name);
+			util.error(req, res, 'Error updating event ' + req.event.name);
 			return;
 		}
 
 		// build the array with the series.id for vehicle classes
 		const vclarray = [];
-		req.body.series.vehicleClasses.forEach(vcl => {
+		req.body.vehicleClasses.forEach(vcl => {
 			vclarray.push({
 				series: req.params.id,
 				class: vcl

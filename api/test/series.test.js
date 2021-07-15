@@ -79,14 +79,11 @@ describe('Series', () => {
 		each(series, async s => {
 			// Need this, because the controller is parsing req.body.series
 			s.vehicleClasses = [vclId];
-			const tmp = {
-				series: s
-			};
 			try {
 				await supertest(server)
 					.post('/api/series')
 					.set('Authorization', 'Bearer ' + token)
-					.send(tmp)
+					.send(s)
 					.expect(200);
 			} catch (err) {
 				should.not.exist(err);
@@ -154,11 +151,8 @@ describe('Series', () => {
 	});
 
 	it('Creating a series with an invalid priority', async () => {
-		const series = { name: 'Test Series 1', shortname: 'TS1', priority: -2 };
-		const tmp = {
-			series,
-			vehicleClasses: [vclId]
-		};
+		const tmp = { name: 'Test Series 1', shortname: 'TS1', priority: -2 };
+		tmp.vehicleClasses = [vclId];
 		try {
 			await supertest(server)
 				.post('/api/series')
@@ -181,12 +175,10 @@ describe('Series', () => {
 			});
 			const vehicleClasses = [vclId];
 			const tmp = {
-				series: {
-					id: series[0].id,
-					name: 'NEW_SERIES_NAME',
-					priority: 2,
-					vehicleClasses
-				}
+				id: series[0].id,
+				name: 'NEW_SERIES_NAME',
+				priority: 2,
+				vehicleClasses
 			};
 
 			await supertest(server)
@@ -220,12 +212,10 @@ describe('Series', () => {
 			});
 			const vehicleClasses = [vclId];
 			const tmp = {
-				series: {
-					id: series[0].id,
-					name: 'NEW_SERIES_NAME',
-					priority: 2,
-					vehicleClasses
-				}
+				id: series[0].id,
+				name: 'NEW_SERIES_NAME',
+				priority: 2,
+				vehicleClasses
 			};
 
 			await supertest(server)
@@ -248,12 +238,10 @@ describe('Series', () => {
 			});
 			const vehicleClasses = [vclId];
 			const tmp = {
-				series: {
-					id: series[0].id,
-					name: 'NEW_SERIES_NAME',
-					priority: 20,
-					vehicleClasses
-				}
+				id: series[0].id,
+				name: 'NEW_SERIES_NAME',
+				priority: 20,
+				vehicleClasses
 			};
 			await supertest(server)
 				.put('/api/series/' + series[0].id)
