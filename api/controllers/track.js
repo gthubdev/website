@@ -4,22 +4,32 @@ const util = require('../util/util');
 const dateutil = require('../util/dateutil');
 
 module.exports.findAll = async (req, res) => {
-	const tracks = await Track.findAll({
-		order: [
-			['id', 'ASC']
-		]
-	});
-	return res.json(tracks);
+	try {
+		const tracks = await Track.findAll({
+			order: [
+				['id', 'ASC']
+			]
+		});
+
+		res.json(tracks);
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
 module.exports.findOne = async (req, res) => {
-	const track = await Track.findOne({
-		where: { id: req.params.id }
-	});
+	try {
+		const track = await Track.findOne({
+			where: { id: req.params.id }
+		});
 
-	if (!track) return res.status(404).send('No tracks found');
-
-	return res.json(track);
+		if (!track)
+			res.json({ });
+		else
+			res.json(track.get({ plain: true }));
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
 module.exports.create = async (req, res) => {
