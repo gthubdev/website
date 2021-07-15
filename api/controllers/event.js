@@ -30,15 +30,15 @@ module.exports.find = async (req, res) => {
 };
 
 module.exports.createEvent = async (req, res) => {
-	const startdate = dayjs(req.body.event.startdate);
-	const enddate = dayjs(req.body.event.enddate);
+	const startdate = dayjs(req.body.startdate);
+	const enddate = dayjs(req.body.enddate);
 
-	if (startdate.format(dateformat) !== req.body.event.startdate) {
+	if (startdate.format(dateformat) !== req.body.startdate) {
 		res.status(422).send('Invalid startdate');
 		return;
 	}
 
-	if (enddate.format(dateformat) !== req.body.event.enddate) {
+	if (enddate.format(dateformat) !== req.body.enddate) {
 		res.status(422).send('Invalid enddate');
 		return;
 	}
@@ -48,18 +48,18 @@ module.exports.createEvent = async (req, res) => {
 		return;
 	}
 
-	const prio = req.body.event.priority;
+	const prio = req.body.priority;
 	if (prio < 1 || prio > 4) {
 		res.status(422).send('Invalid priority');
 		return;
 	}
 
 	try {
-		const newevent = await Event.create(req.body.event);
+		const newevent = await Event.create(req.body);
 
 		// build the array with the event.id for the support series
 		const supportarray = [];
-		req.body.event.supportseries.forEach(s => {
+		req.body.supportseries.forEach(s => {
 			supportarray.push({
 				event: newevent.id,
 				series: s.id
@@ -99,16 +99,16 @@ module.exports.createEvent = async (req, res) => {
 };
 
 module.exports.updateEvent = async (req, res) => {
-	if (req.body.event.startdate && req.body.event.enddate) {
-		const startdate = dayjs(req.body.event.startdate);
-		const enddate = dayjs(req.body.event.enddate);
+	if (req.body.startdate && req.body.enddate) {
+		const startdate = dayjs(req.body.startdate);
+		const enddate = dayjs(req.body.enddate);
 
-		if (startdate.format(dateformat) !== req.body.event.startdate) {
+		if (startdate.format(dateformat) !== req.body.startdate) {
 			res.status(422).send('Invalid startdate');
 			return;
 		}
 
-		if (enddate.format(dateformat) !== req.body.event.enddate) {
+		if (enddate.format(dateformat) !== req.body.enddate) {
 			res.status(422).send('Invalid enddate');
 			return;
 		}
@@ -117,13 +117,13 @@ module.exports.updateEvent = async (req, res) => {
 			res.status(422).send('Enddate cannot be before startdate');
 			return;
 		}
-	} else if (req.body.event.startdate || req.body.event.enddate) {
+	} else if (req.body.startdate || req.body.enddate) {
 		res.status(422).send('Must supply both startdate and enddate');
 		return;
 	}
 
-	if (req.body.event.priority) {
-		const prio = req.body.event.priority;
+	if (req.body.priority) {
+		const prio = req.body.priority;
 		if (prio < 1 || prio > 4) {
 			res.status(422).send('Invalid priority');
 			return;
@@ -132,7 +132,7 @@ module.exports.updateEvent = async (req, res) => {
 
 	try {
 		const [updated, deleted] = await Promise.all([
-			Event.update(req.body.event,
+			Event.update(req.body,
 				{ where: { id: req.params.id } }
 			),
 			SupportSeries.destroy({
@@ -140,13 +140,13 @@ module.exports.updateEvent = async (req, res) => {
 			})
 		]);
 		if (updated !== 1 && deleted < 0) {
-			util.error(req, res, 'Error updating event ' + req.body.event.name);
+			util.error(req, res, 'Error updating event ' + req.body.name);
 			return;
 		}
 
 		// build the array with the event.id for the support series
 		const supportarray = [];
-		req.body.event.supportseries.forEach(s => {
+		req.body.supportseries.forEach(s => {
 			supportarray.push({
 				event: req.params.id,
 				series: s.id

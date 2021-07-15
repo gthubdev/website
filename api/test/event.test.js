@@ -101,13 +101,10 @@ describe('Events', () => {
 		];
 		each(events, async event => {
 			event.supportseries = [];
-			const tmp = {
-				event
-			};
 			try {
 				await supertest(server)
 					.post('/api/event')
-					.send(tmp)
+					.send(event)
 					.set('Authorization', 'Bearer ' + token)
 					.expect(200);
 			} catch (err) {
@@ -181,10 +178,8 @@ describe('Events', () => {
 	});
 
 	it('Creating an event with an invalid date', async () => {
-		const event = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-X', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
-		const tmp = {
-			event
-		};
+		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-X', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
+
 		try {
 			await supertest(server)
 				.post('/api/event')
@@ -197,10 +192,8 @@ describe('Events', () => {
 	});
 
 	it('Creating an event with enddate before startdate', async () => {
-		const event = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
-		const tmp = {
-			event
-		};
+		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
+
 		try {
 			await supertest(server)
 				.post('/api/event')
@@ -213,10 +206,8 @@ describe('Events', () => {
 	});
 
 	it('Creating an event with an invalid priority', async () => {
-		const event = { name: 'Test Event 1', priority: -5, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
-		const tmp = {
-			event
-		};
+		const tmp = { name: 'Test Event 1', priority: -5, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
+
 		try {
 			await supertest(server)
 				.post('/api/event')
@@ -239,11 +230,9 @@ describe('Events', () => {
 			});
 
 			const tmp = {
-				event: {
-					name: 'UPDATED_EVENTNAME',
-					priority: 3,
-					supportseries: []
-				}
+				name: 'UPDATED_EVENTNAME',
+				priority: 3,
+				supportseries: []
 			};
 
 			await supertest(server)
@@ -274,11 +263,9 @@ describe('Events', () => {
 			});
 
 			const tmp = {
-				event: {
-					name: 'UPDATED_EVENTNAME',
-					priority: 3,
-					supportseries: []
-				}
+				name: 'UPDATED_EVENTNAME',
+				priority: 3,
+				supportseries: []
 			};
 
 			await supertest(server)
@@ -301,12 +288,10 @@ describe('Events', () => {
 			});
 
 			const tmp = {
-				event: {
-					name: 'UPDATED_EVENTNAME',
-					enddate: '2019-07-XX',
-					priority: 3,
-					supportseries: []
-				}
+				name: 'UPDATED_EVENTNAME',
+				enddate: '2019-07-XX',
+				priority: 3,
+				supportseries: []
 			};
 
 			await supertest(server)
@@ -330,12 +315,10 @@ describe('Events', () => {
 			});
 
 			const tmp = {
-				event: {
-					name: 'UPDATED_EVENTNAME',
-					enddate: '2019-07-05',
-					priority: 3,
-					supportseries: []
-				}
+				name: 'UPDATED_EVENTNAME',
+				enddate: '2019-07-05',
+				priority: 3,
+				supportseries: []
 			};
 
 			await supertest(server)
@@ -359,13 +342,11 @@ describe('Events', () => {
 			});
 
 			const tmp = {
-				event: {
-					name: 'UPDATED_EVENTNAME',
-					startdate: '2019-07-06',
-					enddate: '2019-07-05',
-					priority: 3,
-					supportseries: []
-				}
+				name: 'UPDATED_EVENTNAME',
+				startdate: '2019-07-06',
+				enddate: '2019-07-05',
+				priority: 3,
+				supportseries: []
 			};
 
 			await supertest(server)
@@ -389,11 +370,9 @@ describe('Events', () => {
 			});
 
 			const tmp = {
-				event: {
-					name: 'UPDATED_EVENTNAME',
-					priority: 33,
-					supportseries: []
-				}
+				name: 'UPDATED_EVENTNAME',
+				priority: 33,
+				supportseries: []
 			};
 
 			await supertest(server)
@@ -409,16 +388,14 @@ describe('Events', () => {
 	it('Deleting an event', async () => {
 		let nrOfEventsBefore, eventID;
 		const tmp = {
-			event: {
-				name: 'Test Event 6',
-				priority: 1,
-				logo: '...',
-				startdate: '2019-07-01',
-				enddate: '2019-07-03',
-				track: null,
-				mainseries: null,
-				supportseries: []
-			}
+			name: 'Test Event 6',
+			priority: 1,
+			logo: '...',
+			startdate: '2019-07-01',
+			enddate: '2019-07-03',
+			track: null,
+			mainseries: null,
+			supportseries: []
 		};
 
 		try {
@@ -444,16 +421,14 @@ describe('Events', () => {
 
 	it('Deleting an event without authorisation', async () => {
 		const tmp = {
-			event: {
-				name: 'Test Event 6',
-				priority: 1,
-				logo: '...',
-				startdate: '2019-07-01',
-				enddate: '2019-07-03',
-				track: null,
-				mainseries: null,
-				supportseries: []
-			}
+			name: 'Test Event 6',
+			priority: 1,
+			logo: '...',
+			startdate: '2019-07-01',
+			enddate: '2019-07-03',
+			track: null,
+			mainseries: null,
+			supportseries: []
 		};
 
 		try {
