@@ -4,7 +4,7 @@ const util = require('../util/util');
 const auth = require('../middleware/auth');
 
 module.exports.create = async (req, res) => {
-	const newuser = req.body.user;
+	const newuser = req.body;
 
 	if (!newuser || !newuser.username || !newuser.password || !newuser.name) {
 		res.status(422).send();
@@ -30,8 +30,8 @@ module.exports.create = async (req, res) => {
 
 	try {
 		const tmp = {
-			username: req.body.user.username,
-			password: bCrypt.hashSync(req.body.user.password, bCrypt.genSaltSync(8)),
+			username: req.body.username,
+			password: bCrypt.hashSync(req.body.password, bCrypt.genSaltSync(8)),
 			name: req.body.name
 		};
 
@@ -40,7 +40,7 @@ module.exports.create = async (req, res) => {
 		res.status(200).send();
 	} catch (err) {
 		if (err.parent && err.parent.errno && err.parent.errno === 1062)
-			res.status(409).send('Username already exists.');
+			res.status(422).send('Username already exists.');
 		else
 			util.error(req, res, err);
 	}
@@ -52,7 +52,7 @@ module.exports.update = async (req, res) => {
 		return;
 	}
 
-	const userdata = req.body.user;
+	const userdata = req.body;
 
 	// cannot update username, password or usertype
 	if (!userdata || userdata.username || userdata.password || userdata.usertype) {
