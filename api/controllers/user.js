@@ -3,7 +3,7 @@ const { User } = require('../models');
 const util = require('../util/util');
 const auth = require('../middleware/auth');
 
-module.exports.createUser = async (req, res) => {
+module.exports.create = async (req, res) => {
 	const newuser = req.body.user;
 
 	if (!newuser || !newuser.username || !newuser.password || !newuser.name) {
@@ -46,7 +46,7 @@ module.exports.createUser = async (req, res) => {
 	}
 };
 
-module.exports.updateUser = async (req, res) => {
+module.exports.update = async (req, res) => {
 	if (!req.header('Authorization')) {
 		res.status(401).send();
 		return;
@@ -90,7 +90,7 @@ module.exports.updateUser = async (req, res) => {
 	}
 };
 
-module.exports.deleteUser = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	const user = { deleted: 1 };
 
 	try {
