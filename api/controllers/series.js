@@ -129,8 +129,7 @@ module.exports.update = async (req, res) => {
 			});
 		});
 		await SeriesType.bulkCreate(vclarray);
-		const series = await Series.findOne({
-			where: { id: req.params.id },
+		const series = await Series.findByPk(req.params.id, {
 			include: [
 				{
 					model: SeriesType,
@@ -145,6 +144,7 @@ module.exports.update = async (req, res) => {
 				}
 			]
 		});
+
 		util.print('Series \'' + series.name + '\' updated');
 		res.json(series.get({ plain: true }));
 	} catch (err) {

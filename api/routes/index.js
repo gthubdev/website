@@ -14,7 +14,7 @@ const BlogPostCtrl = require('../controllers/blogpost');
 const iCalCtrl = require('../controllers/ical');
 const auth = require('../middleware/auth');
 const VehClassCtrl = require('../controllers/classes');
-const VehCatCtrl = require('../controllers/categories');
+const VehCatCtrl = require('../controllers/vehicleclasscategory');
 
 // routes ==================================================
 
