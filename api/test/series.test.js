@@ -298,4 +298,97 @@ describe('Series', () => {
 			should.not.exist(err);
 		}
 	});
+
+	it('Find one series', async () => {
+		try {
+			const series = await Series.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const findOne = await supertest(server)
+				.get('/api/series/' + series[0].id)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			findOne.body.id.should.equal(series[0].id);
+			findOne.body.name.should.equal(series[0].name);
+			findOne.body.shortname.should.equal(series[0].shortname);
+			findOne.body.priority.should.equal(series[0].priority);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find one series with invalid id', async () => {
+		try {
+			const series = await Series.findAll({
+				limit: 1,
+				order: [
+					['id', 'DESC']
+				]
+			});
+
+			const findOne = await supertest(server)
+				.get('/api/series/' + (series[0].id + 1))
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			Object.keys(findOne.body).length.should.equal(0);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find all series', async () => {
+		try {
+			const series = await supertest(server)
+				.get('/api/series/')
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			series.body.length.should.equal(5);
+			series.body.forEach(s => {
+				s.name.should.have.string('Test Series');
+				s.shortname.should.have.string('TS');
+				s.priority.should.equal(1);
+			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find all series (empty)', async () => {
+		try {
+			const series = await Series.findAll({
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const ids = [];
+			series.forEach(s => ids.push(s.id));
+
+			await Series.destroy({
+				where: {
+					id: {
+						[Op.in]: ids
+					}
+				}
+			});
+
+			const res = await supertest(server)
+				.get('/api/series/')
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			res.body.length.should.equal(0);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
 });

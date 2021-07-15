@@ -48,9 +48,9 @@ module.exports.findOne = async (req, res) => {
 		});
 
 		if (!series)
-			return res.status(404).send('No series found');
-
-		res.json(series);
+			res.json({ });
+		else
+			res.json(series.get({ plain: true }));
 	} catch (err) {
 		util.error(req, res, err);
 	}
