@@ -3,11 +3,11 @@ const util = require('../util/util');
 
 module.exports.createBlogPost = async (req, res) => {
 	try {
-		const newblogpost = await BlogPost.create(req.body.blogpost);
+		const newblogpost = await BlogPost.create(req.body);
 
 		const categories = [];
-		if (req.body.blogpost.categories) {
-			req.body.blogpost.categories.forEach(c => {
+		if (req.body.categories) {
+			req.body.categories.forEach(c => {
 				categories.push({
 					post: newblogpost.id,
 					category: c.id
@@ -45,7 +45,7 @@ module.exports.createBlogPost = async (req, res) => {
 
 module.exports.updateBlogPost = async (req, res) => {
 	try {
-		const response = await BlogPost.update(req.body.blogpost,
+		const response = await BlogPost.update(req.body,
 			{ where: { id: req.params.id } }
 		);
 		if (response[0] === 0)

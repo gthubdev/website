@@ -57,14 +57,11 @@ describe('Blog', () => {
 		];
 		each(blogposts, async blogpost => {
 			// Need this, because the controller is parsing req.body.track
-			const tmp = {
-				blogpost
-			};
 			try {
 				await supertest(server)
 					.post('/api/blogs')
 					.set('Authorization', 'Bearer ' + token)
-					.send(tmp)
+					.send(blogpost)
 					.expect(200);
 			} catch (err) {
 				should.not.exist(err);
@@ -136,14 +133,11 @@ describe('Blog', () => {
 			});
 			tmppost.categories = [];
 			tmppost.categories.push(cat);
-			const tmp = {
-				blogpost: tmppost
-			};
 
 			const res = await supertest(server)
 				.post('/api/blogs')
 				.set('Authorization', 'Bearer ' + token)
-				.send(tmp)
+				.send(tmppost)
 				.expect(200);
 
 			res.body.BlogCatRels[0].BlogCategory.id.should.equal(cat1ID);
@@ -167,14 +161,11 @@ describe('Blog', () => {
 					}
 				}
 			});
-			const tmp = {
-				blogpost: tmppost
-			};
 
 			const res = await supertest(server)
 				.post('/api/blogs')
 				.set('Authorization', 'Bearer ' + token)
-				.send(tmp)
+				.send(tmppost)
 				.expect(200);
 
 			res.body.BlogCatRels[0].BlogCategory.id.should.equal(cat1ID);
@@ -208,10 +199,8 @@ describe('Blog', () => {
 			});
 
 			const tmp = {
-				blogpost: {
-					title: 'NEW_Title',
-					content: '<p>new</p>'
-				}
+				title: 'NEW_Title',
+				content: '<p>new</p>'
 			};
 
 			await supertest(server)
@@ -241,10 +230,8 @@ describe('Blog', () => {
 			});
 
 			const tmp = {
-				blogpost: {
-					title: 'Title',
-					content: '<p>new</p>'
-				}
+				title: 'Title',
+				content: '<p>new</p>'
 			};
 
 			await supertest(server)
