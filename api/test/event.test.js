@@ -578,14 +578,11 @@ describe('EventSessions', () => {
 			{ name: 'Test Session 5', starttime: '2019-07-02 18:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 4 }
 		];
 		each(sessions, async es => {
-			const tmp = {
-				session: es
-			};
 			try {
 				await supertest(server)
 					.post('/api/eventsession')
 					.set('Authorization', 'Bearer ' + token)
-					.send(tmp)
+					.send(es)
 					.expect(200);
 			} catch (err) {
 				should.not.exist(err);
@@ -654,9 +651,7 @@ describe('EventSessions', () => {
 	});
 
 	it('Creating an event session with an illegal starttime', async () => {
-		const tmpsession = {
-			session: { name: 'Test Session 6', starttime: '2019-07-XX 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
-		};
+		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-XX 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' };
 
 		try {
 			await supertest(server)
@@ -671,9 +666,7 @@ describe('EventSessions', () => {
 
 	it('Creating an event session starting before the event', async () => {
 		try {
-			const tmpsession = {
-				session: { name: 'Test Session 6', starttime: '2019-06-30 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
-			};
+			const tmpsession = { name: 'Test Session 6', starttime: '2019-06-30 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' };
 
 			await supertest(server)
 				.post('/api/eventsession')
@@ -687,9 +680,7 @@ describe('EventSessions', () => {
 
 	it('Creating an event session starting after the event', async () => {
 		try {
-			const tmpsession = {
-				session: { name: 'Test Session 6', starttime: '2019-07-05 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
-			};
+			const tmpsession = { name: 'Test Session 6', starttime: '2019-07-05 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' };
 
 			await supertest(server)
 				.post('/api/eventsession')
@@ -702,9 +693,7 @@ describe('EventSessions', () => {
 	});
 
 	it('Creating an event session with an invalid duration', async () => {
-		const tmpsession = {
-			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC' }
-		};
+		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC' };
 
 		try {
 			await supertest(server)
@@ -718,9 +707,7 @@ describe('EventSessions', () => {
 	});
 
 	it('Creating an event session with an invalid sessiontype', async () => {
-		const tmpsession = {
-			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC', sessiontype: 5 }
-		};
+		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC', sessiontype: 5 };
 
 		try {
 			await supertest(server)
@@ -744,13 +731,11 @@ describe('EventSessions', () => {
 			});
 
 			const tmp = {
-				session: {
-					id: sessions[0].id,
-					name: 'UPDATED_NAME',
-					starttime: '2019-07-02 12:00',
-					timezone: 'UTC',
-					duration: 30
-				}
+				id: sessions[0].id,
+				name: 'UPDATED_NAME',
+				starttime: '2019-07-02 12:00',
+				timezone: 'UTC',
+				duration: 30
 			};
 
 			await supertest(server)
@@ -780,13 +765,11 @@ describe('EventSessions', () => {
 			});
 
 			const tmp = {
-				session: {
-					id: sessions[0].id,
-					name: 'UPDATED_NAME',
-					starttime: '2019-07-02 12:00',
-					timezone: 'UTC',
-					duration: 30
-				}
+				id: sessions[0].id,
+				name: 'UPDATED_NAME',
+				starttime: '2019-07-02 12:00',
+				timezone: 'UTC',
+				duration: 30
 			};
 
 			await supertest(server)
@@ -809,13 +792,11 @@ describe('EventSessions', () => {
 			});
 
 			const tmp = {
-				session: {
-					id: sessions[0].id,
-					name: 'UPDATED_NAME',
-					starttime: '2019-06-29 12:00',
-					timezone: 'UTC',
-					duration: 30
-				}
+				id: sessions[0].id,
+				name: 'UPDATED_NAME',
+				starttime: '2019-06-29 12:00',
+				timezone: 'UTC',
+				duration: 30
 			};
 
 			await supertest(server)
@@ -839,13 +820,11 @@ describe('EventSessions', () => {
 			});
 
 			const tmp = {
-				session: {
-					id: sessions[0].id,
-					name: 'UPDATED_NAME',
-					starttime: '2019-07-29 12:00',
-					timezone: 'UTC',
-					duration: 30
-				}
+				id: sessions[0].id,
+				name: 'UPDATED_NAME',
+				starttime: '2019-07-29 12:00',
+				timezone: 'UTC',
+				duration: 30
 			};
 
 			await supertest(server)
@@ -869,13 +848,11 @@ describe('EventSessions', () => {
 			});
 
 			const tmp = {
-				session: {
-					id: sessions[0].id,
-					name: 'UPDATED_NAME',
-					starttime: '2019-07-XX 12:00',
-					timezone: 'UTC',
-					duration: 30
-				}
+				id: sessions[0].id,
+				name: 'UPDATED_NAME',
+				starttime: '2019-07-XX 12:00',
+				timezone: 'UTC',
+				duration: 30
 			};
 
 			await supertest(server)
@@ -899,13 +876,11 @@ describe('EventSessions', () => {
 			});
 
 			const tmp = {
-				session: {
-					id: sessions[0].id,
-					name: 'UPDATED_NAME',
-					starttime: '2019-07-02 12:00',
-					timezone: 'UTC',
-					duration: -2
-				}
+				id: sessions[0].id,
+				name: 'UPDATED_NAME',
+				starttime: '2019-07-02 12:00',
+				timezone: 'UTC',
+				duration: -2
 			};
 
 			await supertest(server)
@@ -929,14 +904,12 @@ describe('EventSessions', () => {
 			});
 
 			const tmp = {
-				session: {
-					id: sessions[0].id,
-					name: 'UPDATED_NAME',
-					starttime: '2019-07-02 12:00',
-					timezone: 'UTC',
-					duration: 20,
-					sessiontype: -2
-				}
+				id: sessions[0].id,
+				name: 'UPDATED_NAME',
+				starttime: '2019-07-02 12:00',
+				timezone: 'UTC',
+				duration: 20,
+				sessiontype: -2
 			};
 
 			await supertest(server)

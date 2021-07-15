@@ -6,32 +6,32 @@ const util = require('../util/util');
 const datetimeformat = 'YYYY-MM-DD HH:mm';
 
 module.exports.createEventSession = async (req, res) => {
-	const starttime = dayjs(req.body.session.starttime);
+	const starttime = dayjs(req.body.starttime);
 
-	if (starttime.format(datetimeformat) !== req.body.session.starttime) {
+	if (starttime.format(datetimeformat) !== req.body.starttime) {
 		res.status(422).send('Invalid starttime');
 		return;
 	}
 
-	const duration = req.body.session.duration;
+	const duration = req.body.duration;
 	if (duration <= 0) {
 		res.status(422).send('Invalid duration');
 		return;
 	}
 
-	const sessiontype = req.body.session.sessiontype || 0;
+	const sessiontype = req.body.sessiontype || 0;
 	if (sessiontype < 1 || sessiontype > 4) {
 		res.status(422).send('Invalid sessiontype');
 		return;
 	}
 
 	// need to convert the local starttime into UTC
-	req.body.session.starttime = convertLocalTimeToUTC(req.body.session).format();
+	req.body.starttime = convertLocalTimeToUTC(req.body).format();
 
 	try {
 		// check for a start/end outside the event's dates
 		const event = await Event.findOne({
-			where: { id: req.body.session.event }
+			where: { id: req.body.event }
 		});
 		const ev_startdate = event.startdate;
 		const ev_enddate = event.enddate;
@@ -47,7 +47,7 @@ module.exports.createEventSession = async (req, res) => {
 		}
 
 		// create
-		const newsession = await EventSession.create(req.body.session);
+		const newsession = await EventSession.create(req.body);
 		// query the newly created session to include series-info
 		const eventsession = await EventSession.findOne({
 			where: { id: newsession.id },
@@ -63,36 +63,36 @@ module.exports.createEventSession = async (req, res) => {
 };
 
 module.exports.updateEventSession = async (req, res) => {
-	if (!req.body.session || !req.body.session.timezone) {
+	if (!req.body || !req.body.timezone) {
 		res.status(422).send('Bad request');
 		return;
 	}
 
 	let starttime;
-	if (req.body.session.starttime) {
-		starttime = dayjs(req.body.session.starttime);
-		if (starttime && starttime.format(datetimeformat) !== req.body.session.starttime) {
+	if (req.body.starttime) {
+		starttime = dayjs(req.body.starttime);
+		if (starttime && starttime.format(datetimeformat) !== req.body.starttime) {
 			res.status(422).send('Invalid starttime');
 			return;
 		}
 	}
 
-	if (req.body.session.duration) {
-		const duration = req.body.session.duration;
+	if (req.body.duration) {
+		const duration = req.body.duration;
 		if (duration <= 0) {
 			res.status(422).send('Invalid duration');
 			return;
 		}
 	}
 
-	const sessiontype = req.body.session.sessiontype;
+	const sessiontype = req.body.sessiontype;
 	if (sessiontype < 1 || sessiontype > 4) {
 		res.status(422).send('Invalid sessiontype');
 		return;
 	}
 
 	// need to convert the local starttime into UTC
-	req.body.session.starttime = convertLocalTimeToUTC(req.body.session).format();
+	req.body.starttime = convertLocalTimeToUTC(req.body).format();
 
 	try {
 		// check for a start/end outside the event's dates
@@ -119,7 +119,7 @@ module.exports.updateEventSession = async (req, res) => {
 		}
 
 		// update
-		const response = await EventSession.update(req.body.session,
+		const response = await EventSession.update(req.body,
 			{ where: { id: req.params.id } }
 		);
 		if (response[0] === 0)
