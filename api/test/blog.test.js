@@ -56,7 +56,6 @@ describe('Blog', () => {
 			{ title: 'Title 5', content: '<div>test content</div>', image: '', author: userID }
 		];
 		each(blogposts, async blogpost => {
-			// Need this, because the controller is parsing req.body.track
 			try {
 				await supertest(server)
 					.post('/api/blogs')

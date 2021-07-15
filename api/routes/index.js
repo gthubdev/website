@@ -13,7 +13,7 @@ const TrackCtrl = require('../controllers/track');
 const BlogPostCtrl = require('../controllers/blogpost');
 const iCalCtrl = require('../controllers/ical');
 const auth = require('../middleware/auth');
-const VehClassCtrl = require('../controllers/vehicleclasses');
+const VehClassCtrl = require('../controllers/vehicleclass');
 const VehCatCtrl = require('../controllers/vehicleclasscategory');
 
 // routes ==================================================
@@ -70,18 +70,18 @@ router.put('/blogs/:id', auth.staff_auth, BlogPostCtrl.update);
 router.delete('/blogs/:id', auth.staff_auth, BlogPostCtrl.delete);
 
 // Vehicle classes
-router.get('/vehicleclasses', auth.staff_auth, VehClassCtrl.findAll);
-router.get('/vehicleclasses/:id', auth.staff_auth, VehClassCtrl.findOne);
-router.post('/vehicleclasses', auth.staff_auth, VehClassCtrl.create);
-router.put('/vehicleclasses/:id', auth.staff_auth, VehClassCtrl.update);
-router.delete('/vehicleclasses/:id', auth.staff_auth, VehClassCtrl.delete);
+router.get('/vehicleclass', auth.staff_auth, VehClassCtrl.findAll);
+router.get('/vehicleclass/:id', auth.staff_auth, VehClassCtrl.findOne);
+router.post('/vehicleclass', auth.staff_auth, VehClassCtrl.create);
+router.put('/vehicleclass/:id', auth.staff_auth, VehClassCtrl.update);
+router.delete('/vehicleclass/:id', auth.staff_auth, VehClassCtrl.delete);
 
 // Vehicle Categories
-router.get('/vehiclecategories', auth.staff_auth, VehCatCtrl.findAll);
-router.get('/vehiclecategories/:id', auth.staff_auth, VehCatCtrl.findOne);
-router.post('/vehiclecategories', auth.staff_auth, VehCatCtrl.create);
-router.put('/vehiclecategories/:id', auth.staff_auth, VehCatCtrl.update);
-router.delete('/vehiclecategories/:id', auth.staff_auth, VehCatCtrl.delete);
+router.get('/vehiclecategory', auth.staff_auth, VehCatCtrl.findAll);
+router.get('/vehiclecategory/:id', auth.staff_auth, VehCatCtrl.findOne);
+router.post('/vehiclecategory', auth.staff_auth, VehCatCtrl.create);
+router.put('/vehiclecategory/:id', auth.staff_auth, VehCatCtrl.update);
+router.delete('/vehiclecategory/:id', auth.staff_auth, VehCatCtrl.delete);
 
 // iCal
 router.get('/calendar/ical/event/:id', iCalCtrl.createIcal);
