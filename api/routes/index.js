@@ -52,7 +52,7 @@ router.delete('/eventsession/:id', auth.staff_auth, EventSessionCtrl.deleteEvent
 
 // Series
 router.get('/series', auth.staff_auth, SeriesCtrl.find);
-router.get('/series/:id', SeriesCtrl.findOne);
+router.get('/series/:id', auth.staff_auth, SeriesCtrl.findOne);
 router.post('/series', auth.staff_auth, SeriesCtrl.createSeries);
 router.put('/series/:id', auth.staff_auth, SeriesCtrl.updateSeries);
 router.delete('/series/:id', auth.staff_auth, SeriesCtrl.deleteSeries);
