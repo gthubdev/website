@@ -1,7 +1,7 @@
 const util = require('../util/util.js');
 const { VehicleClassCategory } = require('../models');
 
-module.exports.find = async (req, res) => {
+module.exports.findAll = async (req, res) => {
 	const vehiclecats = await VehicleClassCategory.findAll({
 		order: [
 			['id', 'ASC']
@@ -46,7 +46,7 @@ module.exports.update = async (req, res) => {
 	}
 };
 
-module.exports.destroy = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	try {
 		const response = await VehicleClassCategory.destroy({
 			where: { id: req.params.id }

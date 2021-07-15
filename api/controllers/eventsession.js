@@ -5,7 +5,7 @@ const { Event, EventSession, Series } = require('../models');
 const util = require('../util/util');
 const datetimeformat = 'YYYY-MM-DD HH:mm';
 
-module.exports.createEventSession = async (req, res) => {
+module.exports.create = async (req, res) => {
 	const starttime = dayjs(req.body.starttime);
 
 	if (starttime.format(datetimeformat) !== req.body.starttime) {
@@ -62,7 +62,7 @@ module.exports.createEventSession = async (req, res) => {
 	}
 };
 
-module.exports.updateEventSession = async (req, res) => {
+module.exports.update = async (req, res) => {
 	if (!req.body || !req.body.timezone) {
 		res.status(422).send('Bad request');
 		return;
@@ -139,7 +139,7 @@ module.exports.updateEventSession = async (req, res) => {
 	}
 };
 
-module.exports.deleteEventSession = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	try {
 		const response = await EventSession.destroy({
 			where: { id: req.params.id }

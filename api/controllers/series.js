@@ -1,54 +1,62 @@
 const { Series, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
 const util = require('../util/util.js');
 
-module.exports.find = async (req, res) => {
-	const series = await Series.findAll({
-		include: [
-			{
-				model: SeriesType,
-				include: [
-					{
-						model: VehicleClass,
-						include: [
-							{ model: VehicleClassCategory }
-						]
-					}
-				]
-			}
-		],
-		order: [
-			['id', 'ASC']
-		]
-	});
+module.exports.findAll = async (req, res) => {
+	try {
+		const series = await Series.findAll({
+			include: [
+				{
+					model: SeriesType,
+					include: [
+						{
+							model: VehicleClass,
+							include: [
+								{ model: VehicleClassCategory }
+							]
+						}
+					]
+				}
+			],
+			order: [
+				['id', 'ASC']
+			]
+		});
 
-	return res.json(series);
+		res.json(series);
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
 module.exports.findOne = async (req, res) => {
-	const series = await Series.findOne({
-		where: { id: req.params.id },
-		include: [
-			{
-				model: SeriesType,
-				include: [
-					{
-						model: VehicleClass,
-						include: [
-							{ model: VehicleClassCategory }
-						]
-					}
-				]
-			}
-		]
-	});
+	try {
+		const series = await Series.findOne({
+			where: { id: req.params.id },
+			include: [
+				{
+					model: SeriesType,
+					include: [
+						{
+							model: VehicleClass,
+							include: [
+								{ model: VehicleClassCategory }
+							]
+						}
+					]
+				}
+			]
+		});
 
-	if (!series)
-		return res.status(404).send('No series found');
+		if (!series)
+			return res.status(404).send('No series found');
 
-	return res.json(series);
+		res.json(series);
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
-module.exports.createSeries = async (req, res) => {
+module.exports.create = async (req, res) => {
 	const prio = req.body.priority;
 	if (prio < 1 || prio > 4) {
 		res.status(422).send('Invalid priority');
@@ -88,7 +96,7 @@ module.exports.createSeries = async (req, res) => {
 	}
 };
 
-module.exports.updateSeries = async (req, res) => {
+module.exports.update = async (req, res) => {
 	if (req.body.priority) {
 		const prio = req.body.priority;
 		if (prio < 1 || prio > 4) {
@@ -144,7 +152,7 @@ module.exports.updateSeries = async (req, res) => {
 	}
 };
 
-module.exports.deleteSeries = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	// A series cannot be deleted, if it is the main series of an event,
 	// used as a support series in an event or used in an event session
 	try {

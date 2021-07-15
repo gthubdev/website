@@ -1,7 +1,7 @@
 const { BlogCategory, BlogCatRel, BlogPost, User } = require('../models');
 const util = require('../util/util');
 
-module.exports.createBlogPost = async (req, res) => {
+module.exports.create = async (req, res) => {
 	try {
 		const newblogpost = await BlogPost.create(req.body);
 
@@ -43,7 +43,7 @@ module.exports.createBlogPost = async (req, res) => {
 	}
 };
 
-module.exports.updateBlogPost = async (req, res) => {
+module.exports.update = async (req, res) => {
 	try {
 		const response = await BlogPost.update(req.body,
 			{ where: { id: req.params.id } }
@@ -66,7 +66,7 @@ module.exports.updateBlogPost = async (req, res) => {
 	}
 };
 
-module.exports.deleteBlogPost = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	try {
 		const response = await BlogPost.destroy({
 			where: { id: req.params.id }
@@ -79,7 +79,7 @@ module.exports.deleteBlogPost = async (req, res) => {
 	}
 };
 
-module.exports.getBlog = async (req, res) => {
+module.exports.findAll = async (req, res) => {
 	try {
 		const blogposts = await BlogPost.findAll({
 			include: [

@@ -3,7 +3,7 @@ const { Event, SupportSeries, Track, Series, EventSession } = require('../models
 const util = require('../util/util.js');
 const dateformat = 'YYYY-MM-DD';
 
-module.exports.find = async (req, res) => {
+module.exports.findAll = async (req, res) => {
 	const events = await Event.findAll({
 		include: [
 			{ model: Track },
@@ -29,7 +29,7 @@ module.exports.find = async (req, res) => {
 	return res.json(events);
 };
 
-module.exports.createEvent = async (req, res) => {
+module.exports.create = async (req, res) => {
 	const startdate = dayjs(req.body.startdate);
 	const enddate = dayjs(req.body.enddate);
 
@@ -98,7 +98,7 @@ module.exports.createEvent = async (req, res) => {
 	}
 };
 
-module.exports.updateEvent = async (req, res) => {
+module.exports.update = async (req, res) => {
 	if (req.body.startdate && req.body.enddate) {
 		const startdate = dayjs(req.body.startdate);
 		const enddate = dayjs(req.body.enddate);
@@ -184,7 +184,7 @@ module.exports.updateEvent = async (req, res) => {
 	}
 };
 
-module.exports.deleteEvent = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	try {
 		const response = await Event.destroy({
 			where: { id: req.params.id }

@@ -3,7 +3,7 @@ const { Track } = require('../models');
 const util = require('../util/util');
 const dateutil = require('../util/dateutil');
 
-module.exports.find = async (req, res) => {
+module.exports.findAll = async (req, res) => {
 	const tracks = await Track.findAll({
 		order: [
 			['id', 'ASC']
@@ -22,7 +22,7 @@ module.exports.findOne = async (req, res) => {
 	return res.json(track);
 };
 
-module.exports.createTrack = async (req, res) => {
+module.exports.create = async (req, res) => {
 	if (countryList.getCode(req.body.country) === undefined) {
 		res.status(422).send('Invalid country');
 		return;
@@ -42,7 +42,7 @@ module.exports.createTrack = async (req, res) => {
 	}
 };
 
-module.exports.updateTrack = async (req, res) => {
+module.exports.update = async (req, res) => {
 	if (req.body.country && countryList.getCode(req.body.country) === undefined) {
 		res.status(422).send('Invalid country');
 		return;
@@ -71,7 +71,7 @@ module.exports.updateTrack = async (req, res) => {
 	}
 };
 
-module.exports.deleteTrack = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	// A track cannot be deleted, if it is used in an event
 	try {
 		const response = await Track.destroy({
