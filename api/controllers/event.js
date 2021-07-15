@@ -4,29 +4,33 @@ const util = require('../util/util.js');
 const dateformat = 'YYYY-MM-DD';
 
 module.exports.findAll = async (req, res) => {
-	const events = await Event.findAll({
-		include: [
-			{ model: Track },
-			{ model: Series },
-			{
-				model: SupportSeries,
-				include: [
-					{ model: Series }
-				]
-			},
-			{
-				model: EventSession,
-				include: [
-					{ model: Series }
-				]
-			}
-		],
-		order: [
-			['id', 'ASC']
-		]
-	});
+	try {
+		const events = await Event.findAll({
+			include: [
+				{ model: Track },
+				{ model: Series },
+				{
+					model: SupportSeries,
+					include: [
+						{ model: Series }
+					]
+				},
+				{
+					model: EventSession,
+					include: [
+						{ model: Series }
+					]
+				}
+			],
+			order: [
+				['id', 'ASC']
+			]
+		});
 
-	return res.json(events);
+		res.json(events);
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
 module.exports.create = async (req, res) => {
