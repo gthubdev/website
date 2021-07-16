@@ -4,12 +4,18 @@ const { VehicleClass, VehicleClassCategory } = require('../models');
 module.exports.findAll = async (req, res) => {
 	try {
 		const vehicleclasses = await VehicleClass.findAll({
+			attributes: ['id', 'name', 'category'],
 			include: [
-				{ model: VehicleClassCategory }
+				{
+					model: VehicleClassCategory,
+					attributes: ['id', 'name']
+				}
 			],
 			order: [
 				['id', 'ASC']
-			]
+			],
+			raw: true,
+			nest: true
 		});
 
 		res.json(vehicleclasses);
@@ -21,39 +27,57 @@ module.exports.findAll = async (req, res) => {
 module.exports.findOne = async (req, res) => {
 	try {
 		const vehicleclass = await VehicleClass.findByPk(req.params.id, {
+			attributes: ['id', 'name', 'category'],
 			include: [
 				{
-					model: VehicleClassCategory
+					model: VehicleClassCategory,
+					attributes: ['id', 'name']
 				}
-			]
+			],
+			raw: true,
+			nest: true
 		});
 
 		if (!vehicleclass)
 			res.json({ });
 		else
-			res.json(vehicleclass.get({ plain: true }));
+			res.json(vehicleclass);
 	} catch (err) {
 		util.error(req, res, err);
 	}
 };
 
 module.exports.create = async (req, res) => {
-	if (!req.body.name) {
+	if (!req.body.name || !req.body.category) {
 		res.status(422).send('Cannot create from empty data');
 		return;
 	}
 
 	try {
-		const vehicleclass = await VehicleClass.create(req.body);
+		const tmp = await VehicleClass.create(req.body);
 
-		return res.json(vehicleclass.get({ plain: true }));
+		const vehicleclass = await VehicleClass.findByPk(tmp.id, {
+			attributes: ['id', 'name', 'category'],
+			include: [
+				{
+					model: VehicleClassCategory,
+					attributes: ['id', 'name']
+				}
+			],
+			raw: true,
+			nest: true
+		});
+		res.json(vehicleclass);
 	} catch (err) {
-		return util.error(req, res, err);
+		if (err.parent && err.parent.errno && err.parent.errno === 1452)
+			res.status(422).send('Invalid category.');
+		else
+			util.error(req, res, err);
 	}
 };
 
 module.exports.update = async (req, res) => {
-	if (!req.body.name) {
+	if (!req.body.name && !req.body.category) {
 		res.status(422).send('Cannot update from empty data');
 		return;
 	}
@@ -70,12 +94,17 @@ module.exports.update = async (req, res) => {
 				{
 					model: VehicleClassCategory
 				}
-			]
+			],
+			raw: true,
+			nest: true
 		});
 
-		res.json(vehicleclass.get({ plain: true }));
+		res.json(vehicleclass);
 	} catch (err) {
-		return util.error(req, res, err);
+		if (err.parent && err.parent.errno && err.parent.errno === 1452)
+			res.status(422).send('Invalid category.');
+		else
+			util.error(req, res, err);
 	}
 };
 
@@ -89,6 +118,6 @@ module.exports.delete = async (req, res) => {
 
 		res.json({ deleted: response });
 	} catch (err) {
-		return util.error(req, res, err);
+		util.error(req, res, err);
 	}
 };

@@ -4,9 +4,11 @@ const { VehicleClassCategory } = require('../models');
 module.exports.findAll = async (req, res) => {
 	try {
 		const vehiclecats = await VehicleClassCategory.findAll({
+			attributes: ['id', 'name'],
 			order: [
 				['id', 'ASC']
-			]
+			],
+			raw: true
 		});
 
 		res.json(vehiclecats);
@@ -17,12 +19,14 @@ module.exports.findAll = async (req, res) => {
 
 module.exports.findOne = async (req, res) => {
 	try {
-		const vehicleCat = await VehicleClassCategory.findByPk(req.params.id);
+		const vehicleCat = await VehicleClassCategory.findByPk(req.params.id, {
+			raw: true
+		});
 
 		if (!vehicleCat)
 			res.json({ });
 		else
-			res.json({ plain: true });
+			res.json(vehicleCat);
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -35,9 +39,11 @@ module.exports.create = async (req, res) => {
 	}
 
 	try {
-		const category = await VehicleClassCategory.create(req.body);
+		const category = await VehicleClassCategory.create(req.body, {
+			raw: true
+		});
 
-		res.json(category.get({ plain: true }));
+		res.json(category);
 	} catch (err) {
 		return util.error(req, res, err);
 	}
@@ -56,8 +62,10 @@ module.exports.update = async (req, res) => {
 		if (response[0] === 0)
 			return;
 
-		const category = await VehicleClassCategory.findByPk(req.params.id);
-		res.json(category.get({ plain: true }));
+		const category = await VehicleClassCategory.findByPk(req.params.id, {
+			raw: true
+		});
+		res.json(category);
 	} catch (err) {
 		util.error(req, res, err);
 	}

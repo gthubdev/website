@@ -376,11 +376,7 @@ describe('Tracks', () => {
 			tracks.forEach(s => ids.push(s.id));
 
 			await Track.destroy({
-				where: {
-					id: {
-						[Op.in]: ids
-					}
-				}
+				where: { id: ids }
 			});
 
 			const res = await supertest(server)
