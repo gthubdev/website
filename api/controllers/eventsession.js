@@ -53,10 +53,12 @@ module.exports.create = async (req, res) => {
 			where: { id: newsession.id },
 			include: [
 				{ model: Series }
-			]
+			],
+			raw: true,
+			nest: true
 		});
 		util.print('EventSession \'' + eventsession.name + '\' created');
-		res.json(eventsession.get({ plain: true }));
+		res.json(eventsession);
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -100,7 +102,9 @@ module.exports.update = async (req, res) => {
 			where: { id: req.params.id },
 			include: [
 				{ model: Event }
-			]
+			],
+			raw: true,
+			nest: true
 		});
 		const event = await Event.findOne({
 			where: { id: tmpsession.Event.id }
@@ -131,9 +135,11 @@ module.exports.update = async (req, res) => {
 			where: { id: req.params.id },
 			include: [
 				{ model: Series }
-			]
+			],
+			raw: true,
+			nest: true
 		});
-		res.json(session.get({ plain: true }));
+		res.json(session);
 	} catch (err) {
 		util.error(req, res, err);
 	}

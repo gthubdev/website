@@ -1,28 +1,19 @@
-const { Series, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
+const { Series, SeriesType } = require('../models/');
 const util = require('../util/util.js');
+const attribute_options = require('../util/attribute_options');
+const include_options = require('../util/include_options');
 
 module.exports.findAll = async (req, res) => {
 	try {
 		const series = await Series.findAll({
-			include: [
-				{
-					model: SeriesType,
-					include: [
-						{
-							model: VehicleClass,
-							include: [
-								{ model: VehicleClassCategory }
-							]
-						}
-					]
-				}
-			],
+			attributes: attribute_options.series,
+			include: include_options.series,
 			order: [
 				['id', 'ASC']
 			]
 		});
 
-		res.json(series);
+		res.json(series.map(s => s.get({ plain: true })));
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -30,21 +21,9 @@ module.exports.findAll = async (req, res) => {
 
 module.exports.findOne = async (req, res) => {
 	try {
-		const series = await Series.findOne({
-			where: { id: req.params.id },
-			include: [
-				{
-					model: SeriesType,
-					include: [
-						{
-							model: VehicleClass,
-							include: [
-								{ model: VehicleClassCategory }
-							]
-						}
-					]
-				}
-			]
+		const series = await Series.findByPk(req.params.id, {
+			attributes: attribute_options.series,
+			include: include_options.series
 		});
 
 		if (!series)
@@ -73,21 +52,9 @@ module.exports.create = async (req, res) => {
 			});
 		});
 		await SeriesType.bulkCreate(vclarray);
-		const series = await Series.findOne({
-			where: { id: newseries.id },
-			include: [
-				{
-					model: SeriesType,
-					include: [
-						{
-							model: VehicleClass,
-							include: [
-								{ model: VehicleClassCategory }
-							]
-						}
-					]
-				}
-			]
+		const series = await Series.findByPk(newseries.id, {
+			attributes: attribute_options.series,
+			include: include_options.series
 		});
 		util.print('Series \'' + series.name + '\' created');
 		res.json(series.get({ plain: true }));
@@ -130,19 +97,8 @@ module.exports.update = async (req, res) => {
 		});
 		await SeriesType.bulkCreate(vclarray);
 		const series = await Series.findByPk(req.params.id, {
-			include: [
-				{
-					model: SeriesType,
-					include: [
-						{
-							model: VehicleClass,
-							include: [
-								{ model: VehicleClassCategory }
-							]
-						}
-					]
-				}
-			]
+			attributes: attribute_options.series,
+			include: include_options.series
 		});
 
 		util.print('Series \'' + series.name + '\' updated');

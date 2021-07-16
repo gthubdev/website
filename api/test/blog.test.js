@@ -1,8 +1,6 @@
 const supertest = require('supertest');
 const each = require('async/each');
 const should = require('chai').should();
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 const server = require('../index');
 const { BlogCategory, BlogCatRel, BlogPost, User } = require('../models/');
 
@@ -38,10 +36,9 @@ describe('Blog', () => {
 	});
 
 	after(async () => {
-		const res1 = await User.destroy({
-			where: { id: userID }
+		await User.destroy({
+			where: { }
 		});
-		res1.should.equal(1);
 		await BlogCategory.destroy({
 			where: {}
 		});
@@ -73,30 +70,11 @@ describe('Blog', () => {
 
 	afterEach(async () => {
 		try {
-			const blogposts = await BlogPost.findAll({
-				order: [
-					['createdAt', 'DESC'],
-					['id', 'DESC']
-				]
-			});
-
-			const ids = [];
-			blogposts.forEach(t => ids.push(t.id));
-
 			await BlogCatRel.destroy({
-				where: {
-					post: {
-						[Op.in]: ids
-					}
-				}
+				where: { }
 			});
-
 			await BlogPost.destroy({
-				where: {
-					id: {
-						[Op.in]: ids
-					}
-				}
+				where: { }
 			});
 		} catch (err) {
 			should.not.exist(err);
@@ -139,7 +117,7 @@ describe('Blog', () => {
 				.send(tmppost)
 				.expect(200);
 
-			res.body.BlogCatRels[0].BlogCategory.id.should.equal(cat1ID);
+			res.body.categories[0].cat.id.should.equal(cat1ID);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -154,11 +132,7 @@ describe('Blog', () => {
 			ids.push(cat2ID);
 
 			tmppost.categories = await BlogCategory.findAll({
-				where: {
-					id: {
-						[Op.in]: ids
-					}
-				}
+				where: { id: ids }
 			});
 
 			const res = await supertest(server)
@@ -167,8 +141,8 @@ describe('Blog', () => {
 				.send(tmppost)
 				.expect(200);
 
-			res.body.BlogCatRels[0].BlogCategory.id.should.equal(cat1ID);
-			res.body.BlogCatRels[1].BlogCategory.id.should.equal(cat2ID);
+			res.body.categories[0].cat.id.should.equal(cat1ID);
+			res.body.categories[1].cat.id.should.equal(cat2ID);
 		} catch (err) {
 			should.not.exist(err);
 		}

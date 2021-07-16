@@ -21,15 +21,18 @@ module.exports.create = async (req, res) => {
 			include: [
 				{
 					model: User,
+					as: 'user',
 					attributes: ['name', 'image']
 				},
 				{
 					model: BlogCatRel,
+					as: 'categories',
 					attributes: ['id'],
 					include: [
 						{
 							model: BlogCategory,
-							attributes: ['id', 'name']
+							attributes: ['id', 'name'],
+							as: 'cat'
 						}
 					]
 				}
@@ -56,7 +59,23 @@ module.exports.update = async (req, res) => {
 		const blogpost = await BlogPost.findOne({
 			where: { id: req.params.id },
 			include: [
-				{ model: User }
+				{
+					model: User,
+					as: 'user',
+					attributes: ['name', 'image']
+				},
+				{
+					model: BlogCatRel,
+					attributes: ['id'],
+					as: 'categories',
+					include: [
+						{
+							model: BlogCategory,
+							attributes: ['id', 'name'],
+							as: 'cat'
+						}
+					]
+				}
 			]
 		});
 		res.json(blogpost.get({ plain: true }));
@@ -85,7 +104,20 @@ module.exports.findAll = async (req, res) => {
 			include: [
 				{
 					model: User,
+					as: 'user',
 					attributes: ['name']
+				},
+				{
+					model: BlogCatRel,
+					attributes: ['id'],
+					as: 'categories',
+					include: [
+						{
+							model: BlogCategory,
+							attributes: ['id', 'name'],
+							as: 'cat'
+						}
+					]
 				}
 			],
 			order: [
@@ -93,11 +125,7 @@ module.exports.findAll = async (req, res) => {
 			]
 		});
 
-		const data = {
-			blogposts
-		};
-
-		res.json(data);
+		res.json(blogposts.map(p => p.get({ plain: true })));
 	} catch (err) {
 		util.error(req, res, err);
 	}

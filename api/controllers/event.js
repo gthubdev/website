@@ -1,33 +1,21 @@
 const dayjs = require('dayjs');
-const { Event, SupportSeries, Track, Series, EventSession } = require('../models');
+const { Event, EventSession, SupportSeries } = require('../models');
 const util = require('../util/util.js');
 const dateformat = 'YYYY-MM-DD';
+const attribute_options = require('../util/attribute_options');
+const include_options = require('../util/include_options');
 
 module.exports.findAll = async (req, res) => {
 	try {
 		const events = await Event.findAll({
-			include: [
-				{ model: Track },
-				{ model: Series },
-				{
-					model: SupportSeries,
-					include: [
-						{ model: Series }
-					]
-				},
-				{
-					model: EventSession,
-					include: [
-						{ model: Series }
-					]
-				}
-			],
+			attributes: attribute_options.event,
+			include: include_options.event,
 			order: [
 				['id', 'ASC']
 			]
 		});
 
-		res.json(events);
+		res.json(events.map(e => e.get({ plain: true })));
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -71,24 +59,9 @@ module.exports.create = async (req, res) => {
 		});
 		await SupportSeries.bulkCreate(supportarray);
 
-		const event = await Event.findOne({
-			where: { id: newevent.id },
-			include: [
-				{ model: Track },
-				{ model: Series },
-				{
-					model: SupportSeries,
-					include: [
-						{ model: Series }
-					]
-				},
-				{
-					model: EventSession,
-					include: [
-						{ model: Series }
-					]
-				}
-			],
+		const event = await Event.findByPk(newevent.id, {
+			attributes: attribute_options.event,
+			include: include_options.event,
 			order: [
 				['priority', 'ASC'],
 				['startdate', 'ASC'],
@@ -160,22 +133,8 @@ module.exports.update = async (req, res) => {
 
 		const event = await Event.findOne({
 			where: { id: req.params.id },
-			include: [
-				{ model: Track },
-				{ model: Series },
-				{
-					model: SupportSeries,
-					include: [
-						{ model: Series }
-					]
-				},
-				{
-					model: EventSession,
-					include: [
-						{ model: Series }
-					]
-				}
-			],
+			attributes: attribute_options.event,
+			include: include_options.event,
 			order: [
 				['priority', 'ASC'],
 				['startdate', 'ASC'],

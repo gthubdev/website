@@ -2,13 +2,16 @@ const countryList = require('country-list');
 const { Track } = require('../models');
 const util = require('../util/util');
 const dateutil = require('../util/dateutil');
+const attribute_options = require('../util/attribute_options');
 
 module.exports.findAll = async (req, res) => {
 	try {
 		const tracks = await Track.findAll({
+			attributes: attribute_options.track,
 			order: [
 				['id', 'ASC']
-			]
+			],
+			raw: true
 		});
 
 		res.json(tracks);
@@ -19,14 +22,15 @@ module.exports.findAll = async (req, res) => {
 
 module.exports.findOne = async (req, res) => {
 	try {
-		const track = await Track.findOne({
-			where: { id: req.params.id }
+		const track = await Track.findByPk(req.params.id, {
+			attributes: attribute_options.track,
+			raw: true
 		});
 
 		if (!track)
 			res.json({ });
 		else
-			res.json(track.get({ plain: true }));
+			res.json(track);
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -44,9 +48,12 @@ module.exports.create = async (req, res) => {
 	}
 
 	try {
-		const track = await Track.create(req.body);
+		const track = await Track.create(req.body, {
+			attributes: attribute_options.track,
+			raw: true
+		});
 		util.print('Track \'' + track.name + '\' created');
-		res.json(track.get({ plain: true }));
+		res.json(track);
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -72,10 +79,11 @@ module.exports.update = async (req, res) => {
 
 		util.print('Tracks updated: ' + response[0]);
 
-		const track = await Track.findOne({
-			where: { id: req.params.id }
+		const track = await Track.findByPk(req.params.id, {
+			attributes: attribute_options.track,
+			raw: true
 		});
-		res.json(track.get({ plain: true }));
+		res.json(track);
 	} catch (err) {
 		util.error(req, res, err);
 	}

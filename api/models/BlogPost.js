@@ -28,13 +28,16 @@ module.exports = (sequelize, DataTypes) => {
 	BlogPost.associate = models => {
 		models.BlogPost.belongsTo(models.User, {
 			foreignKey: 'author',
-			onDelete: 'RESTRICT'
+			onDelete: 'RESTRICT',
+			as: 'user'
 		});
 		models.BlogPost.hasMany(models.BlogCatRel, {
-			foreignKey: 'post'
+			foreignKey: 'post',
+			as: 'categories'
 		});
 		models.BlogPost.hasMany(models.BlogTagRel, {
-			foreignKey: 'post'
+			foreignKey: 'post',
+			as: 'tags'
 		});
 	};
 
