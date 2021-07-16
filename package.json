@@ -15,9 +15,10 @@
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "lint": "yarn run lint:js && yarn run lint:style",
     "create_database": "yarn run create_tables && yarn run init_data && yarn run insert_testdata",
-    "create_testdatabase": "cross-env NODE_ENV=test yarn run create_tables && cross-env NODE_ENV=test yarn run init_data && cross-env NODE_ENV=test yarn run insert_testdata",
+    "create_testdatabase": "cross-env NODE_ENV=test yarn run create_tables && cross-env NODE_ENV=test yarn run init_test",
     "create_tables": "node ./database/create_tables.js",
     "init_data": "node ./database/init.js",
+    "init_test": "node ./database/init_test.js",
     "insert_testdata": "node ./database/insert_testdata.js",
     "tailwind-config-viewer": "tailwind-config-viewer -o -p 3006"
   },
