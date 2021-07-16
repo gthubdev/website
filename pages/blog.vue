@@ -13,7 +13,7 @@
 			</template>
 			<template #content>
 				<div>
-					Author: {{ post.User.name }} ({{ formatDate(post.createdAt) }})
+					Author: {{ post.user.name }} ({{ formatDate(post.createdAt) }})
 				</div>
 				<div v-html="post.content" />
 			</template>

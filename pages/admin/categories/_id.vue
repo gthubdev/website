@@ -33,7 +33,7 @@ export default {
 	async asyncData({ $axios, params }) {
 		if (typeof parseInt(params.id) === 'number')
 			try {
-				const res = await $axios.$get('/api/vehiclecategories/' + params.id);
+				const res = await $axios.$get('/api/vehiclecategory/' + params.id);
 				return {
 					type: 'edit',
 					data: res
@@ -87,9 +87,9 @@ export default {
 			}
 			try {
 				if (this.data.id)
-					await this.$axios.put(`/api/vehiclecategories/${this.data.id}`, this.data);
+					await this.$axios.put(`/api/vehiclecategory/${this.data.id}`, this.data);
 				else
-					await this.$axios.post('/api/vehiclecategories', this.data);
+					await this.$axios.post('/api/vehiclecategory', this.data);
 
 				this.$router.push('/admin/categories');
 			} catch (err) {

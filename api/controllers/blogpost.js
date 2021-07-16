@@ -1,13 +1,13 @@
 const { BlogCategory, BlogCatRel, BlogPost, User } = require('../models');
 const util = require('../util/util');
 
-module.exports.createBlogPost = async (req, res) => {
+module.exports.create = async (req, res) => {
 	try {
-		const newblogpost = await BlogPost.create(req.body.blogpost);
+		const newblogpost = await BlogPost.create(req.body);
 
 		const categories = [];
-		if (req.body.blogpost.categories) {
-			req.body.blogpost.categories.forEach(c => {
+		if (req.body.categories) {
+			req.body.categories.forEach(c => {
 				categories.push({
 					post: newblogpost.id,
 					category: c.id
@@ -21,15 +21,18 @@ module.exports.createBlogPost = async (req, res) => {
 			include: [
 				{
 					model: User,
+					as: 'user',
 					attributes: ['name', 'image']
 				},
 				{
 					model: BlogCatRel,
+					as: 'categories',
 					attributes: ['id'],
 					include: [
 						{
 							model: BlogCategory,
-							attributes: ['id', 'name']
+							attributes: ['id', 'name'],
+							as: 'cat'
 						}
 					]
 				}
@@ -43,9 +46,9 @@ module.exports.createBlogPost = async (req, res) => {
 	}
 };
 
-module.exports.updateBlogPost = async (req, res) => {
+module.exports.update = async (req, res) => {
 	try {
-		const response = await BlogPost.update(req.body.blogpost,
+		const response = await BlogPost.update(req.body,
 			{ where: { id: req.params.id } }
 		);
 		if (response[0] === 0)
@@ -56,7 +59,23 @@ module.exports.updateBlogPost = async (req, res) => {
 		const blogpost = await BlogPost.findOne({
 			where: { id: req.params.id },
 			include: [
-				{ model: User }
+				{
+					model: User,
+					as: 'user',
+					attributes: ['name', 'image']
+				},
+				{
+					model: BlogCatRel,
+					attributes: ['id'],
+					as: 'categories',
+					include: [
+						{
+							model: BlogCategory,
+							attributes: ['id', 'name'],
+							as: 'cat'
+						}
+					]
+				}
 			]
 		});
 		res.json(blogpost.get({ plain: true }));
@@ -66,7 +85,7 @@ module.exports.updateBlogPost = async (req, res) => {
 	}
 };
 
-module.exports.deleteBlogPost = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	try {
 		const response = await BlogPost.destroy({
 			where: { id: req.params.id }
@@ -79,13 +98,26 @@ module.exports.deleteBlogPost = async (req, res) => {
 	}
 };
 
-module.exports.getBlog = async (req, res) => {
+module.exports.findAll = async (req, res) => {
 	try {
 		const blogposts = await BlogPost.findAll({
 			include: [
 				{
 					model: User,
+					as: 'user',
 					attributes: ['name']
+				},
+				{
+					model: BlogCatRel,
+					attributes: ['id'],
+					as: 'categories',
+					include: [
+						{
+							model: BlogCategory,
+							attributes: ['id', 'name'],
+							as: 'cat'
+						}
+					]
 				}
 			],
 			order: [
@@ -94,7 +126,7 @@ module.exports.getBlog = async (req, res) => {
 		});
 
 		const data = {
-			blogposts
+			blogposts: blogposts.map(p => p.get({ plain: true }))
 		};
 
 		res.json(data);

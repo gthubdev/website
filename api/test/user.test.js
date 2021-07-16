@@ -88,11 +88,9 @@ describe('User', () => {
 	it('Creating a user', async () => {
 		try {
 			const tmp = {
-				user: {
-					username: 'testuser',
-					password: 'someplace',
-					name: 'Test User'
-				}
+				username: 'testuser',
+				password: 'someplace',
+				name: 'Test User'
 			};
 
 			await supertest(server)
@@ -108,11 +106,9 @@ describe('User', () => {
 	it('Creating a user without authorisation', async () => {
 		try {
 			const tmp = {
-				user: {
-					username: 'testuser',
-					password: 'someplace',
-					name: 'Test User'
-				}
+				username: 'testuser',
+				password: 'someplace',
+				name: 'Test User'
 			};
 
 			await supertest(server)
@@ -127,10 +123,10 @@ describe('User', () => {
 	it('Creating a user without username', async () => {
 		try {
 			const tmp = {
-				user: {
-					password: 'someplace',
-					name: 'Test User'
-				}
+
+				password: 'someplace',
+				name: 'Test User'
+
 			};
 
 			await supertest(server)
@@ -146,10 +142,8 @@ describe('User', () => {
 	it('Creating a user without password', async () => {
 		try {
 			const tmp = {
-				user: {
-					username: 'someplace',
-					name: 'Test User'
-				}
+				username: 'someplace',
+				name: 'Test User'
 			};
 
 			await supertest(server)
@@ -165,10 +159,8 @@ describe('User', () => {
 	it('Creating a user without name', async () => {
 		try {
 			const tmp = {
-				user: {
-					password: 'someplace',
-					username: 'testuser'
-				}
+				password: 'someplace',
+				username: 'testuser'
 			};
 
 			await supertest(server)
@@ -195,14 +187,11 @@ describe('User', () => {
 			{ username: 'ABCDEF ', password: 'someplace', name: 'Test User' }
 		];
 		each(users, async u => {
-			const tmp = {
-				user: u
-			};
 			try {
 				await supertest(server)
 					.post('/api/users')
 					.set('Authorization', 'Bearer ' + admintoken)
-					.send(tmp)
+					.send(u)
 					.expect(422);
 			} catch (err) {
 				should.not.exist(err);
@@ -215,11 +204,9 @@ describe('User', () => {
 
 	it('Creating a user with a username already in use', async () => {
 		const tmp = {
-			user: {
-				username: 'testadmin',
-				password: 'somepass',
-				name: 'Test User'
-			}
+			username: 'testadmin',
+			password: 'somepass',
+			name: 'Test User'
 		};
 
 		try {
@@ -227,7 +214,7 @@ describe('User', () => {
 				.post('/api/users')
 				.set('Authorization', 'Bearer ' + admintoken)
 				.send(tmp)
-				.expect(409);
+				.expect(422);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -235,10 +222,8 @@ describe('User', () => {
 
 	it('Updating a user', async () => {
 		const tmp = {
-			user: {
-				name: 'newname',
-				email: 'new@example.com'
-			}
+			name: 'newname',
+			email: 'new@example.com'
 		};
 
 		try {
@@ -260,10 +245,8 @@ describe('User', () => {
 
 	it('Updating a user as admin', async () => {
 		const tmp = {
-			user: {
-				name: 'newname123',
-				email: 'new@example.com'
-			}
+			name: 'newname123',
+			email: 'new@example.com'
 		};
 
 		try {
@@ -285,10 +268,8 @@ describe('User', () => {
 
 	it('Updating a user without authorisation', async () => {
 		const tmp = {
-			user: {
-				name: 'newname',
-				email: 'new@example.com'
-			}
+			name: 'newname',
+			email: 'new@example.com'
 		};
 
 		try {
@@ -303,10 +284,8 @@ describe('User', () => {
 
 	it('Updating a user with wrong authentication', async () => {
 		const tmp = {
-			user: {
-				name: 'newname',
-				email: 'new@example.com'
-			}
+			name: 'newname',
+			email: 'new@example.com'
 		};
 
 		try {
@@ -322,9 +301,7 @@ describe('User', () => {
 
 	it('Updating a username', async () => {
 		const tmp = {
-			user: {
-				username: 'newusername'
-			}
+			username: 'newusername'
 		};
 
 		try {
@@ -340,9 +317,7 @@ describe('User', () => {
 
 	it('Updating a password', async () => {
 		const tmp = {
-			user: {
-				password: 'newpass'
-			}
+			password: 'newpass'
 		};
 
 		try {
@@ -358,9 +333,7 @@ describe('User', () => {
 
 	it('Updating a usertype', async () => {
 		const tmp = {
-			user: {
-				usertype: 1
-			}
+			usertype: 1
 		};
 
 		try {

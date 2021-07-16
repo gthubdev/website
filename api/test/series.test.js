@@ -79,14 +79,11 @@ describe('Series', () => {
 		each(series, async s => {
 			// Need this, because the controller is parsing req.body.series
 			s.vehicleClasses = [vclId];
-			const tmp = {
-				series: s
-			};
 			try {
 				await supertest(server)
 					.post('/api/series')
 					.set('Authorization', 'Bearer ' + token)
-					.send(tmp)
+					.send(s)
 					.expect(200);
 			} catch (err) {
 				should.not.exist(err);
@@ -154,11 +151,8 @@ describe('Series', () => {
 	});
 
 	it('Creating a series with an invalid priority', async () => {
-		const series = { name: 'Test Series 1', shortname: 'TS1', priority: -2 };
-		const tmp = {
-			series,
-			vehicleClasses: [vclId]
-		};
+		const tmp = { name: 'Test Series 1', shortname: 'TS1', priority: -2 };
+		tmp.vehicleClasses = [vclId];
 		try {
 			await supertest(server)
 				.post('/api/series')
@@ -181,12 +175,10 @@ describe('Series', () => {
 			});
 			const vehicleClasses = [vclId];
 			const tmp = {
-				series: {
-					id: series[0].id,
-					name: 'NEW_SERIES_NAME',
-					priority: 2,
-					vehicleClasses
-				}
+				id: series[0].id,
+				name: 'NEW_SERIES_NAME',
+				priority: 2,
+				vehicleClasses
 			};
 
 			await supertest(server)
@@ -220,12 +212,10 @@ describe('Series', () => {
 			});
 			const vehicleClasses = [vclId];
 			const tmp = {
-				series: {
-					id: series[0].id,
-					name: 'NEW_SERIES_NAME',
-					priority: 2,
-					vehicleClasses
-				}
+				id: series[0].id,
+				name: 'NEW_SERIES_NAME',
+				priority: 2,
+				vehicleClasses
 			};
 
 			await supertest(server)
@@ -248,12 +238,10 @@ describe('Series', () => {
 			});
 			const vehicleClasses = [vclId];
 			const tmp = {
-				series: {
-					id: series[0].id,
-					name: 'NEW_SERIES_NAME',
-					priority: 20,
-					vehicleClasses
-				}
+				id: series[0].id,
+				name: 'NEW_SERIES_NAME',
+				priority: 20,
+				vehicleClasses
 			};
 			await supertest(server)
 				.put('/api/series/' + series[0].id)
@@ -306,6 +294,99 @@ describe('Series', () => {
 			await supertest(server)
 				.delete('/api/series/' + newseries.id)
 				.expect(401);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find one series', async () => {
+		try {
+			const series = await Series.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const findOne = await supertest(server)
+				.get('/api/series/' + series[0].id)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			findOne.body.id.should.equal(series[0].id);
+			findOne.body.name.should.equal(series[0].name);
+			findOne.body.shortname.should.equal(series[0].shortname);
+			findOne.body.priority.should.equal(series[0].priority);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find one series with invalid id', async () => {
+		try {
+			const series = await Series.findAll({
+				limit: 1,
+				order: [
+					['id', 'DESC']
+				]
+			});
+
+			const findOne = await supertest(server)
+				.get('/api/series/' + (series[0].id + 1))
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			Object.keys(findOne.body).length.should.equal(0);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find all series', async () => {
+		try {
+			const series = await supertest(server)
+				.get('/api/series/')
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			series.body.length.should.equal(5);
+			series.body.forEach(s => {
+				s.name.should.have.string('Test Series');
+				s.shortname.should.have.string('TS');
+				s.priority.should.equal(1);
+			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find all series (empty)', async () => {
+		try {
+			const series = await Series.findAll({
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const ids = [];
+			series.forEach(s => ids.push(s.id));
+
+			await Series.destroy({
+				where: {
+					id: {
+						[Op.in]: ids
+					}
+				}
+			});
+
+			const res = await supertest(server)
+				.get('/api/series/')
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			res.body.length.should.equal(0);
 		} catch (err) {
 			should.not.exist(err);
 		}

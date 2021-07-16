@@ -7,7 +7,10 @@ module.exports.getResources = async (req, res) => {
 		const [blogposts, events, series, tracks, vehicleclasscategories, vehicleclasses, sessiontypes] = await Promise.all([
 			BlogPost.findAll({
 				include: [
-					{ model: User }
+					{
+						model: User,
+						as: 'user'
+					}
 				],
 				order: [
 					['createdAt', 'DESC']

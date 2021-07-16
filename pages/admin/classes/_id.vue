@@ -37,10 +37,10 @@ export default {
 	layout: 'admin',
 	middleware: 'auth',
 	async asyncData({ $axios, params }) {
-		const categories = await $axios.$get('/api/vehiclecategories');
+		const categories = await $axios.$get('/api/vehiclecategory');
 		if (typeof parseInt(params.id) === 'number')
 			try {
-				const res = await $axios.$get('/api/vehicleclasses/' + params.id);
+				const res = await $axios.$get('/api/vehicleclass/' + params.id);
 				return {
 					type: 'edit',
 					data: {
@@ -106,9 +106,9 @@ export default {
 			try {
 				this.data.category = this.data.category.id;
 				if (this.data.id)
-					await this.$axios.put(`/api/vehicleclasses/${this.data.id}`, this.data);
+					await this.$axios.put(`/api/vehicleclass/${this.data.id}`, this.data);
 				else
-					await this.$axios.post('/api/vehicleclasses', this.data);
+					await this.$axios.post('/api/vehicleclass', this.data);
 
 				this.$router.push('/admin/classes');
 			} catch (err) {

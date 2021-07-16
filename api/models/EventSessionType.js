@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 	EventSessionType.associate = models => {
 		models.EventSessionType.hasMany(models.EventSession, {
 			foreignKey: 'sessiontype',
+			as: 'type',
 			allowNull: false
 		});
 	};

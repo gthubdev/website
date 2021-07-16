@@ -34,7 +34,7 @@ export default {
 	middleware: 'auth',
 	async asyncData({ $axios }) {
 		try {
-			const res = await $axios.$get('/api/vehicleclasses');
+			const res = await $axios.$get('/api/vehicleclass');
 			return {
 				series: res
 			};
@@ -79,8 +79,8 @@ export default {
 		},
 		async deleteItem(id) {
 			try {
-				await this.$axios.delete(`/api/vehicleclasses/${id}`);
-				const { data } = await this.$axios.get('/api/vehicleclasses');
+				await this.$axios.delete(`/api/vehicleclass/${id}`);
+				const { data } = await this.$axios.get('/api/vehicleclass');
 				this.series = data;
 			} catch (err) {
 				this.$toast.add({ severity: 'error', summary: 'Oh no!', detail: 'Something went wrong while deleting a series.', life: 5000 });

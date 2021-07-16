@@ -10,7 +10,7 @@ describe('Routes', () => {
 	});
 
 	describe('Valid routes', () => {
-		const routes = ['/api/calendar'];
+		const routes = ['/api/calendar', '/api/blog'];
 
 		routes.forEach(route => {
 			it('GET ' + route, done => {

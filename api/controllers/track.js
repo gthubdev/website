@@ -2,27 +2,41 @@ const countryList = require('country-list');
 const { Track } = require('../models');
 const util = require('../util/util');
 const dateutil = require('../util/dateutil');
+const attribute_options = require('../util/attribute_options');
 
-module.exports.find = async (req, res) => {
-	const tracks = await Track.findAll({
-		order: [
-			['id', 'ASC']
-		]
-	});
-	return res.json(tracks);
+module.exports.findAll = async (req, res) => {
+	try {
+		const tracks = await Track.findAll({
+			attributes: attribute_options.track,
+			order: [
+				['id', 'ASC']
+			],
+			raw: true
+		});
+
+		res.json(tracks);
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
 module.exports.findOne = async (req, res) => {
-	const track = await Track.findOne({
-		where: { id: req.params.id }
-	});
+	try {
+		const track = await Track.findByPk(req.params.id, {
+			attributes: attribute_options.track,
+			raw: true
+		});
 
-	if (!track) return res.status(404).send('No tracks found');
-
-	return res.json(track);
+		if (!track)
+			res.json({ });
+		else
+			res.json(track);
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
-module.exports.createTrack = async (req, res) => {
+module.exports.create = async (req, res) => {
 	if (countryList.getCode(req.body.country) === undefined) {
 		res.status(422).send('Invalid country');
 		return;
@@ -34,15 +48,18 @@ module.exports.createTrack = async (req, res) => {
 	}
 
 	try {
-		const track = await Track.create(req.body);
+		const track = await Track.create(req.body, {
+			attributes: attribute_options.track,
+			raw: true
+		});
 		util.print('Track \'' + track.name + '\' created');
-		res.json(track.get({ plain: true }));
+		res.json(track);
 	} catch (err) {
 		util.error(req, res, err);
 	}
 };
 
-module.exports.updateTrack = async (req, res) => {
+module.exports.update = async (req, res) => {
 	if (req.body.country && countryList.getCode(req.body.country) === undefined) {
 		res.status(422).send('Invalid country');
 		return;
@@ -62,16 +79,17 @@ module.exports.updateTrack = async (req, res) => {
 
 		util.print('Tracks updated: ' + response[0]);
 
-		const track = await Track.findOne({
-			where: { id: req.params.id }
+		const track = await Track.findByPk(req.params.id, {
+			attributes: attribute_options.track,
+			raw: true
 		});
-		res.json(track.get({ plain: true }));
+		res.json(track);
 	} catch (err) {
 		util.error(req, res, err);
 	}
 };
 
-module.exports.deleteTrack = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	// A track cannot be deleted, if it is used in an event
 	try {
 		const response = await Track.destroy({

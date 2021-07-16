@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 		});
 		models.EventSession.belongsTo(models.EventSessionType, {
 			foreignKey: 'sessiontype',
+			as: 'type',
 			allowNull: false
 		});
 	};

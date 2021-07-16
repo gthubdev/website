@@ -70,7 +70,7 @@ export default {
 	layout: 'admin',
 	middleware: 'auth',
 	async asyncData({ $axios, params }) {
-		const classes = await $axios.$get('/api/vehicleclasses');
+		const classes = await $axios.$get('/api/vehicleclass');
 		if (typeof parseInt(params.id) === 'number')
 			try {
 				const res = await $axios.$get('/api/series/' + params.id);

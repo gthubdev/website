@@ -1,85 +1,60 @@
-const { Series, SeriesType, VehicleClass, VehicleClassCategory } = require('../models/');
+const { Series, SeriesType } = require('../models/');
 const util = require('../util/util.js');
+const attribute_options = require('../util/attribute_options');
+const include_options = require('../util/include_options');
 
-module.exports.find = async (req, res) => {
-	const series = await Series.findAll({
-		include: [
-			{
-				model: SeriesType,
-				include: [
-					{
-						model: VehicleClass,
-						include: [
-							{ model: VehicleClassCategory }
-						]
-					}
-				]
-			}
-		],
-		order: [
-			['id', 'ASC']
-		]
-	});
+module.exports.findAll = async (req, res) => {
+	try {
+		const series = await Series.findAll({
+			attributes: attribute_options.series,
+			include: include_options.series,
+			order: [
+				['id', 'ASC']
+			]
+		});
 
-	return res.json(series);
+		res.json(series.map(s => s.get({ plain: true })));
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
 module.exports.findOne = async (req, res) => {
-	const series = await Series.findOne({
-		where: { id: req.params.id },
-		include: [
-			{
-				model: SeriesType,
-				include: [
-					{
-						model: VehicleClass,
-						include: [
-							{ model: VehicleClassCategory }
-						]
-					}
-				]
-			}
-		]
-	});
+	try {
+		const series = await Series.findByPk(req.params.id, {
+			attributes: attribute_options.series,
+			include: include_options.series
+		});
 
-	if (!series)
-		return res.status(404).send('No series found');
-
-	return res.json(series);
+		if (!series)
+			res.json({ });
+		else
+			res.json(series.get({ plain: true }));
+	} catch (err) {
+		util.error(req, res, err);
+	}
 };
 
-module.exports.createSeries = async (req, res) => {
-	const prio = req.body.series.priority;
+module.exports.create = async (req, res) => {
+	const prio = req.body.priority;
 	if (prio < 1 || prio > 4) {
 		res.status(422).send('Invalid priority');
 		return;
 	}
 
 	try {
-		const newseries = await Series.create(req.body.series);
+		const newseries = await Series.create(req.body);
 		const vclarray = [];
-		req.body.series.vehicleClasses.forEach(vcl => {
+		req.body.vehicleClasses.forEach(vcl => {
 			vclarray.push({
 				series: newseries.id,
 				class: vcl
 			});
 		});
 		await SeriesType.bulkCreate(vclarray);
-		const series = await Series.findOne({
-			where: { id: newseries.id },
-			include: [
-				{
-					model: SeriesType,
-					include: [
-						{
-							model: VehicleClass,
-							include: [
-								{ model: VehicleClassCategory }
-							]
-						}
-					]
-				}
-			]
+		const series = await Series.findByPk(newseries.id, {
+			attributes: attribute_options.series,
+			include: include_options.series
 		});
 		util.print('Series \'' + series.name + '\' created');
 		res.json(series.get({ plain: true }));
@@ -88,9 +63,9 @@ module.exports.createSeries = async (req, res) => {
 	}
 };
 
-module.exports.updateSeries = async (req, res) => {
-	if (req.body.series.priority) {
-		const prio = req.body.series.priority;
+module.exports.update = async (req, res) => {
+	if (req.body.priority) {
+		const prio = req.body.priority;
 		if (prio < 1 || prio > 4) {
 			res.status(422).send('Invalid priority');
 			return;
@@ -99,7 +74,7 @@ module.exports.updateSeries = async (req, res) => {
 
 	try {
 		const [updated, deleted] = await Promise.all([
-			Series.update(req.body.series,
+			Series.update(req.body,
 				{ where: { id: req.params.id } }
 			),
 			SeriesType.destroy({
@@ -108,35 +83,24 @@ module.exports.updateSeries = async (req, res) => {
 		]);
 
 		if (updated !== 1 && deleted < 0) {
-			util.error(req, res, 'Error updating event ' + req.body.event.name);
+			util.error(req, res, 'Error updating event ' + req.event.name);
 			return;
 		}
 
 		// build the array with the series.id for vehicle classes
 		const vclarray = [];
-		req.body.series.vehicleClasses.forEach(vcl => {
+		req.body.vehicleClasses.forEach(vcl => {
 			vclarray.push({
 				series: req.params.id,
 				class: vcl
 			});
 		});
 		await SeriesType.bulkCreate(vclarray);
-		const series = await Series.findOne({
-			where: { id: req.params.id },
-			include: [
-				{
-					model: SeriesType,
-					include: [
-						{
-							model: VehicleClass,
-							include: [
-								{ model: VehicleClassCategory }
-							]
-						}
-					]
-				}
-			]
+		const series = await Series.findByPk(req.params.id, {
+			attributes: attribute_options.series,
+			include: include_options.series
 		});
+
 		util.print('Series \'' + series.name + '\' updated');
 		res.json(series.get({ plain: true }));
 	} catch (err) {
@@ -144,7 +108,7 @@ module.exports.updateSeries = async (req, res) => {
 	}
 };
 
-module.exports.deleteSeries = async (req, res) => {
+module.exports.delete = async (req, res) => {
 	// A series cannot be deleted, if it is the main series of an event,
 	// used as a support series in an event or used in an event session
 	try {

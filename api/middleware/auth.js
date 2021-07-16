@@ -1,7 +1,7 @@
 const env = require('dotenv');
 const jwt = require('jsonwebtoken');
 const { Auth, User } = require('../models');
-const util = require('../util/util');
+// const util = require('../util/util');
 
 module.exports.staff_auth = async (req, res, next) => {
 	if (!req.header('Authorization')) {
@@ -65,10 +65,10 @@ async function getUserFromToken(req, res) {
 	// load .env variables
 	env.config();
 
-	const token = req.header('Authorization').replace('Bearer ', '');
-	const data = jwt.verify(token, process.env.JWT_KEY);
-
 	try {
+		const token = req.header('Authorization').replace('Bearer ', '');
+		const data = jwt.verify(token, process.env.JWT_KEY);
+
 		const user = await Auth.findOne({
 			where: { token: token },
 			include: [
@@ -84,7 +84,7 @@ async function getUserFromToken(req, res) {
 			data
 		};
 	} catch (err) {
-		util.error(req, res, err);
+		// util.error(req, res, err);
 		return {
 			user: null,
 			data: null

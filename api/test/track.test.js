@@ -298,4 +298,95 @@ describe('Tracks', () => {
 			should.not.exist(err);
 		}
 	});
+
+	it('Find one track', async () => {
+		try {
+			const tracks = await Track.findAll({
+				limit: 1,
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const findOne = await supertest(server)
+				.get('/api/track/' + tracks[0].id)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			findOne.body.id.should.equal(tracks[0].id);
+			findOne.body.name.should.equal(tracks[0].name);
+			findOne.body.country.should.equal(tracks[0].country);
+			findOne.body.timezone.should.equal(tracks[0].timezone);
+			findOne.body.length.should.equal(tracks[0].length);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find one track with invalid id', async () => {
+		try {
+			const tracks = await Track.findAll({
+				limit: 1,
+				order: [
+					['id', 'DESC']
+				]
+			});
+
+			const findOne = await supertest(server)
+				.get('/api/track/' + (tracks[0].id + 1))
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			Object.keys(findOne.body).length.should.equal(0);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find all tracks', async () => {
+		try {
+			const tracks = await supertest(server)
+				.get('/api/track/')
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			tracks.body.length.should.equal(5);
+			tracks.body.forEach(track => {
+				track.name.should.have.string('Test Track');
+				track.country.should.equal('Sweden');
+				track.timezone.should.equal('Europe/Amsterdam');
+				track.length.should.equal(5);
+			});
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
+	it('Find all tracks (empty)', async () => {
+		try {
+			const tracks = await Track.findAll({
+				order: [
+					['createdAt', 'DESC'],
+					['id', 'DESC']
+				]
+			});
+
+			const ids = [];
+			tracks.forEach(s => ids.push(s.id));
+
+			await Track.destroy({
+				where: { id: ids }
+			});
+
+			const res = await supertest(server)
+				.get('/api/track/')
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			res.body.length.should.equal(0);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
 });

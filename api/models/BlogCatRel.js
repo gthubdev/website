@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
 		});
 		models.BlogCatRel.belongsTo(models.BlogCategory, {
 			foreignKey: 'category',
+			as: 'cat',
 			onDelete: 'RESTRICT'
 		});
 	};
