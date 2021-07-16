@@ -125,7 +125,11 @@ module.exports.findAll = async (req, res) => {
 			]
 		});
 
-		res.json(blogposts.map(p => p.get({ plain: true })));
+		const data = {
+			blogposts: blogposts.map(p => p.get({ plain: true }))
+		};
+
+		res.json(data);
 	} catch (err) {
 		util.error(req, res, err);
 	}
