@@ -1,32 +1,32 @@
 const util = require('../util/util.js');
-const { VehicleClassCategory } = require('../models');
+const { BlogTag } = require('../models');
 
 module.exports.findAll = async (req, res) => {
 	try {
-		const vehiclecats = await VehicleClassCategory.findAll({
+		const blogtags = await BlogTag.findAll({
 			attributes: ['id', 'name'],
 			order: [
-				['id', 'ASC']
+				['name', 'ASC']
 			],
 			raw: true
 		});
 
-		res.json(vehiclecats);
+		res.json(blogtags);
 	} catch (err) {
 		util.error(req, res, err);
 	}
 };
 
-module.exports.findOne = async (req, res) => {
+module.exports.fineOne = async (req, res) => {
 	try {
-		const vehicleCat = await VehicleClassCategory.findByPk(req.params.id, {
+		const blogtag = await BlogTag.findByPk(req.params.id, {
 			raw: true
 		});
 
-		if (!vehicleCat)
+		if (!blogtag)
 			res.json({ });
 		else
-			res.json(vehicleCat);
+			res.json(blogtag);
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -39,11 +39,11 @@ module.exports.create = async (req, res) => {
 	}
 
 	try {
-		const category = await VehicleClassCategory.create(req.body, {
+		const tag = await BlogTag.create(req.body, {
 			raw: true
 		});
 
-		res.json(category);
+		res.json(tag);
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -56,16 +56,16 @@ module.exports.update = async (req, res) => {
 	}
 
 	try {
-		const response = await VehicleClassCategory.update(req.body, {
+		const response = await BlogTag.update(req.body, {
 			where: { id: req.params.id }
 		});
 		if (response[0] === 0)
 			return;
 
-		const category = await VehicleClassCategory.findByPk(req.params.id, {
+		const tag = await BlogTag.findByPk(req.params.id, {
 			raw: true
 		});
-		res.json(category);
+		res.json(tag);
 	} catch (err) {
 		util.error(req, res, err);
 	}
@@ -73,14 +73,17 @@ module.exports.update = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
 	try {
-		const response = await VehicleClassCategory.destroy({
+		const response = await BlogTag.destroy({
 			where: { id: req.params.id }
 		});
 		if (response >= 1)
-			util.print('VehicleClassCategories deleted: ' + response);
+			util.print('Blog tags deleted: ' + response);
 
 		res.json({ deleted: response });
 	} catch (err) {
-		util.error(req, res, err);
+		if (err.parent && err.parent.errno && err.parent.errno === 1451)
+			res.status(409).send('The tag is used in blogposts.');
+		else
+			util.error(req, res, err);
 	}
 };

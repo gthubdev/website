@@ -17,21 +17,21 @@ describe('User', () => {
 				password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 				name: 'Testadmin',
 				email: '',
-				usertype: 1
+				usertype_id: 1
 			},
 			{
 				username: 'testuser1',
 				password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 				name: 'Testuser1',
 				email: '',
-				usertype: 2
+				usertype_id: 2
 			},
 			{
 				username: 'testuser2',
 				password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 				name: 'Testuser2',
 				email: '',
-				usertype: 2
+				usertype_id: 2
 			}
 		];
 

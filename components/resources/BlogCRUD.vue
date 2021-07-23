@@ -58,7 +58,7 @@ export default {
 				title: '',
 				content: '',
 				image: '',
-				author: ''
+				author_id: ''
 			},
 			editorContent: ''
 		};
@@ -82,7 +82,7 @@ export default {
 					title: '',
 					content: '',
 					image: '',
-					author: ''
+					author_id: ''
 				};
 				this.editorContent = '';
 			}
@@ -95,7 +95,7 @@ export default {
 					title: this.editingPost.title,
 					content: '',
 					image: this.editingPost.image,
-					author: this.editingPost.author
+					author_id: this.editingPost.author_id
 				};
 				this.editorContent = this.editingPost.content;
 			}
@@ -110,11 +110,12 @@ export default {
 		},
 		sendRequest() {
 			if (this.isEditing === false)
-				this.blogpost.author = this.user.id;
+				this.blogpost.author_id = this.user.id;
 			this.blogpost.content = this.editorContent;
 			// 	.replace('[quote]', '<div class="quote">')
 			// 	.replace('[/quote]', '</div>');
 			this.$emit('send-request', this.blogpost);
+			console.log('sending request');
 		},
 		validInput() {
 			return this.validTitle() &&

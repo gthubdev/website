@@ -18,13 +18,13 @@ module.exports.staff_auth = async (req, res, next) => {
 	}
 
 	// check that JWT belongs to the actual user
-	if (user.user !== data.id) {
+	if (user.user_id !== data.id) {
 		res.status(403).send();
 		return;
 	}
 
 	// check for correct usertype
-	if (data.usertype !== 1 && data.usertype !== 2) {
+	if (user.User.usertype_id !== 1 && user.User.usertype_id !== 2) {
 		res.status(403).send();
 		return;
 	}
@@ -47,13 +47,13 @@ module.exports.admin_auth = async (req, res, next) => {
 	}
 
 	// check that JWT belongs to the actual user
-	if (user.user !== data.id) {
+	if (user.user_id !== data.id) {
 		res.status(403).send();
 		return;
 	}
 
 	// check for correct usertype
-	if (data.usertype !== 1) {
+	if (user.User.usertype_id !== 1) {
 		res.status(403).send();
 		return;
 	}
@@ -74,9 +74,11 @@ async function getUserFromToken(req, res) {
 			include: [
 				{
 					model: User,
-					attributes: ['id', 'username']
+					attributes: ['id', 'username', 'usertype_id']
 				}
-			]
+			],
+			raw: true,
+			nest: true
 		});
 
 		return {

@@ -2,10 +2,10 @@ const supertest = require('supertest');
 const each = require('async/each');
 const should = require('chai').should();
 const server = require('../index');
-const { User, VehicleClassCategory } = require('../models/');
+const { User, BlogCategory } = require('../models/');
 
-describe('VehicleClassCategories', () => {
-	let token;
+describe('Blog Categories', () => {
+	let token, userID;
 
 	before(async () => {
 		const newuser = {
@@ -16,13 +16,14 @@ describe('VehicleClassCategories', () => {
 			usertype_id: 2
 		};
 		try {
-			await User.create(newuser);
+			const user = await User.create(newuser);
 			const res = await supertest(server)
 				.post('/api/auth/login')
 				.send({ username: 'testuser', password: 'admin' })
 				.expect(200);
 
 			token = res.body.token;
+			userID = user.id;
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -54,7 +55,7 @@ describe('VehicleClassCategories', () => {
 		each(categories, async cat => {
 			try {
 				await supertest(server)
-					.post('/api/vehiclecategory')
+					.post('/api/blogcategory')
 					.send(cat)
 					.set('Authorization', 'Bearer ' + token)
 					.expect(200);
@@ -69,7 +70,7 @@ describe('VehicleClassCategories', () => {
 
 	afterEach(async () => {
 		try {
-			await VehicleClassCategory.destroy({
+			await BlogCategory.destroy({
 				where: { }
 			});
 		} catch (err) {
@@ -79,7 +80,7 @@ describe('VehicleClassCategories', () => {
 
 	it('Creating a category', async () => {
 		try {
-			const categories = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				limit: 5,
 				order: [
 					['createdAt', 'DESC'],
@@ -102,7 +103,7 @@ describe('VehicleClassCategories', () => {
 		each(category, async cl => {
 			try {
 				await supertest(server)
-					.post('/api/vehiclecategory')
+					.post('/api/blogcategory')
 					.send(cl)
 					.set('Authorization', 'Bearer ' + token)
 					.expect(422);
@@ -120,7 +121,7 @@ describe('VehicleClassCategories', () => {
 
 		try {
 			await supertest(server)
-				.post('/api/vehiclecategory')
+				.post('/api/blogcategory')
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -133,7 +134,7 @@ describe('VehicleClassCategories', () => {
 
 		try {
 			await supertest(server)
-				.post('/api/vehiclecategory')
+				.post('/api/blogcategory')
 				.set('Authorization', 'Bearer ' + token.toLowerCase().toUpperCase())
 				.send(tmp)
 				.expect(401);
@@ -144,7 +145,7 @@ describe('VehicleClassCategories', () => {
 
 	it('Updating a category', async () => {
 		try {
-			const categories = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				limit: 1,
 				order: [
 					['createdAt', 'DESC'],
@@ -157,12 +158,12 @@ describe('VehicleClassCategories', () => {
 			};
 
 			await supertest(server)
-				.put('/api/vehiclecategory/' + categories[0].id)
+				.put('/api/blogcategory/' + categories[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(200);
 
-			const cat = await VehicleClassCategory.findByPk(categories[0].id);
+			const cat = await BlogCategory.findByPk(categories[0].id);
 
 			cat.name.should.equal('NEWNAME');
 		} catch (err) {
@@ -170,9 +171,9 @@ describe('VehicleClassCategories', () => {
 		}
 	});
 
-	it('Updating a class with empty data', async () => {
+	it('Updating a category with empty data', async () => {
 		try {
-			const categories = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				limit: 1,
 				order: [
 					['createdAt', 'DESC'],
@@ -183,7 +184,7 @@ describe('VehicleClassCategories', () => {
 			const tmp = { };
 
 			await supertest(server)
-				.put('/api/vehiclecategory/' + categories[0].id)
+				.put('/api/blogcategory/' + categories[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.send(tmp)
 				.expect(422);
@@ -194,7 +195,7 @@ describe('VehicleClassCategories', () => {
 
 	it('Updating a category without authorisation', async () => {
 		try {
-			const categories = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				limit: 1,
 				order: [
 					['createdAt', 'DESC'],
@@ -207,7 +208,7 @@ describe('VehicleClassCategories', () => {
 			};
 
 			await supertest(server)
-				.put('/api/vehiclecategory/' + categories[0].id)
+				.put('/api/blogcategory/' + categories[0].id)
 				.send(tmp)
 				.expect(401);
 		} catch (err) {
@@ -217,7 +218,7 @@ describe('VehicleClassCategories', () => {
 
 	it('Updating a category with invalid authorisation', async () => {
 		try {
-			const categories = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				limit: 1,
 				order: [
 					['createdAt', 'DESC'],
@@ -230,7 +231,7 @@ describe('VehicleClassCategories', () => {
 			};
 
 			await supertest(server)
-				.put('/api/vehiclecategory/' + categories[0].id)
+				.put('/api/blogcategory/' + categories[0].id)
 				.set('Authorization', 'Bearer ' + token.toLowerCase().toUpperCase())
 				.send(tmp)
 				.expect(401);
@@ -246,17 +247,17 @@ describe('VehicleClassCategories', () => {
 		};
 
 		try {
-			const cat = await VehicleClassCategory.create(tmp);
+			const cat = await BlogCategory.create(tmp);
 			catID = cat.id;
-			const categories = await VehicleClassCategory.findAll();
+			const categories = await BlogCategory.findAll();
 			nrOfCategoriesBefore = categories.length;
 
 			await supertest(server)
-				.delete('/api/vehiclecategory/' + catID)
+				.delete('/api/blogcategory/' + catID)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 
-			const response = await VehicleClassCategory.findAll();
+			const response = await BlogCategory.findAll();
 			response.length.should.equal(nrOfCategoriesBefore - 1);
 			response.forEach(c => {
 				c.id.should.not.equal(catID);
@@ -266,15 +267,53 @@ describe('VehicleClassCategories', () => {
 		}
 	});
 
+	it('Deleting a category used by a blog post', async () => {
+		let catID;
+		const tmp = {
+			name: 'testcat123'
+		};
+		const tmppost = { title: 'Title 7', content: '<div>test content</div>', image: '', author_id: userID };
+
+		try {
+			const cat = await BlogCategory.create(tmp);
+			catID = cat.id;
+			tmppost.categories = [];
+			tmppost.categories.push(cat.get({ plain: true }));
+
+			const post = await supertest(server)
+				.post('/api/blogs')
+				.set('Authorization', 'Bearer ' + token)
+				.send(tmppost)
+				.expect(200);
+
+			await supertest(server)
+				.delete('/api/blogcategory/' + catID)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(409);
+
+			await supertest(server)
+				.delete('/api/blogs/' + post.body.id)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+
+			await supertest(server)
+				.delete('/api/blogcategory/' + catID)
+				.set('Authorization', 'Bearer ' + token)
+				.expect(200);
+		} catch (err) {
+			should.not.exist(err);
+		}
+	});
+
 	it('Deleting a category without authorisation', async () => {
 		const tmp = {
 			name: 'testcat123'
 		};
 
 		try {
-			const cat = await VehicleClassCategory.create(tmp);
+			const cat = await BlogCategory.create(tmp);
 			await supertest(server)
-				.delete('/api/vehiclecategory/' + cat.id)
+				.delete('/api/blogcategory/' + cat.id)
 				.expect(401);
 		} catch (err) {
 			should.not.exist(err);
@@ -287,9 +326,9 @@ describe('VehicleClassCategories', () => {
 		};
 
 		try {
-			const cat = await VehicleClassCategory.create(tmp);
+			const cat = await BlogCategory.create(tmp);
 			await supertest(server)
-				.delete('/api/vehiclecategory/' + cat.id)
+				.delete('/api/blogcategory/' + cat.id)
 				.set('Authorization', 'Bearer ' + token.toLowerCase().toUpperCase())
 				.expect(401);
 		} catch (err) {
@@ -299,12 +338,12 @@ describe('VehicleClassCategories', () => {
 
 	it('Find one category', async () => {
 		try {
-			const categories = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				limit: 1
 			});
 
 			const findOne = await supertest(server)
-				.get('/api/vehiclecategory/' + categories[0].id)
+				.get('/api/blogcategory/' + categories[0].id)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 
@@ -317,7 +356,7 @@ describe('VehicleClassCategories', () => {
 
 	it('Find one category with invalid id', async () => {
 		try {
-			const categories = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				limit: 1,
 				order: [
 					['id', 'DESC']
@@ -325,7 +364,7 @@ describe('VehicleClassCategories', () => {
 			});
 
 			const findOne = await supertest(server)
-				.get('/api/vehiclecategory/' + categories[0].id + 1)
+				.get('/api/blogcategory/' + categories[0].id + 1)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 
@@ -338,7 +377,7 @@ describe('VehicleClassCategories', () => {
 	it('Find all categories', async () => {
 		try {
 			const categories = await supertest(server)
-				.get('/api/vehiclecategory')
+				.get('/api/blogcategory')
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 
@@ -353,7 +392,7 @@ describe('VehicleClassCategories', () => {
 
 	it('Find all categories (empty)', async () => {
 		try {
-			const classes = await VehicleClassCategory.findAll({
+			const categories = await BlogCategory.findAll({
 				order: [
 					['createdAt', 'DESC'],
 					['id', 'DESC']
@@ -361,14 +400,14 @@ describe('VehicleClassCategories', () => {
 			});
 
 			const ids = [];
-			classes.forEach(s => ids.push(s.id));
+			categories.forEach(s => ids.push(s.id));
 
-			await VehicleClassCategory.destroy({
+			await BlogCategory.destroy({
 				where: { id: ids }
 			});
 
 			const res = await supertest(server)
-				.get('/api/vehiclecategory/')
+				.get('/api/blogcategory/')
 				.set('Authorization', 'Bearer ' + token)
 				.expect(200);
 

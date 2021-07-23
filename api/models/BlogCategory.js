@@ -24,8 +24,9 @@ module.exports = (sequelize, DataTypes) => {
 
 	BlogCategory.associate = models => {
 		models.BlogCategory.hasMany(models.BlogCatRel, {
-			foreignKey: 'category',
-			as: 'cat'
+			foreignKey: 'category_id',
+			as: 'category',
+			onDelete: 'RESTRICT'
 		});
 	};
 

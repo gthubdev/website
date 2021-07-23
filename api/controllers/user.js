@@ -73,7 +73,7 @@ module.exports.update = async (req, res) => {
 	}
 
 	// do not allow edits from other users except admins
-	if (data.usertype > 1 && data.id !== Number(req.params.id)) {
+	if (user.User.usertype_id > 1 && data.id !== Number(req.params.id)) {
 		res.status(403).send();
 		return;
 	}

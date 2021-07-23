@@ -53,8 +53,8 @@ module.exports.create = async (req, res) => {
 		const supportarray = [];
 		req.body.supportseries.forEach(s => {
 			supportarray.push({
-				event: newevent.id,
-				series: s.id
+				event_id: newevent.id,
+				series_id: s.id
 			});
 		});
 		await SupportSeries.bulkCreate(supportarray);
@@ -113,7 +113,7 @@ module.exports.update = async (req, res) => {
 				{ where: { id: req.params.id } }
 			),
 			SupportSeries.destroy({
-				where: { event: req.params.id }
+				where: { event_id: req.params.id }
 			})
 		]);
 		if (updated !== 1 && deleted < 0) {
@@ -125,8 +125,8 @@ module.exports.update = async (req, res) => {
 		const supportarray = [];
 		req.body.supportseries.forEach(s => {
 			supportarray.push({
-				event: req.params.id,
-				series: s.id
+				event_id: req.params.id,
+				series_id: s.id
 			});
 		});
 		await SupportSeries.bulkCreate(supportarray);

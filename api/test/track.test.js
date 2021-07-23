@@ -15,7 +15,7 @@ describe('Tracks', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testadmin',
 			email: '',
-			usertype: 1
+			usertype_id: 1
 		};
 		try {
 			const user = await User.create(newuser);

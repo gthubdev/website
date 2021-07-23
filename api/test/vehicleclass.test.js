@@ -13,7 +13,7 @@ describe('VehicleClasses', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testuser',
 			email: '',
-			usertype: 2
+			usertype_id: 2
 		};
 		const newcat1 = { name: 'testcat1' };
 		const newcat2 = { name: 'testcat2' };
@@ -54,11 +54,11 @@ describe('VehicleClasses', () => {
 
 	beforeEach(done => {
 		const classes = [
-			{ name: 'TestClass 1', category: cat1ID },
-			{ name: 'TestClass 2', category: cat1ID },
-			{ name: 'TestClass 3', category: cat1ID },
-			{ name: 'TestClass 4', category: cat1ID },
-			{ name: 'TestClass 5', category: cat1ID }
+			{ name: 'TestClass 1', category_id: cat1ID },
+			{ name: 'TestClass 2', category_id: cat1ID },
+			{ name: 'TestClass 3', category_id: cat1ID },
+			{ name: 'TestClass 4', category_id: cat1ID },
+			{ name: 'TestClass 5', category_id: cat1ID }
 		];
 		each(classes, async cl => {
 			try {
@@ -98,7 +98,7 @@ describe('VehicleClasses', () => {
 
 			classes.forEach(cl => {
 				cl.name.should.have.string('TestClass');
-				cl.category.should.equal(cat1ID);
+				cl.category_id.should.equal(cat1ID);
 			});
 		} catch (err) {
 			should.not.exist(err);
@@ -108,7 +108,7 @@ describe('VehicleClasses', () => {
 	it('Creating a class without data', done => {
 		const classes = [
 			{ name: 'TestClass 1' },
-			{ category: cat1ID },
+			{ category_id: cat1ID },
 			{ }
 		];
 		each(classes, async cl => {
@@ -136,7 +136,7 @@ describe('VehicleClasses', () => {
 				]
 			});
 
-			const tmp = { name: 'Testclass', category: categories[0].id + 1 };
+			const tmp = { name: 'Testclass', category_id: categories[0].id + 1 };
 
 			await supertest(server)
 				.post('/api/vehicleclass')
@@ -151,7 +151,7 @@ describe('VehicleClasses', () => {
 	it('Creating a class without authorisation', async () => {
 		const tmp = {
 			name: 'TestClass',
-			category: cat1ID
+			category_id: cat1ID
 		};
 
 		try {
@@ -167,7 +167,7 @@ describe('VehicleClasses', () => {
 	it('Creating a class with invalid authorisation', async () => {
 		const tmp = {
 			name: 'TestClass',
-			category: cat1ID
+			category_id: cat1ID
 		};
 
 		try {
@@ -193,7 +193,7 @@ describe('VehicleClasses', () => {
 
 			const tmp = {
 				name: 'NEWNAME',
-				category: cat2ID
+				category_id: cat2ID
 			};
 
 			await supertest(server)
@@ -205,7 +205,7 @@ describe('VehicleClasses', () => {
 			const cl = await VehicleClass.findByPk(classes[0].id);
 
 			cl.name.should.equal('NEWNAME');
-			cl.category.should.equal(cat2ID);
+			cl.category_id.should.equal(cat2ID);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -250,7 +250,7 @@ describe('VehicleClasses', () => {
 				]
 			});
 
-			const tmp = { name: 'Test', category: categories[0].id + 1 };
+			const tmp = { name: 'Test', category_id: categories[0].id + 1 };
 
 			await supertest(server)
 				.put('/api/vehicleclass/' + classes[0].id)
@@ -274,7 +274,7 @@ describe('VehicleClasses', () => {
 
 			const tmp = {
 				name: 'NEWNAME',
-				category: cat2ID
+				category_id: cat2ID
 			};
 
 			await supertest(server)
@@ -298,7 +298,7 @@ describe('VehicleClasses', () => {
 
 			const tmp = {
 				name: 'NEWNAME',
-				category: cat2ID
+				category_id: cat2ID
 			};
 
 			await supertest(server)
@@ -315,7 +315,7 @@ describe('VehicleClasses', () => {
 		let nrOfClassesBefore, classID;
 		const tmp = {
 			name: 'testclass123',
-			category: cat2ID
+			category_id: cat2ID
 		};
 
 		try {
@@ -342,7 +342,7 @@ describe('VehicleClasses', () => {
 	it('Deleting a class without authorisation', async () => {
 		const tmp = {
 			name: 'testclass123',
-			category: cat2ID
+			category_id: cat2ID
 		};
 
 		try {
@@ -359,7 +359,7 @@ describe('VehicleClasses', () => {
 	it('Deleting a class with invalid authorisation', async () => {
 		const tmp = {
 			name: 'testclass123',
-			category: cat2ID
+			category_id: cat2ID
 		};
 
 		try {
@@ -387,7 +387,7 @@ describe('VehicleClasses', () => {
 
 			findOne.body.id.should.equal(classes[0].id);
 			findOne.body.name.should.equal(classes[0].name);
-			findOne.body.category.should.equal(classes[0].category);
+			findOne.body.category_id.should.equal(classes[0].category_id);
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -423,7 +423,7 @@ describe('VehicleClasses', () => {
 			classes.body.length.should.equal(5);
 			classes.body.forEach(cl => {
 				cl.name.should.have.string('TestClass');
-				cl.category.should.equal(cat1ID);
+				cl.category_id.should.equal(cat1ID);
 			});
 		} catch (err) {
 			should.not.exist(err);

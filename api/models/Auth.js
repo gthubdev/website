@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	Auth.associate = models => {
 		models.Auth.belongsTo(models.User, {
-			foreignKey: 'user',
+			foreignKey: 'user_id',
 			onDelete: 'CASCADE'
 		});
 	};

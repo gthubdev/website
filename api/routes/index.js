@@ -11,6 +11,8 @@ const ResourcesCtrl = require('../controllers/resources');
 const SeriesCtrl = require('../controllers/series');
 const TrackCtrl = require('../controllers/track');
 const BlogPostCtrl = require('../controllers/blogpost');
+const BlogCatCtrl = require('../controllers/blogcategory');
+const BlogTagCtrl = require('../controllers/blogtag');
 const iCalCtrl = require('../controllers/ical');
 const auth = require('../middleware/auth');
 const VehClassCtrl = require('../controllers/vehicleclass');
@@ -68,6 +70,20 @@ router.delete('/track/:id', auth.staff_auth, TrackCtrl.delete);
 router.post('/blogs', auth.staff_auth, BlogPostCtrl.create);
 router.put('/blogs/:id', auth.staff_auth, BlogPostCtrl.update);
 router.delete('/blogs/:id', auth.staff_auth, BlogPostCtrl.delete);
+
+// Blog Categories
+router.get('/blogcategory', auth.staff_auth, BlogCatCtrl.findAll);
+router.get('/blogcategory/:id', auth.staff_auth, BlogCatCtrl.fineOne);
+router.post('/blogcategory', auth.staff_auth, BlogCatCtrl.create);
+router.put('/blogcategory/:id', auth.staff_auth, BlogCatCtrl.update);
+router.delete('/blogcategory/:id', auth.staff_auth, BlogCatCtrl.delete);
+
+// Blog Tags
+router.get('/blogtag', auth.staff_auth, BlogTagCtrl.findAll);
+router.get('/blogtag/:id', auth.staff_auth, BlogTagCtrl.fineOne);
+router.post('/blogtag', auth.staff_auth, BlogTagCtrl.create);
+router.put('/blogtag/:id', auth.staff_auth, BlogTagCtrl.update);
+router.delete('/blogtag/:id', auth.staff_auth, BlogTagCtrl.delete);
 
 // Vehicle classes
 router.get('/vehicleclass', auth.staff_auth, VehClassCtrl.findAll);

@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true,
 			primaryKey: true
 		},
-		event: {
+		event_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-		series: {
+		series_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
@@ -25,17 +25,17 @@ module.exports = (sequelize, DataTypes) => {
 		tableName: 'SupportSeries',
 		timestamps: true,
 		indexes: [
-			{ fields: ['event', 'series'], unique: true }
+			{ fields: ['event_id', 'series_id'], unique: true }
 		]
 	});
 
 	SupportSeries.associate = models => {
 		models.SupportSeries.belongsTo(models.Event, {
-			foreignKey: 'event',
+			foreignKey: 'event_id',
 			onDelete: 'RESTRICT'
 		});
 		models.SupportSeries.belongsTo(models.Series, {
-			foreignKey: 'series',
+			foreignKey: 'series_id',
 			onDelete: 'RESTRICT'
 		});
 	};

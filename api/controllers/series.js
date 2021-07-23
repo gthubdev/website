@@ -47,11 +47,12 @@ module.exports.create = async (req, res) => {
 		const vclarray = [];
 		req.body.vehicleClasses.forEach(vcl => {
 			vclarray.push({
-				series: newseries.id,
-				class: vcl
+				series_id: newseries.id,
+				class_id: vcl
 			});
 		});
 		await SeriesType.bulkCreate(vclarray);
+
 		const series = await Series.findByPk(newseries.id, {
 			attributes: attribute_options.series,
 			include: include_options.series
@@ -78,7 +79,7 @@ module.exports.update = async (req, res) => {
 				{ where: { id: req.params.id } }
 			),
 			SeriesType.destroy({
-				where: { series: req.params.id }
+				where: { series_id: req.params.id }
 			})
 		]);
 
@@ -91,8 +92,8 @@ module.exports.update = async (req, res) => {
 		const vclarray = [];
 		req.body.vehicleClasses.forEach(vcl => {
 			vclarray.push({
-				series: req.params.id,
-				class: vcl
+				series_id: req.params.id,
+				class_id: vcl
 			});
 		});
 		await SeriesType.bulkCreate(vclarray);

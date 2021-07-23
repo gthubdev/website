@@ -5,8 +5,6 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true,
 			primaryKey: true
 		},
-		series: DataTypes.INTEGER,
-		class: DataTypes.INTEGER,
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.fn('NOW')
@@ -19,14 +17,16 @@ module.exports = (sequelize, DataTypes) => {
 		tableName: 'SeriesType',
 		timestamps: true,
 		indexes: [
-			{ fields: ['series', 'class'], unique: true }
+			{ fields: ['series_id', 'class_id'], unique: true }
 		]
 	});
 
 	SeriesType.associate = models => {
-		models.SeriesType.belongsTo(models.Series, { foreignKey: 'series' });
+		models.SeriesType.belongsTo(models.Series, {
+			foreignKey: 'series_id'
+		});
 		models.SeriesType.belongsTo(models.VehicleClass, {
-			foreignKey: 'class',
+			foreignKey: 'class_id',
 			onDelete: 'RESTRICT'
 		});
 	};

@@ -28,18 +28,20 @@ module.exports = (sequelize, DataTypes) => {
 
 	Event.associate = models => {
 		models.Event.belongsTo(models.Track, {
-			foreignKey: 'track',
+			foreignKey: 'track_id',
 			onDelete: 'RESTRICT'
 		});
 		models.Event.belongsTo(models.Series, {
-			foreignKey: 'mainseries',
+			foreignKey: 'mainseries_id',
 			onDelete: 'RESTRICT'
 		});
 		models.Event.hasMany(models.EventSession, {
-			foreignKey: 'event',
+			foreignKey: 'event_id',
 			onDelete: 'CASCADE'
 		});
-		models.Event.hasMany(models.SupportSeries, { foreignKey: 'event' });
+		models.Event.hasMany(models.SupportSeries, {
+			foreignKey: 'event_id'
+		});
 	};
 
 	return Event;

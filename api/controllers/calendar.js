@@ -6,7 +6,7 @@ const include_options = require('../util/include_options');
 module.exports.getCalendar = async (req, res) => {
 	try {
 		const events = await Event.findAll({
-			attributes: ['id', 'name', 'priority', 'logo', 'startdate', 'enddate', 'track', 'mainseries'],
+			attributes: ['id', 'name', 'priority', 'logo', 'startdate', 'enddate', 'track_id', 'mainseries_id'],
 			include: include_options.event,
 			order: [
 				['priority', 'ASC'],

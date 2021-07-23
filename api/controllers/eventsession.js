@@ -19,7 +19,7 @@ module.exports.create = async (req, res) => {
 		return;
 	}
 
-	const sessiontype = req.body.sessiontype || 0;
+	const sessiontype = req.body.sessiontype_id || 0;
 	if (sessiontype < 1 || sessiontype > 4) {
 		res.status(422).send('Invalid sessiontype');
 		return;
@@ -31,7 +31,7 @@ module.exports.create = async (req, res) => {
 	try {
 		// check for a start/end outside the event's dates
 		const event = await Event.findOne({
-			where: { id: req.body.event }
+			where: { id: req.body.event_id }
 		});
 		const ev_startdate = event.startdate;
 		const ev_enddate = event.enddate;
@@ -87,7 +87,7 @@ module.exports.update = async (req, res) => {
 		}
 	}
 
-	const sessiontype = req.body.sessiontype;
+	const sessiontype = req.body.sessiontype_id;
 	if (sessiontype < 1 || sessiontype > 4) {
 		res.status(422).send('Invalid sessiontype');
 		return;

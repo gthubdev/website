@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 		title: DataTypes.STRING(1023),
 		content: DataTypes.TEXT('long'),
 		image: DataTypes.STRING,
-		author: {
+		author_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
@@ -27,17 +27,19 @@ module.exports = (sequelize, DataTypes) => {
 
 	BlogPost.associate = models => {
 		models.BlogPost.belongsTo(models.User, {
-			foreignKey: 'author',
+			foreignKey: 'author_id',
 			onDelete: 'RESTRICT',
-			as: 'user'
+			as: 'author'
 		});
 		models.BlogPost.hasMany(models.BlogCatRel, {
-			foreignKey: 'post',
-			as: 'categories'
+			foreignKey: 'post_id',
+			as: 'categories',
+			onDelete: 'CASCADE'
 		});
 		models.BlogPost.hasMany(models.BlogTagRel, {
-			foreignKey: 'post',
-			as: 'tags'
+			foreignKey: 'post_id',
+			as: 'tags',
+			onDelete: 'CASCADE'
 		});
 	};
 

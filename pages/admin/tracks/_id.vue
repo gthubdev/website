@@ -1,7 +1,7 @@
 <template>
 <div class="py-4">
 	<div class="flex justify-between items-baseline mb-4">
-		<h3 v-if="type == 'edit'" class="text-lg mb-3">
+		<h3 v-if="type === 'edit'" class="text-lg mb-3">
 			Edit "{{ data.name }}"
 		</h3>
 		<h3 v-else class="text-lg mb-3">
@@ -16,7 +16,7 @@
 		<!-- <pre>{{ invalidFields }}</pre> -->
 		<div>
 			<label class="block mb-1" for="name">Name</label>
-			<input-text v-model="data.name" class="w-full " :class="invalidFields.name && 'p-invalid'" />
+			<input-text id="name" v-model="data.name" class="w-full " :class="invalidFields.name && 'p-invalid'" />
 			<small v-if="invalidFields.name" class="text-red-600 text-capitalize">{{ invalidFields.name }}</small>
 		</div>
 		<div>

@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true,
 			primaryKey: true
 		},
-		post: {
+		post_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-		category: {
+		category_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
@@ -31,12 +31,12 @@ module.exports = (sequelize, DataTypes) => {
 
 	BlogCatRel.associate = models => {
 		models.BlogCatRel.belongsTo(models.BlogPost, {
-			foreignKey: 'post',
-			onDelete: 'RESTRICT'
+			foreignKey: 'post_id',
+			onDelete: 'CASCADE'
 		});
 		models.BlogCatRel.belongsTo(models.BlogCategory, {
-			foreignKey: 'category',
-			as: 'cat',
+			foreignKey: 'category_id',
+			as: 'category',
 			onDelete: 'RESTRICT'
 		});
 	};

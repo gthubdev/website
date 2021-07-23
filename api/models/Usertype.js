@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	Usertype.associate = models => {
-		models.Usertype.hasMany(models.User, { foreignKey: 'usertype' });
+		models.Usertype.hasMany(models.User, {
+			foreignKey: 'usertype_id'
+		});
 	};
 
 	return Usertype;

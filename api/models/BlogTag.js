@@ -24,7 +24,9 @@ module.exports = (sequelize, DataTypes) => {
 
 	BlogTag.associate = models => {
 		models.BlogTag.hasMany(models.BlogTagRel, {
-			foreignKey: 'tag'
+			foreignKey: 'tag_id',
+			as: 'tag',
+			onDelete: 'RESTRICT'
 		});
 	};
 

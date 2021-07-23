@@ -20,9 +20,11 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	VehicleClass.associate = models => {
-		models.VehicleClass.belongsTo(models.VehicleClassCategory, { foreignKey: 'category' });
+		models.VehicleClass.belongsTo(models.VehicleClassCategory, {
+			foreignKey: 'category_id'
+		});
 		models.VehicleClass.hasMany(models.SeriesType, {
-			foreignKey: 'class',
+			foreignKey: 'class_id',
 			onDelete: 'RESTRICT'
 		});
 	};

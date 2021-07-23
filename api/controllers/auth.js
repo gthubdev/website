@@ -107,9 +107,8 @@ module.exports.me = async (req, res) => {
 
 		const token = req.header('Authorization').replace('Bearer ', '');
 		const data = jwt.verify(token, process.env.JWT_KEY);
-		const user = await User.findOne({
-			where: { id: data.id },
-			attributes: ['id', 'username', 'name', 'usertype']
+		const user = await User.findByPk(data.id, {
+			attributes: ['id', 'username', 'name', 'usertype_id']
 		});
 		res.json(user);
 	} catch (err) {
@@ -136,7 +135,7 @@ async function generateToken(user) {
 
 	try {
 		await Auth.create({
-			user: user.id,
+			user_id: user.id,
 			token: gentoken
 		});
 

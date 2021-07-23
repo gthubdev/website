@@ -35,19 +35,19 @@ module.exports = (sequelize, DataTypes) => {
 
 	Series.associate = models => {
 		models.Series.hasMany(models.EventSession, {
-			foreignKey: 'series',
+			foreignKey: 'series_id',
 			onDelete: 'RESTRICT'
 		});
 		models.Series.hasMany(models.Event, {
-			foreignKey: 'mainseries',
+			foreignKey: 'mainseries_id',
 			onDelete: 'RESTRICT'
 		});
 		models.Series.hasMany(models.SupportSeries, {
-			foreignKey: 'series',
+			foreignKey: 'series_id',
 			onDelete: 'RESTRICT'
 		});
 		models.Series.hasMany(models.SeriesType, {
-			foreignKey: 'series'
+			foreignKey: 'series_id'
 		});
 	};
 
