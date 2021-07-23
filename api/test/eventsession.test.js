@@ -17,7 +17,7 @@ describe('EventSessions', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testadmin',
 			email: '',
-			usertype: 1
+			usertype_id: 1
 		};
 		const tmp1 = {
 			name: 'Test Vehicle Class Category'
@@ -44,7 +44,7 @@ describe('EventSessions', () => {
 			vclId = vcl.id;
 
 			const tmpevent = {
-				event: { name: 'Test Event 1', priority: 5, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] }
+				event: { name: 'Test Event 1', priority: 5, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track_id: null, mainseries_id: null, supportseries: [] }
 			};
 			const vehicleClasses = [];
 			vehicleClasses.push({ id: vclId });
@@ -98,11 +98,11 @@ describe('EventSessions', () => {
 
 	beforeEach(done => {
 		const sessions = [
-			{ name: 'Test Session 1', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 1 },
-			{ name: 'Test Session 2', starttime: '2019-07-01 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'America/New_York', sessiontype: 1 },
-			{ name: 'Test Session 3', starttime: '2019-07-02 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 2 },
-			{ name: 'Test Session 4', starttime: '2019-07-03 12:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 3 },
-			{ name: 'Test Session 5', starttime: '2019-07-02 18:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 4 }
+			{ name: 'Test Session 1', starttime: '2019-07-02 10:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'Europe/Stockholm', sessiontype_id: 1 },
+			{ name: 'Test Session 2', starttime: '2019-07-01 12:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'America/New_York', sessiontype_id: 1 },
+			{ name: 'Test Session 3', starttime: '2019-07-02 12:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'Europe/Stockholm', sessiontype_id: 2 },
+			{ name: 'Test Session 4', starttime: '2019-07-03 12:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'Europe/Stockholm', sessiontype_id: 3 },
+			{ name: 'Test Session 5', starttime: '2019-07-02 18:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'Europe/Stockholm', sessiontype_id: 4 }
 		];
 		each(sessions, async es => {
 			try {
@@ -156,8 +156,8 @@ describe('EventSessions', () => {
 				s.name.should.have.string('Test Session');
 				dayjs(s.starttime).format('YYYY-MM-DD').should.have.string('2019-07-0');
 				s.duration.should.equal(60);
-				s.series.should.equal(seriesID);
-				s.event.should.equal(eventID);
+				s.series_id.should.equal(seriesID);
+				s.event_id.should.equal(eventID);
 			});
 		} catch (err) {
 			should.not.exist(err);
@@ -165,7 +165,7 @@ describe('EventSessions', () => {
 	});
 
 	it('Creating an event session without authorisation', async () => {
-		const tmp = { name: 'Test Session 1', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'Europe/Stockholm', sessiontype: 1 };
+		const tmp = { name: 'Test Session 1', starttime: '2019-07-02 10:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'Europe/Stockholm', sessiontype_id: 1 };
 
 		try {
 			await supertest(server)
@@ -178,7 +178,7 @@ describe('EventSessions', () => {
 	});
 
 	it('Creating an event session with an illegal starttime', async () => {
-		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-XX 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' };
+		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-XX 10:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'UTC' };
 
 		try {
 			await supertest(server)
@@ -193,7 +193,7 @@ describe('EventSessions', () => {
 
 	it('Creating an event session starting before the event', async () => {
 		try {
-			const tmpsession = { name: 'Test Session 6', starttime: '2019-06-30 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' };
+			const tmpsession = { name: 'Test Session 6', starttime: '2019-06-30 10:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'UTC' };
 
 			await supertest(server)
 				.post('/api/eventsession')
@@ -207,7 +207,7 @@ describe('EventSessions', () => {
 
 	it('Creating an event session starting after the event', async () => {
 		try {
-			const tmpsession = { name: 'Test Session 6', starttime: '2019-07-05 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' };
+			const tmpsession = { name: 'Test Session 6', starttime: '2019-07-05 10:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'UTC' };
 
 			await supertest(server)
 				.post('/api/eventsession')
@@ -220,7 +220,7 @@ describe('EventSessions', () => {
 	});
 
 	it('Creating an event session with an invalid duration', async () => {
-		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC' };
+		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series_id: seriesID, event_id: eventID, timezone: 'UTC' };
 
 		try {
 			await supertest(server)
@@ -234,7 +234,7 @@ describe('EventSessions', () => {
 	});
 
 	it('Creating an event session with an invalid sessiontype', async () => {
-		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series: seriesID, event: eventID, timezone: 'UTC', sessiontype: 5 };
+		const tmpsession = { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 0, series_id: seriesID, event_id: eventID, timezone: 'UTC', sessiontype_id: 5 };
 
 		try {
 			await supertest(server)
@@ -436,7 +436,7 @@ describe('EventSessions', () => {
 				starttime: '2019-07-02 12:00',
 				timezone: 'UTC',
 				duration: 20,
-				sessiontype: -2
+				sessiontype_id: -2
 			};
 
 			await supertest(server)
@@ -452,7 +452,7 @@ describe('EventSessions', () => {
 	it('Deleting an event session', async () => {
 		let nrOfSessionsBefore, sessionID;
 		const tmp = {
-			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
+			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'UTC' }
 		};
 
 		try {
@@ -479,7 +479,7 @@ describe('EventSessions', () => {
 
 	it('Deleting an event session without authorisation', async () => {
 		const tmp = {
-			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 60, series: seriesID, event: eventID, timezone: 'UTC' }
+			session: { name: 'Test Session 6', starttime: '2019-07-02 10:00', duration: 60, series_id: seriesID, event_id: eventID, timezone: 'UTC' }
 		};
 
 		try {

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
 		title: DataTypes.STRING(1023),
 		content: DataTypes.TEXT('long'),
 		image: DataTypes.STRING,
-		author: {
+		author_id: {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	BlogPost.associate = models => {
 		models.BlogPost.belongsTo(models.User, {
-			foreignKey: 'author',
+			foreignKey: 'author_id',
 			onDelete: 'RESTRICT',
 			as: 'user'
 		});

@@ -8,7 +8,7 @@ const { Series, SeriesType, User, VehicleClass, VehicleClassCategory } = require
 
 describe('Series', () => {
 	let vclCatId, vclId;
-	let userid, token;
+	let token;
 
 	before(async () => {
 		const newuser = {
@@ -16,15 +16,14 @@ describe('Series', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testadmin',
 			email: '',
-			usertype: 1
+			usertype_id: 1
 		};
 		const tmp1 = {
 			name: 'Test Vehicle Class Category'
 		};
 
 		try {
-			const user = await User.create(newuser);
-			userid = user.id;
+			await User.create(newuser);
 			const res = await supertest(server)
 				.post('/api/auth/login')
 				.send({ username: 'testadmin', password: 'admin' })
@@ -37,7 +36,7 @@ describe('Series', () => {
 			vclCatId = vclCat.id;
 			const tmp2 = {
 				name: 'Test Vehicle Class',
-				category: vclCatId
+				category_id: vclCatId
 			};
 
 			const vcl = await VehicleClass.create(tmp2);
@@ -49,20 +48,21 @@ describe('Series', () => {
 
 	after(async () => {
 		try {
-			const response = await User.destroy({
-				where: { id: userid }
+			await User.destroy({
+				where: { }
 			});
-			response.should.equal(1);
 
-			const res1 = await VehicleClass.destroy({
-				where: { id: vclId }
+			await SeriesType.destroy({
+				where: { }
 			});
-			res1.should.equal(1);
 
-			const res2 = await VehicleClassCategory.destroy({
-				where: { id: vclCatId }
+			await VehicleClass.destroy({
+				where: { }
 			});
-			res2.should.equal(1);
+
+			await VehicleClassCategory.destroy({
+				where: { }
+			});
 		} catch (err) {
 			should.not.exist(err);
 		}
@@ -195,7 +195,7 @@ describe('Series', () => {
 			});
 			s.name.should.equal('NEW_SERIES_NAME');
 			s.priority.should.equal(2);
-			s.SeriesTypes[0].class.should.equal(vclId);
+			s.SeriesTypes[0].class_id.should.equal(vclId);
 		} catch (err) {
 			should.not.exist(err);
 		}

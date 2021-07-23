@@ -4,7 +4,7 @@ const { VehicleClass, VehicleClassCategory } = require('../models');
 module.exports.findAll = async (req, res) => {
 	try {
 		const vehicleclasses = await VehicleClass.findAll({
-			attributes: ['id', 'name', 'category'],
+			attributes: ['id', 'name', 'category_id'],
 			include: [
 				{
 					model: VehicleClassCategory,
@@ -27,7 +27,7 @@ module.exports.findAll = async (req, res) => {
 module.exports.findOne = async (req, res) => {
 	try {
 		const vehicleclass = await VehicleClass.findByPk(req.params.id, {
-			attributes: ['id', 'name', 'category'],
+			attributes: ['id', 'name', 'category_id'],
 			include: [
 				{
 					model: VehicleClassCategory,
@@ -48,7 +48,7 @@ module.exports.findOne = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-	if (!req.body.name || !req.body.category) {
+	if (!req.body.name || !req.body.category_id) {
 		res.status(422).send('Cannot create from empty data');
 		return;
 	}
@@ -57,7 +57,7 @@ module.exports.create = async (req, res) => {
 		const tmp = await VehicleClass.create(req.body);
 
 		const vehicleclass = await VehicleClass.findByPk(tmp.id, {
-			attributes: ['id', 'name', 'category'],
+			attributes: ['id', 'name', 'category_id'],
 			include: [
 				{
 					model: VehicleClassCategory,
@@ -77,7 +77,7 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.update = async (req, res) => {
-	if (!req.body.name && !req.body.category) {
+	if (!req.body.name && !req.body.category_id) {
 		res.status(422).send('Cannot update from empty data');
 		return;
 	}
@@ -92,7 +92,8 @@ module.exports.update = async (req, res) => {
 		const vehicleclass = await VehicleClass.findByPk(req.params.id, {
 			include: [
 				{
-					model: VehicleClassCategory
+					model: VehicleClassCategory,
+					attributes: ['id', 'name']
 				}
 			],
 			raw: true,

@@ -16,7 +16,7 @@ describe('Events', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testadmin',
 			email: '',
-			usertype: 1
+			usertype_id: 1
 		};
 		const tmp1 = {
 			name: 'Test Vehicle Class Category'
@@ -92,11 +92,11 @@ describe('Events', () => {
 
 	beforeEach(done => {
 		const events = [
-			{ name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries: [] },
-			{ name: 'Test Event 2', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries: [] },
-			{ name: 'Test Event 3', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries: [] },
-			{ name: 'Test Event 4', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries: [] },
-			{ name: 'Test Event 5', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries: [] }
+			{ name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track_id: trackID, mainseries_id: seriesID, supportseries: [] },
+			{ name: 'Test Event 2', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track_id: trackID, mainseries_id: seriesID, supportseries: [] },
+			{ name: 'Test Event 3', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track_id: trackID, mainseries_id: seriesID, supportseries: [] },
+			{ name: 'Test Event 4', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track_id: trackID, mainseries_id: seriesID, supportseries: [] },
+			{ name: 'Test Event 5', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track_id: trackID, mainseries_id: seriesID, supportseries: [] }
 		];
 		each(events, async event => {
 			event.supportseries = [];
@@ -155,8 +155,8 @@ describe('Events', () => {
 				event.logo.should.equal('...');
 				event.startdate.should.equal('2019-07-01');
 				event.enddate.should.equal('2019-07-03');
-				event.track.should.equal(trackID);
-				event.mainseries.should.equal(seriesID);
+				event.track_id.should.equal(trackID);
+				event.mainseries_id.should.equal(seriesID);
 			});
 		} catch (err) {
 			should.not.exist(err);
@@ -164,7 +164,7 @@ describe('Events', () => {
 	});
 
 	it('Creating an event without authorisation', async () => {
-		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track: trackID, mainseries: seriesID, supportseries: [] };
+		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-01', enddate: '2019-07-03', track_id: trackID, mainseries_id: seriesID, supportseries: [] };
 
 		try {
 			await supertest(server)
@@ -177,7 +177,7 @@ describe('Events', () => {
 	});
 
 	it('Creating an event with an invalid date', async () => {
-		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-X', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
+		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-X', enddate: '2019-07-03', track_id: null, mainseries_id: null, supportseries: [] };
 
 		try {
 			await supertest(server)
@@ -191,7 +191,7 @@ describe('Events', () => {
 	});
 
 	it('Creating an event with enddate before startdate', async () => {
-		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
+		const tmp = { name: 'Test Event 1', priority: 1, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track_id: null, mainseries_id: null, supportseries: [] };
 
 		try {
 			await supertest(server)
@@ -205,7 +205,7 @@ describe('Events', () => {
 	});
 
 	it('Creating an event with an invalid priority', async () => {
-		const tmp = { name: 'Test Event 1', priority: -5, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track: null, mainseries: null, supportseries: [] };
+		const tmp = { name: 'Test Event 1', priority: -5, logo: '...', startdate: '2019-07-04', enddate: '2019-07-03', track_id: null, mainseries_id: null, supportseries: [] };
 
 		try {
 			await supertest(server)
@@ -392,8 +392,8 @@ describe('Events', () => {
 			logo: '...',
 			startdate: '2019-07-01',
 			enddate: '2019-07-03',
-			track: null,
-			mainseries: null,
+			track_id: null,
+			mainseries_id: null,
 			supportseries: []
 		};
 
@@ -425,8 +425,8 @@ describe('Events', () => {
 			logo: '...',
 			startdate: '2019-07-01',
 			enddate: '2019-07-03',
-			track: null,
-			mainseries: null,
+			track_id: null,
+			mainseries_id: null,
 			supportseries: []
 		};
 
@@ -451,7 +451,7 @@ describe('Events', () => {
 			});
 
 			await supertest(server)
-				.delete('/api/series/' + events[0].mainseries)
+				.delete('/api/series/' + events[0].mainseries_id)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(409);
 		} catch (err) {
@@ -470,7 +470,7 @@ describe('Events', () => {
 			});
 
 			await supertest(server)
-				.delete('/api/track/' + events[0].track)
+				.delete('/api/track/' + events[0].track_id)
 				.set('Authorization', 'Bearer ' + token)
 				.expect(409);
 		} catch (err) {

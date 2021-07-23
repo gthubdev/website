@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
 	});
 
 	VehicleClassCategory.associate = models => {
-		models.VehicleClassCategory.hasMany(models.VehicleClass, { foreignKey: 'category' });
+		models.VehicleClassCategory.hasMany(models.VehicleClass, {
+			foreignKey: 'category_id'
+		});
 	};
 
 	return VehicleClassCategory;

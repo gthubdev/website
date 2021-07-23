@@ -13,7 +13,7 @@ describe('Authentication', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testadmin',
 			email: '',
-			usertype: 1
+			usertype_id: 1
 		};
 
 		try {
@@ -63,7 +63,7 @@ describe('Authentication', () => {
 
 			user.username.should.have.string('testadmin');
 			user.name.should.have.string('Testadmin');
-			user.usertype.should.equal(1);
+			user.usertype_id.should.equal(1);
 		} catch (err) {
 			should.not.exist(err);
 		}

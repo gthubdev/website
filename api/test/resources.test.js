@@ -12,7 +12,7 @@ describe('Resources', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Resource Test User',
 			email: '',
-			usertype: 1
+			usertype_id: 1
 		};
 		try {
 			const user = await User.create(newuser);
@@ -43,7 +43,6 @@ describe('Resources', () => {
 				.send()
 				.expect(200);
 
-			// console.log(res.body);
 			res.body.blogposts.should.have.lengthOf.at.least(0);
 			res.body.events.should.have.lengthOf.at.least(0);
 			res.body.series.should.have.lengthOf.at.least(0);

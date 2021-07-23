@@ -13,7 +13,7 @@ describe('Blog Categories', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testuser',
 			email: '',
-			usertype: 2
+			usertype_id: 2
 		};
 		try {
 			const user = await User.create(newuser);
@@ -272,7 +272,7 @@ describe('Blog Categories', () => {
 		const tmp = {
 			name: 'testcat123'
 		};
-		const tmppost = { title: 'Title 7', content: '<div>test content</div>', image: '', author: userID };
+		const tmppost = { title: 'Title 7', content: '<div>test content</div>', image: '', author_id: userID };
 
 		try {
 			const cat = await BlogCategory.create(tmp);

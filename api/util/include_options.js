@@ -53,7 +53,7 @@ module.exports.event = [
 	},
 	{
 		model: EventSession,
-		attributes: ['id', 'name', 'starttime', 'duration', 'series', 'sessiontype'],
+		attributes: ['id', 'name', 'starttime', 'duration', 'series_id', 'sessiontype_id'],
 		include: [
 			{
 				model: Series,
@@ -71,11 +71,11 @@ module.exports.event = [
 module.exports.series = [
 	{
 		model: SeriesType,
-		attributes: ['id', 'class'],
+		attributes: ['id', 'class_id'],
 		include: [
 			{
 				model: VehicleClass,
-				attributes: ['id', 'name', 'category'],
+				attributes: ['id', 'name', 'category_id'],
 				include: [
 					{
 						model: VehicleClassCategory,

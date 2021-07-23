@@ -13,7 +13,7 @@ describe('VehicleClassCategories', () => {
 			password: '$2a$08$PpEU2iK0atLmAkcKjXPXD.byYaw3Fxzlen3VUxB8l70U.IQkb/yZ.',
 			name: 'Testuser',
 			email: '',
-			usertype: 2
+			usertype_id: 2
 		};
 		try {
 			await User.create(newuser);
