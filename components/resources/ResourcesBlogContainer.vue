@@ -22,7 +22,7 @@
 			<template #list="slotProps">
 				<div class="resource-list-item-container">
 					<div class="resource-list-item">
-						{{ slotProps.data.title }} (by {{ slotProps.data.User.name }})
+						{{ slotProps.data.title }} (by {{ slotProps.data.author.name }})
 					</div>
 					<div>
 						<Button icon="pi pi-pencil" @click="editPost(slotProps.data)" />
@@ -84,7 +84,7 @@ export default {
 		},
 		async sendDeleteRequest(post) {
 			try {
-				const res = await this.$axios.$delete('/api/blog/' + post.id);
+				const res = await this.$axios.$delete('/api/blogs/' + post.id);
 				if (res.deleted >= 1) {
 					this.deletePost(post.id);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Blogpost deleted.', life: 5000 });
@@ -98,17 +98,15 @@ export default {
 		},
 		async sendRequest(obj) {
 			const blogpost = JSON.parse(JSON.stringify(obj));
+			console.log('receiving request');
+			console.log(blogpost);
 
 			try {
 				let res;
 				if (this.isEditing === false)
-					res = await this.$axios.$post('/api/blog', {
-						blogpost: blogpost
-					});
+					res = await this.$axios.$post('/api/blogs', blogpost);
 				else
-					res = await this.$axios.$put('/api/blog/' + blogpost.id, {
-						blogpost: blogpost
-					});
+					res = await this.$axios.$put('/api/blogs/' + blogpost.id, blogpost);
 
 				if (this.isEditing === false) {
 					this.addPost(res);

@@ -144,7 +144,7 @@ export default {
 				track: '',
 				startdate: '',
 				enddate: '',
-				mainseries: '',
+				mainseries_id: '',
 				supportseries: []
 			},
 			availablePriorities: [],
@@ -180,7 +180,7 @@ export default {
 					track: '',
 					startdate: '',
 					enddate: '',
-					mainseries: '',
+					mainseries_id: '',
 					supportseries: []
 				};
 				this.chosenTrack = '';
@@ -199,7 +199,7 @@ export default {
 					track: '',
 					startdate: '',
 					enddate: '',
-					mainseries: '',
+					mainseries_id: '',
 					supportseries: []
 				};
 				this.chosenTrack = this.editingEvent.Track;
@@ -271,8 +271,8 @@ export default {
 			this.showEventDialog = false;
 		},
 		sendRequest() {
-			this.event.track = this.chosenTrack.id;
-			this.event.mainseries = this.chosenMainSeries.id;
+			this.event.track_id = this.chosenTrack.id;
+			this.event.mainseries_id = this.chosenMainSeries.id;
 			this.event.supportseries = this.pickListData[1];
 			this.event.startdate = this.$dayjs(this.chosenDates[0]).format('YYYY-MM-DD');
 			this.event.enddate = this.$dayjs(this.chosenDates[1]).format('YYYY-MM-DD');

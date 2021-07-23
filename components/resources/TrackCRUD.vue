@@ -190,7 +190,10 @@ export default {
 			return !isNaN(Number(this.track.length)) && Number(this.track.length) > 0;
 		},
 		validMap() {
-			return this.track.map.trim() === '' || this.track.map.startsWith('https://') || this.track.map.startsWith('http://');
+			return this.track.map !== undefined &&
+				(this.track.map.trim() === '' ||
+				this.track.map.startsWith('https://') ||
+				this.track.map.startsWith('http://'));
 		},
 		getCountryFlag(country) {
 			return flag(cl.getCode(country));

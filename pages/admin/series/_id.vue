@@ -1,7 +1,7 @@
 <template>
 <div class="py-4">
 	<div class="flex justify-between items-baseline mb-4">
-		<h3 v-if="type == 'edit'" class="text-lg mb-3">
+		<h3 v-if="type === 'edit'" class="text-lg mb-3">
 			Edit "{{ series.name }}"
 		</h3>
 		<h3 v-else class="text-lg mb-3">

@@ -53,9 +53,9 @@ describe('Blogposts', () => {
 	beforeEach(done => {
 		const blogposts = [
 			{ title: 'Title 1', content: '<div>test content</div>', image: '', author_id: userID },
-			// { title: 'Title 2', content: '<div>test content</div>', image: '', author_id: userID },
-			// { title: 'Title 3', content: '<div>test content</div>', image: '', author_id: userID },
-			// { title: 'Title 4', content: '<div>test content</div>', image: '', author_id: userID },
+			{ title: 'Title 2', content: '<div>test content</div>', image: '', author_id: userID },
+			{ title: 'Title 3', content: '<div>test content</div>', image: '', author_id: userID },
+			{ title: 'Title 4', content: '<div>test content</div>', image: '', author_id: userID },
 			{ title: 'Title 5', content: '<div>test content</div>', image: '', author_id: userID }
 		];
 		each(blogposts, async blogpost => {
@@ -100,7 +100,7 @@ describe('Blogposts', () => {
 				post.title.should.have.string('Title');
 				post.content.should.equal('<div>test content</div>');
 				post.image.should.equal('');
-				// post.author_id.should.equal(userID);
+				post.author_id.should.equal(userID);
 			});
 		} catch (err) {
 			should.not.exist(err);

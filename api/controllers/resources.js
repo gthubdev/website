@@ -9,7 +9,7 @@ module.exports.getResources = async (req, res) => {
 				include: [
 					{
 						model: User,
-						as: 'user'
+						as: 'author'
 					}
 				],
 				order: [

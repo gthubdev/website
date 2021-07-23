@@ -218,13 +218,9 @@ export default {
 			try {
 				let res;
 				if (this.isEditingEvent === false)
-					res = await this.$axios.$post('/api/event', {
-						event
-					});
+					res = await this.$axios.$post('/api/event', event);
 				else
-					res = await this.$axios.$put('/api/event/' + this.editingEvent.id, {
-						event
-					});
+					res = await this.$axios.$put('/api/event/' + this.editingEvent.id, event);
 
 				if (this.isEditingEvent === false) {
 					this.addEvent(res);
@@ -248,13 +244,9 @@ export default {
 			try {
 				let res;
 				if (this.isEditingEvent === false)
-					res = await this.$axios.$post('/api/eventsession', {
-						session
-					});
+					res = await this.$axios.$post('/api/eventsession', session);
 				else
-					res = await this.$axios.$put('/api/eventsession/' + this.editingSession.id, {
-						session
-					});
+					res = await this.$axios.$put('/api/eventsession/' + this.editingSession.id, session);
 
 				if (this.editingSession === false) {
 					this.addEventSession({ eventid: session.event, session: res });

@@ -126,13 +126,9 @@ export default {
 			try {
 				let res;
 				if (this.isEditing === false)
-					res = await this.$axios.post(url, {
-						series
-					});
+					res = await this.$axios.post(url, series);
 				else
-					res = await this.$axios.put(url, {
-						series
-					});
+					res = await this.$axios.put(url, series);
 				if (this.isEditing === false) {
 					this.addSeries(res.data);
 					this.$toast.add({ severity: 'success', summary: 'Success', detail: 'Series ' + series.name + ' created.', life: 5000 });

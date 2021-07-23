@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 		models.BlogPost.belongsTo(models.User, {
 			foreignKey: 'author_id',
 			onDelete: 'RESTRICT',
-			as: 'user'
+			as: 'author'
 		});
 		models.BlogPost.hasMany(models.BlogCatRel, {
 			foreignKey: 'post_id',

@@ -126,13 +126,9 @@ export default {
 			try {
 				let res;
 				if (this.isEditing === false)
-					res = await this.$axios.$post('/api/track', {
-						track
-					});
+					res = await this.$axios.$post('/api/track', track);
 				else
-					res = await this.$axios.$put('/api/track/' + this.editingTrack.id, {
-						track
-					});
+					res = await this.$axios.$put('/api/track/' + this.editingTrack.id, track);
 
 				if (this.isEditing === false) {
 					this.addTrack(res);

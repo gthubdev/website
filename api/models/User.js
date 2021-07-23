@@ -51,7 +51,9 @@ module.exports = (sequelize, DataTypes) => {
 		models.User.belongsTo(models.Usertype, {
 			foreignKey: 'usertype_id'
 		});
-		models.User.hasMany(models.Auth, { foreignKey: 'user_id' });
+		models.User.hasMany(models.Auth, {
+			foreignKey: 'user_id'
+		});
 		models.User.hasMany(models.BlogPost, {
 			foreignKey: 'author_id',
 			onDelete: 'RESTRICT'

@@ -4,7 +4,6 @@ const include_options = require('../util/include_options');
 
 module.exports.create = async (req, res) => {
 	try {
-		// console.log('req.body', req.body)
 		const newblogpost = await BlogPost.create(req.body);
 
 		if (req.body.categories) {
@@ -28,8 +27,6 @@ module.exports.create = async (req, res) => {
 			});
 			await BlogTagRel.bulkCreate(tags);
 		}
-
-		// console.log('in create', newblogpost)
 
 		const blogpost = await BlogPost.findByPk(newblogpost.id, {
 			include: include_options.blogpost

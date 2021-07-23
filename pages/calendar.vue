@@ -141,13 +141,13 @@ export default {
 		const tracks = new Set();
 		const series = new Set();
 		for (const ev of this.data.events) {
-			if (!tracks.has(ev.track)) {
+			if (!tracks.has(ev.track_id)) {
 				this.displayedTracks.push(ev.Track);
-				tracks.add(ev.track);
+				tracks.add(ev.track_id);
 			}
-			if (!series.has(ev.mainseries)) {
+			if (!series.has(ev.mainseries_id)) {
 				this.displayedSeries.push(ev.Series);
-				series.add(ev.mainseries);
+				series.add(ev.mainseries_id);
 			}
 		}
 	},
@@ -185,7 +185,7 @@ export default {
 					track_ids.add(track.id);
 			else
 				for (const ev of this.data.events)
-					track_ids.add(ev.track);
+					track_ids.add(ev.track_id);
 
 			const series_ids = new Set();
 			if (this.selectedSeries != null && this.selectedSeries.length > 0)
@@ -193,11 +193,11 @@ export default {
 					series_ids.add(series.id);
 			else
 				for (const ev of this.data.events)
-					series_ids.add(ev.mainseries);
+					series_ids.add(ev.mainseries_id);
 
 			this.displayedEvents = this.data.events
-				.filter(ev => track_ids.has(ev.track))
-				.filter(ev => series_ids.has(ev.mainseries));
+				.filter(ev => track_ids.has(ev.track_id))
+				.filter(ev => series_ids.has(ev.mainseries_id));
 		}
 	}
 };

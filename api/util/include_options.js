@@ -3,7 +3,7 @@ const { BlogCategory, BlogCatRel, BlogTag, BlogTagRel, EventSession, EventSessio
 module.exports.blogpost = [
 	{
 		model: User,
-		as: 'user',
+		as: 'author',
 		attributes: ['name', 'image']
 	},
 	{
