@@ -32,12 +32,14 @@ module.exports = (sequelize, DataTypes) => {
 			as: 'user'
 		});
 		models.BlogPost.hasMany(models.BlogCatRel, {
-			foreignKey: 'post',
-			as: 'categories'
+			foreignKey: 'post_id',
+			as: 'categories',
+			onDelete: 'CASCADE'
 		});
 		models.BlogPost.hasMany(models.BlogTagRel, {
-			foreignKey: 'post',
-			as: 'tags'
+			foreignKey: 'post_id',
+			as: 'tags',
+			onDelete: 'CASCADE'
 		});
 	};
 

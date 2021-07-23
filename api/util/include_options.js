@@ -1,4 +1,36 @@
-const { EventSession, EventSessionType, Track, Series, SeriesType, SupportSeries, VehicleClass, VehicleClassCategory } = require('../models/');
+const { BlogCategory, BlogCatRel, BlogTag, BlogTagRel, EventSession, EventSessionType, Track, Series, SeriesType, SupportSeries, User, VehicleClass, VehicleClassCategory } = require('../models/');
+
+module.exports.blogpost = [
+	{
+		model: User,
+		as: 'user',
+		attributes: ['name', 'image']
+	},
+	{
+		model: BlogCatRel,
+		as: 'categories',
+		attributes: ['id'],
+		include: [
+			{
+				model: BlogCategory,
+				attributes: ['id', 'name'],
+				as: 'category'
+			}
+		]
+	},
+	{
+		model: BlogTagRel,
+		as: 'tags',
+		attributes: ['id'],
+		include: [
+			{
+				model: BlogTag,
+				attributes: ['id', 'name'],
+				as: 'tag'
+			}
+		]
+	}
+];
 
 module.exports.event = [
 	{
