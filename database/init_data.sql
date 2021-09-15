@@ -54,6 +54,12 @@ INSERT INTO VehicleClass (id, name, category_id) VALUES (33, 'ARCA', 5);
 INSERT INTO VehicleClass (id, name, category_id) VALUES (34, 'NASCAR National', 5);
 INSERT INTO VehicleClass (id, name, category_id) VALUES (35, 'Other Stock Car', 5);
 
+INSERT INTO VehicleClassCategory (id, name) VALUES (7, 'Sliding Car');
+INSERT INTO VehicleClass (id, name, category) VALUES (43, 'Bobsleigh', 7);
+INSERT INTO VehicleClass (id, name, category) VALUES (44, 'Luge', 7);
+INSERT INTO VehicleClass (id, name, category) VALUES (45, 'Skeleton', 7);
+INSERT INTO VehicleClass (id, name, category) VALUES (46, 'Other', 7);
+
 INSERT INTO VehicleClassCategory (id, name) VALUES (6, 'Other');
 INSERT INTO VehicleClass (id, name, category_id) VALUES (36, 'Rally', 6);
 INSERT INTO VehicleClass (id, name, category_id) VALUES (37, 'Rallycross', 6);
